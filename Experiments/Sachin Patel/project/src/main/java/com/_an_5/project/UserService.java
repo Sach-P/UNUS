@@ -23,4 +23,6 @@ public class UserService {
     public List<User> getAllUsers(){
         return userDao.selectAllUsers();
     }
+
+    public int deleteUser(User user) { return userDao.deleteUser(user); }
 }

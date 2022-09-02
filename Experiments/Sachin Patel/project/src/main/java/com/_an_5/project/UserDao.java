@@ -13,6 +13,6 @@ public interface UserDao {
     }
     List<User> selectAllUsers();
 
-
+    int deleteUser(User user);
 
 }
