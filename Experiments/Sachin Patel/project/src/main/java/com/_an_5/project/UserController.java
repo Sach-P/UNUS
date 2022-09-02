@@ -21,7 +21,10 @@ public class UserController {
     }
 
     @GetMapping
-    public List<User> getAllPeople(){
+    public List<User> getAllUsers(){
         return userService.getAllUsers();
     }
+
+    @DeleteMapping
+    public void deleteUser(@RequestBody User user) { userService.deleteUser(user); }
 }
