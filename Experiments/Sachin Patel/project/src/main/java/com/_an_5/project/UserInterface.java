@@ -3,7 +3,7 @@ package com._an_5.project;
 import java.util.List;
 import java.util.UUID;
 
-public interface UserDao {
+public interface UserInterface {
 
     int insertUser(UUID ID, User user);
 
@@ -13,6 +13,8 @@ public interface UserDao {
     }
     List<User> selectAllUsers();
 
-    int deleteUser(User user);
+    User selectUser(UUID id);
+
+    int deleteUser(UUID id);
 
 }

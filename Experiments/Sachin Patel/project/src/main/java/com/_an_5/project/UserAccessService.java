@@ -6,8 +6,8 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
 
-@Repository("userDao")
-public class UserAccessService implements UserDao{
+@Repository("userInterface")
+public class UserAccessService implements UserInterface {
     private static List<User> users = new ArrayList<>();
 
     @Override
@@ -21,10 +21,22 @@ public class UserAccessService implements UserDao{
         return users;
     }
 
+    @Override
+    public User selectUser(UUID id) {
+        for (User user : users){
+            if(user.getId().equals(id)){
+                return user;
+            }
+        }
+
+        return null;
+    }
+
 
     @Override
-    public int deleteUser(User user) {
-        users.clear();
+    public int deleteUser(UUID id) {
+        User user = this.selectUser(id);
+        users.remove(user);
         return 1;
     }
 }

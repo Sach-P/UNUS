@@ -1,9 +1,11 @@
 package com._an_5.project;
 
+import com.fasterxml.jackson.annotation.JsonProperty;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
+import java.util.UUID;
 
 @RequestMapping("/users")
 @RestController
@@ -25,6 +27,9 @@ public class UserController {
         return userService.getAllUsers();
     }
 
-    @DeleteMapping
-    public void deleteUser(@RequestBody User user) { userService.deleteUser(user); }
+    @GetMapping(path = "{id}")
+    public User getUser(@PathVariable("id") UUID id){ return userService.getUser(id); }
+
+    @DeleteMapping(path = "{id}")
+    public void deleteUser(@PathVariable("id") UUID id) { userService.deleteUser(id); }
 }

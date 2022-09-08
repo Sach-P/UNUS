@@ -5,24 +5,28 @@ import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.UUID;
 
 @Service
 public class UserService {
 
-    private final UserDao userDao;
+    private final UserInterface userInterface;
 
     @Autowired
-    public UserService(@Qualifier("userDao") UserDao userDao){
-        this.userDao = userDao;
+    public UserService(@Qualifier("userInterface") UserInterface userInterface){
+        this.userInterface = userInterface;
     }
 
     public int addUser(User user){
-        return userDao.insertUser(user);
+        return userInterface.insertUser(user);
     }
 
     public List<User> getAllUsers(){
-        return userDao.selectAllUsers();
+        return userInterface.selectAllUsers();
     }
 
-    public int deleteUser(User user) { return userDao.deleteUser(user); }
+    public User getUser(UUID id) { return userInterface.selectUser(id);}
+
+    public int deleteUser(UUID id) { return userInterface.deleteUser(id); }
 }
+
