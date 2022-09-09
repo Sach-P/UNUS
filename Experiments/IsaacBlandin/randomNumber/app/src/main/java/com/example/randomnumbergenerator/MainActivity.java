@@ -1,14 +1,13 @@
-package com.example.geoff.randomnumber;
+package com.example.randomnumbergenerator;
 
-import android.support.v7.app.AppCompatActivity;
+import androidx.appcompat.app.AppCompatActivity;
+
 import android.os.Bundle;
 import android.text.TextUtils;
 import android.view.View;
 import android.widget.EditText;
 import android.widget.TextView;
-
-import org.w3c.dom.Text;
-
+import android.widget.Button;
 import java.util.Random;
 
 public class MainActivity extends AppCompatActivity {
@@ -19,9 +18,8 @@ public class MainActivity extends AppCompatActivity {
         setContentView(R.layout.activity_main);
     }
 
-
     public void getNumber(View view){
-        EditText value = (EditText) findViewById(R.id.range);
+        EditText value = (EditText) findViewById(R.id.editTextNumber);
         String strEntry = value.getText().toString();
 
         if (!TextUtils.isEmpty(strEntry)) {
@@ -29,7 +27,7 @@ public class MainActivity extends AppCompatActivity {
             Random rand = new Random();
             int num = rand.nextInt(rangeNumber+1);
 
-            TextView result = findViewById(R.id.result);
+            TextView result = findViewById(R.id.prompt);
             result.setText(String.valueOf(num));
         }
     }
