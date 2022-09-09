@@ -35,5 +35,12 @@ public class MessageAccess {
 		}
 		messages[9] = " ";
 	}
+	
+	public void updateName(String name, String newName) {
+		for(int i = 0; i < 9 ; i++) {
+			if(messages[i].equals(name))
+				messages[i] = newName;
+		}
+	}
 
 }

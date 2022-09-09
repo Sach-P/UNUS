@@ -1,7 +1,5 @@
 package com.example.demo;
 
-import java.util.UUID;
-
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -16,19 +14,19 @@ import org.springframework.web.bind.annotation.RestController;
 @RestController
 public class TestController {
 	
-	public MessageAccess carl = new MessageAccess();
+	public MessageAccess access = new MessageAccess();
 	
 	
 	@GetMapping("/getTest")
 	public String getTest(@RequestParam(value = "username", defaultValue = "World") String message) {
-		carl.addMessage(message);
+		access.addMessage(message);
 		return String.format("Hello, %s! You sent a get request with a parameter!", message);
 	}
 	
 	@PostMapping("/postTest1")
 	public String postTest1(@RequestParam(value = "username", defaultValue = "World") String message) {
 		//
-		carl.addMessage(message);
+		access.addMessage(message);
 		return String.format("Hello, %s! You sent a post request with a parameter!", message);
 	}
 
@@ -36,28 +34,29 @@ public class TestController {
 	@PostMapping("/postTest2")
 	public String postTest2(@RequestBody TestData testData) {
 
-		carl.addMessage(testData.getMessage());
+		access.addMessage(testData.getMessage());
 		return String.format("Hello, %s! You sent a post request with a requestbody!", testData.getMessage());
 	}	
 	
 	@GetMapping(path = "{index}")
 	public String get(@PathVariable("index") int index) { //@RequestParam(value = "index", defaultValue = "0") int index
-		return String.format("%s", carl.getMessage(index));
+		return String.format("%s", access.getMessage(index));
 	}
 	
 	@GetMapping("/all")
 	public String[] getAll() {
-		return carl.allMessages();
+		return access.allMessages();
 	}
 	
 	@DeleteMapping(path = "{index}")
 	public String[] deleteTest(@PathVariable("index") int index) {
-		carl.deleteMessage(index);
-		return carl.allMessages();
+		access.deleteMessage(index);
+		return access.allMessages();
 	}
 	
-	@PutMapping("/putTest")
-	public void putTest() {
-		//TODO
+	@PutMapping(path = "{name}")
+	public String[] putTest(@PathVariable("name") String currname, @RequestBody String username) {
+		access.updateName(currname, username);
+		return access.allMessages();
 	}
 }
