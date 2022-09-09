@@ -17,4 +17,6 @@ public interface UserInterface {
 
     int deleteUser(UUID id);
 
+    int updateUser(UUID id, User user);
+
 }

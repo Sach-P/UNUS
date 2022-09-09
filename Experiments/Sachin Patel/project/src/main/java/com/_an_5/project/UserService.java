@@ -28,5 +28,7 @@ public class UserService {
     public User getUser(UUID id) { return userInterface.selectUser(id);}
 
     public int deleteUser(UUID id) { return userInterface.deleteUser(id); }
+
+    public int updateUser(UUID id, User user) { return userInterface.updateUser(id, user); }
 }
 

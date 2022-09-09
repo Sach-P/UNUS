@@ -39,4 +39,10 @@ public class UserAccessService implements UserInterface {
         users.remove(user);
         return 1;
     }
+
+    @Override
+    public int updateUser(UUID id, User user){
+        users.set(users.indexOf(this.selectUser(id)), user);
+        return 1;
+    }
 }
