@@ -29,11 +29,14 @@ public class SecondFragment extends Fragment {
     public void onViewCreated(@NonNull View view, Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
 
+        Bundle bundle = this.getArguments();
+
+        binding.textviewSecond.setText("Hello " + bundle.getString("name"));
+
         binding.buttonSecond.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                NavHostFragment.findNavController(SecondFragment.this)
-                        .navigate(R.id.action_SecondFragment_to_FirstFragment);
+                getActivity().getSupportFragmentManager().beginTransaction().replace(R.id.fragmentContainerView, new FirstFragment()).commit();
             }
         });
     }
