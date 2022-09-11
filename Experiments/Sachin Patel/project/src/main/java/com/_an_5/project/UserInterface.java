@@ -19,4 +19,6 @@ public interface UserInterface {
 
     int updateUser(UUID id, User user);
 
+    List<User> getUsersByAge(int age);
+
 }
