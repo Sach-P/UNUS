@@ -1,46 +1,92 @@
 package com.example.demo;
 
+import java.util.ArrayList;
+import java.util.List;
+
 public class MessageAccess {
 	
-	private String[] messages = new String[10];
-	private int index;
+	private ArrayList<TestData> names = new ArrayList<TestData>();
 	
 	public MessageAccess() {
-		for(int i = 0; i < 10; i++) {
-			messages[i] = " ";
+		
+	}
+	
+	public void addMessage(String name) {
+		names.add(new TestData(name));
+	}
+	
+	public void addMessage(TestData td) {
+		names.add(td);
+	}
+	
+	public TestData getMessage(int id) {
+		int n = names.size();
+		for(int i = 0; i < n; i++) {
+			if(names.get(i).getID() == id) {
+				return names.get(i);
+			}
+		}
+		return new TestData("bad ID");
+	}
+	
+	public List<TestData> allNames() {
+		return names;
+	}
+	
+	public void deleteMessage(int id) {
+		int n = names.size();
+		for(int i = 0; i < n; i++) {
+			if(names.get(i).getID() == id) {
+				names.remove(i);
+				return;
+			}
 		}
 	}
 	
-	public void addMessage(String s) {
-		messages[index] = s;
-		if(index<9) { index++;}
-	}
-	
-	public String getMessage(int i) {
-		if(i < 0) {return messages[0]; }
-		if(i > 9) {return messages[9]; }
-		return messages[i];
-	}
-	
-	public String[] allMessages() {
-		return messages;
-	}
-	
-	public void deleteMessage(int n) {
-		index--;
-		if(n < 0) { n = 0; }
-		if(n > 9) { n = 9; }
-		for(int i = n; i < 9; i++) {
-			messages[i] = messages[i+1];
+	public void updateName(int id, String newName) {
+		int n = names.size();
+		for(int i = 0; i < n; i++) {
+			if(names.get(i).getID() == id) {
+				names.get(i).updateName(newName);
+				return;
+			}
 		}
-		messages[9] = " ";
+	}
+	public void updateJob(int id, String newJob) {
+		int n = names.size();
+		for(int i = 0; i < n; i++) {
+			if(names.get(i).getID() == id) {
+				names.get(i).updateJob(newJob);
+				return;
+			}
+		}
+	}
+	public void updateAge(int id, String newAge) {
+		int n = names.size();
+		for(int i = 0; i < n; i++) {
+			if(names.get(i).getID() == id) {
+				names.get(i).updateAge(newAge);
+				return;
+			}
+		}
 	}
 	
-	public void updateName(String name, String newName) {
-		for(int i = 0; i < 9 ; i++) {
-			if(messages[i].equals(name))
-				messages[i] = newName;
+	public List<TestData> getJobs(String job) {
+		List<TestData> temp = new ArrayList<TestData>();
+		int n = names.size();
+		for(int i = 0; i < n; i++) {
+			if(names.get(i).getJob().equals(job)) {temp.add(names.get(i));};
 		}
+		return temp;
+	}
+	
+	public List<TestData> getAges(String age) {
+		List<TestData> temp = new ArrayList<TestData>();
+		int n = names.size();
+		for(int i = 0; i < n; i++) {
+			if(names.get(i).getAge().equals(age)) {temp.add(names.get(i));};
+		}
+		return temp;
 	}
 
 }
