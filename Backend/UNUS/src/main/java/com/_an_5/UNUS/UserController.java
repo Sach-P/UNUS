@@ -37,10 +37,10 @@ public class UserController {
     public User getUser(@PathVariable("id") int id){ return userInterface.findById(id); }
 
     @DeleteMapping(path = "{id}")
-    public void deleteUser(@PathVariable("id") UUID id) {  }
+    public void deleteUser(@PathVariable("id") int id) { userInterface.deleteById(id); }
 
     @PutMapping(path = "{id}")
-    public void updateUser(@PathVariable("id") UUID id, @RequestBody User user) {  }
+    public void updateUser(@PathVariable("id") int id, @RequestBody User user) {  }
 
     @GetMapping(path = "/age/{age}")
     public List<User> getUsersByAge(@PathVariable("age") int age){ return null; }
