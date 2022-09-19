@@ -42,6 +42,4 @@ public class UserController {
     @PutMapping(path = "{id}")
     public void updateUser(@PathVariable("id") int id, @RequestBody User user) {  }
 
-    @GetMapping(path = "/age/{age}")
-    public List<User> getUsersByAge(@PathVariable("age") int age){ return null; }
 }
