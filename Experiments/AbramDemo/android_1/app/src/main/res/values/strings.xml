@@ -9,4 +9,7 @@
 
     <string name="hello_first_fragment">Hello first fragment</string>
     <string name="hello_second_fragment">Hello second fragment. Arg: %1$s</string>
+    <string name="hello_world">\"Hello World\"</string>
+    <string name="prompt_hint">Enter your name</string>
+    <string name="string_hello">string/hello</string>
 </resources>
