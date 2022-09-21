@@ -1,0 +1,9 @@
+<resources>
+    <string name="app_name">UNUS</string>
+
+    <string name="logo_content_description">logo</string>
+    <string name="login_header">Enter Login Credentials</string>
+    <string name="username_hint">username</string>
+    <string name="password_hint">password</string>
+    <string name="login_button_text">login</string>
+</resources>
