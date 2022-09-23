@@ -58,6 +58,7 @@ public class LogInScreenFragment extends Fragment {
         loginButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
+                loginHeader.setText("Validating Credentials...");
                 sendLoginPostRequest(usernameField.getText().toString(), passwordField.getText().toString());
             }
         });
@@ -95,7 +96,7 @@ public class LogInScreenFragment extends Fragment {
                     new Response.ErrorListener() {
                         @Override
                         public void onErrorResponse(VolleyError error) {
-
+                            loginHeader.setText(getString(R.string.login_error));
                         }
                     }
             );
@@ -103,7 +104,7 @@ public class LogInScreenFragment extends Fragment {
             Volley.newRequestQueue(requireContext()).add(request);
 
         } catch(JSONException ex) {
-
+            loginHeader.setText(getString(R.string.login_error));
         }
     }
 
