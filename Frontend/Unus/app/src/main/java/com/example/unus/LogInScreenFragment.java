@@ -7,58 +7,107 @@ import androidx.fragment.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
+import android.widget.EditText;
+import android.widget.TextView;
+
+import com.android.volley.Request;
+import com.android.volley.Response;
+import com.android.volley.VolleyError;
+import com.android.volley.toolbox.JsonObjectRequest;
+import com.android.volley.toolbox.Volley;
+
+import org.json.JSONException;
+import org.json.JSONObject;
+import org.w3c.dom.Text;
+
+import java.util.Objects;
 
 /**
- * A simple {@link Fragment} subclass.
- * Use the {@link LogInScreenFragment#newInstance} factory method to
- * create an instance of this fragment.
+ * A simply login screen fragment which takes the a user's username
+ * and password and sends it to the server for verification
  */
 public class LogInScreenFragment extends Fragment {
 
-    // TODO: Rename parameter arguments, choose names that match
-    // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
-    private static final String ARG_PARAM1 = "param1";
-    private static final String ARG_PARAM2 = "param2";
-
-    // TODO: Rename and change types of parameters
-    private String mParam1;
-    private String mParam2;
+    private View view;
+    private Button loginButton;
+    private TextView loginHeader;
+    private EditText usernameField;
+    private EditText passwordField;
 
     public LogInScreenFragment() {
         // Required empty public constructor
     }
 
-    /**
-     * Use this factory method to create a new instance of
-     * this fragment using the provided parameters.
-     *
-     * @param param1 Parameter 1.
-     * @param param2 Parameter 2.
-     * @return A new instance of fragment LogInScreenFragment.
-     */
-    // TODO: Rename and change types and number of parameters
-    public static LogInScreenFragment newInstance(String param1, String param2) {
-        LogInScreenFragment fragment = new LogInScreenFragment();
-        Bundle args = new Bundle();
-        args.putString(ARG_PARAM1, param1);
-        args.putString(ARG_PARAM2, param2);
-        fragment.setArguments(args);
-        return fragment;
-    }
-
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        if (getArguments() != null) {
-            mParam1 = getArguments().getString(ARG_PARAM1);
-            mParam2 = getArguments().getString(ARG_PARAM2);
-        }
     }
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-        // Inflate the layout for this fragment
-        return inflater.inflate(R.layout.fragment_log_in_screen, container, false);
+        view = inflater.inflate(R.layout.fragment_log_in_screen, container, false);
+
+        loginHeader = (TextView) view.findViewById(R.id.login_header);
+
+        usernameField = (EditText) view.findViewById(R.id.username_field);
+        passwordField = (EditText) view.findViewById(R.id.password_field);
+
+        loginButton = (Button)view.findViewById(R.id.login_button);
+        loginButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                sendLoginPostRequest(usernameField.getText().toString(), passwordField.getText().toString());
+            }
+        });
+
+        return view;
+    }
+
+    private void sendLoginPostRequest(String username, String password){
+        try{
+
+            JSONObject requestBody = new JSONObject();
+            requestBody.put("username", username);
+            requestBody.put("password", password);
+
+            LoginStatus loginStatus;
+
+            JsonObjectRequest request = new JsonObjectRequest(
+                    Request.Method.POST,
+                    getString(R.string.postman_mock_server_url),
+                    requestBody,
+                    new Response.Listener<JSONObject>() {
+                        @Override
+                        public void onResponse(JSONObject response) {
+                            try {
+                                if (response.getString("verification").equals("passed")){
+                                    navigateToMainMenu();
+                                } else {
+                                    loginHeader.setText(getString(R.string.login_failed));
+                                }
+                            } catch (JSONException ex) {
+                                loginHeader.setText(getString(R.string.login_error));
+                            }
+                        }
+                    },
+                    new Response.ErrorListener() {
+                        @Override
+                        public void onErrorResponse(VolleyError error) {
+
+                        }
+                    }
+            );
+
+            Volley.newRequestQueue(requireContext()).add(request);
+
+        } catch(JSONException ex) {
+
+        }
+    }
+
+    private void navigateToMainMenu(){
+        getActivity().getSupportFragmentManager().beginTransaction().replace(R.id.fragmentContainerView, new MainMenuFragment()).commit();
     }
 }

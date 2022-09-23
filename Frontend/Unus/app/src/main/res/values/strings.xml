@@ -6,4 +6,11 @@
     <string name="username_hint">username</string>
     <string name="password_hint">password</string>
     <string name="login_button_text">login</string>
+
+    <string name="postman_mock_server_url">https://8d0d4937-d8bc-43cc-bee6-ff1ecb033bc9.mock.pstmn.io/login_attempt/</string>
+
+    <string name="login_failed">Invalid login credentials. Try Again</string>
+    <string name="login_error">Login Error</string>
+    <!-- TODO: Remove or change this placeholder text -->
+    <string name="hello_blank_fragment">Hello blank fragment</string>
 </resources>
