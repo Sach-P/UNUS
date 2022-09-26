@@ -49,15 +49,17 @@ public class LogInScreenFragment extends Fragment {
                              Bundle savedInstanceState) {
         view = inflater.inflate(R.layout.fragment_log_in_screen, container, false);
 
+        //initialize login screen views
         loginHeader = (TextView) view.findViewById(R.id.login_header);
-
         usernameField = (EditText) view.findViewById(R.id.username_field);
         passwordField = (EditText) view.findViewById(R.id.password_field);
 
+        //set up login button action
         loginButton = (Button)view.findViewById(R.id.login_button);
         loginButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
+                loginHeader.setText("Validating Credentials...");
                 sendLoginPostRequest(usernameField.getText().toString(), passwordField.getText().toString());
             }
         });
@@ -65,14 +67,20 @@ public class LogInScreenFragment extends Fragment {
         return view;
     }
 
+    /**
+     * sends a post request with Strings for username and password to a
+     * url stored in the strings xml.
+     *
+     * @param username
+     * @param password
+     */
     private void sendLoginPostRequest(String username, String password){
         try{
 
+            //add login credentials to the response body
             JSONObject requestBody = new JSONObject();
             requestBody.put("username", username);
             requestBody.put("password", password);
-
-            LoginStatus loginStatus;
 
             JsonObjectRequest request = new JsonObjectRequest(
                     Request.Method.POST,
@@ -82,9 +90,12 @@ public class LogInScreenFragment extends Fragment {
                         @Override
                         public void onResponse(JSONObject response) {
                             try {
+                                //check for passed or failed verification in the response
                                 if (response.getString("verification").equals("passed")){
+                                    //change fragment to main menu
                                     navigateToMainMenu();
                                 } else {
+                                    //notify user of failed login
                                     loginHeader.setText(getString(R.string.login_failed));
                                 }
                             } catch (JSONException ex) {
@@ -95,7 +106,7 @@ public class LogInScreenFragment extends Fragment {
                     new Response.ErrorListener() {
                         @Override
                         public void onErrorResponse(VolleyError error) {
-
+                            loginHeader.setText(getString(R.string.login_error));
                         }
                     }
             );
@@ -103,10 +114,13 @@ public class LogInScreenFragment extends Fragment {
             Volley.newRequestQueue(requireContext()).add(request);
 
         } catch(JSONException ex) {
-
+            loginHeader.setText(getString(R.string.login_error));
         }
     }
 
+    /**
+     * method which changes fragment in container to the main menu fragment
+     */
     private void navigateToMainMenu(){
         getActivity().getSupportFragmentManager().beginTransaction().replace(R.id.fragmentContainerView, new MainMenuFragment()).commit();
     }
