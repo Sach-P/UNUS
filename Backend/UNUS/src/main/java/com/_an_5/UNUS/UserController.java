@@ -7,12 +7,9 @@ import java.util.List;
 
 @RestController
 public class UserController {
-    private final UserInterface userInterface;
 
     @Autowired
-    public UserController(UserInterface userInterface){
-        this.userInterface = userInterface;
-    }
+    UserInterface userInterface;
 
     private String success = "{\"message\":\"success\"}";
     private String failure = "{\"message\":\"failure\"}";
@@ -38,6 +35,12 @@ public class UserController {
     public void deleteUser(@PathVariable int id) { userInterface.deleteById(id); }
 
     @PutMapping(path = "{id}")
-    public void updateUser(@PathVariable("id") int id, @RequestBody User user) {  }
+    public User updateUser(@PathVariable int id, @RequestBody User user) {
+        User currUser = userInterface.findById(id);
+        if(user == null)
+            return null;
+        userInterface.save(user);
+        return userInterface.findById(id);
+    }
 
 }
