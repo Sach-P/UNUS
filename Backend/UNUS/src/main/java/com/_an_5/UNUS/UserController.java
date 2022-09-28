@@ -37,9 +37,10 @@ public class UserController {
     @PutMapping(path = "{id}")
     public User updateUser(@PathVariable int id, @RequestBody User user) {
         User currUser = userInterface.findById(id);
-        if(user == null)
+        if(currUser == null)
             return null;
-        userInterface.save(user);
+        currUser.setName(user.getName());
+        userInterface.save(currUser);
         return userInterface.findById(id);
     }
 
