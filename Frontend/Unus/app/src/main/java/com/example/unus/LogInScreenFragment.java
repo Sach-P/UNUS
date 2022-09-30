@@ -4,6 +4,8 @@ import android.os.Bundle;
 
 import androidx.fragment.app.Fragment;
 
+import android.text.method.HideReturnsTransformationMethod;
+import android.text.method.PasswordTransformationMethod;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -30,7 +32,6 @@ import java.util.Objects;
 public class LogInScreenFragment extends Fragment {
 
     private View view;
-    private Button loginButton;
     private TextView loginHeader;
     private EditText usernameField;
     private EditText passwordField;
@@ -55,12 +56,27 @@ public class LogInScreenFragment extends Fragment {
         passwordField = (EditText) view.findViewById(R.id.password_field);
 
         //set up login button action
-        loginButton = (Button)view.findViewById(R.id.login_button);
+        Button loginButton = (Button)view.findViewById(R.id.login_button);
         loginButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                loginHeader.setText("Validating Credentials...");
+                loginHeader.setText(getString(R.string.validatingMessage));
                 sendLoginPostRequest(usernameField.getText().toString(), passwordField.getText().toString());
+            }
+        });
+
+        //set up hide/show password button action
+        Button showHideButton = (Button)view.findViewById(R.id.show_hide_button);
+        showHideButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                if (showHideButton.getText().toString().equals("show")){
+                    showHideButton.setText(getString(R.string.hidePassword));
+                    passwordField.setTransformationMethod(HideReturnsTransformationMethod.getInstance());
+                } else {
+                    showHideButton.setText(getString(R.string.showPassword));
+                    passwordField.setTransformationMethod(PasswordTransformationMethod.getInstance());
+                }
             }
         });
 

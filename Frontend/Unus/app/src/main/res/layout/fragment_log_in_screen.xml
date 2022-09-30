@@ -1,7 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
-    xmlns:tools="http://schemas.android.com/tools"
+
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical"
@@ -38,14 +37,37 @@
         android:hint="@string/username_hint"
         />
 
-    <EditText
-        android:id="@+id/password_field"
-        android:layout_height="50dp"
+    <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+
         android:layout_width="fill_parent"
+        android:layout_height="50dp"
+        android:orientation="horizontal"
         android:layout_marginTop="15dp"
         android:layout_marginHorizontal="30dp"
-        android:hint="@string/password_hint"
-        />
+
+        >
+
+        <EditText
+            android:id="@+id/password_field"
+            android:layout_height="fill_parent"
+            android:layout_width="0dp"
+            android:layout_weight="0.75"
+            android:hint="@string/password_hint"
+            android:inputType="textPassword"
+            />
+
+        <Button
+            android:id="@+id/show_hide_button"
+            android:layout_width="0dp"
+            android:layout_height="fill_parent"
+            android:layout_weight="0.25"
+            android:backgroundTint="#ED1C24"
+            android:textColor="#F8DA27"
+            android:textStyle="bold"
+            android:text="@string/showPassword"
+            />
+
+    </LinearLayout>
 
     <Button
         android:id="@+id/login_button"
