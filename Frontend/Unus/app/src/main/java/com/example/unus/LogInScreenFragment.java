@@ -21,9 +21,6 @@ import com.android.volley.toolbox.Volley;
 
 import org.json.JSONException;
 import org.json.JSONObject;
-import org.w3c.dom.Text;
-
-import java.util.Objects;
 
 /**
  * A simply login screen fragment which takes the a user's username
