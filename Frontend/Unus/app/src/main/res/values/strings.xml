@@ -18,4 +18,5 @@
     <string name="signup_header">Create An Account</string>
     <string name="signup_description">Password Must include \n - 8 characters \n - 1 number</string>
     <string name="confirm_password_hint">cofirm password</string>
+    <string name="signup_button_text">create account</string>
 </resources>
