@@ -21,9 +21,6 @@ import com.android.volley.toolbox.Volley;
 
 import org.json.JSONException;
 import org.json.JSONObject;
-import org.w3c.dom.Text;
-
-import java.util.Objects;
 
 /**
  * A simply login screen fragment which takes the a user's username
@@ -55,6 +52,12 @@ public class LogInScreenFragment extends Fragment {
         usernameField = (EditText) view.findViewById(R.id.username_field);
         passwordField = (EditText) view.findViewById(R.id.password_field);
 
+        if (this.getArguments() != null){
+            Bundle bundle = this.getArguments();
+            String username = bundle.getString("username");
+            usernameField.setText(username);
+        }
+
         //set up login button action
         Button loginButton = (Button)view.findViewById(R.id.login_button);
         loginButton.setOnClickListener(new View.OnClickListener() {
@@ -62,6 +65,15 @@ public class LogInScreenFragment extends Fragment {
             public void onClick(View view) {
                 loginHeader.setText(getString(R.string.validatingMessage));
                 sendLoginPostRequest(usernameField.getText().toString(), passwordField.getText().toString());
+            }
+        });
+
+        //set up account creation button action
+        Button createAccountButton = (Button)view.findViewById(R.id.create_account_button);
+        createAccountButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+               navigateToSignup();
             }
         });
 
@@ -100,7 +112,7 @@ public class LogInScreenFragment extends Fragment {
 
             JsonObjectRequest request = new JsonObjectRequest(
                     Request.Method.POST,
-                    getString(R.string.postman_mock_server_url),
+                    getString(R.string.login_url),
                     requestBody,
                     new Response.Listener<JSONObject>() {
                         @Override
@@ -139,5 +151,9 @@ public class LogInScreenFragment extends Fragment {
      */
     private void navigateToMainMenu(){
         getActivity().getSupportFragmentManager().beginTransaction().replace(R.id.fragmentContainerView, new MainMenuFragment()).commit();
+    }
+
+    private void navigateToSignup(){
+        getActivity().getSupportFragmentManager().beginTransaction().replace(R.id.fragmentContainerView, new SignUpScreenFragment()).commit();
     }
 }
