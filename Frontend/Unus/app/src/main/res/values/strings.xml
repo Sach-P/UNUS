@@ -19,4 +19,6 @@
 
 
     <string name="hello_blank_fragment">Login Successful</string>
+    <string name="delete_user">Delete Account</string>
+    <string name="user_settings">User Settings</string>
 </resources>
