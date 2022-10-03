@@ -14,12 +14,4 @@ public class UnusApplication {
 		SpringApplication.run(UnusApplication.class, args);
 	}
 
-	@Bean
-	CommandLineRunner initUser(UserInterface userRepository) {
-		return args -> {
-			User user1 = new User("Sachin");
-			userRepository.save(user1);
-
-		};
-	}
 }
