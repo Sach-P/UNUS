@@ -68,6 +68,15 @@ public class LogInScreenFragment extends Fragment {
             }
         });
 
+        //set up account creation button action
+        Button createAccountButton = (Button)view.findViewById(R.id.create_account_button);
+        createAccountButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+               navigateToSignup();
+            }
+        });
+
         //set up hide/show password button action
         Button showHideButton = (Button)view.findViewById(R.id.show_hide_button);
         showHideButton.setOnClickListener(new View.OnClickListener() {
