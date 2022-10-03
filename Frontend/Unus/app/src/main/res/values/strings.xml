@@ -10,13 +10,24 @@
     <string name="hidePassword">hide</string>
     <string name="validatingMessage">Validating Credentials...</string>
 
-    <string name="postman_mock_server_url">https://8d0d4937-d8bc-43cc-bee6-ff1ecb033bc9.mock.pstmn.io/login_attempt/</string>
+    <string name="login_url">https://3d5d7b90-cdb8-41bc-b45b-cffb50951687.mock.pstmn.io/login/</string>
 
     <string name="login_failed">Invalid login credentials. Try Again</string>
     <string name="login_error">Login Error</string>
 
     <string name="signup_header">Create An Account</string>
     <string name="signup_description">Password Must include \n - 8 characters \n - 1 number</string>
-    <string name="confirm_password_hint">cofirm password</string>
+    <string name="confirm_password_hint">confirm password</string>
     <string name="signup_button_text">create account</string>
+
+    <string name="no_username">Please Fill Username Field</string>
+    <string name="no_password">Please Fill Password Field</string>
+    <string name="invalid_password">Please Follow Given Password Requirements</string>
+    <string name="username_unavailable">Username Unavailable, Please Try Another</string>
+    <string name="password_mismatch">Passwords Do Not Match</string>
+    <string name="signup_error">Account Creation Error</string>
+
+    <string name="signup_url">https://3d5d7b90-cdb8-41bc-b45b-cffb50951687.mock.pstmn.io/signup/</string>
+
+    <string name="placeholder">login successful</string>
 </resources>

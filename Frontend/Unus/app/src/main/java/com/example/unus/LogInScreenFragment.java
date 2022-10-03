@@ -52,6 +52,12 @@ public class LogInScreenFragment extends Fragment {
         usernameField = (EditText) view.findViewById(R.id.username_field);
         passwordField = (EditText) view.findViewById(R.id.password_field);
 
+        if (this.getArguments() != null){
+            Bundle bundle = this.getArguments();
+            String username = bundle.getString("username");
+            usernameField.setText(username);
+        }
+
         //set up login button action
         Button loginButton = (Button)view.findViewById(R.id.login_button);
         loginButton.setOnClickListener(new View.OnClickListener() {
@@ -97,7 +103,7 @@ public class LogInScreenFragment extends Fragment {
 
             JsonObjectRequest request = new JsonObjectRequest(
                     Request.Method.POST,
-                    getString(R.string.postman_mock_server_url),
+                    getString(R.string.login_url),
                     requestBody,
                     new Response.Listener<JSONObject>() {
                         @Override
@@ -136,5 +142,9 @@ public class LogInScreenFragment extends Fragment {
      */
     private void navigateToMainMenu(){
         getActivity().getSupportFragmentManager().beginTransaction().replace(R.id.fragmentContainerView, new MainMenuFragment()).commit();
+    }
+
+    private void navigateToSignup(){
+        getActivity().getSupportFragmentManager().beginTransaction().replace(R.id.fragmentContainerView, new SignUpScreenFragment()).commit();
     }
 }
