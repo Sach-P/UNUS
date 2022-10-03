@@ -15,8 +15,7 @@
     <string name="login_failed">Invalid login credentials. Try Again</string>
     <string name="login_error">Login Error</string>
 
-
-
-
-    <string name="hello_blank_fragment">Login Successful</string>
+    <string name="signup_header">Create An Account</string>
+    <string name="signup_description">Password Must include \n - 8 characters \n - 1 number</string>
+    <string name="confirm_password_hint">cofirm password</string>
 </resources>
