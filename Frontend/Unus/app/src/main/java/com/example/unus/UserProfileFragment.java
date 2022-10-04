@@ -22,6 +22,7 @@ public class UserProfileFragment extends Fragment {
     private View view;
     private TextView username;
     private Button settings;
+    private Button back;
 
     public UserProfileFragment() {
         // Required empty public constructor
@@ -38,13 +39,21 @@ public class UserProfileFragment extends Fragment {
         view = inflater.inflate(R.layout.fragment_user_profile, container, false);
         username = (TextView) view.findViewById(R.id.username);
         settings = (Button) view.findViewById(R.id.user_settings);
-        username.setText("hello");
+        back = (Button) view.findViewById(R.id.back);
+        username.setText("username");
 
 
         settings.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 getActivity().getSupportFragmentManager().beginTransaction().replace(R.id.fragmentContainerView, new UserSettingsFragment()).commit();
+            }
+        });
+
+        back.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                getActivity().getSupportFragmentManager().beginTransaction().replace(R.id.fragmentContainerView, new MainMenuFragment()).commit();
             }
         });
 
