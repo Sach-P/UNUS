@@ -21,6 +21,9 @@ public class UserProfileFragment extends Fragment {
 
     private View view;
     private TextView username;
+    private TextView userID;
+    private TextView games;
+    private TextView wins;
     private Button settings;
     private Button back;
 
@@ -38,10 +41,15 @@ public class UserProfileFragment extends Fragment {
                               Bundle savedInstanceState) {
         view = inflater.inflate(R.layout.fragment_user_profile, container, false);
         username = (TextView) view.findViewById(R.id.username);
+        userID = (TextView) view.findViewById(R.id.userID);
+        games = (TextView) view.findViewById(R.id.games);
+        wins = (TextView) view.findViewById(R.id.wins);
         settings = (Button) view.findViewById(R.id.user_settings);
         back = (Button) view.findViewById(R.id.back);
-        username.setText("username");
-        getStats();
+        username.setText(UserData.getInstance().getUsername());
+        userID.setText("UserID: "+ UserData.getInstance().getUserID());
+        games.setText("Games Played: "+ UserData.getInstance().getGamesPlayed());
+        wins.setText("Games Won: "+ UserData.getInstance().getGamesWon());
 
 
         settings.setOnClickListener(new View.OnClickListener() {
@@ -60,40 +68,5 @@ public class UserProfileFragment extends Fragment {
 
 
         return view;
-    }
-
-    public void getStats() {
-        try {
-            //add login credentials to the response body
-            JSONObject requestBody = new JSONObject();
-            requestBody.put("id", "12345");
-
-            JsonObjectRequest request = new JsonObjectRequest(
-                    Request.Method.GET,
-                    "https://b82a18c1-e947-44cf-bf54-6d24cab1848c.mock.pstmn.io/get_stats",
-                    requestBody,
-                    new Response.Listener<JSONObject>() {
-                        @Override
-                        public void onResponse(JSONObject response) {
-                            try {
-                                ((TextView) view.findViewById(R.id.games)).setText("Games Played: " + response.getString("GamesPlayed"));
-                            } catch (JSONException e) {
-                                e.printStackTrace();
-                            }
-                        }
-                    },
-                    new Response.ErrorListener() {
-                        @Override
-                        public void onErrorResponse(VolleyError error) {
-                            //loginHeader.setText(getString(R.string.login_error));
-                        }
-                    }
-            );
-
-            Volley.newRequestQueue(requireContext()).add(request);
-
-        } catch (JSONException ex) {
-            //loginHeader.setText(getString(R.string.login_error));
-        }
     }
 }
