@@ -101,8 +101,15 @@ public class UserSettingsFragment extends Fragment {
         delete.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                popupWindow.dismiss();
-                deleteUser(((EditText) popupView.findViewById(R.id.user_prompt)).getText().toString(), ((EditText) popupView.findViewById(R.id.pass_prompt)).getText().toString());
+                String name = ((EditText) popupView.findViewById(R.id.user_prompt)).getText().toString();
+                String password = ((EditText) popupView.findViewById(R.id.pass_prompt)).getText().toString();
+                if(name.equals(UserData.getInstance().getUsername()) && password.equals(UserData.getInstance().getPassword())) {
+                    popupWindow.dismiss();
+                    deleteUser(name, password);
+                } else {
+                    popupWindow.dismiss();
+                    top_text.setText("Incorrect Username or Password");
+                }
 
             }
         });
