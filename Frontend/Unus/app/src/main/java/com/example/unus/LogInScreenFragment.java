@@ -28,7 +28,6 @@ import org.json.JSONObject;
  */
 public class LogInScreenFragment extends Fragment {
 
-    private View view;
     private TextView loginHeader;
     private EditText usernameField;
     private EditText passwordField;
@@ -45,7 +44,7 @@ public class LogInScreenFragment extends Fragment {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-        view = inflater.inflate(R.layout.fragment_log_in_screen, container, false);
+        View view = inflater.inflate(R.layout.fragment_log_in_screen, container, false);
 
         //initialize login screen views
         loginHeader = (TextView) view.findViewById(R.id.login_header);
