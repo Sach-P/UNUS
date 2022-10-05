@@ -103,7 +103,7 @@ public class SignUpScreenFragment extends Fragment {
                         public void onResponse(JSONObject response) {
                             try {
                                 //check for passed or failed verification in the response
-                                if (response.getString("verification").equals("passed")){
+                                if (response.getString("messsage").equals("passed")){
                                     //change fragment to login
                                     navigateToLogin(username);
                                 } else {
