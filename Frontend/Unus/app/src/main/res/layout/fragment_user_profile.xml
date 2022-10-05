@@ -21,7 +21,7 @@
             android:layout_height="50dp"
             android:layout_width="100dp"
             android:layout_marginLeft="10dp"
-            android:text="@string/back_button"
+            android:text="BACK"
             />
         <TextView
             android:layout_width="140dp"
@@ -34,7 +34,7 @@
             android:layout_height="50dp"
             android:layout_alignParentRight="true"
             android:layout_marginRight="10dp"
-            android:text="@string/user_settings" />
+            android:text="Settings" />
 
 
     </LinearLayout>
@@ -44,7 +44,7 @@
         android:layout_height="50dp"
         android:layout_width="fill_parent"
         android:layout_marginHorizontal="30dp"
-        android:text="@string/login_header"
+        android:text="Username"
         android:textAlignment="center"
         android:textSize="20sp"
 

@@ -19,9 +19,4 @@
 
 
     <string name="hello_blank_fragment">Login Successful</string>
-    <string name="delete_user">Delete Account</string>
-    <string name="user_settings">           Settings</string>
-    <string name="back_button">Back</string>
-    <string name="username_prompt">Username:</string>
-    <string name="password_prompt">Password:</string>
 </resources>

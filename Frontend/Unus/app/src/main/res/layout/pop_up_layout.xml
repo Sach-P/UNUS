@@ -20,7 +20,7 @@
                 android:layout_gravity="center"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="@string/username_prompt"
+                android:text="Username:"
                 android:textSize="20sp"
                 android:textStyle="bold"
                 android:padding="10dp"/>
@@ -36,7 +36,7 @@
             android:layout_gravity="center"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="@string/password_prompt"
+            android:text="Password:"
             android:textSize="20sp"
             android:textStyle="bold"
             android:padding="10dp"/>
@@ -52,7 +52,7 @@
                 android:id="@+id/delete"
                 android:layout_width="150dp"
                 android:layout_height="60dp"
-                android:text="@string/delete_user"
+                android:text="Delete Account"
                 />
 
         </LinearLayout>
