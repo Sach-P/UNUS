@@ -1,9 +1,12 @@
 package com.example.unus;
 import android.os.Bundle;
+import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.ViewGroup;
 import android.view.View;
 import android.widget.Button;
+import android.widget.LinearLayout;
+import android.widget.PopupWindow;
 import android.widget.TextView;
 
 import androidx.fragment.app.Fragment;
@@ -50,7 +53,7 @@ public class UserProfileFragment extends Fragment {
         userID.setText("UserID: "+ UserData.getInstance().getUserID());
         games.setText("Games Played: "+ UserData.getInstance().getGamesPlayed());
         wins.setText("Games Won: "+ UserData.getInstance().getGamesWon());
-
+        getFriends();
 
         settings.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -68,5 +71,16 @@ public class UserProfileFragment extends Fragment {
 
 
         return view;
+    }
+
+    public void getFriends() {
+        LinearLayout layout = view.findViewById(R.id.friends);
+        TextView tv = new TextView(view.getContext());
+        tv.setLayoutParams(new ViewGroup.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT,
+                ViewGroup.LayoutParams.WRAP_CONTENT));
+        tv.setText("programmatically created TextView1");
+        tv.setBackgroundColor(0xff66ff66); // hex color 0xAARRGGBB
+        tv.setPadding(20, 20, 20, 20); // in pixels (left, top, right, bottom)
+        layout.addView(tv);
     }
 }
