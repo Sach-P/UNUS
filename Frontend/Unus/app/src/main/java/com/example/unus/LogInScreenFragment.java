@@ -123,16 +123,14 @@ public class LogInScreenFragment extends Fragment {
                                     //transfer user data received from http response to userData singleton
                                     UserData userData= UserData.getInstance();
 
-                                    userData.setUserID(response.getInt("userID"));
-                                    userData.setUsername(response.getString("username"));
-                                    userData.setPassword(response.getString("password"));
-                                    userData.setGamesPlayed(response.getInt("gamesPlayed"));
-                                    userData.setGamesWon(response.getInt("gamesWon"));
+                                    userData.setUserID(response.getJSONObject("user").getInt("id"));
+                                    userData.setUsername(response.getJSONObject("user").getString("username"));
+                                    userData.setPassword(response.getJSONObject("user").getString("password"));
 
-                                    int numFriends = response.getJSONArray("friends").length();
+                                    int numFriends = response.getJSONObject("user").getJSONArray("friends").length();
                                     Friend[] friendList = new Friend[numFriends];
                                     for (int i = 0; i < numFriends; i++){
-                                        JSONObject friendObj = response.getJSONArray("friends").getJSONObject(i);
+                                        JSONObject friendObj = response.getJSONObject("user").getJSONArray("friends").getJSONObject(i);
                                         friendList[i] = new Friend(friendObj.getInt("userID"), friendObj.getString("username"));
                                     }
                                     userData.setFriendsList(friendList);
