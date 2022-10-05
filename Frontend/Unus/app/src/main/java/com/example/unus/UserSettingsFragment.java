@@ -27,9 +27,11 @@ import org.json.JSONObject;
 public class UserSettingsFragment extends Fragment {
 
     private View view;
-    private TextView username;
+    private TextView top_text;
     private Button delete_user;
     private Button back;
+    private Button change_name;
+    private Button change_pass;
 
     public UserSettingsFragment() {
         // Required empty public constructor
@@ -44,9 +46,11 @@ public class UserSettingsFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         view = inflater.inflate(R.layout.fragment_user_settings, container, false);
-        username = (TextView) view.findViewById(R.id.username);
+        top_text = (TextView) view.findViewById(R.id.top_text);
         delete_user = (Button) view.findViewById(R.id.delete_user);
         back = (Button) view.findViewById(R.id.back);
+        change_name = (Button) view.findViewById(R.id.change_name);
+        change_pass = (Button) view.findViewById(R.id.change_password);
 
         back.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -55,18 +59,31 @@ public class UserSettingsFragment extends Fragment {
             }
         });
 
+        change_name.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                change(true);
+            }
+        });
+
+        change_pass.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                change(false);
+            }
+        });
+
         delete_user.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-
-                getPopUp();
+                deleteConfirmation();
             }
         });
 
         return view;
     }
 
-    public void getPopUp( ) {
+    public void deleteConfirmation( ) {
         //Create a View object yourself through inflater
         LayoutInflater inflater = (LayoutInflater) view.getContext().getSystemService(view.getContext().LAYOUT_INFLATER_SERVICE);
         View popupView = inflater.inflate(R.layout.pop_up_layout, null);
@@ -80,11 +97,12 @@ public class UserSettingsFragment extends Fragment {
         //Set the location of the window on the screen
         popupWindow.showAtLocation(view, Gravity.CENTER, 50, 30);
 
-        Button delete = (Button) view.findViewById(R.id.delete);
+        Button delete = (Button) popupView.findViewById(R.id.delete);
         delete.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                deleteUser(((EditText) view.findViewById(R.id.user_prompt)).getText().toString(), ((EditText) view.findViewById(R.id.pass_prompt)).getText().toString());
+                popupWindow.dismiss();
+                deleteUser(((EditText) popupView.findViewById(R.id.user_prompt)).getText().toString(), ((EditText) popupView.findViewById(R.id.pass_prompt)).getText().toString());
 
             }
         });
@@ -92,7 +110,46 @@ public class UserSettingsFragment extends Fragment {
         popupView.setOnTouchListener(new View.OnTouchListener() {
             @Override
             public boolean onTouch(View v, MotionEvent event) {
+                //Close the window when clicked
+                popupWindow.dismiss();
+                return true;
+            }
+        });
+    }
 
+    public void change(boolean name) {
+        //Create a View object yourself through inflater
+        LayoutInflater inflater = (LayoutInflater) view.getContext().getSystemService(view.getContext().LAYOUT_INFLATER_SERVICE);
+        View popupView = inflater.inflate(R.layout.pop_up_layout, null);
+
+        //Make Inactive Items Outside Of PopupWindow
+        boolean focusable = true;
+
+        //Create a window with our parameters
+        final PopupWindow popupWindow = new PopupWindow(popupView, 1000, 1000, focusable);
+
+        //Set the location of the window on the screen
+        popupWindow.showAtLocation(view, Gravity.CENTER, 50, 30);
+        if(name) {
+            ((TextView) popupView.findViewById(R.id.username)).setText("New Username:");
+        } else {
+            ((TextView) popupView.findViewById(R.id.username)).setText("New Password:");
+            ((TextView) popupView.findViewById(R.id.password)).setText("Old Password:");
+        }
+
+        ((Button) popupView.findViewById(R.id.delete)).setText("Change");
+
+        Button delete = (Button) popupView.findViewById(R.id.delete);
+        delete.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                popupWindow.dismiss();
+            }
+        });
+
+        popupView.setOnTouchListener(new View.OnTouchListener() {
+            @Override
+            public boolean onTouch(View v, MotionEvent event) {
                 //Close the window when clicked
                 popupWindow.dismiss();
                 return true;
@@ -117,14 +174,11 @@ public class UserSettingsFragment extends Fragment {
                             try {
                                 //check for passed or failed verification in the response
                                 if (response.getString("results").equals("deleted")) {
-
-                                    navigateToMainMenu();
+                                    navigateToLogin();
                                 } else {
-                                    //notify user of failed login
-                                    //loginHeader.setText(getString(R.string.login_failed));
+                                    top_text.setText("Username/Password Incorrect");
                                 }
                             } catch (JSONException ex) {
-                                //loginHeader.setText(getString(R.string.login_error));
                             }
                         }
                     },
@@ -141,11 +195,10 @@ public class UserSettingsFragment extends Fragment {
         } catch (JSONException ex) {
             //loginHeader.setText(getString(R.string.login_error));
         }
-        getActivity().getSupportFragmentManager().beginTransaction().replace(R.id.fragmentContainerView, new LogInScreenFragment()).commit();
     }
 
-    private void navigateToMainMenu(){
-        getActivity().getSupportFragmentManager().beginTransaction().replace(R.id.fragmentContainerView, new MainMenuFragment()).commit();
+    private void navigateToLogin(){
+        getActivity().getSupportFragmentManager().beginTransaction().replace(R.id.fragmentContainerView, new LogInScreenFragment()).commit();
     }
 }
 
