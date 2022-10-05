@@ -8,4 +8,8 @@ public class Friend {
         this.userID = userID;
         this.username = username;
     }
+
+    public String getUsername(){
+        return username;
+    }
 }

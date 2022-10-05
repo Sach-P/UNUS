@@ -74,13 +74,34 @@ public class UserProfileFragment extends Fragment {
     }
 
     public void getFriends() {
-        LinearLayout layout = view.findViewById(R.id.friends);
-        TextView tv = new TextView(view.getContext());
-        tv.setLayoutParams(new ViewGroup.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT,
-                ViewGroup.LayoutParams.WRAP_CONTENT));
-        tv.setText("programmatically created TextView1");
-        tv.setBackgroundColor(0xff66ff66); // hex color 0xAARRGGBB
-        tv.setPadding(20, 20, 20, 20); // in pixels (left, top, right, bottom)
-        layout.addView(tv);
+        for( int i = 0; i < UserData.getInstance().getFriendsList().length; i++) {
+            LinearLayout layout = view.findViewById(R.id.friends);
+            LinearLayout newLayout = new LinearLayout(view.getContext());
+            newLayout.setLayoutParams(new ViewGroup.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT,
+                    ViewGroup.LayoutParams.WRAP_CONTENT));
+            TextView tv = new TextView(view.getContext());
+            tv.setLayoutParams(new ViewGroup.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT,
+                    ViewGroup.LayoutParams.WRAP_CONTENT));
+            tv.setTextSize(20);
+            tv.setText(UserData.getInstance().getFriendsList()[i].getUsername());
+            newLayout.addView(tv);
+            Button button = new Button(view.getContext());
+            button.setLayoutParams(new ViewGroup.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT,
+                    ViewGroup.LayoutParams.WRAP_CONTENT));
+            button.setText("view");
+            button.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    getUser();
+                }
+            });
+            newLayout.addView(button);
+            layout.addView(newLayout);
+        }
     }
+
+    public void getUser() {
+
+    }
+
 }
