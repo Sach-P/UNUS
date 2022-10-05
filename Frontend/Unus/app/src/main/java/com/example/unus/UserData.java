@@ -5,13 +5,13 @@ package com.example.unus;
  */
 public class UserData {
 
-    private UserData singleInstance;
+    private static UserData singleInstance;
 
     private int userID;
     private String username;
     private String password;
 
-    private Friend[] friends;
+    private Friend[] friendsList;
 
     private int gamesPlayed;
     private int gamesWon;
@@ -27,7 +27,7 @@ public class UserData {
      * allows user to access the instance storing the user data. creates an instance if not called before
      * @return instance containing user data
      */
-    public UserData getInstance(){
+    public static UserData getInstance(){
         if (singleInstance == null){
             singleInstance = new UserData();
         }
@@ -91,6 +91,14 @@ public class UserData {
     }
 
     /**
+     * sets the current user's games played stat to a given int value
+     * @param gamesPlayed games played by user
+     */
+    public void setGamesPlayed(int gamesPlayed){
+        this.gamesPlayed = gamesPlayed;
+    }
+
+    /**
      * adds a game played to the current user's games played stat
      */
     public void incrementGamesPlayed(){
@@ -106,10 +114,37 @@ public class UserData {
     }
 
     /**
+     * sets the current user's games won stat to a given int value
+     * @param gamesWon games won by user
+     */
+    public void setGamesWon(int gamesWon){
+        this.gamesWon = gamesWon;
+    }
+
+    /**
      * adds a game won to the current user's games won stat
      */
     public void incrementGamesWon(){
         gamesWon++;
+    }
+
+    /**
+     * copys over a given list of Friend objects into the friendsList array
+     * @param friendsList list of Friends
+     */
+    public void setFriendsList(Friend[] friendsList){
+        this.friendsList = new Friend[friendsList.length];
+        for (int i = 0; i < friendsList.length; i++){
+            this.friendsList[i] = friendsList[i];
+        }
+    }
+
+    /**
+     * returns the friendsList array of Friend objects
+     * @return friends list
+     */
+    public Friend[] getFriendsList(){
+        return friendsList;
     }
 
 }

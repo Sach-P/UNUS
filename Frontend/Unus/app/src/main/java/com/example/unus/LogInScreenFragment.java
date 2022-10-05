@@ -120,6 +120,24 @@ public class LogInScreenFragment extends Fragment {
                             try {
                                 //check for passed or failed verification in the response
                                 if (response.getString("verification").equals("passed")){
+
+                                    //transfer user data received from http response to userData singleton
+                                    UserData userData= UserData.getInstance();
+
+                                    userData.setUserID(response.getInt("userID"));
+                                    userData.setUsername(response.getString("username"));
+                                    userData.setPassword(response.getString("password"));
+                                    userData.setGamesPlayed(response.getInt("gamesPlayed"));
+                                    userData.setGamesWon(response.getInt("gamesWon"));
+
+                                    int numFriends = response.getJSONArray("friends").length();
+                                    Friend[] friendList = new Friend[numFriends];
+                                    for (int i = 0; i < numFriends; i++){
+                                        JSONObject friendObj = response.getJSONArray("friends").getJSONObject(i);
+                                        friendList[i] = new Friend(friendObj.getInt("userID"), friendObj.getString("username"));
+                                    }
+                                    userData.setFriendsList(friendList);
+
                                     //change fragment to main menu
                                     navigateToMainMenu();
                                 } else {
