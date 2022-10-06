@@ -89,10 +89,11 @@ public class UserProfileFragment extends Fragment {
             button.setLayoutParams(new ViewGroup.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT,
                     ViewGroup.LayoutParams.WRAP_CONTENT));
             button.setText("view");
+            int finalIndex = i;
             button.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
-                    getUser();
+                    getUser(UserData.getInstance().getFriendsList()[finalIndex].getUserID());
                 }
             });
             newLayout.addView(button);
@@ -100,8 +101,57 @@ public class UserProfileFragment extends Fragment {
         }
     }
 
-    public void getUser() {
+    public void getUser(int id) {
+        LayoutInflater inflater = (LayoutInflater) view.getContext().getSystemService(view.getContext().LAYOUT_INFLATER_SERVICE);
+        View popupView = inflater.inflate(R.layout.profile_view_layout, null);
 
+        //Make Inactive Items Outside Of PopupWindow
+        boolean focusable = true;
+
+        //Create a window with our parameters
+        final PopupWindow popupWindow = new PopupWindow(popupView, 1000, 1000, focusable);
+
+        //Set the location of the window on the screen
+        popupWindow.showAtLocation(view, Gravity.CENTER, 50, 30);
+
+        try {
+            //add login credentials to the response body
+            JSONObject requestBody = new JSONObject();
+            requestBody.put("userID", id);
+
+            JsonObjectRequest request = new JsonObjectRequest(
+                    Request.Method.GET,
+                    "https://3d5d7b90-cdb8-41bc-b45b-cffb50951687.mock.pstmn.io/get_user/",
+                    requestBody,
+                    new Response.Listener<JSONObject>() {
+                        @Override
+                        public void onResponse(JSONObject response) {
+                            try {
+                                //check for passed or failed verification in the response
+                                if (response.getString("verification").equals("passed")) {
+                                    ((TextView) popupView.findViewById(R.id.username)).setText(response.getJSONObject("user").getString("username"));
+                                    //((TextView) popupView.findViewById(R.id.user_id)).setText(response.getJSONObject("user").getInt("id"));
+                                    ((TextView) popupView.findViewById(R.id.games_played)).setText("Games Played: "+response.getJSONObject("user").getString("games_played"));
+                                    ((TextView) popupView.findViewById(R.id.games_won)).setText("Games Won: "+response.getJSONObject("user").getString("games_won"));
+                                } else {
+                                }
+                            } catch (JSONException ex) {
+                            }
+                        }
+                    },
+                    new Response.ErrorListener() {
+                        @Override
+                        public void onErrorResponse(VolleyError error) {
+                            //loginHeader.setText(getString(R.string.login_error));
+                        }
+                    }
+            );
+
+            Volley.newRequestQueue(requireContext()).add(request);
+
+        } catch (JSONException ex) {
+            //loginHeader.setText(getString(R.string.login_error));
+        }
     }
 
 }

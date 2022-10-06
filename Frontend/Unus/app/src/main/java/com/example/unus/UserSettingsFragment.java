@@ -105,7 +105,7 @@ public class UserSettingsFragment extends Fragment {
                 String password = ((EditText) popupView.findViewById(R.id.pass_prompt)).getText().toString();
                 if(name.equals(UserData.getInstance().getUsername()) && password.equals(UserData.getInstance().getPassword())) {
                     popupWindow.dismiss();
-                    deleteUser(name, password);
+                    deleteUser(UserData.getInstance().getUserID());
                 } else {
                     popupWindow.dismiss();
                     top_text.setText("Incorrect Username or Password");
@@ -164,23 +164,22 @@ public class UserSettingsFragment extends Fragment {
         });
     }
 
-    private void deleteUser(String username, String password) {
+    private void deleteUser(int id) {
         try {
             //add login credentials to the response body
             JSONObject requestBody = new JSONObject();
-            requestBody.put("username", username);
-            requestBody.put("password", password);
+            requestBody.put("id", id);
 
             JsonObjectRequest request = new JsonObjectRequest(
                     Request.Method.DELETE,
-                    "https://b82a18c1-e947-44cf-bf54-6d24cab1848c.mock.pstmn.io/delete_user/",
+                    "https://3d5d7b90-cdb8-41bc-b45b-cffb50951687.mock.pstmn.io/delete/",
                     requestBody,
                     new Response.Listener<JSONObject>() {
                         @Override
                         public void onResponse(JSONObject response) {
                             try {
                                 //check for passed or failed verification in the response
-                                if (response.getString("results").equals("deleted")) {
+                                if (response.getString("verification").equals("deleted")) {
                                     navigateToLogin();
                                 } else {
                                     top_text.setText("Username/Password Incorrect");
