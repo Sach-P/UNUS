@@ -121,7 +121,7 @@ public class UserProfileFragment extends Fragment {
 
             JsonObjectRequest request = new JsonObjectRequest(
                     Request.Method.GET,
-                    "https://3d5d7b90-cdb8-41bc-b45b-cffb50951687.mock.pstmn.io/get_user/",
+                    "https://3d5d7b90-cdb8-41bc-b45b-cffb50951687.mock.pstmn.io/get_user/"+id,
                     requestBody,
                     new Response.Listener<JSONObject>() {
                         @Override
