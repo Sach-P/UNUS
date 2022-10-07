@@ -1,6 +1,9 @@
 <resources>
     <string name="app_name">UNUS</string>
 
+    <string name="postman_url">https://3d5d7b90-cdb8-41bc-b45b-cffb50951687.mock.pstmn.io/%s/</string>
+    <string name="remote_server_url">coms-309-029.class.las.iastate.edu:8080/%s/</string>
+    
     <string name="logo_content_description">logo</string>
     <string name="login_header">Enter Login Credentials</string>
     <string name="username_hint">username</string>
@@ -10,13 +13,25 @@
     <string name="hidePassword">hide</string>
     <string name="validatingMessage">Validating Credentials...</string>
 
-    <string name="postman_mock_server_url">https://8d0d4937-d8bc-43cc-bee6-ff1ecb033bc9.mock.pstmn.io/login_attempt/</string>
-
     <string name="login_failed">Invalid login credentials. Try Again</string>
     <string name="login_error">Login Error</string>
 
+    <string name="signup_header">Create An Account</string>
+    <string name="signup_description">Password Must include \n - 8 characters \n - 1 number</string>
+    <string name="confirm_password_hint">confirm password</string>
+    <string name="signup_button_text">create account</string>
 
+    <string name="no_username">Please Fill Username Field</string>
+    <string name="no_password">Please Fill Password Field</string>
+    <string name="invalid_password">Please Follow Given Password Requirements</string>
+    <string name="username_unavailable">Username Unavailable, Please Try Another</string>
+    <string name="password_mismatch">Passwords Do Not Match</string>
+    <string name="signup_error">Account Creation Error</string>
 
+    <string name="id_display">id: %d</string>
 
-    <string name="hello_blank_fragment">Login Successful</string>
+    <string name="join_game_button">JOIN GAME</string>
+    <string name="host_game_button">HOST GAME</string>
+    <string name="leaderboards_button">LEADERBOARD</string>
+    <string name="logout_button">LOGOUT</string>
 </resources>

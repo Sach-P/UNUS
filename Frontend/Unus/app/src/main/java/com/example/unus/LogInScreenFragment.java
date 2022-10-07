@@ -21,9 +21,6 @@ import com.android.volley.toolbox.Volley;
 
 import org.json.JSONException;
 import org.json.JSONObject;
-import org.w3c.dom.Text;
-
-import java.util.Objects;
 
 /**
  * A simply login screen fragment which takes the a user's username
@@ -31,7 +28,6 @@ import java.util.Objects;
  */
 public class LogInScreenFragment extends Fragment {
 
-    private View view;
     private TextView loginHeader;
     private EditText usernameField;
     private EditText passwordField;
@@ -48,12 +44,18 @@ public class LogInScreenFragment extends Fragment {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-        view = inflater.inflate(R.layout.fragment_log_in_screen, container, false);
+        View view = inflater.inflate(R.layout.fragment_log_in_screen, container, false);
 
         //initialize login screen views
         loginHeader = (TextView) view.findViewById(R.id.login_header);
         usernameField = (EditText) view.findViewById(R.id.username_field);
         passwordField = (EditText) view.findViewById(R.id.password_field);
+
+        if (this.getArguments() != null){
+            Bundle bundle = this.getArguments();
+            String username = bundle.getString("username");
+            usernameField.setText(username);
+        }
 
         //set up login button action
         Button loginButton = (Button)view.findViewById(R.id.login_button);
@@ -62,6 +64,15 @@ public class LogInScreenFragment extends Fragment {
             public void onClick(View view) {
                 loginHeader.setText(getString(R.string.validatingMessage));
                 sendLoginPostRequest(usernameField.getText().toString(), passwordField.getText().toString());
+            }
+        });
+
+        //set up account creation button action
+        Button createAccountButton = (Button)view.findViewById(R.id.create_account_button);
+        createAccountButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+               navigateToSignup();
             }
         });
 
@@ -100,7 +111,7 @@ public class LogInScreenFragment extends Fragment {
 
             JsonObjectRequest request = new JsonObjectRequest(
                     Request.Method.POST,
-                    getString(R.string.postman_mock_server_url),
+                    getString(R.string.postman_url, "login"),
                     requestBody,
                     new Response.Listener<JSONObject>() {
                         @Override
@@ -108,6 +119,22 @@ public class LogInScreenFragment extends Fragment {
                             try {
                                 //check for passed or failed verification in the response
                                 if (response.getString("verification").equals("passed")){
+
+                                    //transfer user data received from http response to userData singleton
+                                    UserData userData= UserData.getInstance();
+
+                                    userData.setUserID(response.getJSONObject("user").getInt("id"));
+                                    userData.setUsername(response.getJSONObject("user").getString("username"));
+                                    userData.setPassword(password);
+
+                                    int numFriends = response.getJSONObject("user").getJSONArray("friends").length();
+                                    Friend[] friendList = new Friend[numFriends];
+                                    for (int i = 0; i < numFriends; i++){
+                                        JSONObject friendObj = response.getJSONObject("user").getJSONArray("friends").getJSONObject(i);
+                                        friendList[i] = new Friend(friendObj.getInt("friendId"), friendObj.getString("username"));
+                                    }
+                                    userData.setFriendsList(friendList);
+
                                     //change fragment to main menu
                                     navigateToMainMenu();
                                 } else {
@@ -139,5 +166,9 @@ public class LogInScreenFragment extends Fragment {
      */
     private void navigateToMainMenu(){
         getActivity().getSupportFragmentManager().beginTransaction().replace(R.id.fragmentContainerView, new MainMenuFragment()).commit();
+    }
+
+    private void navigateToSignup(){
+        getActivity().getSupportFragmentManager().beginTransaction().replace(R.id.fragmentContainerView, new SignUpScreenFragment()).commit();
     }
 }

@@ -1,0 +1,26 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<classpath>
+	<classpathentry kind="con" path="org.eclipse.jdt.launching.JRE_CONTAINER">
+		<attributes>
+			<attribute name="module" value="true"/>
+		</attributes>
+	</classpathentry>
+	<classpathentry kind="src" path="Experiments/AbramDemo/Exp1/demo/src/main/java"/>
+	<classpathentry kind="src" path="Experiments/AbramDemo/Exp1/demo/src/test/java"/>
+	<classpathentry kind="src" path="Experiments/AbramDemo/Exp2/demo/src/main/java"/>
+	<classpathentry kind="src" path="Experiments/AbramDemo/Exp2/demo/src/test/java"/>
+	<classpathentry kind="src" path="Experiments/IsaacBlandin/androidExp1/app/src/androidTest/java"/>
+	<classpathentry kind="src" path="Experiments/IsaacBlandin/androidExp1/app/src/main/java"/>
+	<classpathentry kind="src" path="Experiments/IsaacBlandin/androidExp1/app/src/test/java"/>
+	<classpathentry kind="src" path="Experiments/IsaacBlandin/randomNumber/app/src/androidTest/java"/>
+	<classpathentry kind="src" path="Experiments/IsaacBlandin/randomNumber/app/src/main/java"/>
+	<classpathentry kind="src" path="Experiments/IsaacBlandin/randomNumber/app/src/test/java"/>
+	<classpathentry kind="src" path="Experiments/Sachin Patel/project/src/main/java"/>
+	<classpathentry kind="src" path="Experiments/Sachin Patel/project/src/test/java"/>
+	<classpathentry kind="lib" path="Experiments/AbramDemo/Exp1/demo/.mvn/wrapper/maven-wrapper.jar"/>
+	<classpathentry kind="lib" path="Experiments/AbramDemo/Exp2/demo/.mvn/wrapper/maven-wrapper.jar"/>
+	<classpathentry kind="lib" path="Experiments/IsaacBlandin/androidExp1/gradle/wrapper/gradle-wrapper.jar"/>
+	<classpathentry kind="lib" path="Experiments/IsaacBlandin/randomNumber/gradle/wrapper/gradle-wrapper.jar"/>
+	<classpathentry kind="lib" path="Experiments/Sachin Patel/project/.mvn/wrapper/maven-wrapper.jar"/>
+	<classpathentry kind="output" path="Experiments/Sachin Patel/project/target/classes"/>
+</classpath>

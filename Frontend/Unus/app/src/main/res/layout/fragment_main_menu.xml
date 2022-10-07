@@ -1,14 +1,140 @@
 <?xml version="1.0" encoding="utf-8"?>
-<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:tools="http://schemas.android.com/tools"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".MainMenuFragment">
+    android:orientation="vertical"
+    >
 
-    <!-- TODO: Update blank fragment layout -->
-    <TextView
+    <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+
+        android:layout_width="fill_parent"
+        android:layout_height="50dp"
+        android:orientation="horizontal"
+        android:layout_marginHorizontal="5dp"
+        android:layout_marginTop="5dp"
+        >
+
+        <Space
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="0.9"
+            />
+
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:orientation="vertical"
+            >
+
+            <TextView
+                android:id="@+id/username_display"
+                android:layout_width="wrap_content"
+                android:layout_height="0dp"
+                android:layout_weight="0.6"
+                android:textSize="25sp"
+                android:layout_gravity="end"
+                android:textColor="@color/black"
+                />
+
+            <TextView
+                android:id="@+id/id_display"
+                android:layout_width="wrap_content"
+                android:layout_height="0dp"
+                android:layout_weight="0.4"
+                android:text="@string/id_display"
+                android:textSize="15sp"
+                android:layout_gravity="end"
+                android:textColor="@color/black"
+                />
+
+        </LinearLayout>
+
+        <ImageView
+            android:id="@+id/avatar_pic"
+            android:layout_width="50dp"
+            android:layout_height="50dp"
+            android:src="@drawable/ic_blank_avatar"
+            android:layout_marginLeft="5dp"
+            />
+
+    </LinearLayout>
+
+    <Space
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:text="@string/hello_blank_fragment" />
+        android:layout_height="0dp"
+        android:layout_weight="0.05"
+        />
 
-</FrameLayout>
+    <ImageView
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="0.5"
+        android:src="@drawable/ic_uno_logo"
+        />
+
+    <Space
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="0.2"
+        />
+
+    <Button
+        android:id="@+id/join_game_button"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="0.2"
+        android:layout_marginHorizontal="50dp"
+        android:backgroundTint="#ED1C24"
+        android:textColor="#F8DA27"
+        android:textStyle="bold"
+        android:textSize="25sp"
+        android:text="@string/join_game_button"
+        />
+
+    <Button
+        android:id="@+id/host_game_button"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="0.2"
+        android:layout_marginHorizontal="50dp"
+        android:backgroundTint="#ED1C24"
+        android:textColor="#F8DA27"
+        android:textStyle="bold"
+        android:textSize="25sp"
+        android:text="@string/host_game_button"
+        />
+
+    <Button
+        android:id="@+id/leaderboard_button"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="0.2"
+        android:layout_marginHorizontal="50dp"
+        android:backgroundTint="#ED1C24"
+        android:textColor="#F8DA27"
+        android:textStyle="bold"
+        android:textSize="25sp"
+        android:text="@string/leaderboards_button"
+        />
+
+    <Button
+        android:id="@+id/logout_button"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="0.2"
+        android:layout_marginHorizontal="50dp"
+        android:backgroundTint="#ED1C24"
+        android:textColor="#F8DA27"
+        android:textStyle="bold"
+        android:textSize="25sp"
+        android:text="@string/logout_button"
+        />
+
+    <Space
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="0.2"
+        />
+
+</LinearLayout>
