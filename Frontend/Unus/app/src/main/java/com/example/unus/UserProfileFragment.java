@@ -139,7 +139,7 @@ public class UserProfileFragment extends Fragment {
 
             JsonObjectRequest request = new JsonObjectRequest(
                     Request.Method.GET,
-                    "https://3d5d7b90-cdb8-41bc-b45b-cffb50951687.mock.pstmn.io/user/"+id,
+                    getString(R.string.postman_url, "user/"+id),
                     requestBody,
                     new Response.Listener<JSONObject>() {
                         @Override

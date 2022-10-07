@@ -21,6 +21,7 @@ import com.android.volley.VolleyError;
 import com.android.volley.toolbox.JsonObjectRequest;
 import com.android.volley.toolbox.Volley;
 
+import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
@@ -144,6 +145,7 @@ public class UserSettingsFragment extends Fragment {
             ((TextView) popupView.findViewById(R.id.password)).setText("Old Password:");
         }
 
+
         ((Button) popupView.findViewById(R.id.delete)).setText("Change");
 
         Button delete = (Button) popupView.findViewById(R.id.delete);
@@ -151,6 +153,11 @@ public class UserSettingsFragment extends Fragment {
             @Override
             public void onClick(View view) {
                 popupWindow.dismiss();
+                if(((EditText) popupView.findViewById(R.id.pass_prompt)).getText().toString().equals(UserData.getInstance().getPassword())) {
+                    changeUser(name, ((EditText) popupView.findViewById(R.id.user_prompt)).getText().toString());
+                } else {
+                    top_text.setText("Username/Password Incorrect");
+                }
             }
         });
 
@@ -172,7 +179,7 @@ public class UserSettingsFragment extends Fragment {
 
             JsonObjectRequest request = new JsonObjectRequest(
                     Request.Method.DELETE,
-                    "https://3d5d7b90-cdb8-41bc-b45b-cffb50951687.mock.pstmn.io/user/"+id,
+                    getString(R.string.postman_url, "user/"+id),
                     requestBody,
                     new Response.Listener<JSONObject>() {
                         @Override
@@ -201,6 +208,51 @@ public class UserSettingsFragment extends Fragment {
         } catch (JSONException ex) {
             //loginHeader.setText(getString(R.string.login_error));
         }
+    }
+
+    public void changeUser(boolean b, String s) {
+        try {
+            JSONArray friendsList = new JSONArray();
+            for(int i = 0; i < UserData.getInstance().getFriendsList().length; i++) {
+                JSONObject temp = new JSONObject();
+                temp.put("friendId", UserData.getInstance().getFriendsList()[i].getUserID());
+                temp.put("username", UserData.getInstance().getFriendsList()[i].getUsername());
+                temp.put("status", "pending");
+                friendsList.put(temp);
+            }
+            //add login credentials to the response body
+            JSONObject requestBody = new JSONObject();
+            requestBody.put("id", UserData.getInstance().getUserID());
+            if(b) {
+                requestBody.put("username", s);
+                requestBody.put("password", UserData.getInstance().getPassword());
+            } else {
+                requestBody.put("username", UserData.getInstance().getUsername());
+                requestBody.put("password", s);
+            }
+            requestBody.put("friends", friendsList);
+            requestBody.put("gamesPlayed", UserData.getInstance().getGamesPlayed());
+            requestBody.put("gamesWon", UserData.getInstance().getGamesWon());
+
+            JsonObjectRequest request = new JsonObjectRequest(
+                    Request.Method.PUT,
+                    getString(R.string.postman_url, "user/"+UserData.getInstance().getUserID()),
+                    requestBody,
+                    null,
+                    new Response.ErrorListener() {
+                        @Override
+                        public void onErrorResponse(VolleyError error) {
+                            //loginHeader.setText(getString(R.string.login_error));
+                        }
+                    }
+            );
+
+            Volley.newRequestQueue(requireContext()).add(request);
+
+        } catch (JSONException ex) {
+            //loginHeader.setText(getString(R.string.login_error));
+        }
+        navigateToLogin();
     }
 
     private void navigateToLogin(){
