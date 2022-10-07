@@ -1,10 +1,13 @@
 package com._an_5.UNUS;
 
+import com.fasterxml.jackson.databind.util.JSONPObject;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.ModelAndView;
 
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 @RestController
 public class UserController {
@@ -15,8 +18,8 @@ public class UserController {
     @Autowired
     private UserService userService;
 
-    private String success = "{\"message\":\"success\"}";
-    private String failure = "{\"message\":\"failure\"}";
+    private String success = "{\"message\":\"passed\"}";
+    private String failure = "{\"message\":\"failed\"}";
 
 
     @PostMapping(path = "/signup")
@@ -35,14 +38,18 @@ public class UserController {
 //    }
 
     @PostMapping(path = "/login")
-    public String login(@RequestBody User user){//@ModelAttribute("user") User user){
+    public Map<String, Object> login(@RequestBody User user){//@ModelAttribute("user") User user){
+        HashMap<String, Object> map = new HashMap<>();
         User oauthUser = userService.login(user.getUsername(), user.getPassword());
         if(oauthUser != null){
-            return "{\"verification\":\"passed\"}";
+            map.put("verification", "passed");
+            map.put("user", oauthUser);
+            return map;
         }
-        return "{\"verification\":\"failed\"}";
+        map.put("verification", "failed");
+        map.put("user", null);
+        return map;
     }
-
 
     @GetMapping(path = "/user")
     public List<User> getAllUsers(){
