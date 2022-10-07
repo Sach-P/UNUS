@@ -1,6 +1,9 @@
 package com._an_5.UNUS;
 
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonSetter;
+
 import javax.persistence.*;
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -18,21 +21,21 @@ public class User {
     private String password;
     //private Map<String, Integer> stats;
 
-    @OneToMany(mappedBy = "friends")
-    private List<Friend> friends;
+//    @OneToMany(mappedBy = "friends")
+//    private List<Friend> friends;
 
 
     public User (String username, String password){
         this.username = username;
         this.password = password;
-        friends = new ArrayList<>();
+//        friends = new ArrayList<>();
 //        stats = new HashMap<>();
 //        stats.put("Games Played", 0);
 //        stats.put("Games Won", 0);
     }
 
     public User() {
-        friends = new ArrayList<>();
+//        friends = new ArrayList<>();
     }
 
 
@@ -52,18 +55,20 @@ public class User {
         this.username = username;
     }
 
+    @JsonIgnore
     public String getPassword() { return password; }
 
+    @JsonSetter
     public void setPassword(String password) { this.password = password; }
 
 
-    public List<Friend> getFriends(){
-        return friends;
-    }
+//    public List<Friend> getFriends(){
+//        return friends;
+//    }
 
-    public void addFriend(Friend friend){
-        friends.add(friend);
-    }
+//    public void addFriend(Friend friend){
+//        friends.add(friend);
+//    }
 
 //    public Map<String, Integer> getStats(){
 //        return stats;

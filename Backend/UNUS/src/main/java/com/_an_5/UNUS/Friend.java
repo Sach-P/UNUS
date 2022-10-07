@@ -1,16 +1,18 @@
 package com._an_5.UNUS;
 
-import javax.persistence.Entity;
-import javax.persistence.Id;
+import javax.persistence.*;
 
 @Entity
+@Table(name = "friends")
 public class Friend {
+
     @Id
-    int friendID;
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    int id;
     String username;
 
     public Friend(int id, String username){
-        friendID = id;
+        this.id = id;
         this.username = username;
     }
 
