@@ -171,8 +171,8 @@ public class UserSettingsFragment extends Fragment {
             requestBody.put("id", id);
 
             JsonObjectRequest request = new JsonObjectRequest(
-                    Request.Method.POST,
-                    "https://3d5d7b90-cdb8-41bc-b45b-cffb50951687.mock.pstmn.io/delete/"+id,
+                    Request.Method.DELETE,
+                    "https://3d5d7b90-cdb8-41bc-b45b-cffb50951687.mock.pstmn.io/user/"+id,
                     requestBody,
                     new Response.Listener<JSONObject>() {
                         @Override
