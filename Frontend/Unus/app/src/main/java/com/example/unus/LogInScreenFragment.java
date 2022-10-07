@@ -135,6 +135,9 @@ public class LogInScreenFragment extends Fragment {
                                     }
                                     userData.setFriendsList(friendList);
 
+                                    userData.setGamesPlayed(response.getJSONObject("user").getInt("gamesPlayed"));
+                                    userData.setGamesWon(response.getJSONObject("user").getInt("gamesWon"));
+
                                     //change fragment to main menu
                                     navigateToMainMenu();
                                 } else {
