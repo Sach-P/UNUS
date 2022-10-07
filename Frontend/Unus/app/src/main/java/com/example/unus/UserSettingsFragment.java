@@ -28,10 +28,6 @@ public class UserSettingsFragment extends Fragment {
 
     private View view;
     private TextView top_text;
-    private Button delete_user;
-    private Button back;
-    private Button change_name;
-    private Button change_pass;
 
     public UserSettingsFragment() {
         // Required empty public constructor
@@ -47,10 +43,10 @@ public class UserSettingsFragment extends Fragment {
                              Bundle savedInstanceState) {
         view = inflater.inflate(R.layout.fragment_user_settings, container, false);
         top_text = (TextView) view.findViewById(R.id.top_text);
-        delete_user = (Button) view.findViewById(R.id.delete_user);
-        back = (Button) view.findViewById(R.id.back);
-        change_name = (Button) view.findViewById(R.id.change_name);
-        change_pass = (Button) view.findViewById(R.id.change_password);
+        Button delete_user = (Button) view.findViewById(R.id.delete_user);
+        Button back = (Button) view.findViewById(R.id.back);
+        Button change_name = (Button) view.findViewById(R.id.change_name);
+        Button change_pass = (Button) view.findViewById(R.id.change_password);
 
         back.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -172,7 +168,7 @@ public class UserSettingsFragment extends Fragment {
 
             JsonObjectRequest request = new JsonObjectRequest(
                     Request.Method.DELETE,
-                    "https://3d5d7b90-cdb8-41bc-b45b-cffb50951687.mock.pstmn.io/user/"+id,
+                    getString(R.string.remote_server_url, "user")+id,
                     requestBody,
                     new Response.Listener<JSONObject>() {
                         @Override

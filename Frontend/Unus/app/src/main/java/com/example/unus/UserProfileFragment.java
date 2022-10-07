@@ -135,11 +135,10 @@ public class UserProfileFragment extends Fragment {
         try {
             //add login credentials to the response body
             JSONObject requestBody = new JSONObject();
-            requestBody.put("userID", id);
 
             JsonObjectRequest request = new JsonObjectRequest(
                     Request.Method.GET,
-                    "https://3d5d7b90-cdb8-41bc-b45b-cffb50951687.mock.pstmn.io/user/"+id,
+                    getString(R.string.remote_server_url, "user")+id,
                     requestBody,
                     new Response.Listener<JSONObject>() {
                         @Override
@@ -167,7 +166,7 @@ public class UserProfileFragment extends Fragment {
 
             Volley.newRequestQueue(requireContext()).add(request);
 
-        } catch (JSONException ex) {
+        } catch (Exception ex) {
             //loginHeader.setText(getString(R.string.login_error));
         }
     }
