@@ -148,7 +148,7 @@ public class UserProfileFragment extends Fragment {
                                 //check for passed or failed verification in the response
                                 if (response.getString("verification").equals("passed")) {
                                     ((TextView) popupView.findViewById(R.id.username)).setText(response.getJSONObject("user").getString("username"));
-                                    //((TextView) popupView.findViewById(R.id.user_id)).setText(response.getJSONObject("user").getInt("id"));
+                                    ((TextView) popupView.findViewById(R.id.user_id)).setText(response.getJSONObject("user").getString("id"));
                                     ((TextView) popupView.findViewById(R.id.games_played)).setText("Games Played: "+response.getJSONObject("user").getString("games_played"));
                                     ((TextView) popupView.findViewById(R.id.games_won)).setText("Games Won: "+response.getJSONObject("user").getString("games_won"));
                                 } else {
