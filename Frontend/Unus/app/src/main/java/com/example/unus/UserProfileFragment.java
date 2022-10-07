@@ -86,9 +86,11 @@ public class UserProfileFragment extends Fragment {
             tv.setText(UserData.getInstance().getFriendsList()[i].getUsername());
             newLayout.addView(tv);
             Button button = new Button(view.getContext());
-            button.setLayoutParams(new ViewGroup.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT,
+            button.setLayoutParams(new ViewGroup.LayoutParams(250,
                     ViewGroup.LayoutParams.WRAP_CONTENT));
             button.setText("view");
+            button.setBackgroundColor(this.getResources().getColor(R.color.red));
+            button.setTextColor(this.getResources().getColor(R.color.yellow));
             int finalIndex = i;
             button.setOnClickListener(new View.OnClickListener() {
                 @Override
@@ -99,6 +101,22 @@ public class UserProfileFragment extends Fragment {
             newLayout.addView(button);
             layout.addView(newLayout);
         }
+        LinearLayout layout = view.findViewById(R.id.friends);
+        Button make_friends = new Button(view.getContext());
+        make_friends.setLayoutParams(new ViewGroup.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT,
+                ViewGroup.LayoutParams.WRAP_CONTENT));
+        make_friends.setTextSize(20);
+        make_friends.setText("Add Friends");
+        layout.addView(make_friends);
+        make_friends.setBackgroundColor(this.getResources().getColor(R.color.red));
+        make_friends.setTextColor(this.getResources().getColor(R.color.yellow));
+        make_friends.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+
+            }
+        });
+
     }
 
     public void getUser(int id) {
