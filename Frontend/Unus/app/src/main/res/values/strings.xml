@@ -1,6 +1,8 @@
 <resources>
     <string name="app_name">UNUS</string>
 
+    <string name="postman_url">https://3d5d7b90-cdb8-41bc-b45b-cffb50951687.mock.pstmn.io/%s/</string>
+    
     <string name="logo_content_description">logo</string>
     <string name="login_header">Enter Login Credentials</string>
     <string name="username_hint">username</string>
@@ -9,8 +11,6 @@
     <string name="showPassword">show</string>
     <string name="hidePassword">hide</string>
     <string name="validatingMessage">Validating Credentials...</string>
-
-    <string name="login_url">https://3d5d7b90-cdb8-41bc-b45b-cffb50951687.mock.pstmn.io/login/</string>
 
     <string name="login_failed">Invalid login credentials. Try Again</string>
     <string name="login_error">Login Error</string>
@@ -26,8 +26,6 @@
     <string name="username_unavailable">Username Unavailable, Please Try Another</string>
     <string name="password_mismatch">Passwords Do Not Match</string>
     <string name="signup_error">Account Creation Error</string>
-
-    <string name="signup_url">https://3d5d7b90-cdb8-41bc-b45b-cffb50951687.mock.pstmn.io/signup/</string>
 
     <string name="id_display">id: %d</string>
 
