@@ -1,6 +1,9 @@
 package com._an_5.UNUS;
 
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonSetter;
+
 import javax.persistence.*;
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -18,14 +21,24 @@ public class User {
     private String password;
     //private Map<String, Integer> stats;
 
-    @OneToMany(mappedBy = "friends")
+    @OneToMany(cascade=CascadeType.ALL)
+    @JoinColumn(name="friends_id")
     private List<Friend> friends;
 
+    @OneToMany(cascade=CascadeType.ALL)
+    @JoinColumn(name="friendRequest_id")
+    private List<Friend> friendRequests;
+
+    @OneToMany(cascade=CascadeType.ALL)
+    @JoinColumn(name="friendRequested_id")
+    private List<Friend> friendRequested;
 
     public User (String username, String password){
         this.username = username;
         this.password = password;
         friends = new ArrayList<>();
+        friendRequests = new ArrayList<>();
+        friendRequested = new ArrayList<>();
 //        stats = new HashMap<>();
 //        stats.put("Games Played", 0);
 //        stats.put("Games Won", 0);
@@ -33,6 +46,8 @@ public class User {
 
     public User() {
         friends = new ArrayList<>();
+        friendRequests = new ArrayList<>();
+        friendRequested = new ArrayList<>();
     }
 
 
@@ -52,8 +67,10 @@ public class User {
         this.username = username;
     }
 
+    @JsonIgnore
     public String getPassword() { return password; }
 
+    @JsonSetter
     public void setPassword(String password) { this.password = password; }
 
 
@@ -63,6 +80,35 @@ public class User {
 
     public void addFriend(Friend friend){
         friends.add(friend);
+    }
+
+    public void removeFriend(Friend friend){
+        friends.remove(friend);
+    }
+
+
+    public List<Friend> getSentFriendRequests(){
+        return friendRequests;
+    }
+
+    public void addSentFriendRequests(Friend friend){
+        friendRequests.add(friend);
+    }
+
+    public void removeSentFriendRequests(Friend friend){
+        friendRequests.remove(friend);
+    }
+
+    public List<Friend> getReceivedFriendRequests(){
+        return friendRequested;
+    }
+
+    public void addReceivedFriendRequests(Friend friend){
+        friendRequested.add(friend);
+    }
+
+    public void removeReceivedFriendRequests(Friend friend){
+        friendRequested.remove(friend);
     }
 
 //    public Map<String, Integer> getStats(){
