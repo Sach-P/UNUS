@@ -6,9 +6,7 @@ import com.fasterxml.jackson.annotation.JsonSetter;
 
 import javax.persistence.*;
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 
 @Entity
 @Table(name="user")
@@ -19,7 +17,8 @@ public class User {
     private int id;
     private String username;
     private String password;
-    //private Map<String, Integer> stats;
+    private int gamesPlayed;
+    private int gamesWon;
 
     @OneToMany(cascade=CascadeType.ALL)
     @JoinColumn(name="friends_id")
@@ -33,10 +32,6 @@ public class User {
     @JoinColumn(name="friendRequested_id")
     private List<Friend> friendRequested;
 
-
-    private int gamesPlayed;
-    private int gamesWon;
-
     public User (String username, String password){
         this.username = username;
         this.password = password;
@@ -45,9 +40,6 @@ public class User {
         friends = new ArrayList<>();
         friendRequests = new ArrayList<>();
         friendRequested = new ArrayList<>();
-//        stats = new HashMap<>();
-//        stats.put("Games Played", 0);
-//        stats.put("Games Won", 0);
     }
 
     public User() {
@@ -133,12 +125,5 @@ public class User {
         return gamesWon;
     }
 
-    //    public Map<String, Integer> getStats(){
-//        return stats;
-//    }
-//
-//    public void updateStat(String key, int val){
-//        stats.replace("key", val);
-//    }
 
 }

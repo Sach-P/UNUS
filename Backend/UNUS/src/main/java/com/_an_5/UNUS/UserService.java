@@ -9,8 +9,8 @@ public class UserService {
     @Autowired
     private UserRepository repo;
 
-    public User login(String name, String password){
-        User user = repo.findByUsernameAndPassword(name, password);
+    public User login(String username, String password){
+        User user = repo.findByUsernameAndPassword(username, password);
         return user;
     }
 

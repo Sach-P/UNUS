@@ -40,7 +40,7 @@ public class Friend {
 
     @Override
     public int hashCode() {
-        return Objects.hash(id);
+        return Objects.hash(friendId);
     }
 
     public int getId() {
