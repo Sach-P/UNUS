@@ -33,9 +33,15 @@ public class User {
     @JoinColumn(name="friendRequested_id")
     private List<Friend> friendRequested;
 
+
+    private int gamesPlayed;
+    private int gamesWon;
+
     public User (String username, String password){
         this.username = username;
         this.password = password;
+        gamesPlayed = 0;
+        gamesWon = 0;
         friends = new ArrayList<>();
         friendRequests = new ArrayList<>();
         friendRequested = new ArrayList<>();
@@ -111,7 +117,23 @@ public class User {
         friendRequested.remove(friend);
     }
 
-//    public Map<String, Integer> getStats(){
+    public void setGamesPlayed(int gamesPlayed) {
+        this.gamesPlayed = gamesPlayed;
+    }
+
+    public int getGamesPlayed() {
+        return gamesPlayed;
+    }
+
+    public void setGamesWon(int gamesWon) {
+        this.gamesWon = gamesWon;
+    }
+
+    public int getGamesWon() {
+        return gamesWon;
+    }
+
+    //    public Map<String, Integer> getStats(){
 //        return stats;
 //    }
 //

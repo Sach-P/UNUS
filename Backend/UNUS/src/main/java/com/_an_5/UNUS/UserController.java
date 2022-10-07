@@ -64,7 +64,7 @@ public class UserController {
     @PutMapping(path = "/user/{id}")
     public User updateUser(@PathVariable int id, @RequestBody User user) {
         User currUser = userRepository.findById(id);
-        if(user == null)
+        if(currUser == null)
             return null;
         userRepository.save(user);
         return userRepository.findById(id);
