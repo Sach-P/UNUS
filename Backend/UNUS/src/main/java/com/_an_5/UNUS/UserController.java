@@ -1,11 +1,10 @@
 package com._an_5.UNUS;
 
-import com.fasterxml.jackson.databind.util.JSONPObject;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
-import org.springframework.web.servlet.ModelAndView;
 
 import java.util.HashMap;
+import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 
@@ -13,7 +12,7 @@ import java.util.Map;
 public class UserController {
 
     @Autowired
-    UserInterface userInterface;
+    UserRepository userRepository;
 
     @Autowired
     private UserService userService;
@@ -26,7 +25,7 @@ public class UserController {
     public String addUser(@RequestBody User user){
         if (user == null)
             return failure;
-        userInterface.save(user);
+        userRepository.save(user);
         return success;
     }
 
@@ -53,22 +52,92 @@ public class UserController {
 
     @GetMapping(path = "/user")
     public List<User> getAllUsers(){
-        return userInterface.findAll();
+        return userRepository.findAll();
     }
 
     @GetMapping(path = "/user/{id}")
-    public User getUser(@PathVariable int id){ return userInterface.findById(id); }
+    public User getUser(@PathVariable int id){ return userRepository.findById(id); }
 
     @DeleteMapping(path = "/user/{id}")
-    public void deleteUser(@PathVariable int id) { userInterface.deleteById(id); }
+    public void deleteUser(@PathVariable int id) { userRepository.deleteById(id); }
 
     @PutMapping(path = "/user/{id}")
     public User updateUser(@PathVariable int id, @RequestBody User user) {
-        User currUser = userInterface.findById(id);
+        User currUser = userRepository.findById(id);
         if(user == null)
             return null;
-        userInterface.save(user);
-        return userInterface.findById(id);
+        userRepository.save(user);
+        return userRepository.findById(id);
     }
+
+    @PutMapping(path = "/user/{id}/send-friend-request")
+    public List<Friend> sendFriendRequest(@PathVariable int id, @RequestBody Friend friend){
+        User currUser = userRepository.findById(id);
+        User friendUser = userRepository.findById(friend.getFriendId());
+        if(friend != null){
+            currUser.addSentFriendRequests(friend);
+            friendUser.addReceivedFriendRequests(new Friend(currUser.getId(), currUser.getUsername()));
+        }
+        userRepository.save(currUser);
+        userRepository.save(friendUser);
+        return currUser.getSentFriendRequests();
+    }
+
+    @GetMapping(path = "/user/{id}/pending-friend-requests")
+    public List<Friend> getFriendRequests(@PathVariable int id){
+        User currUser = userRepository.findById(id);
+        return currUser.getReceivedFriendRequests();
+    }
+
+    @PutMapping(path = "/user/{id}/pending-friend-requests")
+    public List<Friend> acceptOrDeclineFriendRequest(@PathVariable int id, @RequestBody Friend request){
+        User currUser = userRepository.findById(id);
+        User friendUser = userRepository.findById(request.getFriendId());
+        Iterator<Friend> it = currUser.getReceivedFriendRequests().listIterator();
+        while(it.hasNext()){
+            Friend friendRequest = it.next();
+            if(friendRequest.getId() == request.getId()){
+                if(request.getStatus().equals("accepted")){
+                    it.remove();
+                    friendUser.removeSentFriendRequests(new Friend(currUser.getId(), currUser.getUsername()));
+                    friendRequest.setStatus("friend");
+                    currUser.addFriend(friendRequest);
+                    friendUser.addFriend(new Friend(currUser.getId(), currUser.getUsername(), "friend"));
+                }
+                else if(request.getStatus().equals("declined")){
+                    it.remove();
+                    friendUser.removeSentFriendRequests(new Friend(currUser.getId(), currUser.getUsername()));
+                }
+                break;
+            }
+        }
+        userRepository.save(currUser);
+        userRepository.save(friendUser);
+        return currUser.getReceivedFriendRequests();
+    }
+
+    @PutMapping(path = "/user/{id}/friends/remove-friend")
+    public Friend removeFriend(@PathVariable int id, @RequestBody Friend friend){
+        User currUser = userRepository.findById(id);
+        User friendUser = userRepository.findById(friend.getFriendId());
+        Iterator<Friend> it = currUser.getFriends().listIterator();
+        while(it.hasNext()){
+            Friend currFriend = it.next();
+            if(friend.getId() == currFriend.getId()){
+                it.remove();
+                friendUser.removeFriend(new Friend(currUser.getId(), currUser.getUsername()));
+            }
+        }
+        userRepository.save(currUser);
+        userRepository.save(friendUser);
+        return friend;
+    }
+
+    @GetMapping(path = "/user/{id}/friends")
+    public List<Friend> getFriends(@PathVariable int id){
+        User currUser = userRepository.findById(id);
+        return currUser.getFriends();
+    }
+
 
 }

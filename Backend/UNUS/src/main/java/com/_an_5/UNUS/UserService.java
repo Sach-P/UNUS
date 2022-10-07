@@ -7,7 +7,7 @@ import org.springframework.stereotype.Service;
 @Service
 public class UserService {
     @Autowired
-    private UserInterface repo;
+    private UserRepository repo;
 
     public User login(String name, String password){
         User user = repo.findByUsernameAndPassword(name, password);
