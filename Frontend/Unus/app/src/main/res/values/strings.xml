@@ -2,7 +2,7 @@
     <string name="app_name">UNUS</string>
 
     <string name="postman_url">https://3d5d7b90-cdb8-41bc-b45b-cffb50951687.mock.pstmn.io/%s/</string>
-    <string name="remote_server_url">null</string>
+    <string name="remote_server_url">coms-309-029.class.las.iastate.edu:8080/%s/</string>
     
     <string name="logo_content_description">logo</string>
     <string name="login_header">Enter Login Credentials</string>
