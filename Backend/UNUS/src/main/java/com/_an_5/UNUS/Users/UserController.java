@@ -1,5 +1,6 @@
-package com._an_5.UNUS;
+package com._an_5.UNUS.Users;
 
+import com._an_5.UNUS.Friends.Friend;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
@@ -57,7 +58,7 @@ public class UserController {
     @PutMapping(path = "/user/{id}")
     public User updateUser(@PathVariable int id, @RequestBody User user) {
         User currUser = userRepository.findById(id);
-        if(currUser == null)
+        if(user == null)
             return null;
         userRepository.save(user);
         return userRepository.findById(id);

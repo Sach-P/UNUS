@@ -1,4 +1,4 @@
-package com._an_5.UNUS;
+package com._an_5.UNUS.Friends;
 
 import javax.persistence.*;
 import java.util.Objects;

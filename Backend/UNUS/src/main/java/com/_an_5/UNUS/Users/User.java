@@ -1,6 +1,7 @@
-package com._an_5.UNUS;
+package com._an_5.UNUS.Users;
 
 
+import com._an_5.UNUS.Friends.Friend;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonSetter;
 
@@ -20,6 +21,7 @@ public class User {
     private int gamesPlayed;
     private int gamesWon;
 
+
     @OneToMany(cascade=CascadeType.ALL)
     @JoinColumn(name="friends_id")
     private List<Friend> friends;
@@ -35,14 +37,11 @@ public class User {
     public User (String username, String password){
         this.username = username;
         this.password = password;
-        gamesPlayed = 0;
-        gamesWon = 0;
-        friends = new ArrayList<>();
-        friendRequests = new ArrayList<>();
-        friendRequested = new ArrayList<>();
     }
 
     public User() {
+        gamesPlayed = 0;
+        gamesWon = 0;
         friends = new ArrayList<>();
         friendRequests = new ArrayList<>();
         friendRequested = new ArrayList<>();
