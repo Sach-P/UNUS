@@ -125,13 +125,13 @@ public class LogInScreenFragment extends Fragment {
 
                                     userData.setUserID(response.getJSONObject("user").getInt("id"));
                                     userData.setUsername(response.getJSONObject("user").getString("username"));
-                                    userData.setPassword(response.getJSONObject("user").getString("password"));
+                                    userData.setPassword(password);
 
                                     int numFriends = response.getJSONObject("user").getJSONArray("friends").length();
                                     Friend[] friendList = new Friend[numFriends];
                                     for (int i = 0; i < numFriends; i++){
                                         JSONObject friendObj = response.getJSONObject("user").getJSONArray("friends").getJSONObject(i);
-                                        friendList[i] = new Friend(friendObj.getInt("userID"), friendObj.getString("username"));
+                                        friendList[i] = new Friend(friendObj.getInt("friendId"), friendObj.getString("username"));
                                     }
                                     userData.setFriendsList(friendList);
 
