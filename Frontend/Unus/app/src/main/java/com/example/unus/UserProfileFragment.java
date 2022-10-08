@@ -132,44 +132,36 @@ public class UserProfileFragment extends Fragment {
         //Set the location of the window on the screen
         popupWindow.showAtLocation(view, Gravity.CENTER, 50, 30);
 
-        try {
-            //add login credentials to the response body
-            JSONObject requestBody = new JSONObject();
-            requestBody.put("userID", id);
+        JsonObjectRequest request = new JsonObjectRequest(
+                Request.Method.GET,
+                getString(R.string.remote_server_url, "user")+Integer.toString(id),
+                null,
+                new Response.Listener<JSONObject>() {
+                    @Override
+                    public void onResponse(JSONObject response) {
 
-            JsonObjectRequest request = new JsonObjectRequest(
-                    Request.Method.GET,
-                    getString(R.string.remote_server_url, "user/"+id),
-                    requestBody,
-                    new Response.Listener<JSONObject>() {
-                        @Override
-                        public void onResponse(JSONObject response) {
-                            try {
-                                //check for passed or failed verification in the response
-                                if (response.getString("verification").equals("passed")) {
-                                    ((TextView) popupView.findViewById(R.id.username)).setText(response.getJSONObject("user").getString("username"));
-                                    ((TextView) popupView.findViewById(R.id.user_id)).setText(response.getJSONObject("user").getString("id"));
-                                    ((TextView) popupView.findViewById(R.id.games_played)).setText("Games Played: "+response.getJSONObject("user").getString("games_played"));
-                                    ((TextView) popupView.findViewById(R.id.games_won)).setText("Games Won: "+response.getJSONObject("user").getString("games_won"));
-                                } else {
-                                }
-                            } catch (JSONException ex) {
-                            }
+                        try {
+                            ((TextView) popupView.findViewById(R.id.username)).setText(response.getString("username"));
+                            ((TextView) popupView.findViewById(R.id.user_id)).setText(getString(R.string.id_display, response.getInt("id")));
+                            ((TextView) popupView.findViewById(R.id.games_played)).setText(getString(R.string.games_played, response.getInt("gamesPlayed")));
+                            ((TextView) popupView.findViewById(R.id.games_won)).setText(getString(R.string.games_won, response.getInt("gamesWon")));
+                        } catch (JSONException e) {
+                            e.printStackTrace();
                         }
-                    },
-                    new Response.ErrorListener() {
-                        @Override
-                        public void onErrorResponse(VolleyError error) {
-                            //loginHeader.setText(getString(R.string.login_error));
-                        }
+
+
                     }
-            );
+                },
+                new Response.ErrorListener() {
+                    @Override
+                    public void onErrorResponse(VolleyError error) {
+                        //loginHeader.setText(getString(R.string.login_error));
+                    }
+                }
+        );
 
-            Volley.newRequestQueue(requireContext()).add(request);
+        Volley.newRequestQueue(requireContext()).add(request);
 
-        } catch (JSONException ex) {
-            //loginHeader.setText(getString(R.string.login_error));
-        }
     }
 
 }

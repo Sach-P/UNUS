@@ -29,10 +29,14 @@
     <string name="password_mismatch">Passwords Do Not Match</string>
     <string name="signup_error">Account Creation Error</string>
 
-    <string name="id_display">id: %d</string>
+    <string name="id_display">ID: %d</string>
 
     <string name="join_game_button">JOIN GAME</string>
     <string name="host_game_button">HOST GAME</string>
     <string name="leaderboards_button">LEADERBOARD</string>
     <string name="logout_button">LOGOUT</string>
+
+    <string name="games_played">Games Played: %d</string>
+    <string name="games_won">Games Won: %d</string>
+
 </resources>
