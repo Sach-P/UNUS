@@ -172,42 +172,27 @@ public class UserSettingsFragment extends Fragment {
     }
 
     private void deleteUser(int id) {
-        try {
-            //add login credentials to the response body
-            JSONObject requestBody = new JSONObject();
-            requestBody.put("id", id);
 
-            JsonObjectRequest request = new JsonObjectRequest(
-                    Request.Method.DELETE,
-                    getString(R.string.postman_url, "user/"+id),
-                    requestBody,
-                    new Response.Listener<JSONObject>() {
-                        @Override
-                        public void onResponse(JSONObject response) {
-                            try {
-                                //check for passed or failed verification in the response
-                                if (response.getString("verification").equals("deleted")) {
-                                    navigateToLogin();
-                                } else {
-                                    top_text.setText("Username/Password Incorrect");
-                                }
-                            } catch (JSONException ex) {
-                            }
-                        }
-                    },
-                    new Response.ErrorListener() {
-                        @Override
-                        public void onErrorResponse(VolleyError error) {
-                            //loginHeader.setText(getString(R.string.login_error));
-                        }
+        JsonObjectRequest request = new JsonObjectRequest(
+                Request.Method.DELETE,
+                getString(R.string.remote_server_url, "user")+Integer.toString(id),
+                null,
+                new Response.Listener<JSONObject>() {
+                    @Override
+                    public void onResponse(JSONObject response) {
+                        navigateToLogin();
                     }
-            );
+                },
+                new Response.ErrorListener() {
+                    @Override
+                    public void onErrorResponse(VolleyError error) {
+                        navigateToLogin();
+                    }
+                }
+        );
 
-            Volley.newRequestQueue(requireContext()).add(request);
+        Volley.newRequestQueue(requireContext()).add(request);
 
-        } catch (JSONException ex) {
-            //loginHeader.setText(getString(R.string.login_error));
-        }
     }
 
     public void changeUser(boolean b, String s) {
@@ -236,7 +221,7 @@ public class UserSettingsFragment extends Fragment {
 
             JsonObjectRequest request = new JsonObjectRequest(
                     Request.Method.PUT,
-                    getString(R.string.postman_url, "user/"+UserData.getInstance().getUserID()),
+                    getString(R.string.remote_server_url, "user/"+UserData.getInstance().getUserID()),
                     requestBody,
                     null,
                     new Response.ErrorListener() {

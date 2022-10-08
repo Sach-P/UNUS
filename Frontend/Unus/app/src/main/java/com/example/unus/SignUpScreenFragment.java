@@ -96,7 +96,7 @@ public class SignUpScreenFragment extends Fragment {
 
             JsonObjectRequest request = new JsonObjectRequest(
                     Request.Method.POST,
-                    getString(R.string.postman_url, "signup"),
+                    getString(R.string.remote_server_url, "signup"),
                     requestBody,
                     new Response.Listener<JSONObject>() {
                         @Override

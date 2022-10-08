@@ -2,7 +2,7 @@
     <string name="app_name">UNUS</string>
 
     <string name="postman_url">https://3d5d7b90-cdb8-41bc-b45b-cffb50951687.mock.pstmn.io/%s/</string>
-    <string name="remote_server_url">coms-309-029.class.las.iastate.edu:8080/%s/</string>
+    <string name="remote_server_url">http://coms-309-029.class.las.iastate.edu:8080/%s/</string>
     
     <string name="logo_content_description">logo</string>
     <string name="login_header">Enter Login Credentials</string>
@@ -15,6 +15,7 @@
 
     <string name="login_failed">Invalid login credentials. Try Again</string>
     <string name="login_error">Login Error</string>
+    <string name="volley_error">Volley Error</string>
 
     <string name="signup_header">Create An Account</string>
     <string name="signup_description">Password Must include \n - 8 characters \n - 1 number</string>
