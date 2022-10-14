@@ -175,7 +175,7 @@ public class UserSettingsFragment extends Fragment {
 
         JsonObjectRequest request = new JsonObjectRequest(
                 Request.Method.DELETE,
-                getString(R.string.remote_server_url, "user")+Integer.toString(id),
+                getString(R.string.remote_server_url, "user", Integer.toString(id)),
                 null,
                 new Response.Listener<JSONObject>() {
                     @Override
@@ -221,7 +221,7 @@ public class UserSettingsFragment extends Fragment {
 
             JsonObjectRequest request = new JsonObjectRequest(
                     Request.Method.PUT,
-                    getString(R.string.remote_server_url, "user/"+UserData.getInstance().getUserID()),
+                    getString(R.string.remote_server_url, "user", Integer.toString(UserData.getInstance().getUserID())),
                     requestBody,
                     null,
                     new Response.ErrorListener() {

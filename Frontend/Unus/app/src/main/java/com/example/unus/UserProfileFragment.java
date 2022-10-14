@@ -134,7 +134,7 @@ public class UserProfileFragment extends Fragment {
 
         JsonObjectRequest request = new JsonObjectRequest(
                 Request.Method.GET,
-                getString(R.string.remote_server_url, "user")+Integer.toString(id),
+                getString(R.string.remote_server_url, "user", Integer.toString(id)),
                 null,
                 new Response.Listener<JSONObject>() {
                     @Override
