@@ -57,7 +57,7 @@ public class SignUpScreenFragment extends Fragment {
             public void onClick(View view) {
                 String username = usernameField.getText().toString();
                 String password = passwordField.getText().toString();
-                String cofirmPassword = confirmPasswordField.getText().toString();
+                String confirmPassword = confirmPasswordField.getText().toString();
 
                 status.setText(getString(R.string.validatingMessage));
 
@@ -67,7 +67,7 @@ public class SignUpScreenFragment extends Fragment {
                     status.setText(getString(R.string.no_password));
                 } else if (password.length() < 8 || !containsNumber(password)){ //check if password meets requirements
                     status.setText(getString(R.string.invalid_password));
-                } else if (!password.equals(cofirmPassword)){ //check if confirm password field matches
+                } else if (!password.equals(confirmPassword)){ //check if confirm password field matches
                     status.setText(getString(R.string.password_mismatch));
                 } else { //check with server if account can be created
                     sendSignupPostRequest(username, password);

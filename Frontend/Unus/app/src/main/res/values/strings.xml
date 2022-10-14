@@ -36,7 +36,10 @@
     <string name="leaderboards_button">LEADERBOARD</string>
     <string name="logout_button">LOGOUT</string>
 
-    <string name="games_played">Games Played: %d</string>
-    <string name="games_won">Games Won: %d</string>
+    <string name="add_friends_button">Add Friends</string>
+
+    <string name="user_id_display">User Id: %d</string>
+    <string name="games_played_display">Games Played: %d</string>
+    <string name="games_won_display">Games Won: %d</string>
 
 </resources>
