@@ -13,7 +13,7 @@ import java.util.Map;
 public class UserController {
 
     @Autowired
-    UserRepository userRepository;
+    private UserRepository userRepository;
 
     @Autowired
     private UserService userService;

@@ -9,10 +9,10 @@ public class Friend {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    int id;
-    int friendId;
-    String username;
-    String status;
+    private int id;
+    private int friendId;
+    private String username;
+    private String status;
 
     public Friend(int id, String username){
         this.friendId = id;
@@ -35,7 +35,7 @@ public class Friend {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
         Friend friend = (Friend) o;
-        return friendId == friend.friendId;
+        return friendId == friend.getFriendId();
     }
 
     @Override
