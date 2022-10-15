@@ -16,10 +16,12 @@ public class Lobby {
     private int id;
     private boolean isPrivate;
 
-    @OneToOne
+    @OneToOne(cascade=CascadeType.ALL)
+    @JoinColumn(name = "hosts")
     private User host;
 
     @OneToMany(cascade=CascadeType.ALL)
+    @JoinColumn(name="players")
     private List<User> players;
 
     public Lobby(User host, boolean isPrivate){
