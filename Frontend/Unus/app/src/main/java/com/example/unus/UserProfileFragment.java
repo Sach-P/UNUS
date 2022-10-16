@@ -29,6 +29,7 @@ public class UserProfileFragment extends Fragment {
     private TextView wins;
     private Button settings;
     private Button back;
+    private Button addFriends;
 
     public UserProfileFragment() {
         // Required empty public constructor
@@ -113,7 +114,7 @@ public class UserProfileFragment extends Fragment {
         make_friends.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-
+                getActivity().getSupportFragmentManager().beginTransaction().replace(R.id.fragmentContainerView, new UserSearchFragment()).commit();
             }
         });
 
