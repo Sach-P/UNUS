@@ -1,0 +1,24 @@
+# Example  .gitlab-ci.yml file
+stages:
+  - maventry
+  - androidtry
+
+maven-build:   #this is a JOB
+  stage: maventry
+  tags:
+    - springboot_tag  					# this is LINK to the shell runner on the remote-server 
+  script:
+    - cd Backend					#change directory to where you have your springboot application
+    - mvn package
+
+android-build: #this is another job
+  image:  gjandres/android-ci:latest      		# this is a directive to DOCKER
+  stage: androidtry
+  tags:
+   - android_tag         					#this is LINK to the docker runner on the remote-server        
+  before_script:
+    - export GRADLE_USER_HOME=`pwd`/.gradle
+    - chmod +x ./Frontend/gradlew			#change directory to where you have ‘gradlew’ in your android directory
+  script:
+    - cd Frontend					#change directory to where you have your android application
+    - ./gradlew assemble
