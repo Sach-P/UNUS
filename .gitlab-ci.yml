@@ -2,6 +2,7 @@ stages:
   - mavenbuild
   - maventest
   - androidbuild
+  - androidtest
 
 maven-build:
   stage: mavenbuild
@@ -26,10 +27,26 @@ android-build:
   image:  gjandres/android-ci:latest
   stage: androidbuild
   tags:
-   - android_tag         					#this is LINK to the docker runner on the remote-server        
+   - android_tag        
   before_script:
     - export GRADLE_USER_HOME=`pwd`/.gradle
-    - chmod +x ./Frontend/Unus/gradlew			#change directory to where you have ‘gradlew’ in your android directory
+    - chmod +x ./Frontend/Unus/gradlew
   script:
-    - cd Frontend/Unus					#change directory to where you have your android application
+    - cd Frontend/Unus
     - ./gradlew assemble
+  artifacts:
+    paths:
+      -Android_test/app/build/outputs/
+
+android_test:
+  image: gjandres/android-ci:latest
+  stage: androidtest
+  tags:
+    - android_tag
+  before_script:
+    - export GRADLE_USER_HOME='pwd'/.gradle
+    - chmod +x ./Frontend/Unus/gradlew
+  script:
+    - cd Frontend/Unus
+    - ./gradlew test
+  
