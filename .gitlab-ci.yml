@@ -20,5 +20,5 @@ android-build: #this is another job
     - export GRADLE_USER_HOME=`pwd`/.gradle
     - chmod +x ./Frontend/Unus/gradlew			#change directory to where you have ‘gradlew’ in your android directory
   script:
-    - cd Frontend					#change directory to where you have your android application
-    - ./Unus/gradlew assemble
+    - cd Frontend/Unus					#change directory to where you have your android application
+    - ./gradlew assemble
