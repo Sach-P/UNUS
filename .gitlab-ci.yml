@@ -3,6 +3,7 @@ stages:
   - maventest
   - androidbuild
   - androidtest
+  - mavenDeploy
 
 maven-build:
   stage: mavenbuild
@@ -23,6 +24,18 @@ maven-test:
     paths:
       - Backend/target/*.jar
 
+autoDeploy:
+  stage: mavenDeploy
+  tags:
+    - springboot_tag
+  script:
+    - cd Backend/UNUS
+    - mvn package
+    - sudo mv target/*.jar /target/web-demo.jar
+    - sudo systemctl stop system-web-demo
+    - sudo systemctl start system-web-demo 
+
+
 android-build:
   image:  gjandres/android-ci:latest
   stage: androidbuild
@@ -36,7 +49,7 @@ android-build:
     - ./gradlew assemble
   artifacts:
     paths:
-      -Android_test/app/build/outputs/
+      - Android_test/app/build/outputs/
 
 android_test:
   image: gjandres/android-ci:latest
