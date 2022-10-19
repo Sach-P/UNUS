@@ -3,7 +3,8 @@
 
     <string name="postman_url">https://3d5d7b90-cdb8-41bc-b45b-cffb50951687.mock.pstmn.io/%s/%s</string>
     <string name="remote_server_url">http://coms-309-029.class.las.iastate.edu:8080/%s/%s</string>
-    
+
+    <!--login screen strings-->
     <string name="logo_content_description">logo</string>
     <string name="login_header">Enter Login Credentials</string>
     <string name="username_hint">username</string>
@@ -17,6 +18,7 @@
     <string name="login_error">Login Error</string>
     <string name="volley_error">Volley Error</string>
 
+    <!--signup screen strings-->
     <string name="signup_header">Create An Account</string>
     <string name="signup_description">Password Must include \n - 8 characters \n - 1 number</string>
     <string name="confirm_password_hint">confirm password</string>
@@ -29,6 +31,7 @@
     <string name="password_mismatch">Passwords Do Not Match</string>
     <string name="signup_error">Account Creation Error</string>
 
+    <!--main menu strings-->
     <string name="id_display">ID: %d</string>
 
     <string name="join_game_button">JOIN GAME</string>
@@ -36,10 +39,17 @@
     <string name="leaderboards_button">LEADERBOARD</string>
     <string name="logout_button">LOGOUT</string>
 
+    <!--user menu strings-->
     <string name="add_friends_button">Add Friends</string>
-
     <string name="user_id_display">User Id: %d</string>
     <string name="games_played_display">Games Played: %d</string>
     <string name="games_won_display">Games Won: %d</string>
+
+    <!--user settings strings-->
+    <string name="invalid_credentials">Invalid Credentials</string>
+    <string name="new_username">New Username:</string>
+    <string name="new_password">New Password:</string>
+    <string name="old_password">Old Password:</string>
+    <string name="change_button">Change</string>
 
 </resources>
