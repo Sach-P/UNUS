@@ -1,18 +1,30 @@
-# Example  .gitlab-ci.yml file
 stages:
-  - maventry
-  - androidtry
+  - mavenbuild
+  - maventest
+  - androidbuild
+  - androidtest
 
-maven-build:   #this is a JOB
-  stage: maventry
+maven-build:
+  stage: mavenbuild
   tags:
-    - springboot_tag  					# this is LINK to the shell runner on the remote-server 
+    - springboot_tag  					 
   script:
-    - cd Backend/UNUS					#change directory to where you have your springboot application
+    - cd Backend/UNUS					
     - mvn package
 
-android-build: #this is another job
-  image:  gjandres/android-ci:latest      		# this is a directive to DOCKER
+maven-test:
+  stage: maventest
+  tags:
+    - springboot_tag
+  script:
+    - cd Backend/UNUS
+    - mvn test
+  artifacts:
+    paths:
+      - Backend/target/*.jar
+
+android-build:
+  image:  gjandres/android-ci:latest
   stage: androidtry
   tags:
    - android_tag         					#this is LINK to the docker runner on the remote-server        
