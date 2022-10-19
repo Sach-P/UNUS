@@ -1,9 +1,9 @@
 stages:
   - mavenbuild
   - maventest
+  - mavenDeploy
   - androidbuild
   - androidtest
-  - mavenDeploy
 
 maven-build:
   stage: mavenbuild
