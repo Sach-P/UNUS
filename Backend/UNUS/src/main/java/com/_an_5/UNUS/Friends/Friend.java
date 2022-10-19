@@ -1,5 +1,8 @@
 package com._an_5.UNUS.Friends;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonSetter;
+
 import javax.persistence.*;
 import java.util.Objects;
 
@@ -43,10 +46,12 @@ public class Friend {
         return Objects.hash(friendId);
     }
 
+    @JsonIgnore
     public int getId() {
         return id;
     }
 
+    @JsonSetter
     public void setId(int id){
         this.id = id;
     }
