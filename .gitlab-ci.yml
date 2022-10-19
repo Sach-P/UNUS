@@ -24,7 +24,7 @@ maven-test:
 
 android-build:
   image:  gjandres/android-ci:latest
-  stage: androidtry
+  stage: androidbuild
   tags:
    - android_tag         					#this is LINK to the docker runner on the remote-server        
   before_script:
