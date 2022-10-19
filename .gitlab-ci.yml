@@ -1,14 +1,14 @@
 # Example  .gitlab-ci.yml file
 stages:
-  - mavenDeploy
+  - maventry
   - androidtry
 
 maven-build:   #this is a JOB
-  stage: mavenDeploy
+  stage: maventry
   tags:
     - springboot_tag  					# this is LINK to the shell runner on the remote-server 
   script:
-    - cd Backend					#change directory to where you have your springboot application
+    - cd Backend/UNUS					#change directory to where you have your springboot application
     - mvn package
 
 android-build: #this is another job
