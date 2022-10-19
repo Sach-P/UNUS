@@ -17,7 +17,7 @@ public class Lobby {
     private boolean isPrivate;
 
     @OneToOne(cascade=CascadeType.ALL)
-    @JoinColumn(name = "hosts")
+    @JoinColumn(name = "host")
     private User host;
 
     @OneToMany(cascade=CascadeType.ALL)
@@ -27,6 +27,7 @@ public class Lobby {
     public Lobby(User host, boolean isPrivate){
         this.host = host;
         this.isPrivate = isPrivate;
+        players = new ArrayList<User>();
     }
 
     public Lobby() {
@@ -51,6 +52,10 @@ public class Lobby {
 
     public void addPlayer(User player){
         players.add(player);
+    }
+
+    public List<User> getPlayers(){
+        return players;
     }
 
     public void removePlayer(User player){
