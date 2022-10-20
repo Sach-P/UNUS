@@ -118,6 +118,21 @@ public class UserProfileFragment extends Fragment {
             }
         });
 
+        Button pending_reqs = new Button(view.getContext());
+        pending_reqs.setLayoutParams(new ViewGroup.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT,
+                ViewGroup.LayoutParams.WRAP_CONTENT));
+        pending_reqs.setTextSize(20);
+        pending_reqs.setText("Pending Reqs");
+        layout.addView(pending_reqs);
+        pending_reqs.setBackgroundColor(this.getResources().getColor(R.color.red));
+        pending_reqs.setTextColor(this.getResources().getColor(R.color.yellow));
+        pending_reqs.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                getActivity().getSupportFragmentManager().beginTransaction().replace(R.id.fragmentContainerView, new FriendRequestFragment()).commit();
+
+            }
+        });
     }
 
     public void getUser(int id) {

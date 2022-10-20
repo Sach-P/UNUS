@@ -31,6 +31,7 @@ public class UserSearchFragment extends Fragment {
     private Button back;
     private Button search;
     private EditText id;
+    private String name;
 
     public UserSearchFragment() {
         // Required empty public constructor
@@ -96,9 +97,9 @@ public class UserSearchFragment extends Fragment {
                                         try {
                                             ((TextView) popupView.findViewById(R.id.username)).setText(response.getString("username"));
                                             ((TextView) popupView.findViewById(R.id.user_id)).setText(response.getString("id"));
-                                            ((TextView) popupView.findViewById(R.id.games_played)).setText("Games Played: "+response.getString("games_played"));
-                                            ((TextView) popupView.findViewById(R.id.games_won)).setText("Games Won: "+response.getString("games_won"));
-                                        } catch (JSONException e) {
+                                            ((TextView) popupView.findViewById(R.id.games_played)).setText("Games Played: "+response.getString("gamesPlayed"));
+                                            ((TextView) popupView.findViewById(R.id.games_won)).setText("Games Won: "+response.getString("gamesWon"));
+                                         } catch (JSONException e) {
                                             e.printStackTrace();
                                         }
                                     }
@@ -107,7 +108,11 @@ public class UserSearchFragment extends Fragment {
                                     @Override
                                     public void onClick(View view) {
                                         sendReq.setText("Request Sent");
-                                        sendFriendRequest(Integer.parseInt(id));
+                                        try {
+                                            sendFriendRequest(response.getString("username"), id);
+                                        } catch (JSONException e) {
+                                            e.printStackTrace();
+                                        }
                                     }
                                 });
                             } catch (JSONException e) {
@@ -129,12 +134,17 @@ public class UserSearchFragment extends Fragment {
         Volley.newRequestQueue(requireContext()).add(request);
     }
 
-    private void sendFriendRequest(int id) {
+    private void sendFriendRequest(String s, String id) throws JSONException {
+        JSONObject temp = new JSONObject();
+        temp.put("username", s);
+        temp.put("friendId", Integer.parseInt(id));
+
         JsonObjectRequest request = new JsonObjectRequest(
                 Request.Method.PUT,
-                "https://3d5d7b90-cdb8-41bc-b45b-cffb50951687.mock.pstmn.io/sendFreindReq/"+id,
-                null,
+                getString(R.string.remote_server_url, "user")+UserData.getInstance().getUserID()+"/send-friend-request",
+                temp,
                 null, null);
-
+        Volley.newRequestQueue(requireContext()).add(request);
     }
+
 }
