@@ -65,7 +65,7 @@ public class UserSearchFragment extends Fragment {
     private void search(String id) {
             JsonObjectRequest request = new JsonObjectRequest(
                     Request.Method.GET,
-                    "https://3d5d7b90-cdb8-41bc-b45b-cffb50951687.mock.pstmn.io/user/1",
+                    getString(R.string.remote_server_url, "user")+Integer.parseInt(id),
                     null,
                     new Response.Listener<JSONObject>() {
                         @Override
@@ -79,7 +79,7 @@ public class UserSearchFragment extends Fragment {
                             sendReq.setTextSize(20);
                             sendReq.setText("Send Friend Request");
                             try {
-                                user.setText(response.getJSONObject("user").getString("username"));
+                                user.setText(response.getString("username"));
                                 viewProf.setOnClickListener(new View.OnClickListener() {
                                     @Override
                                     public void onClick(View view) {
@@ -94,13 +94,20 @@ public class UserSearchFragment extends Fragment {
                                         popupWindow.showAtLocation(view, Gravity.CENTER, 50, 30);
 
                                         try {
-                                            ((TextView) popupView.findViewById(R.id.username)).setText(response.getJSONObject("user").getString("username"));
-                                            ((TextView) popupView.findViewById(R.id.user_id)).setText(response.getJSONObject("user").getString("id"));
-                                            ((TextView) popupView.findViewById(R.id.games_played)).setText("Games Played: "+response.getJSONObject("user").getString("games_played"));
-                                            ((TextView) popupView.findViewById(R.id.games_won)).setText("Games Won: "+response.getJSONObject("user").getString("games_won"));
+                                            ((TextView) popupView.findViewById(R.id.username)).setText(response.getString("username"));
+                                            ((TextView) popupView.findViewById(R.id.user_id)).setText(response.getString("id"));
+                                            ((TextView) popupView.findViewById(R.id.games_played)).setText("Games Played: "+response.getString("games_played"));
+                                            ((TextView) popupView.findViewById(R.id.games_won)).setText("Games Won: "+response.getString("games_won"));
                                         } catch (JSONException e) {
                                             e.printStackTrace();
                                         }
+                                    }
+                                });
+                                sendReq.setOnClickListener(new View.OnClickListener() {
+                                    @Override
+                                    public void onClick(View view) {
+                                        sendReq.setText("Request Sent");
+                                        sendFriendRequest(Integer.parseInt(id));
                                     }
                                 });
                             } catch (JSONException e) {
@@ -120,5 +127,14 @@ public class UserSearchFragment extends Fragment {
             );
 
         Volley.newRequestQueue(requireContext()).add(request);
+    }
+
+    private void sendFriendRequest(int id) {
+        JsonObjectRequest request = new JsonObjectRequest(
+                Request.Method.PUT,
+                "https://3d5d7b90-cdb8-41bc-b45b-cffb50951687.mock.pstmn.io/sendFreindReq/"+id,
+                null,
+                null, null);
+
     }
 }
