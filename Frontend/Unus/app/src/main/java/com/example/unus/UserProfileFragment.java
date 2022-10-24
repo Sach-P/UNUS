@@ -7,6 +7,7 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.LinearLayout;
 import android.widget.PopupWindow;
+import android.widget.Space;
 import android.widget.TextView;
 
 import androidx.fragment.app.Fragment;
@@ -75,40 +76,13 @@ public class UserProfileFragment extends Fragment {
     }
 
     public void getFriends() {
-        for( int i = 0; i < UserData.getInstance().getFriendsList().length; i++) {
-            LinearLayout layout = view.findViewById(R.id.friends);
-            LinearLayout newLayout = new LinearLayout(view.getContext());
-            newLayout.setLayoutParams(new ViewGroup.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT,
-                    ViewGroup.LayoutParams.WRAP_CONTENT));
-            TextView tv = new TextView(view.getContext());
-            tv.setLayoutParams(new ViewGroup.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT,
-                    ViewGroup.LayoutParams.WRAP_CONTENT));
-            tv.setTextSize(20);
-            tv.setText(UserData.getInstance().getFriendsList()[i].getUsername());
-            newLayout.addView(tv);
-            Button button = new Button(view.getContext());
-            button.setLayoutParams(new ViewGroup.LayoutParams(250,
-                    ViewGroup.LayoutParams.WRAP_CONTENT));
-            button.setText("view");
-            button.setBackgroundColor(this.getResources().getColor(R.color.red));
-            button.setTextColor(this.getResources().getColor(R.color.yellow));
-            int finalIndex = i;
-            button.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View view) {
-                    getUser(UserData.getInstance().getFriendsList()[finalIndex].getUserID());
-                }
-            });
-            newLayout.addView(button);
-            layout.addView(newLayout);
-        }
-        LinearLayout layout = view.findViewById(R.id.friends);
+        LinearLayout flayout = view.findViewById(R.id.friend_buttons);
         Button make_friends = new Button(view.getContext());
-        make_friends.setLayoutParams(new ViewGroup.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT,
+        make_friends.setLayoutParams(new ViewGroup.LayoutParams(175,
                 ViewGroup.LayoutParams.WRAP_CONTENT));
-        make_friends.setTextSize(20);
-        make_friends.setText("Add Friends");
-        layout.addView(make_friends);
+        make_friends.setTextSize(15);
+        make_friends.setText("Add");
+        flayout.addView(make_friends);
         make_friends.setBackgroundColor(this.getResources().getColor(R.color.red));
         make_friends.setTextColor(this.getResources().getColor(R.color.yellow));
         make_friends.setOnClickListener(new View.OnClickListener() {
@@ -118,12 +92,16 @@ public class UserProfileFragment extends Fragment {
             }
         });
 
+        Space sp = new Space(view.getContext());
+        sp.setLayoutParams(new ViewGroup.LayoutParams(40, ViewGroup.LayoutParams.WRAP_CONTENT));
+        flayout.addView(sp);
+
         Button pending_reqs = new Button(view.getContext());
-        pending_reqs.setLayoutParams(new ViewGroup.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT,
+        pending_reqs.setLayoutParams(new ViewGroup.LayoutParams(300,
                 ViewGroup.LayoutParams.WRAP_CONTENT));
-        pending_reqs.setTextSize(20);
-        pending_reqs.setText("Pending Reqs");
-        layout.addView(pending_reqs);
+        pending_reqs.setTextSize(15);
+        pending_reqs.setText("Requests");
+        flayout.addView(pending_reqs);
         pending_reqs.setBackgroundColor(this.getResources().getColor(R.color.red));
         pending_reqs.setTextColor(this.getResources().getColor(R.color.yellow));
         pending_reqs.setOnClickListener(new View.OnClickListener() {
@@ -133,6 +111,49 @@ public class UserProfileFragment extends Fragment {
 
             }
         });
+        for( int i = 0; i < UserData.getInstance().getFriendsList().length; i++) {
+            LinearLayout layout = view.findViewById(R.id.friends);
+            LinearLayout newLayout = new LinearLayout(view.getContext());
+            newLayout.setLayoutParams(new ViewGroup.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT,
+                    ViewGroup.LayoutParams.WRAP_CONTENT));
+            Button button = new Button(view.getContext());
+            button.setLayoutParams(new ViewGroup.LayoutParams(400,
+                    ViewGroup.LayoutParams.WRAP_CONTENT));
+            button.setText(UserData.getInstance().getFriendsList()[i].getUsername());
+            button.setTextSize(20);
+            button.setBackgroundColor(this.getResources().getColor(R.color.red));
+            button.setTextColor(this.getResources().getColor(R.color.yellow));
+
+            Button remove = new Button(view.getContext());
+            remove.setLayoutParams(new ViewGroup.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT,
+                    ViewGroup.LayoutParams.WRAP_CONTENT));
+            remove.setText("del");
+            remove.setTextSize(10);
+            remove.setBackgroundColor(this.getResources().getColor(R.color.red));
+            remove.setTextColor(this.getResources().getColor(R.color.yellow));
+            int finalIndex = i;
+            button.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    getUser(UserData.getInstance().getFriendsList()[finalIndex].getUserID());
+                }
+            });
+            remove.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    unfriend(UserData.getInstance().getFriendsList()[finalIndex].getUserID(), UserData.getInstance().getFriendsList()[finalIndex].getUsername());
+                }
+            });
+            Space sp2 = new Space(view.getContext());
+            sp2.setLayoutParams(new ViewGroup.LayoutParams(20, ViewGroup.LayoutParams.WRAP_CONTENT));
+            newLayout.addView(button);
+            newLayout.addView(sp2);
+            newLayout.addView(remove);
+            Space sp3 = new Space(view.getContext());
+            sp3.setLayoutParams(new ViewGroup.LayoutParams( ViewGroup.LayoutParams.WRAP_CONTENT, 20));
+            layout.addView(newLayout);
+            layout.addView(sp3);
+        }
     }
 
     public void getUser(int id) {
@@ -178,6 +199,48 @@ public class UserProfileFragment extends Fragment {
 
         Volley.newRequestQueue(requireContext()).add(request);
 
+    }
+
+    private void unfriend(int id, String name) {
+        try {
+            JSONObject object = new JSONObject();
+            object.put("username", name);
+            object.put("friendId", id);
+
+            JsonObjectRequest request = new JsonObjectRequest(
+                    Request.Method.PUT,
+                    getString(R.string.remote_server_url, "user") + UserData.getInstance().getUserID() + "/friends/remove-friend",
+                    object,
+                    new Response.Listener<JSONObject>() {
+                        @Override
+                        public void onResponse(JSONObject response) {
+
+                        }
+                    },
+                    new Response.ErrorListener() {
+                        @Override
+                        public void onErrorResponse(VolleyError error) {
+                            //loginHeader.setText(getString(R.string.login_error));
+                        }
+                    }
+            );
+
+            Volley.newRequestQueue(requireContext()).add(request);
+
+            Friend[] newFriends = new Friend[UserData.getInstance().getFriendsList().length - 1];
+            for(int i = 0, j = 0; i < UserData.getInstance().getFriendsList().length - 1; i++) {
+                if(UserData.getInstance().getFriendsList()[i].getUserID() != id) {
+                    newFriends[j] = UserData.getInstance().getFriendsList()[i];
+                    j++;
+                }
+            }
+            UserData.getInstance().setFriendsList(newFriends);
+            getActivity().getSupportFragmentManager().beginTransaction().replace(R.id.fragmentContainerView, new UserProfileFragment()).commit();
+
+
+        } catch(JSONException ex) {
+          //  loginHeader.setText(getString(R.string.login_error));
+        }
     }
 
 }

@@ -115,12 +115,21 @@ public class FriendRequestFragment extends Fragment {
         accept.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
+                Friend newFriend = new Friend(id, username);
+                Friend[] temp = new Friend[UserData.getInstance().getFriendsList().length+1];
+                for(int i = 0; i < UserData.getInstance().getFriendsList().length; i++) {
+                    temp[i]= UserData.getInstance().getFriendsList()[i];
+                }
+                temp[UserData.getInstance().getFriendsList().length] = newFriend;
+                UserData.getInstance().setFriendsList(temp);
+                accept_decline(true, username, id); //true will equate to accepting the request
                 newLayout.setVisibility(View.GONE);
             }
         });
         decline.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
+                accept_decline(false, username, id); //false will equate to declining the request
                 newLayout.setVisibility(View.GONE);
             }
         });
@@ -173,9 +182,26 @@ public class FriendRequestFragment extends Fragment {
                     }
                 }
         );
-
         Volley.newRequestQueue(requireContext()).add(request);
+    }
 
+    private void accept_decline(boolean b, String username, int id) {
+        try {
+            JSONObject object = new JSONObject();
+            object.put("username", username);
+            object.put("friendId", id);
+            object.put("status", (b)? "accepted":"declined");
+
+            JsonObjectRequest request = new JsonObjectRequest(
+                    Request.Method.PUT,
+                    getString(R.string.remote_server_url, "user") + UserData.getInstance().getUserID()+"/pending-friend-requests",
+                    object,
+                    null, null
+            );
+            Volley.newRequestQueue(requireContext()).add(request);
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
     }
 
 }

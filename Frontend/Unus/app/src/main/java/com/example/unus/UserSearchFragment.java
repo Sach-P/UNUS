@@ -64,9 +64,16 @@ public class UserSearchFragment extends Fragment {
         return view;
     }
     private void search(String id) {
+        if(Integer.parseInt(id) != UserData.getInstance().getUserID() && Integer.parseInt(id) > 0) {
+            for(int i = 0; i < UserData.getInstance().getFriendsList().length; i++) {
+                if (Integer.parseInt(id) == UserData.getInstance().getFriendsList()[i].getUserID()) {
+                    return;
+                }
+            }
+
             JsonObjectRequest request = new JsonObjectRequest(
                     Request.Method.GET,
-                    getString(R.string.remote_server_url, "user")+Integer.parseInt(id),
+                    getString(R.string.remote_server_url, "user") + Integer.parseInt(id),
                     null,
                     new Response.Listener<JSONObject>() {
                         @Override
@@ -97,9 +104,9 @@ public class UserSearchFragment extends Fragment {
                                         try {
                                             ((TextView) popupView.findViewById(R.id.username)).setText(response.getString("username"));
                                             ((TextView) popupView.findViewById(R.id.user_id)).setText(response.getString("id"));
-                                            ((TextView) popupView.findViewById(R.id.games_played)).setText("Games Played: "+response.getString("gamesPlayed"));
-                                            ((TextView) popupView.findViewById(R.id.games_won)).setText("Games Won: "+response.getString("gamesWon"));
-                                         } catch (JSONException e) {
+                                            ((TextView) popupView.findViewById(R.id.games_played)).setText("Games Played: " + response.getString("gamesPlayed"));
+                                            ((TextView) popupView.findViewById(R.id.games_won)).setText("Games Won: " + response.getString("gamesWon"));
+                                        } catch (JSONException e) {
                                             e.printStackTrace();
                                         }
                                     }
@@ -118,9 +125,9 @@ public class UserSearchFragment extends Fragment {
                             } catch (JSONException e) {
                                 e.printStackTrace();
                             }
-                            ((LinearLayout)view.findViewById(R.id.results)).addView(user);
-                            ((LinearLayout)view.findViewById(R.id.results)).addView(viewProf);
-                            ((LinearLayout)view.findViewById(R.id.results)).addView(sendReq);
+                            ((LinearLayout) view.findViewById(R.id.results)).addView(user);
+                            ((LinearLayout) view.findViewById(R.id.results)).addView(viewProf);
+                            ((LinearLayout) view.findViewById(R.id.results)).addView(sendReq);
                         }
                     },
                     new Response.ErrorListener() {
@@ -131,7 +138,8 @@ public class UserSearchFragment extends Fragment {
                     }
             );
 
-        Volley.newRequestQueue(requireContext()).add(request);
+            Volley.newRequestQueue(requireContext()).add(request);
+        }
     }
 
     private void sendFriendRequest(String s, String id) throws JSONException {
