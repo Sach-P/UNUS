@@ -135,6 +135,22 @@ public class LogInScreenFragment extends Fragment {
                                     }
                                     userData.setFriendsList(friendList);
 
+                                    int numSentRequests = response.getJSONObject("user").getJSONArray("sentFriendRequests").length();
+                                    Friend[] sentRequests = new Friend[numSentRequests];
+                                    for (int i = 0; i < numSentRequests; i++){
+                                        JSONObject friendObj = response.getJSONObject("user").getJSONArray("sentFriendRequests").getJSONObject(i);
+                                        sentRequests[i] = new Friend(friendObj.getInt("friendId"), friendObj.getString("username"));
+                                    }
+                                    userData.setSentRequestsList(sentRequests);
+
+                                    int numReceivedRequests = response.getJSONObject("user").getJSONArray("receivedFriendRequests").length();
+                                    Friend[] receivedRequests = new Friend[numReceivedRequests];
+                                    for (int i = 0; i < numReceivedRequests; i++){
+                                        JSONObject friendObj = response.getJSONObject("user").getJSONArray("receivedFriendRequests").getJSONObject(i);
+                                        receivedRequests[i] = new Friend(friendObj.getInt("friendId"), friendObj.getString("username"));
+                                    }
+                                    userData.setReceivedRequestsList(receivedRequests);
+
                                     userData.setGamesWon(response.getJSONObject("user").getInt("gamesPlayed"));
                                     userData.setGamesPlayed(response.getJSONObject("user").getInt("gamesWon"));
 

@@ -64,13 +64,26 @@ public class UserSearchFragment extends Fragment {
         return view;
     }
     private void search(String id) {
+        boolean friend = false;
+        boolean sentReq = false;
+        boolean receivedReq = false;
         if(Integer.parseInt(id) != UserData.getInstance().getUserID() && Integer.parseInt(id) > 0) {
             for(int i = 0; i < UserData.getInstance().getFriendsList().length; i++) {
-                if (Integer.parseInt(id) == UserData.getInstance().getFriendsList()[i].getUserID()) {
-                    return;
-                }
+                if (Integer.parseInt(id) == UserData.getInstance().getFriendsList()[i].getUserID())
+                    friend = true;
+            }
+            for(int i = 0; i < UserData.getInstance().getSentRequests().length; i++) {
+                if (Integer.parseInt(id) == UserData.getInstance().getSentRequests()[i].getUserID())
+                    sentReq = true;
+            }
+            for(int i = 0; i < UserData.getInstance().getReceivedRequests().length; i++) {
+                if (Integer.parseInt(id) == UserData.getInstance().getReceivedRequests()[i].getUserID())
+                    receivedReq = true;
             }
 
+            boolean finalFriend = friend;
+            boolean finalSentReq = sentReq;
+            boolean finalReceivedReq = receivedReq;
             JsonObjectRequest request = new JsonObjectRequest(
                     Request.Method.GET,
                     getString(R.string.remote_server_url, "user") + Integer.parseInt(id),
@@ -82,10 +95,18 @@ public class UserSearchFragment extends Fragment {
                             Button viewProf = new Button(view.getContext());
                             Button sendReq = new Button(view.getContext());
                             user.setTextSize(30);
-                            viewProf.setTextSize(20);
+                            viewProf.setTextSize(15);
                             viewProf.setText("View");
-                            sendReq.setTextSize(20);
-                            sendReq.setText("Send Friend Request");
+                            sendReq.setTextSize(15);
+                            if(finalFriend) {
+                                sendReq.setText("Already Friends");
+                            } else if (finalSentReq) {
+                                sendReq.setText("Request Sent");
+                            } else if (finalReceivedReq) {
+                                sendReq.setText("Accept Request");
+                            } else {
+                                sendReq.setText("Send Friend Request");
+                            }
                             try {
                                 user.setText(response.getString("username"));
                                 viewProf.setOnClickListener(new View.OnClickListener() {
@@ -114,8 +135,10 @@ public class UserSearchFragment extends Fragment {
                                 sendReq.setOnClickListener(new View.OnClickListener() {
                                     @Override
                                     public void onClick(View view) {
+                                        if(finalFriend) { return; }
                                         sendReq.setText("Request Sent");
                                         try {
+                                            if(finalReceivedReq) { acceptFriend(response.getString("username"), id); return; }
                                             sendFriendRequest(response.getString("username"), id);
                                         } catch (JSONException e) {
                                             e.printStackTrace();
@@ -142,17 +165,53 @@ public class UserSearchFragment extends Fragment {
         }
     }
 
-    private void sendFriendRequest(String s, String id) throws JSONException {
-        JSONObject temp = new JSONObject();
-        temp.put("username", s);
-        temp.put("friendId", Integer.parseInt(id));
+    private void sendFriendRequest(String username, String id) throws JSONException {
+
+        Friend newSent = new Friend(Integer.parseInt(id), username);
+        Friend[] temp = new Friend[UserData.getInstance().getSentRequests().length+1];
+        for(int i = 0; i < UserData.getInstance().getSentRequests().length; i++) {
+            temp[i]= UserData.getInstance().getSentRequests()[i];
+        }
+        temp[UserData.getInstance().getSentRequests().length] = newSent;
+        UserData.getInstance().setSentRequestsList(temp);
+
+        JSONObject object = new JSONObject();
+        object.put("username", username);
+        object.put("friendId", Integer.parseInt(id));
 
         JsonObjectRequest request = new JsonObjectRequest(
                 Request.Method.PUT,
                 getString(R.string.remote_server_url, "user")+UserData.getInstance().getUserID()+"/send-friend-request",
-                temp,
+                object,
                 null, null);
         Volley.newRequestQueue(requireContext()).add(request);
+    }
+
+    private void acceptFriend(String username, String id) {
+
+        Friend newFriend = new Friend(Integer.parseInt(id), username);
+        Friend[] temp = new Friend[UserData.getInstance().getFriendsList().length+1];
+        for(int i = 0; i < UserData.getInstance().getFriendsList().length; i++) {
+            temp[i]= UserData.getInstance().getFriendsList()[i];
+        }
+        temp[UserData.getInstance().getFriendsList().length] = newFriend;
+        UserData.getInstance().setFriendsList(temp);
+        try {
+            JSONObject object = new JSONObject();
+            object.put("username", username);
+            object.put("friendId", Integer.parseInt(id));
+            object.put("status", "accepted");
+
+            JsonObjectRequest request = new JsonObjectRequest(
+                    Request.Method.PUT,
+                    getString(R.string.remote_server_url, "user") + UserData.getInstance().getUserID()+"/pending-friend-requests",
+                    object,
+                    null, null
+            );
+            Volley.newRequestQueue(requireContext()).add(request);
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
     }
 
 }
