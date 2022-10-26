@@ -127,7 +127,7 @@ public class UserSearchFragment extends Fragment {
 
                                         try {
                                             ((TextView) popupView.findViewById(R.id.username)).setText(response.getString("username"));
-                                            ((TextView) popupView.findViewById(R.id.user_id)).setText(response.getString("id"));
+                                            ((TextView) popupView.findViewById(R.id.user_id)).setText("ID: "+response.getString("id"));
                                             ((TextView) popupView.findViewById(R.id.games_played)).setText("Games Played: " + response.getString("gamesPlayed"));
                                             ((TextView) popupView.findViewById(R.id.games_won)).setText("Games Won: " + response.getString("gamesWon"));
                                         } catch (JSONException e) {

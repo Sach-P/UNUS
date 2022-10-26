@@ -179,15 +179,9 @@ public class UserProfileFragment extends Fragment {
 
                         try {
                             ((TextView) popupView.findViewById(R.id.username)).setText(response.getString("username"));
-<<<<<<< HEAD
                             ((TextView) popupView.findViewById(R.id.user_id)).setText("ID: "+ response.getInt("id"));
                             ((TextView) popupView.findViewById(R.id.games_played)).setText("Games Played: "+ response.getInt("gamesPlayed"));
                             ((TextView) popupView.findViewById(R.id.games_won)).setText("Games Won: "+ response.getInt("gamesWon"));
-=======
-                            ((TextView) popupView.findViewById(R.id.user_id)).setText(getString(R.string.id_display, response.getInt("id")));
-                            ((TextView) popupView.findViewById(R.id.games_played)).setText(getString(R.string.games_played_display, response.getInt("gamesPlayed")));
-                            ((TextView) popupView.findViewById(R.id.games_won)).setText(getString(R.string.games_won_display, response.getInt("gamesWon")));
->>>>>>> 49c5cf6267b59c40e15f24ec0dcbfce18aee9d5c
                         } catch (JSONException e) {
                             e.printStackTrace();
                         }
