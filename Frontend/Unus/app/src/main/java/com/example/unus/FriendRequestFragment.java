@@ -99,6 +99,7 @@ public class FriendRequestFragment extends Fragment {
         Button decline = new Button(view.getContext());
         user.setTextSize(30);
         user.setText(username);
+        user.setTextAlignment(View.TEXT_ALIGNMENT_CENTER);
         viewProf.setTextSize(20);
         viewProf.setText("View");
         accept.setTextSize(20);
@@ -124,6 +125,7 @@ public class FriendRequestFragment extends Fragment {
                 UserData.getInstance().setFriendsList(temp);
                 accept_decline(true, username, id); //true will equate to accepting the request
                 newLayout.setVisibility(View.GONE);
+                user.setVisibility(View.GONE);
             }
         });
         decline.setOnClickListener(new View.OnClickListener() {
@@ -131,14 +133,16 @@ public class FriendRequestFragment extends Fragment {
             public void onClick(View view) {
                 accept_decline(false, username, id); //false will equate to declining the request
                 newLayout.setVisibility(View.GONE);
+                user.setVisibility(View.GONE);
             }
         });
 
 
-        newLayout.addView(user);
+
         newLayout.addView(viewProf);
         newLayout.addView(accept);
         newLayout.addView(decline);
+        ((LinearLayout)view.findViewById(R.id.results)).addView(user);
         ((LinearLayout)view.findViewById(R.id.results)).addView(newLayout);
     }
 

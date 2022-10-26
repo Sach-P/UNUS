@@ -43,11 +43,24 @@
             />
     </LinearLayout>
 
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="40dp"
+            android:text=""
+            android:textSize="35sp"
+            android:textAlignment="center"
+            android:textColor="@color/black"
+            android:id="@+id/username"
+            >
+
+        </TextView>
+
         <LinearLayout
             android:id="@+id/results"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:orientation="horizontal"
+            android:layout_gravity="top"
             >
 
         </LinearLayout>
