@@ -7,6 +7,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestParam;
 
@@ -29,6 +30,8 @@ public class LobbySocket {
 
     private static UserRepository userRepository;
 
+    private Lobby lobby;
+
     @Autowired
     public void setLobbyRepository(LobbyRepository repo){
         lobbyRepository = repo;
@@ -46,7 +49,7 @@ public class LobbySocket {
 
 
     @OnOpen
-    public void onOpen(Session session, @RequestParam("userId") int userId) throws IOException {
+    public void onOpen(Session session, @PathParam(value = "lobbyId") int lobbyId, @PathParam("userId") int userId) throws IOException {
 
         logger.info("Entered into Open");
 
@@ -54,6 +57,9 @@ public class LobbySocket {
         sessionUserMap.put(session, player);
         userSessionMap.put(player, session);
 
+        lobby = lobbyRepository.findById(lobbyId);
+        lobby.addPlayer(player);
+        lobbyRepository.save(lobby);
         String message = player.getUsername() + " has joined the lobby";
         broadcast(message);
     }
@@ -65,7 +71,8 @@ public class LobbySocket {
         User player = sessionUserMap.get(session);
         sessionUserMap.remove(session);
         userSessionMap.remove(player);
-
+        lobby.removePlayer(player);
+        lobbyRepository.save(lobby);
         String message = player.getUsername() + " left the lobby";
         broadcast(message);
     }
