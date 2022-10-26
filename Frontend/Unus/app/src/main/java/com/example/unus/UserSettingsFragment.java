@@ -175,7 +175,7 @@ public class UserSettingsFragment extends Fragment {
 
         JsonObjectRequest request = new JsonObjectRequest(
                 Request.Method.DELETE,
-                getString(R.string.remote_server_url, "user")+Integer.toString(id),
+                "http://coms-309-029.class.las.iastate.edu:8080/user/"+Integer.toString(id),
                 null,
                 new Response.Listener<JSONObject>() {
                     @Override

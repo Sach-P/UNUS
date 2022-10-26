@@ -209,7 +209,7 @@ public class UserProfileFragment extends Fragment {
 
             JsonObjectRequest request = new JsonObjectRequest(
                     Request.Method.PUT,
-                    getString(R.string.remote_server_url, "user") + UserData.getInstance().getUserID() + "/friends/remove-friend",
+                    "http://coms-309-029.class.las.iastate.edu:8080/user/" + UserData.getInstance().getUserID() + "/friends/remove-friend",
                     object,
                     new Response.Listener<JSONObject>() {
                         @Override

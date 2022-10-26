@@ -55,7 +55,7 @@ public class FriendRequestFragment extends Fragment {
             object.put("password", UserData.getInstance().getPassword());
         JsonObjectRequest request = new JsonObjectRequest(
                 Request.Method.POST,
-                getString(R.string.remote_server_url, "login"),
+                "http://coms-309-029.class.las.iastate.edu:8080/login",
                 object,
                 new Response.Listener<JSONObject>() {
                     @Override
@@ -157,7 +157,7 @@ public class FriendRequestFragment extends Fragment {
 
         JsonObjectRequest request = new JsonObjectRequest(
                 Request.Method.GET,
-                getString(R.string.remote_server_url, "user")+Integer.toString(id),
+                "http://coms-309-029.class.las.iastate.edu:8080/user/"+Integer.toString(id),
                 null,
                 new Response.Listener<JSONObject>() {
                     @Override
@@ -194,7 +194,7 @@ public class FriendRequestFragment extends Fragment {
 
             JsonObjectRequest request = new JsonObjectRequest(
                     Request.Method.PUT,
-                    getString(R.string.remote_server_url, "user") + UserData.getInstance().getUserID()+"/pending-friend-requests",
+                    "http://coms-309-029.class.las.iastate.edu:8080/user/" + UserData.getInstance().getUserID()+"/pending-friend-requests",
                     object,
                     null, null
             );

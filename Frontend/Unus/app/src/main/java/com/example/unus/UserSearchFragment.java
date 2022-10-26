@@ -32,6 +32,7 @@ public class UserSearchFragment extends Fragment {
     private Button search;
     private EditText id;
     private String name;
+    private LinearLayout resultLayout;
 
     public UserSearchFragment() {
         // Required empty public constructor
@@ -49,6 +50,7 @@ public class UserSearchFragment extends Fragment {
         back = (Button) view.findViewById(R.id.backbutton);
         search = (Button) view.findViewById(R.id.search_button);
         id = (EditText) view.findViewById(R.id.searchbar);
+        resultLayout = (LinearLayout) view.findViewById(R.id.results);
         back.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -58,6 +60,7 @@ public class UserSearchFragment extends Fragment {
         search.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
+                resultLayout.removeAllViews();
                 search(id.getText().toString());
             }
         });
@@ -86,7 +89,7 @@ public class UserSearchFragment extends Fragment {
             boolean finalReceivedReq = receivedReq;
             JsonObjectRequest request = new JsonObjectRequest(
                     Request.Method.GET,
-                    getString(R.string.remote_server_url, "user") + Integer.parseInt(id),
+                    "http://coms-309-029.class.las.iastate.edu:8080/user/" + Integer.parseInt(id),
                     null,
                     new Response.Listener<JSONObject>() {
                         @Override
@@ -135,7 +138,7 @@ public class UserSearchFragment extends Fragment {
                                 sendReq.setOnClickListener(new View.OnClickListener() {
                                     @Override
                                     public void onClick(View view) {
-                                        if(finalFriend) { return; }
+                                        if(finalFriend || finalSentReq) { return; }
                                         sendReq.setText("Request Sent");
                                         try {
                                             if(finalReceivedReq) { acceptFriend(response.getString("username"), id); return; }
@@ -181,7 +184,7 @@ public class UserSearchFragment extends Fragment {
 
         JsonObjectRequest request = new JsonObjectRequest(
                 Request.Method.PUT,
-                getString(R.string.remote_server_url, "user")+UserData.getInstance().getUserID()+"/send-friend-request",
+                "http://coms-309-029.class.las.iastate.edu:8080/user/"+UserData.getInstance().getUserID()+"/send-friend-request",
                 object,
                 null, null);
         Volley.newRequestQueue(requireContext()).add(request);
@@ -204,7 +207,7 @@ public class UserSearchFragment extends Fragment {
 
             JsonObjectRequest request = new JsonObjectRequest(
                     Request.Method.PUT,
-                    getString(R.string.remote_server_url, "user") + UserData.getInstance().getUserID()+"/pending-friend-requests",
+                    "http://coms-309-029.class.las.iastate.edu:8080/user/" + UserData.getInstance().getUserID()+"/pending-friend-requests",
                     object,
                     null, null
             );
