@@ -52,9 +52,9 @@ public class UserProfileFragment extends Fragment {
         settings = (Button) view.findViewById(R.id.user_settings);
         back = (Button) view.findViewById(R.id.back);
         username.setText(UserData.getInstance().getUsername());
-        userID.setText("UserID: "+ UserData.getInstance().getUserID());
-        games.setText("Games Played: "+ UserData.getInstance().getGamesPlayed());
-        wins.setText("Games Won: "+ UserData.getInstance().getGamesWon());
+        userID.setText(getString(R.string.user_id_display, UserData.getInstance().getUserID()));
+        games.setText(getString(R.string.games_played_display, UserData.getInstance().getGamesPlayed()));
+        wins.setText(getString(R.string.games_won_display, UserData.getInstance().getGamesWon()));
         getFriends();
 
         settings.setOnClickListener(new View.OnClickListener() {
@@ -171,7 +171,7 @@ public class UserProfileFragment extends Fragment {
 
         JsonObjectRequest request = new JsonObjectRequest(
                 Request.Method.GET,
-                getString(R.string.remote_server_url, "user")+Integer.toString(id),
+                getString(R.string.remote_server_url, "user", Integer.toString(id)),
                 null,
                 new Response.Listener<JSONObject>() {
                     @Override
@@ -180,13 +180,11 @@ public class UserProfileFragment extends Fragment {
                         try {
                             ((TextView) popupView.findViewById(R.id.username)).setText(response.getString("username"));
                             ((TextView) popupView.findViewById(R.id.user_id)).setText(getString(R.string.id_display, response.getInt("id")));
-                            ((TextView) popupView.findViewById(R.id.games_played)).setText(getString(R.string.games_played, response.getInt("gamesPlayed")));
-                            ((TextView) popupView.findViewById(R.id.games_won)).setText(getString(R.string.games_won, response.getInt("gamesWon")));
+                            ((TextView) popupView.findViewById(R.id.games_played)).setText(getString(R.string.games_played_display, response.getInt("gamesPlayed")));
+                            ((TextView) popupView.findViewById(R.id.games_won)).setText(getString(R.string.games_won_display, response.getInt("gamesWon")));
                         } catch (JSONException e) {
                             e.printStackTrace();
                         }
-
-
                     }
                 },
                 new Response.ErrorListener() {
