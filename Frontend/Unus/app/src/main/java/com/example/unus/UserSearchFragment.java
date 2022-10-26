@@ -117,7 +117,7 @@ public class UserSearchFragment extends Fragment {
                                     200));
                             viewProf.setTextSize(20);
                             viewProf.setText("View");
-                            viewProf.setBackgroundColor(view.getResources().getColor(R.color.red));
+                            //viewProf.setBackgroundColor(view.getResources().getColor(R.color.red));
                             sendReq.setTextSize(20);
                             if(finalFriend) {
                                 sendReq.setText("Already Friends");
@@ -130,6 +130,7 @@ public class UserSearchFragment extends Fragment {
                             }
                             try {
                                 username.setText(response.getString("username"));
+                                final boolean[] newFriend = {finalFriend};
                                 viewProf.setOnClickListener(new View.OnClickListener() {
                                     @Override
                                     public void onClick(View view) {
@@ -156,11 +157,17 @@ public class UserSearchFragment extends Fragment {
                                 sendReq.setOnClickListener(new View.OnClickListener() {
                                     @Override
                                     public void onClick(View view) {
-                                        if(finalFriend || finalSentReq) { return; }
+                                        if(newFriend[0] || finalSentReq) { return; }
                                         sendReq.setText("Request Sent");
                                         try {
-                                            if(finalReceivedReq) { acceptFriend(response.getString("username"), id); return; }
+                                            if(finalReceivedReq) {
+                                                acceptFriend(response.getString("username"), id);
+                                                sendReq.setText("Accepted");
+                                                newFriend[0] = true;
+                                                return;
+                                            }
                                             sendFriendRequest(response.getString("username"), id);
+                                            newFriend[0] = true;
                                         } catch (JSONException e) {
                                             e.printStackTrace();
                                         }

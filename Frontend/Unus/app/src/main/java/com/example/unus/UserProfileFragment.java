@@ -7,6 +7,7 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.LinearLayout;
 import android.widget.PopupWindow;
+import android.widget.ScrollView;
 import android.widget.Space;
 import android.widget.TextView;
 
@@ -112,7 +113,7 @@ public class UserProfileFragment extends Fragment {
             }
         });
         for( int i = 0; i < UserData.getInstance().getFriendsList().length; i++) {
-            LinearLayout layout = view.findViewById(R.id.friends);
+            LinearLayout layout = view.findViewById(R.id.scrollList);
             LinearLayout newLayout = new LinearLayout(view.getContext());
             newLayout.setLayoutParams(new ViewGroup.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT,
                     ViewGroup.LayoutParams.WRAP_CONTENT));
@@ -226,7 +227,7 @@ public class UserProfileFragment extends Fragment {
             Volley.newRequestQueue(requireContext()).add(request);
 
             Friend[] newFriends = new Friend[UserData.getInstance().getFriendsList().length - 1];
-            for(int i = 0, j = 0; i < UserData.getInstance().getFriendsList().length - 1; i++) {
+            for(int i = 0, j = 0; i < UserData.getInstance().getFriendsList().length; i++) {
                 if(UserData.getInstance().getFriendsList()[i].getUserID() != id) {
                     newFriends[j] = UserData.getInstance().getFriendsList()[i];
                     j++;
