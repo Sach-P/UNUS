@@ -12,6 +12,8 @@ public class UserData {
     private String password;
 
     private Friend[] friendsList;
+    private Friend[] sentRequests;
+    private Friend[] receivedRequests;
 
     private int gamesPlayed;
     private int gamesWon;
@@ -147,4 +149,38 @@ public class UserData {
         return friendsList;
     }
 
+    /**
+     * Returns the sent friend requests arraylist
+     * @return sentFriends list
+     */
+    public Friend[] getSentRequests() { return sentRequests; }
+
+
+    /**
+     * Returns the received friend requests arraylist
+     * @return receivedFriends list
+     */
+    public Friend[] getReceivedRequests() { return receivedRequests; }
+
+    /**
+     * copys over a given list of Friend objects into the friendsList array
+     * @param friendsList list of Friends
+     */
+    public void setSentRequestsList(Friend[] friendsList){
+        this.sentRequests = new Friend[friendsList.length];
+        for (int i = 0; i < friendsList.length; i++){
+            this.sentRequests[i] = friendsList[i];
+        }
+    }
+
+    /**
+     * copys over a given list of Friend objects into the friendsList array
+     * @param friendsList list of Friends
+     */
+    public void setReceivedRequestsList(Friend[] friendsList){
+        this.receivedRequests = new Friend[friendsList.length];
+        for (int i = 0; i < friendsList.length; i++){
+            this.receivedRequests[i] = friendsList[i];
+        }
+    }
 }
