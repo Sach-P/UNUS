@@ -13,6 +13,9 @@
     <string name="showPassword">show</string>
     <string name="hidePassword">hide</string>
     <string name="validatingMessage">Validating Credentials...</string>
+    <string name="back">Back</string>
+    <string name="search">Search</string>
+    <string name="searchid">Search by UserID</string>
 
     <string name="login_failed">Invalid login credentials. Try Again</string>
     <string name="login_error">Login Error</string>
