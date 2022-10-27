@@ -122,6 +122,7 @@ public class UserProfileFragment extends Fragment {
                     ViewGroup.LayoutParams.WRAP_CONTENT));
             button.setText(UserData.getInstance().getFriendsList()[i].getUsername());
             button.setTextSize(20);
+            button.setAllCaps(false);
             button.setBackgroundColor(this.getResources().getColor(R.color.purple_500));
             button.setTextColor(this.getResources().getColor(R.color.yellow));
 
