@@ -136,8 +136,7 @@ public class FriendRequestFragment extends Fragment {
         accept.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                newLayout.setVisibility(View.GONE);
-                user.setVisibility(View.GONE);
+                fullBox.setVisibility(View.GONE);
                 Friend newFriend = new Friend(id, username);
                 Friend[] temp = new Friend[UserData.getInstance().getFriendsList().length+1];
                 for(int i = 0; i < UserData.getInstance().getFriendsList().length; i++) {
@@ -151,8 +150,7 @@ public class FriendRequestFragment extends Fragment {
         decline.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                newLayout.setVisibility(View.GONE);
-                user.setVisibility(View.GONE);
+                fullBox.setVisibility(View.GONE);
                 accept_decline(false, username, id); //false will equate to declining the request
             }
         });

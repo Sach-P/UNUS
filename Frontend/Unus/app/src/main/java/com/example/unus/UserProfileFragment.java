@@ -84,7 +84,7 @@ public class UserProfileFragment extends Fragment {
         make_friends.setTextSize(15);
         make_friends.setText("Add");
         flayout.addView(make_friends);
-        make_friends.setBackgroundColor(this.getResources().getColor(R.color.red));
+        make_friends.setBackgroundColor(this.getResources().getColor(R.color.purple_500));
         make_friends.setTextColor(this.getResources().getColor(R.color.yellow));
         make_friends.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -103,7 +103,7 @@ public class UserProfileFragment extends Fragment {
         pending_reqs.setTextSize(15);
         pending_reqs.setText("Requests");
         flayout.addView(pending_reqs);
-        pending_reqs.setBackgroundColor(this.getResources().getColor(R.color.red));
+        pending_reqs.setBackgroundColor(this.getResources().getColor(R.color.purple_500));
         pending_reqs.setTextColor(this.getResources().getColor(R.color.yellow));
         pending_reqs.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -122,7 +122,7 @@ public class UserProfileFragment extends Fragment {
                     ViewGroup.LayoutParams.WRAP_CONTENT));
             button.setText(UserData.getInstance().getFriendsList()[i].getUsername());
             button.setTextSize(20);
-            button.setBackgroundColor(this.getResources().getColor(R.color.red));
+            button.setBackgroundColor(this.getResources().getColor(R.color.purple_500));
             button.setTextColor(this.getResources().getColor(R.color.yellow));
 
             Button remove = new Button(view.getContext());
@@ -130,7 +130,7 @@ public class UserProfileFragment extends Fragment {
                     ViewGroup.LayoutParams.WRAP_CONTENT));
             remove.setText("del");
             remove.setTextSize(10);
-            remove.setBackgroundColor(this.getResources().getColor(R.color.red));
+            remove.setBackgroundColor(this.getResources().getColor(R.color.purple_500));
             remove.setTextColor(this.getResources().getColor(R.color.yellow));
             int finalIndex = i;
             button.setOnClickListener(new View.OnClickListener() {
