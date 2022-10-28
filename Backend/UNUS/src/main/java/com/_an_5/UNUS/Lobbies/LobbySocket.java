@@ -11,10 +11,7 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestParam;
 
-import javax.websocket.OnClose;
-import javax.websocket.OnError;
-import javax.websocket.OnOpen;
-import javax.websocket.Session;
+import javax.websocket.*;
 import javax.websocket.server.PathParam;
 import javax.websocket.server.ServerEndpoint;
 import java.io.IOException;
@@ -23,14 +20,12 @@ import java.util.Hashtable;
 import java.util.Map;
 
 @Controller
-@ServerEndpoint(value = "/lobbies/{lobbyId}")
+@ServerEndpoint(value = "/lobbies/{lobbyId}/{userId}")
 public class LobbySocket {
 
     private static LobbyRepository lobbyRepository;
 
     private static UserRepository userRepository;
-
-    private Lobby lobby;
 
     @Autowired
     public void setLobbyRepository(LobbyRepository repo){
@@ -57,22 +52,31 @@ public class LobbySocket {
         sessionUserMap.put(session, player);
         userSessionMap.put(player, session);
 
-        lobby = lobbyRepository.findById(lobbyId);
+        Lobby lobby = lobbyRepository.findById(lobbyId);
         lobby.addPlayer(player);
         lobbyRepository.save(lobby);
         String message = player.getUsername() + " has joined the lobby";
         broadcast(message);
     }
 
+    @OnMessage
+    public void onMessage(Session session, String message) throws IOException {
+        logger.info("Entered into Message: Got Message:" + message);
+        User player = sessionUserMap.get(session);
+        broadcast(player.getUsername() + ": " + message);
+    }
+
+
     @OnClose
-    public void onClose(Session session) throws IOException {
+    public void onClose(Session session, @PathParam(value = "lobbyId") int lobbyId) throws IOException {
         logger.info("Entered into Close");
 
         User player = sessionUserMap.get(session);
-        sessionUserMap.remove(session);
-        userSessionMap.remove(player);
+        Lobby lobby = lobbyRepository.findById(lobbyId);
         lobby.removePlayer(player);
         lobbyRepository.save(lobby);
+        sessionUserMap.remove(session);
+        userSessionMap.remove(player);
         String message = player.getUsername() + " left the lobby";
         broadcast(message);
     }
@@ -89,7 +93,7 @@ public class LobbySocket {
                 session.getBasicRemote().sendText(message);
             }
             catch (IOException e) {
-                logger.info("ExceptionL " + e.getMessage().toString());
+                logger.info("Exception " + e.getMessage());
                 e.printStackTrace();
             }
         });
