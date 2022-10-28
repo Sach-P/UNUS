@@ -4,6 +4,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical"
+    android:background="?attr/backgroundColor"
     >
 
     <Button
@@ -11,8 +12,9 @@
         android:layout_width="100dp"
         android:layout_height="50dp"
         android:text="@string/back"
-        android:backgroundTint="@color/red"
-        android:textColor="@color/yellow"
+        android:backgroundTint="?attr/buttonTint"
+        android:textColor="?attr/colorSecondary"
+        android:layout_marginLeft="10dp"
         />
     <LinearLayout
         android:layout_width="match_parent"
@@ -32,14 +34,18 @@
             android:layout_height="50dp"
             android:id="@+id/searchbar"
             android:hint="@string/searchid"
+            android:textColor="@color/white"
+            android:backgroundTint="@color/white"
+            android:textColorHint="@color/white"
+
         />
         <Button
             android:id="@+id/search_button"
             android:layout_width="100dp"
             android:layout_height="50dp"
             android:text="@string/search"
-            android:backgroundTint="@color/red"
-            android:textColor="@color/yellow"
+            android:backgroundTint="?attr/buttonTint"
+            android:textColor="?attr/colorSecondary"
             />
     </LinearLayout>
 
@@ -49,8 +55,9 @@
             android:text=""
             android:textSize="35sp"
             android:textAlignment="center"
-            android:textColor="@color/black"
+            android:textColor="@color/white"
             android:id="@+id/username"
+            android:layout_marginBottom="20dp"
             >
 
         </TextView>

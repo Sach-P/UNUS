@@ -6,9 +6,9 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
-import android.widget.EditText;
 import android.widget.LinearLayout;
 import android.widget.PopupWindow;
+import android.widget.Space;
 import android.widget.TextView;
 
 import androidx.fragment.app.Fragment;
@@ -93,19 +93,39 @@ public class FriendRequestFragment extends Fragment {
         LinearLayout newLayout = new LinearLayout(view.getContext());
         newLayout.setLayoutParams(new ViewGroup.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT,
                         ViewGroup.LayoutParams.WRAP_CONTENT));
+        newLayout.setGravity(Gravity.CENTER);
+
+        LinearLayout fullBox = new LinearLayout(view.getContext());
+        fullBox.setLayoutParams(new ViewGroup.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT,
+                ViewGroup.LayoutParams.WRAP_CONTENT));
+        fullBox.setOrientation(LinearLayout.VERTICAL);
+        fullBox.setPadding(30,10,30,30);
+        fullBox.setBackgroundColor(getResources().getColor(R.color.dark_gray));
+
         TextView user = new TextView(view.getContext());
         Button viewProf = new Button(view.getContext());
         Button accept = new Button(view.getContext());
         Button decline = new Button(view.getContext());
+
         user.setTextSize(30);
         user.setText(username);
         user.setTextAlignment(View.TEXT_ALIGNMENT_CENTER);
+        user.setTextColor(getResources().getColor(R.color.purple_500));
+
         viewProf.setTextSize(20);
         viewProf.setText("View");
+        viewProf.setTextColor(getResources().getColor(R.color.yellow));
+        viewProf.setBackgroundColor(getResources().getColor(R.color.purple_500));
+
         accept.setTextSize(20);
         accept.setText("Accept");
+        accept.setTextColor(getResources().getColor(R.color.yellow));
+        accept.setBackgroundColor(getResources().getColor(R.color.purple_500));
+
         decline.setTextSize(20);
         decline.setText("Decline");
+        decline.setTextColor(getResources().getColor(R.color.yellow));
+        decline.setBackgroundColor(getResources().getColor(R.color.purple_500));
 
         viewProf.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -116,8 +136,7 @@ public class FriendRequestFragment extends Fragment {
         accept.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                newLayout.setVisibility(View.GONE);
-                user.setVisibility(View.GONE);
+                fullBox.setVisibility(View.GONE);
                 Friend newFriend = new Friend(id, username);
                 Friend[] temp = new Friend[UserData.getInstance().getFriendsList().length+1];
                 for(int i = 0; i < UserData.getInstance().getFriendsList().length; i++) {
@@ -131,19 +150,32 @@ public class FriendRequestFragment extends Fragment {
         decline.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                newLayout.setVisibility(View.GONE);
-                user.setVisibility(View.GONE);
+                fullBox.setVisibility(View.GONE);
                 accept_decline(false, username, id); //false will equate to declining the request
             }
         });
 
+        Space space = new Space(view.getContext());
+        space.setLayoutParams(new LinearLayout.LayoutParams(40,20));
 
+        Space space2 = new Space(view.getContext());
+        space2.setLayoutParams(new LinearLayout.LayoutParams(40,20));
 
         newLayout.addView(viewProf);
+        newLayout.addView(space);
         newLayout.addView(accept);
+        newLayout.addView(space2);
         newLayout.addView(decline);
-        ((LinearLayout)view.findViewById(R.id.results)).addView(user);
-        ((LinearLayout)view.findViewById(R.id.results)).addView(newLayout);
+
+        fullBox.addView(user);
+        fullBox.addView(newLayout);
+
+        Space space3 = new Space(view.getContext());
+        space3.setLayoutParams(new LinearLayout.LayoutParams(0, 30));
+
+        ((LinearLayout)view.findViewById(R.id.results)).addView(fullBox);
+        ((LinearLayout)view.findViewById(R.id.results)).addView(space3);
+
     }
 
     public void getUser(int id) {

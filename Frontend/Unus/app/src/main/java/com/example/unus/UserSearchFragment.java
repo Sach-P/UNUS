@@ -14,6 +14,7 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.LinearLayout;
 import android.widget.PopupWindow;
+import android.widget.Space;
 import android.widget.TextView;
 
 import com.android.volley.Request;
@@ -131,6 +132,9 @@ public class UserSearchFragment extends Fragment {
                             try {
                                 username.setText(response.getString("username"));
                                 final boolean[] newFriend = {finalFriend};
+
+                                viewProf.setBackgroundColor(getResources().getColor(R.color.purple_500));
+                                viewProf.setTextColor(getResources().getColor(R.color.yellow));
                                 viewProf.setOnClickListener(new View.OnClickListener() {
                                     @Override
                                     public void onClick(View view) {
@@ -154,6 +158,9 @@ public class UserSearchFragment extends Fragment {
                                         }
                                     }
                                 });
+
+                                sendReq.setBackgroundColor(getResources().getColor(R.color.purple_500));
+                                sendReq.setTextColor(getResources().getColor(R.color.yellow));
                                 sendReq.setOnClickListener(new View.OnClickListener() {
                                     @Override
                                     public void onClick(View view) {
@@ -177,7 +184,12 @@ public class UserSearchFragment extends Fragment {
                                 username.setText("User Not Found");
                                 e.printStackTrace();
                             }
+
+                            Space space = new Space(view.getContext());
+                            space.setLayoutParams(new LinearLayout.LayoutParams(30, 0));
+
                             ((LinearLayout) view.findViewById(R.id.results)).addView(viewProf);
+                            ((LinearLayout) view.findViewById(R.id.results)).addView(space);
                             ((LinearLayout) view.findViewById(R.id.results)).addView(sendReq);
                         }
                     },

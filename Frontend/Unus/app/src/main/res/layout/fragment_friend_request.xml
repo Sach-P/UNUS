@@ -4,6 +4,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical"
+    android:background="?attr/backgroundColor"
     >
 
     <Button
@@ -11,8 +12,8 @@
         android:layout_width="100dp"
         android:layout_height="50dp"
         android:text="@string/back"
-        android:backgroundTint="@color/red"
-        android:textColor="@color/yellow"
+        android:backgroundTint="?attr/colorPrimary"
+        android:textColor="?attr/colorSecondary"
         />
     <LinearLayout
         android:layout_width="match_parent"
@@ -28,7 +29,7 @@
             android:text="Friend Requests"
             android:textAlignment="center"
             android:textSize="30sp"
-            android:textColor="@color/red"
+            android:textColor="?attr/colorPrimary"
             android:id="@+id/friend_reqs"
                 />
         <ScrollView
