@@ -33,6 +33,11 @@
 			<artifactId>spring-boot-starter-websocket</artifactId>
 		</dependency>
 
+		<dependency>
+			<groupId>org.projectlombok</groupId>
+			<artifactId>lombok</artifactId>
+			<optional>true</optional>
+		</dependency>
 
 		<!-- The H2 database dependency
 		<dependency>

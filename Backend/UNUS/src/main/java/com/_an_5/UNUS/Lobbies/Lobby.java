@@ -20,9 +20,13 @@ public class Lobby {
     @JoinColumn(name = "host")
     private User host;
 
-    @OneToMany(cascade=CascadeType.ALL)
+    @OneToMany(fetch = FetchType.EAGER, cascade=CascadeType.ALL)
     @JoinColumn(name="players")
     private List<User> players;
+
+//    @OneToMany(fetch = FetchType., cascade=CascadeType.ALL)
+//    @JoinColumn(name="invitedPlayers")
+//    private List<User> invitedPlayers;
 
     public Lobby(User host, boolean isPrivate){
         this.host = host;
@@ -50,12 +54,18 @@ public class Lobby {
         return host;
     }
 
+//    public void invitePlayer(User player) { invitedPlayers.add(player); }
+
     public void addPlayer(User player){
         players.add(player);
     }
 
     public List<User> getPlayers(){
         return players;
+    }
+
+    public void setPlayers(List<User> players){
+        this.players = players;
     }
 
     public void removePlayer(User player){

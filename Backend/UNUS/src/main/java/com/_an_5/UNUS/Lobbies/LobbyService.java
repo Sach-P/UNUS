@@ -29,12 +29,14 @@ public class LobbyService {
     public String deleteLobby(int lobbyId, int userId){
         User host = userRepo.findById(userId);
         Lobby lobby = lobbyRepo.findById(lobbyId);
-        if(!host.equals(lobby.getHost())){
-            return failure;
-        }
-        else{
+        if(host.equals(lobby.getHost())){
+            lobby.setHost(null);
+            lobbyRepo.save(lobby);
             lobbyRepo.deleteById(lobbyId);
             return success;
+        }
+        else{
+            return failure;
         }
     }
 

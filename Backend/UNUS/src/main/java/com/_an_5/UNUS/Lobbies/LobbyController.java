@@ -28,4 +28,9 @@ public class LobbyController {
         return lobbyService.createLobby(userId, isPrivate);
 
     }
+
+    @DeleteMapping(path = "/lobbies/delete-lobby/{lobbyId}")
+    public String deleteLobby(@RequestParam(name = "userId") int userId, @PathVariable int lobbyId){
+        return lobbyService.deleteLobby(lobbyId, userId);
+    }
 }
