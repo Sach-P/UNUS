@@ -15,6 +15,7 @@ import javax.websocket.server.PathParam;
 import javax.websocket.server.ServerEndpoint;
 import java.io.IOException;
 import java.util.Hashtable;
+import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 
@@ -85,16 +86,14 @@ public class LobbySocket {
         if (lobby.getHost().equals(player)){
             if(message.startsWith("/kick")){
                 int userId = Integer.parseInt(message.split(" ")[1]);
-                for(User user : lobby.getPlayers()){
+                Iterator<User> it = userSessionMap.keySet().iterator();
+                while(it.hasNext()){
+                    User user = it.next();
                     if(user.getId() == userId){
-                        List<User> players = lobby.getPlayers();
-                        players.set(players.indexOf(user), null);
-                        lobby.setPlayers(players);
-                        lobbyRepository.save(lobby);
-                        lobby.removePlayer(user);
                         sessionUserMap.remove(userSessionMap.get(user));
-                        userSessionMap.remove(user);
-                        broadcast(user.getUsername() + "was kicked from the lobby");
+                        it.remove();
+                        lobby.removePlayer(user);
+                        broadcast(user.getUsername() + " was kicked from the lobby");
                     }
 
                 }
@@ -120,7 +119,7 @@ public class LobbySocket {
         Lobby lobby = sessionLobbyMap.get(session);
         if(lobby.getHost().equals(player)){
             if(lobby.getPlayers().size() > 0){
-                lobby.setHost(lobby.getPlayers().get(0));
+                lobby.setHost((User)lobby.getPlayers().toArray()[0]); //TODO test
                 lobby.removePlayer(lobby.getHost());
                 lobbyRepository.save(lobby);
             }

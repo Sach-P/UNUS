@@ -2,6 +2,7 @@ package com._an_5.UNUS.Users;
 
 
 import com._an_5.UNUS.Friends.Friend;
+import com._an_5.UNUS.Lobbies.Lobby;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonSetter;
 
@@ -22,6 +23,9 @@ public class User {
     private int gamesPlayed;
     private int gamesWon;
 
+    @ManyToOne(cascade = CascadeType.ALL)
+    @JoinColumn(name = "lobby_id", referencedColumnName = "id")
+    private Lobby lobby;
 
     @OneToMany(cascade=CascadeType.ALL)
     @JoinColumn(name="friends_id")
