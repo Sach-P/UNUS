@@ -139,7 +139,7 @@ public class LogInScreenFragment extends Fragment {
                                     Friend[] sentRequests = new Friend[numSentRequests];
                                     for (int i = 0; i < numSentRequests; i++){
                                         JSONObject friendObj = response.getJSONObject("user").getJSONArray("sentFriendRequests").getJSONObject(i);
-                                        sentRequests[i] = new Friend(friendObj.getInt("friendId"), friendObj.getString("username"));
+                                        sentRequests[i] = new Friend(friendObj  .getInt("friendId"), friendObj.getString("username"));
                                     }
                                     userData.setSentRequestsList(sentRequests);
 

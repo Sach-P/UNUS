@@ -67,7 +67,7 @@ public class MainMenuFragment extends Fragment {
                 leaderboard.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View view) {
-                        //put navigation to leaderboard fragment
+                        ChatLayout cl = new ChatLayout(view);
             }
         });
 
