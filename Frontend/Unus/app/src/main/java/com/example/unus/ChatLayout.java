@@ -11,13 +11,20 @@ import android.widget.LinearLayout;
 import android.widget.PopupWindow;
 import android.widget.TextView;
 
-/*
+import org.java_websocket.WebSocket;
+import org.java_websocket.WebSocketFactory;
 import org.java_websocket.client.WebSocketClient;
 import org.java_websocket.drafts.Draft;
 import org.java_websocket.drafts.Draft_6455;
+import org.java_websocket.framing.Framedata;
 import org.java_websocket.handshake.ServerHandshake;
- */
 
+import java.net.InetSocketAddress;
+import java.net.URI;
+import java.net.URISyntaxException;
+import java.nio.ByteBuffer;
+import java.nio.channels.NotYetConnectedException;
+import java.util.Collection;
 
 public class ChatLayout {
 
@@ -26,8 +33,9 @@ public class ChatLayout {
     private Button back;
     private View popupView;
     private LinearLayout messageBoard;
+    private WebSocketClient ws;
 
-    public ChatLayout(View view) {
+    public ChatLayout(View view)  {
         LayoutInflater inflater = (LayoutInflater) view.getContext().getSystemService(view.getContext().LAYOUT_INFLATER_SERVICE);
         popupView = inflater.inflate(R.layout.chat_layout, null);
 
@@ -39,6 +47,8 @@ public class ChatLayout {
 
         //Set the location of the window on the screen
         popupWindow.showAtLocation(view, Gravity.LEFT, 0, 0);
+
+        connectWebSocket();
 
         newMessage = popupView.findViewById(R.id.new_message);
         sendMessage = popupView.findViewById(R.id.send);
@@ -55,6 +65,7 @@ public class ChatLayout {
         back.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
+                ws.close();
                 popupWindow.dismiss();
             }
         });
@@ -62,7 +73,13 @@ public class ChatLayout {
     }
 
     private void receivedMessage(String message) {
+        TextView nextMessage = new TextView(popupView.getContext());
+        nextMessage.setText(message);
+        nextMessage.setTextColor(popupView.getResources().getColor(R.color.yellow));
+        nextMessage.setBackgroundColor(popupView.getResources().getColor(R.color.bright_purple));
+        nextMessage.setTextSize(25);
 
+        messageBoard.addView(nextMessage, 0);
     }
 
     private void sendMessage(String message) {
@@ -71,9 +88,56 @@ public class ChatLayout {
         nextMessage.setTextColor(popupView.getResources().getColor(R.color.yellow));
         nextMessage.setBackgroundColor(popupView.getResources().getColor(R.color.bright_purple));
         nextMessage.setTextSize(25);
+        nextMessage.setGravity(Gravity.RIGHT);
         newMessage.setText("");
+        ws.send(message);
 
-        messageBoard.addView(nextMessage);
+        messageBoard.addView(nextMessage, 0);
 
+    }
+
+    private void connectWebSocket() {
+        URI uri;
+        try {
+            uri = new URI("wss://demo.piesocket.com/v3/channel_123?api_key=VCXCEuvhGcBDP7XhiJJUDvR1e1D3eiVjgZ9VRiaV&notify_self");
+        } catch (URISyntaxException e) {
+            TextView nextMessage = new TextView(popupView.getContext());
+            nextMessage.setText("Couldn't Connect to Messages");
+            nextMessage.setTextColor(popupView.getResources().getColor(R.color.yellow));
+            nextMessage.setBackgroundColor(popupView.getResources().getColor(R.color.bright_purple));
+            nextMessage.setTextSize(25);
+
+            messageBoard.addView(nextMessage, 0);
+            e.printStackTrace();
+            return;
+        }
+
+        ws = new WebSocketClient(uri) {
+            @Override
+            public void onOpen(ServerHandshake serverHandshake) {
+                //ws.send("Hello from android");
+            }
+
+            @Override
+            public void onMessage(String s) {
+                receivedMessage(s);
+            }
+
+            @Override
+            public void onClose(int i, String s, boolean b) {
+            }
+
+            @Override
+            public void onError(Exception e) {
+                TextView nextMessage = new TextView(popupView.getContext());
+                nextMessage.setText("Couldn't Connect to Message"+e);
+                nextMessage.setTextColor(popupView.getResources().getColor(R.color.yellow));
+                nextMessage.setBackgroundColor(popupView.getResources().getColor(R.color.bright_purple));
+                nextMessage.setTextSize(25);
+
+                messageBoard.addView(nextMessage, 0);
+            }
+        };
+        ws.connect();
     }
 }
