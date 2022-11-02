@@ -1,5 +1,6 @@
 package com.example.unus;
 
+import android.app.Activity;
 import android.os.Bundle;
 import android.view.Gravity;
 import android.view.LayoutInflater;
@@ -26,7 +27,7 @@ import java.nio.ByteBuffer;
 import java.nio.channels.NotYetConnectedException;
 import java.util.Collection;
 
-public class ChatLayout {
+public class ChatLayout extends Activity {
 
     private EditText newMessage;
     private Button sendMessage;
@@ -35,7 +36,7 @@ public class ChatLayout {
     private LinearLayout messageBoard;
     private WebSocketClient ws;
 
-    public ChatLayout(View view)  {
+    public ChatLayout(View view) {
         LayoutInflater inflater = (LayoutInflater) view.getContext().getSystemService(view.getContext().LAYOUT_INFLATER_SERVICE);
         popupView = inflater.inflate(R.layout.chat_layout, null);
 
@@ -99,7 +100,7 @@ public class ChatLayout {
     private void connectWebSocket() {
         URI uri;
         try {
-            uri = new URI("wss://demo.piesocket.com/v3/channel_123?api_key=VCXCEuvhGcBDP7XhiJJUDvR1e1D3eiVjgZ9VRiaV&notify_self");
+            uri = new URI(getString(R.string.fake_websocket));
         } catch (URISyntaxException e) {
             TextView nextMessage = new TextView(popupView.getContext());
             nextMessage.setText("Couldn't Connect to Messages");
@@ -120,7 +121,12 @@ public class ChatLayout {
 
             @Override
             public void onMessage(String s) {
-                receivedMessage(s);
+                runOnUiThread(new Runnable() {
+                    @Override
+                    public void run() {
+                        receivedMessage(s);
+                    }
+                });
             }
 
             @Override
@@ -130,7 +136,7 @@ public class ChatLayout {
             @Override
             public void onError(Exception e) {
                 TextView nextMessage = new TextView(popupView.getContext());
-                nextMessage.setText("Couldn't Connect to Message"+e);
+                nextMessage.setText(""+e);
                 nextMessage.setTextColor(popupView.getResources().getColor(R.color.yellow));
                 nextMessage.setBackgroundColor(popupView.getResources().getColor(R.color.bright_purple));
                 nextMessage.setTextSize(25);

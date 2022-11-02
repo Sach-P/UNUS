@@ -3,6 +3,7 @@
 
     <string name="postman_url">https://3d5d7b90-cdb8-41bc-b45b-cffb50951687.mock.pstmn.io/%s/%s</string>
     <string name="remote_server_url">http://coms-309-029.class.las.iastate.edu:8080/%s/%s</string>
+    <string name="fake_websocket">wss://demo.piesocket.com/v3/channel_123?api_key=VCXCEuvhGcBDP7XhiJJUDvR1e1D3eiVjgZ9VRiaV&amp;notify_self</string>
 
     <!--login screen strings-->
     <string name="logo_content_description">logo</string>
