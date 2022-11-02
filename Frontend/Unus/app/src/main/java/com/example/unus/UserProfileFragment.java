@@ -143,7 +143,9 @@ public class UserProfileFragment extends Fragment {
             remove.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
-                    unfriend(UserData.getInstance().getFriendsList()[finalIndex].getUserID(), UserData.getInstance().getFriendsList()[finalIndex].getUsername());
+                    ConfirmationLayout cl = new ConfirmationLayout(view);
+                    if(cl.confirm())
+                        unfriend(UserData.getInstance().getFriendsList()[finalIndex].getUserID(), UserData.getInstance().getFriendsList()[finalIndex].getUsername());
                 }
             });
             Space sp2 = new Space(view.getContext());
