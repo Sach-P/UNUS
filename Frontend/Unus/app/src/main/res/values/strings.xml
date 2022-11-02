@@ -55,4 +55,12 @@
     <string name="old_password">Old Password:</string>
     <string name="change_button">Change</string>
 
+    <!--game lobby strings-->
+    <string name="pre_game_lobby">Pre-Game Lobby</string>
+    <string name="players">Players:</string>
+    <string name="player_count">%d (min 2)</string>
+    <string name="start_game">Start Game</string>
+    <string name="ready">Ready</string>
+    <string name="game_code">Code: %1$s</string>
+
 </resources>
