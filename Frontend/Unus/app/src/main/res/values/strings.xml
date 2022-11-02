@@ -56,4 +56,7 @@
     <string name="old_password">Old Password:</string>
     <string name="change_button">Change</string>
 
+    <!--chat strings-->
+    <string name="message_error">Couldn\'t connect to messages</string>
+
 </resources>

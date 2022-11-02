@@ -100,10 +100,11 @@ public class ChatLayout extends Activity {
     private void connectWebSocket() {
         URI uri;
         try {
-            uri = new URI(getString(R.string.fake_websocket));
+            uri = new URI("wss://demo.piesocket.com/v3/channel_123?api_key=VCXCEuvhGcBDP7XhiJJUDvR1e1D3eiVjgZ9VRiaV&notify_self");
+                //will be getString(R.string.fake_websocket)) eventually;
         } catch (URISyntaxException e) {
             TextView nextMessage = new TextView(popupView.getContext());
-            nextMessage.setText("Couldn't Connect to Messages");
+            nextMessage.setText("Couldn't Connect to Messages"); //will be getString(R.string.message_error)); eventually
             nextMessage.setTextColor(popupView.getResources().getColor(R.color.yellow));
             nextMessage.setBackgroundColor(popupView.getResources().getColor(R.color.bright_purple));
             nextMessage.setTextSize(25);
