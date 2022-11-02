@@ -11,4 +11,5 @@ public interface LobbyRepository extends JpaRepository<Lobby, Long> {
 
     @Transactional
     void deleteById(int id);
+
 }

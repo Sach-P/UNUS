@@ -10,6 +10,8 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 
+import javax.persistence.EntityManager;
+import javax.persistence.TypedQuery;
 import javax.websocket.*;
 import javax.websocket.server.PathParam;
 import javax.websocket.server.ServerEndpoint;
@@ -53,28 +55,22 @@ public class LobbySocket {
 
 
     @OnOpen
-    public void onOpen(Session session, @PathParam(value = "lobbyId") int lobbyId, @PathParam("userId") int userId) throws IOException {
+    public void onOpen(Session session, @PathParam("lobbyId") int lobbyId, @PathParam("userId") int userId) throws IOException {
 
         logger.info("Entered into Open");
 
         Lobby lobby = lobbyRepository.findById(lobbyId);
 
-        if(!lobby.getPrivacy()){
-            User player = userRepository.findById(userId);
-            sessionUserMap.put(session, player);
-            userSessionMap.put(player, session);
+        User player = userRepository.findById(userId);
+        sessionUserMap.put(session, player);
+        userSessionMap.put(player, session);
 
-            if((!player.equals(lobby.getHost())) && (!lobby.getPlayers().contains(player))){
-                lobby.addPlayer(player);
-                lobbyRepository.save(lobby);
-            }
-            sessionLobbyMap.put(session, lobby);
-            lobbySessionMap.put(lobby, session);
+        sessionLobbyMap.put(session, lobby);
+        lobbySessionMap.put(lobby, session);
 
-            sendMessageToParticularUser(player, getChatHistory());
-            String message = player.getUsername() + " has joined the lobby";
-            broadcast(message);
-        }
+        sendMessageToParticularUser(player, getChatHistory());
+        String message = player.getUsername() + " has joined the lobby";
+        broadcast(message);
 
     }
 
@@ -83,26 +79,12 @@ public class LobbySocket {
         logger.info("Entered into Message: Got Message:" + message);
         User player = sessionUserMap.get(session);
         Lobby lobby = sessionLobbyMap.get(session);
-        if (lobby.getHost().equals(player)){
-            if(message.startsWith("/kick")){
-                int userId = Integer.parseInt(message.split(" ")[1]);
-                Iterator<User> it = userSessionMap.keySet().iterator();
-                while(it.hasNext()){
-                    User user = it.next();
-                    if(user.getId() == userId){
-                        sessionUserMap.remove(userSessionMap.get(user));
-                        it.remove();
-                        lobby.removePlayer(user);
-                        broadcast(user.getUsername() + " was kicked from the lobby");
-                    }
-
-                }
-
-                lobbyRepository.save(lobby);
-            }
-            else{
-                broadcast(player.getUsername() + ": " + message);
-            }
+        if(message.startsWith("/kick")) {
+            int userId = Integer.parseInt(message.split(" ")[1]);
+            User user = userRepository.findById(userId);
+            sessionUserMap.remove(session);
+            userSessionMap.remove(user);
+            broadcast(user.getUsername() + " was kicked from the lobby");
         }
         else{
             broadcast(player.getUsername() + ": " + message);
@@ -117,20 +99,20 @@ public class LobbySocket {
 
         User player = sessionUserMap.get(session);
         Lobby lobby = sessionLobbyMap.get(session);
-        if(lobby.getHost().equals(player)){
-            if(lobby.getPlayers().size() > 0){
-                lobby.setHost((User)lobby.getPlayers().toArray()[0]); //TODO test
-                lobby.removePlayer(lobby.getHost());
-                lobbyRepository.save(lobby);
-            }
-            else{
-                lobbyRepository.deleteById(lobby.getId());
-            }
-        }
-        else{
-            lobby.removePlayer(player);
-            lobbyRepository.save(lobby);
-        }
+//        if(lobby.getHost().equals(player)){
+//            if(lobby.getPlayers().size() > 0){
+//                lobby.setHost((User)lobby.getPlayers().toArray()[0]); //TODO test
+//                lobby.removePlayer(lobby.getHost());
+//                lobbyRepository.save(lobby);
+//            }
+//            else{
+//                lobbyRepository.deleteById(lobby.getId());
+//            }
+//        }
+//        else{
+//            lobby.removePlayer(player);
+//            lobbyRepository.save(lobby);
+//        }
         lobbySessionMap.remove(lobby);
         sessionLobbyMap.remove(session);
         sessionUserMap.remove(session);

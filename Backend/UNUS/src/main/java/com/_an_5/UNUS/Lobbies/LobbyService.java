@@ -2,8 +2,13 @@ package com._an_5.UNUS.Lobbies;
 
 import com._an_5.UNUS.Users.User;
 import com._an_5.UNUS.Users.UserRepository;
+import lombok.AllArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.messaging.simp.SimpMessagingTemplate;
 import org.springframework.stereotype.Service;
+
+import java.util.Iterator;
 
 @Service
 public class LobbyService {
@@ -22,7 +27,10 @@ public class LobbyService {
         if(host == null){
             return failure;
         }
-        lobbyRepo.save(new Lobby(host, isPrivate));
+        Lobby lobby = new Lobby(host, isPrivate);
+        host.setLobby(lobby);
+        lobbyRepo.save(lobby);
+        userRepo.save(host);
         return success;
     }
 
@@ -46,10 +54,31 @@ public class LobbyService {
             return failure;
         }
         else{
-            lobby.addPlayer(userRepo.findById(userId));
-            lobbyRepo.save(lobby);
+            User player = userRepo.findById(userId);
+            player.setLobby(lobby);
+//            lobby.addPlayer(userRepo.findById(userId));
+            userRepo.save(player);
+//            lobbyRepo.save(lobby);
             return  success;
         }
 
+    }
+
+    public String kickPlayer(int lobbyId, int playerId){
+        Lobby lobby = lobbyRepo.findById(lobbyId);
+        if(lobby != null){
+                User player = userRepo.findById(playerId);
+                Iterator<User> it = lobby.getPlayers().iterator();
+                while(it.hasNext()) {
+                    User user = it.next();
+                    if (user.getId() == playerId) {
+                        user.setLobby(null);
+                        userRepo.save(user);
+                        return "/kick " + playerId;
+                    }
+
+                }
+        }
+        return failure;
     }
 }

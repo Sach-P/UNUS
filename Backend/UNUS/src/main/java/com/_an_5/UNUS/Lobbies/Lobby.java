@@ -19,27 +19,19 @@ public class Lobby {
     private boolean isPrivate;
 
     @OneToOne(cascade=CascadeType.ALL)
-    @JoinColumn(name = "host_id")
+    @JoinColumn(name = "host_id", referencedColumnName = "id")
     private User host;
 
     @OneToMany(mappedBy = "lobby")
     private Set<User> players = new HashSet<>();
-//    @OneToMany(fetch = FetchType.EAGER, cascade=CascadeType.ALL)
-//    @JoinColumn(name="players")
-//    private List<User> players;
 
-//    @OneToMany(fetch = FetchType., cascade=CascadeType.ALL)
-//    @JoinColumn(name="invitedPlayers")
-//    private List<User> invitedPlayers;
 
     public Lobby(User host, boolean isPrivate){
         this.host = host;
         this.isPrivate = isPrivate;
-//        players = new ArrayList<User>();
     }
 
     public Lobby() {
-        /*players = new ArrayList<User>();*/
     }
 
     public void setId(int id) {
@@ -58,24 +50,6 @@ public class Lobby {
         return host;
     }
 
-//    public void invitePlayer(User player) { invitedPlayers.add(player); }
-
-//    public void addPlayer(User player){
-//        players.add(player);
-//    }
-//
-//    public List<User> getPlayers(){
-//        return players;
-//    }
-//
-//    public void setPlayers(List<User> players){
-//        this.players = players;
-//    }
-//
-//    public void removePlayer(User player){
-//        players.remove(player);
-//    }
-
     public boolean getPrivacy(){
         return isPrivate;
     }
@@ -87,6 +61,11 @@ public class Lobby {
     public Set<User> getPlayers() {
         return players;
     }
+
+    public void setPlayers(Set<User> players){
+        this.players = players;
+    }
+
 
     public void addPlayer(User player){
         players.add(player);

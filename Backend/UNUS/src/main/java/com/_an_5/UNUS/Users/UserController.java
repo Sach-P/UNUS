@@ -64,35 +64,7 @@ public class UserController {
         return userRepository.findById(id);
     }
 
-    @PutMapping(path = "/user/{id}/send-friend-request")
-    public String sendFriendRequest(@PathVariable int id, @RequestBody Friend friend){
-        userService.sendFriendRequest(id, friend);
-        return success;
-    }
 
-    @GetMapping(path = "/user/{id}/pending-friend-requests")
-    public List<Friend> getFriendRequests(@PathVariable int id){
-        User currUser = userRepository.findById(id);
-        return currUser.getReceivedFriendRequests();
-    }
-
-    @PutMapping(path = "/user/{id}/pending-friend-requests")
-    public String acceptOrDeclineFriendRequest(@PathVariable int id, @RequestBody Friend request){
-        userService.acceptOrDeclineFriendRequest(id, request);
-        return success;
-    }
-
-    @PutMapping(path = "/user/{id}/friends/remove-friend")
-    public String removeFriend(@PathVariable int id, @RequestBody Friend friend){
-        userService.removeFriend(id, friend);
-        return success;
-    }
-
-    @GetMapping(path = "/user/{id}/friends")
-    public List<Friend> getFriends(@PathVariable int id){
-        User currUser = userRepository.findById(id);
-        return currUser.getFriends();
-    }
 
 
 }
