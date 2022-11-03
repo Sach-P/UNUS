@@ -87,19 +87,43 @@ public class FriendService {
         return failure;
     }
 
-//
-//    public void removeFriend(int id, Friend friend){
-//        User currUser = repo.findById(id);
-//        User friendUser = repo.findById(friend.getFriendId());
-//        Iterator<Friend> it = currUser.getFriends().listIterator();
-//        while(it.hasNext()){
-//            Friend currFriend = it.next();
-//            if(friend.getFriendId() == currFriend.getFriendId()){
-//                it.remove();
-//                friendUser.removeFriend(new Friend(currUser.getId(), currUser.getUsername()));
-//            }
-//        }
-//        repo.save(currUser);
-//        repo.save(friendUser);
-//    }
+
+    public String removeFriend(int id, int friendId){
+        User user1 = userRepository.findById(id);
+        User user2 = userRepository.findById(friendId);
+        Friend friend1 = null;
+        Friend friend2 = null;
+
+        Iterator<Friend> it = user1.getFriends().iterator();
+        while(it.hasNext()){
+            Friend friend = it.next();
+            if(friend.getFriendId() == friendId){
+                friend1 = friend;
+                it.remove();
+                break;
+            }
+        }
+
+        it = user2.getFriends().iterator();
+        while(it.hasNext()){
+            Friend friend = it.next();
+            if(friend.getFriendId() == id){
+                friend2 = friend;
+                it.remove();
+                break;
+            }
+        }
+
+        if(friend1 != null && friend2 != null){
+            friend1.setFriend(null);
+            friend2.setFriend(null);
+            friendRepository.deleteById(friend1.getId());
+            friendRepository.deleteById(friend2.getId());
+            return success;
+        }
+
+        return failure;
+
+    }
+
 }

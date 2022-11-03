@@ -68,6 +68,8 @@ public class LobbySocket {
         sessionLobbyMap.put(session, lobby);
         lobbySessionMap.put(lobby, session);
 
+
+
         sendMessageToParticularUser(player, getChatHistory());
         String message = player.getUsername() + " has joined the lobby";
         broadcast(message);
@@ -77,17 +79,19 @@ public class LobbySocket {
     @OnMessage
     public void onMessage(Session session, String message) throws IOException {
         logger.info("Entered into Message: Got Message:" + message);
-        User player = sessionUserMap.get(session);
-        Lobby lobby = sessionLobbyMap.get(session);
-        if(message.startsWith("/kick")) {
-            int userId = Integer.parseInt(message.split(" ")[1]);
-            User user = userRepository.findById(userId);
-            sessionUserMap.remove(session);
-            userSessionMap.remove(user);
-            broadcast(user.getUsername() + " was kicked from the lobby");
-        }
-        else{
-            broadcast(player.getUsername() + ": " + message);
+        if(sessionUserMap.containsKey(session)){
+            User player = sessionUserMap.get(session);
+            Lobby lobby = sessionLobbyMap.get(session);
+            if(message.startsWith("/kick") && player.equals(lobby.getHost())) {
+                int userId = Integer.parseInt(message.split(" ")[1]);
+                User user = userRepository.findById(userId);
+                broadcast(user.getUsername() + " was kicked from the lobby");
+                onClose(userSessionMap.get(user));
+            }
+            else{
+                broadcast(player.getUsername() + ": " + message);
+                messageRepository.save(new Message(player.getUsername(), message));
+            }
         }
 
     }

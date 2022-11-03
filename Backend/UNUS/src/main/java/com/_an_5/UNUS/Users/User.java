@@ -22,8 +22,7 @@ public class User {
     private int gamesWon;
 
     @JsonIgnore
-    @ManyToOne(cascade = CascadeType.ALL)
-    @JoinColumn(name = "lobby_id", referencedColumnName = "id")
+    @OneToOne(mappedBy = "host")
     private Lobby lobby;
 
     @OneToMany(mappedBy = "friend")

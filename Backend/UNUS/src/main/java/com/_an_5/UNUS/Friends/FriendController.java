@@ -23,7 +23,7 @@ public class FriendController {
     private String success = "{\"message\":\"passed\"}";
     private String failure = "{\"message\":\"failed\"}";
 
-    @PutMapping(path = "/user/{id}/send-friend-request")
+    @PostMapping(path = "/user/{id}/send-friend-request")
     public String sendFriendRequest(@PathVariable int id, @RequestParam("friendId") int friendId){
         return friendService.sendFriendRequest(id, friendId);
     }
@@ -35,13 +35,13 @@ public class FriendController {
     }
 
     @PutMapping(path = "/user/{id}/pending-friend-requests")
-    public String acceptOrDeclineFriendRequest(@PathVariable int id, @RequestParam("friendId") int friendRelationId, @RequestBody String status){
-        return friendService.acceptOrDeclineFriendRequest(id, friendRelationId, status);
+    public String acceptOrDeclineFriendRequest(@PathVariable int id, @RequestParam("friendId") int friendId, @RequestBody String status){
+        return friendService.acceptOrDeclineFriendRequest(id, friendId, status);
     }
 
-    @PutMapping(path = "/user/{id}/friends/remove-friend")
-    public String removeFriend(@PathVariable int id, @RequestParam("friendId") int friendRelationId){
-        friendRepository.deleteById(friendRelationId);
+    @DeleteMapping(path = "/user/{id}/friends/remove-friend")
+    public String removeFriend(@PathVariable int id, @RequestParam("friendId") int friendId){
+        friendService.removeFriend(id, friendId);
         return success;
     }
 
