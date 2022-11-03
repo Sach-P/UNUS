@@ -16,16 +16,14 @@ public class Friend {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int id;
+    private int fId;
+    private String username;
     private String status;
 
     @JsonIgnore
-    @ManyToMany
-    @JoinTable(
-            name = "friend_relation",
-            joinColumns = @JoinColumn(name = "friend_id"),
-            inverseJoinColumns = @JoinColumn(name = "user_id")
-    )
-    private Set<User> friends = new HashSet<>();
+    @ManyToOne(cascade = CascadeType.ALL)
+    @JoinColumn(name = "friend_id", referencedColumnName = "id")
+    private User friend;
 
     @JsonIgnore
     @ManyToOne(cascade = CascadeType.ALL)
@@ -38,7 +36,9 @@ public class Friend {
     private User requestedUser;
 
 
-    public Friend(String status){
+    public Friend(int id, String status, String username){
+        this.fId = id;
+        this.username = username;
         this.status = status;
     }
 
@@ -65,6 +65,22 @@ public class Friend {
 
     public void setId(int id){
         this.id = id;
+    }
+
+    public int getFriendId() {
+        return fId;
+    }
+
+    public void setFriendId(int friendId) {
+        this.fId = friendId;
+    }
+
+    public void setUsername(String username) {
+        this.username = username;
+    }
+
+    public String getUsername() {
+        return username;
     }
 
     public String getStatus() {
@@ -99,12 +115,12 @@ public class Friend {
         this.requestedUser = requestedUser;
     }
 
-    public void addFriend(User friend){
-        friends.add(friend);
+    public void setFriend(User friend){
+        this.friend = friend;
     }
 
 
-    public Set<User> getFriends() {
-        return friends;
+    public User getFriend() {
+        return friend;
     }
 }

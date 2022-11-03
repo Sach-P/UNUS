@@ -22,7 +22,8 @@ public class Lobby {
     @JoinColumn(name = "host_id", referencedColumnName = "id")
     private User host;
 
-    @OneToMany(mappedBy = "lobby")
+//    @OneToMany(mappedBy = "lobby")
+    @Transient
     private Set<User> players = new HashSet<>();
 
 

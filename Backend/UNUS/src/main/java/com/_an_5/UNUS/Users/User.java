@@ -26,7 +26,7 @@ public class User {
     @JoinColumn(name = "lobby_id", referencedColumnName = "id")
     private Lobby lobby;
 
-    @ManyToMany(mappedBy = "friends")
+    @OneToMany(mappedBy = "friend")
     private Set<Friend> friends = new HashSet<>();
 
     @OneToMany(mappedBy = "userRequest")
