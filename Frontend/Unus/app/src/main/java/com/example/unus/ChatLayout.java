@@ -10,6 +10,7 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.LinearLayout;
 import android.widget.PopupWindow;
+import android.widget.Space;
 import android.widget.TextView;
 
 import org.java_websocket.WebSocket;
@@ -19,6 +20,7 @@ import org.java_websocket.drafts.Draft;
 import org.java_websocket.drafts.Draft_6455;
 import org.java_websocket.framing.Framedata;
 import org.java_websocket.handshake.ServerHandshake;
+import org.json.JSONObject;
 
 import java.net.InetSocketAddress;
 import java.net.URI;
@@ -75,25 +77,47 @@ public class ChatLayout extends Activity {
 
     private void receivedMessage(String message) {
         TextView nextMessage = new TextView(popupView.getContext());
+        LinearLayout.LayoutParams textLayoutParams = new LinearLayout.LayoutParams(900, ViewGroup.LayoutParams.WRAP_CONTENT);
+        textLayoutParams.setMargins(50, 10, 0, 0);
+        nextMessage.setLayoutParams(textLayoutParams);
+        nextMessage.setPadding(20, 10, 20, 10);
         nextMessage.setText(message);
         nextMessage.setTextColor(popupView.getResources().getColor(R.color.yellow));
         nextMessage.setBackgroundColor(popupView.getResources().getColor(R.color.bright_purple));
-        nextMessage.setTextSize(25);
+        nextMessage.setTextSize(20);
 
         messageBoard.addView(nextMessage, 0);
     }
 
     private void sendMessage(String message) {
         TextView nextMessage = new TextView(popupView.getContext());
+        LinearLayout.LayoutParams textLayoutParams = new LinearLayout.LayoutParams(900, ViewGroup.LayoutParams.WRAP_CONTENT);
+        textLayoutParams.setMargins(50, 10, 0, 0);
+        nextMessage.setLayoutParams(textLayoutParams);
+        nextMessage.setPadding(20, 10, 20, 10);
+        nextMessage.setText(message);
         nextMessage.setText(message);
         nextMessage.setTextColor(popupView.getResources().getColor(R.color.yellow));
         nextMessage.setBackgroundColor(popupView.getResources().getColor(R.color.bright_purple));
-        nextMessage.setTextSize(25);
+        nextMessage.setTextSize(20);
         nextMessage.setGravity(Gravity.RIGHT);
         newMessage.setText("");
         ws.send(message);
 
+        TextView sender = new TextView(popupView.getContext());
+        LinearLayout.LayoutParams sendLayoutParams = new LinearLayout.LayoutParams(900, ViewGroup.LayoutParams.WRAP_CONTENT);
+        sendLayoutParams.setMargins(10, 0, 10, 0);
+        sender.setLayoutParams(sendLayoutParams);
+        sender.setPadding(20, 0, 20, 0);
+        sender.setText(message);
+        sender.setText(UserData.getInstance().getUsername());
+        sender.setTextColor(popupView.getResources().getColor(R.color.yellow));
+        //sender.setBackgroundColor(popupView.getResources().getColor(R.color.bright_purple));
+        sender.setTextSize(15);
+        sender.setGravity(Gravity.RIGHT);
+
         messageBoard.addView(nextMessage, 0);
+        messageBoard.addView(sender, 0);
 
     }
 
@@ -107,7 +131,7 @@ public class ChatLayout extends Activity {
             nextMessage.setText("Couldn't Connect to Messages"); //will be getString(R.string.message_error)); eventually
             nextMessage.setTextColor(popupView.getResources().getColor(R.color.yellow));
             nextMessage.setBackgroundColor(popupView.getResources().getColor(R.color.bright_purple));
-            nextMessage.setTextSize(25);
+            nextMessage.setTextSize(20);
 
             messageBoard.addView(nextMessage, 0);
             e.printStackTrace();
