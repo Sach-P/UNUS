@@ -6,7 +6,7 @@ android-build:
   image:  gjandres/android-ci:latest
   stage: androidbuild
   tags:
-   - android_tag        
+   - abe_android_tag        
   before_script:
     - export GRADLE_USER_HOME=`pwd`/.gradle
     - chmod +x ./Frontend/Unus/gradlew
@@ -21,7 +21,7 @@ android_test:
   image: gjandres/android-ci:latest
   stage: androidtest
   tags:
-    - android_tag
+    - abe_android_tag
   before_script:
     - export GRADLE_USER_HOME='pwd'/.gradle
     - chmod +x ./Frontend/Unus/gradlew
