@@ -36,33 +36,4 @@ maven-test:
 #     - sudo mv target/*.jar /target/web-demo.jar
 #     - sudo systemctl stop system-web-demo
 #     - sudo systemctl start system-web-demo 
-  
 
-
-android-build:
-  image:  gjandres/android-ci:latest
-  stage: androidbuild
-  tags:
-   - android_tag        
-  before_script:
-    - export GRADLE_USER_HOME=`pwd`/.gradle
-    - chmod +x ./Frontend/Unus/gradlew
-  script:
-    - cd Frontend/Unus
-    - ./gradlew assemble
-  artifacts:
-    paths:
-      - Android_test/app/build/outputs/
-
-android_test:
-  image: gjandres/android-ci:latest
-  stage: androidtest
-  tags:
-    - android_tag
-  before_script:
-    - export GRADLE_USER_HOME='pwd'/.gradle
-    - chmod +x ./Frontend/Unus/gradlew
-  script:
-    - cd Frontend/Unus
-    - ./gradlew test
-  
