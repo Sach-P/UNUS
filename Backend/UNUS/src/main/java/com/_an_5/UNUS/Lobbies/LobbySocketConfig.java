@@ -10,22 +10,11 @@ import org.springframework.web.socket.config.annotation.WebSocketMessageBrokerCo
 import org.springframework.web.socket.server.standard.ServerEndpointExporter;
 
 @Configuration
-@EnableWebSocketMessageBroker
-public class LobbySocketConfig implements WebSocketMessageBrokerConfigurer {
-    @Override
-    public void registerStompEndpoints(StompEndpointRegistry registry) {
-        registry.addEndpoint("/lobbies/{lobbyId}/{userId}").withSockJS();
-    }
-
-    @Override
-    public void configureMessageBroker(MessageBrokerRegistry config){
-        config.enableSimpleBroker("/topic/");
-        config.setApplicationDestinationPrefixes("/app");
-    }
-
+public class LobbySocketConfig {
     @Bean
     public ServerEndpointExporter serverEndpointExporter(){
         return new ServerEndpointExporter();
     }
+
 }
 

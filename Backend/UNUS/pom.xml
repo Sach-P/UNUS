@@ -15,6 +15,7 @@
 	<description>Project for COM S 309</description>
 	<properties>
 		<java.version>11</java.version>
+		<tomcat.version>9.0.68</tomcat.version>
 	</properties>
 
 	<dependencies>
