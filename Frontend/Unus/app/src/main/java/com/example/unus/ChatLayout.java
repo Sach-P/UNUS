@@ -1,7 +1,6 @@
 package com.example.unus;
 
 import android.app.Activity;
-import android.os.Bundle;
 import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -10,24 +9,15 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.LinearLayout;
 import android.widget.PopupWindow;
-import android.widget.Space;
 import android.widget.TextView;
 
-import org.java_websocket.WebSocket;
-import org.java_websocket.WebSocketFactory;
 import org.java_websocket.client.WebSocketClient;
-import org.java_websocket.drafts.Draft;
-import org.java_websocket.drafts.Draft_6455;
-import org.java_websocket.framing.Framedata;
 import org.java_websocket.handshake.ServerHandshake;
+import org.json.JSONException;
 import org.json.JSONObject;
 
-import java.net.InetSocketAddress;
 import java.net.URI;
 import java.net.URISyntaxException;
-import java.nio.ByteBuffer;
-import java.nio.channels.NotYetConnectedException;
-import java.util.Collection;
 
 public class ChatLayout extends Activity {
 
@@ -37,6 +27,7 @@ public class ChatLayout extends Activity {
     private View popupView;
     private LinearLayout messageBoard;
     private WebSocketClient ws;
+    private int lastUserId = -1;
 
     public ChatLayout(View view) {
         LayoutInflater inflater = (LayoutInflater) view.getContext().getSystemService(view.getContext().LAYOUT_INFLATER_SERVICE);
@@ -61,6 +52,7 @@ public class ChatLayout extends Activity {
         sendMessage.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
+                if(!newMessage.getText().toString().equals(""))
                 sendMessage(newMessage.getText().toString());
             }
         });
@@ -75,49 +67,87 @@ public class ChatLayout extends Activity {
 
     }
 
-    private void receivedMessage(String message) {
-        TextView nextMessage = new TextView(popupView.getContext());
-        LinearLayout.LayoutParams textLayoutParams = new LinearLayout.LayoutParams(900, ViewGroup.LayoutParams.WRAP_CONTENT);
-        textLayoutParams.setMargins(50, 10, 0, 0);
-        nextMessage.setLayoutParams(textLayoutParams);
-        nextMessage.setPadding(20, 10, 20, 10);
-        nextMessage.setText(message);
-        nextMessage.setTextColor(popupView.getResources().getColor(R.color.yellow));
-        nextMessage.setBackgroundColor(popupView.getResources().getColor(R.color.bright_purple));
-        nextMessage.setTextSize(20);
+    private void receivedMessage(String message) throws JSONException {
+        try {
+            JSONObject object = new JSONObject(message);
+            if(!object.get("userId").equals(UserData.getInstance().getUserID())) {
+                TextView nextMessage = new TextView(popupView.getContext());
+                LinearLayout.LayoutParams textLayoutParams = new LinearLayout.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT);
+                textLayoutParams.setMargins(50, 10, 100, 0);
+                nextMessage.setLayoutParams(textLayoutParams);
+                nextMessage.setPadding(20, 10, 20, 10);
+                nextMessage.setText(object.get("message").toString());
+                nextMessage.setTextColor(popupView.getResources().getColor(R.color.yellow));
+                nextMessage.setBackgroundColor(popupView.getResources().getColor(R.color.bright_purple));
+                nextMessage.setTextSize(20);
 
-        messageBoard.addView(nextMessage, 0);
+                TextView sender = new TextView(popupView.getContext());
+                LinearLayout.LayoutParams sendLayoutParams = new LinearLayout.LayoutParams(900, ViewGroup.LayoutParams.WRAP_CONTENT);
+                sendLayoutParams.setMargins(40, 0, 10, 0);
+                sender.setLayoutParams(sendLayoutParams);
+                sender.setPadding(20, 0, 20, 0);
+                sender.setText(object.get("username").toString());
+                sender.setTextColor(popupView.getResources().getColor(R.color.yellow));
+                //sender.setBackgroundColor(popupView.getResources().getColor(R.color.bright_purple));
+                sender.setTextSize(15);
+                sender.setGravity(Gravity.LEFT);
+
+                if(lastUserId == object.getInt("userId")){
+                    messageBoard.addView(nextMessage, 1);
+                } else {
+                    messageBoard.addView(nextMessage, 0);
+                    messageBoard.addView(sender, 0);
+                }
+                lastUserId = object.getInt("userId");
+            }
+        } catch (JSONException ex) {
+
+        }
     }
 
     private void sendMessage(String message) {
-        TextView nextMessage = new TextView(popupView.getContext());
-        LinearLayout.LayoutParams textLayoutParams = new LinearLayout.LayoutParams(900, ViewGroup.LayoutParams.WRAP_CONTENT);
-        textLayoutParams.setMargins(50, 10, 0, 0);
-        nextMessage.setLayoutParams(textLayoutParams);
-        nextMessage.setPadding(20, 10, 20, 10);
-        nextMessage.setText(message);
-        nextMessage.setText(message);
-        nextMessage.setTextColor(popupView.getResources().getColor(R.color.yellow));
-        nextMessage.setBackgroundColor(popupView.getResources().getColor(R.color.bright_purple));
-        nextMessage.setTextSize(20);
-        nextMessage.setGravity(Gravity.RIGHT);
-        newMessage.setText("");
-        ws.send(message);
+        try {
+            TextView nextMessage = new TextView(popupView.getContext());
+            LinearLayout.LayoutParams textLayoutParams = new LinearLayout.LayoutParams(900, ViewGroup.LayoutParams.WRAP_CONTENT);
+            textLayoutParams.setMargins(50, 10, 50, 0);
+            nextMessage.setLayoutParams(textLayoutParams);
+            nextMessage.setPadding(20, 10, 20, 10);
+            nextMessage.setText(message);
+            nextMessage.setText(message);
+            nextMessage.setTextColor(popupView.getResources().getColor(R.color.yellow));
+            nextMessage.setBackgroundColor(popupView.getResources().getColor(R.color.bright_purple));
+            nextMessage.setTextSize(20);
+            nextMessage.setGravity(Gravity.RIGHT);
+            newMessage.setText("");
+            JSONObject object = new JSONObject();
 
-        TextView sender = new TextView(popupView.getContext());
-        LinearLayout.LayoutParams sendLayoutParams = new LinearLayout.LayoutParams(900, ViewGroup.LayoutParams.WRAP_CONTENT);
-        sendLayoutParams.setMargins(10, 0, 10, 0);
-        sender.setLayoutParams(sendLayoutParams);
-        sender.setPadding(20, 0, 20, 0);
-        sender.setText(message);
-        sender.setText(UserData.getInstance().getUsername());
-        sender.setTextColor(popupView.getResources().getColor(R.color.yellow));
-        //sender.setBackgroundColor(popupView.getResources().getColor(R.color.bright_purple));
-        sender.setTextSize(15);
-        sender.setGravity(Gravity.RIGHT);
+            object.put("username", UserData.getInstance().getUsername());
+            object.put("userId", UserData.getInstance().getUserID());
+            object.put("message", message);
+            ws.send(object.toString());
 
-        messageBoard.addView(nextMessage, 0);
-        messageBoard.addView(sender, 0);
+            TextView sender = new TextView(popupView.getContext());
+            LinearLayout.LayoutParams sendLayoutParams = new LinearLayout.LayoutParams(900, ViewGroup.LayoutParams.WRAP_CONTENT);
+            sendLayoutParams.setMargins(10, 0, 10, 0);
+            sender.setLayoutParams(sendLayoutParams);
+            sender.setPadding(20, 0, 20, 0);
+            sender.setText(message);
+            sender.setText(object.get("username").toString());
+            sender.setTextColor(popupView.getResources().getColor(R.color.yellow));
+            //sender.setBackgroundColor(popupView.getResources().getColor(R.color.bright_purple));
+            sender.setTextSize(15);
+            sender.setGravity(Gravity.RIGHT);
+
+            if(lastUserId == object.getInt("userId")){
+                messageBoard.addView(nextMessage, 1);
+            } else {
+                messageBoard.addView(nextMessage, 0);
+                messageBoard.addView(sender, 0);
+            }
+            lastUserId = object.getInt("userId");
+        } catch (JSONException ex) {
+
+        }
 
     }
 
@@ -149,7 +179,11 @@ public class ChatLayout extends Activity {
                 runOnUiThread(new Runnable() {
                     @Override
                     public void run() {
-                        receivedMessage(s);
+                        try {
+                            receivedMessage(s);
+                        } catch (JSONException e) {
+                            e.printStackTrace();
+                        }
                     }
                 });
             }
