@@ -26,7 +26,7 @@ maven-test:
 
 autoDeploy:
   only:
-    - main
+    - branches
   stage: mavenDeploy
   tags:
     - springboot_tag
