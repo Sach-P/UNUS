@@ -24,18 +24,19 @@ maven-test:
     paths:
       - Backend/target/*.jar
 
-autoDeploy:
-  only:
-    - main
-  stage: mavenDeploy
-  tags:
-    - springboot_tag
-  script:
-    - cd Backend/UNUS
-    - mvn package
-    - sudo mv target/*.jar /target/web-demo.jar
-    - sudo systemctl stop system-web-demo
-    - sudo systemctl start system-web-demo 
+# autoDeploy:
+#   only:
+#     - main
+#   stage: mavenDeploy
+#   tags:
+#     - springboot_tag
+#   script:
+#     - cd Backend/UNUS
+#     - mvn package
+#     - sudo mv target/*.jar /target/web-demo.jar
+#     - sudo systemctl stop system-web-demo
+#     - sudo systemctl start system-web-demo 
+  
 
 
 android-build:
