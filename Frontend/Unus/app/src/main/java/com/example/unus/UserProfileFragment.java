@@ -204,45 +204,37 @@ public class UserProfileFragment extends Fragment {
     }
 
     private void unfriend(int id, String name) {
-        try {
-            JSONObject object = new JSONObject();
-            object.put("username", name);
-            object.put("friendId", id);
+        JsonObjectRequest request = new JsonObjectRequest(
+                Request.Method.DELETE,
+                "http://coms-309-029.class.las.iastate.edu:8080/user/" + UserData.getInstance().getUserID() + "/friends/remove-friend?friendId="+id,
+                null,
+                new Response.Listener<JSONObject>() {
+                    @Override
+                    public void onResponse(JSONObject response) {
 
-            JsonObjectRequest request = new JsonObjectRequest(
-                    Request.Method.PUT,
-                    "http://coms-309-029.class.las.iastate.edu:8080/user/" + UserData.getInstance().getUserID() + "/friends/remove-friend",
-                    object,
-                    new Response.Listener<JSONObject>() {
-                        @Override
-                        public void onResponse(JSONObject response) {
-
-                        }
-                    },
-                    new Response.ErrorListener() {
-                        @Override
-                        public void onErrorResponse(VolleyError error) {
-                            //loginHeader.setText(getString(R.string.login_error));
-                        }
                     }
-            );
-
-            Volley.newRequestQueue(requireContext()).add(request);
-
-            Friend[] newFriends = new Friend[UserData.getInstance().getFriendsList().length - 1];
-            for(int i = 0, j = 0; i < UserData.getInstance().getFriendsList().length; i++) {
-                if(UserData.getInstance().getFriendsList()[i].getUserID() != id) {
-                    newFriends[j] = UserData.getInstance().getFriendsList()[i];
-                    j++;
+                },
+                new Response.ErrorListener() {
+                    @Override
+                    public void onErrorResponse(VolleyError error) {
+                        //loginHeader.setText(getString(R.string.login_error));
+                    }
                 }
+        );
+
+        Volley.newRequestQueue(requireContext()).add(request);
+
+        Friend[] newFriends = new Friend[UserData.getInstance().getFriendsList().length - 1];
+        for(int i = 0, j = 0; i < UserData.getInstance().getFriendsList().length; i++) {
+            if(UserData.getInstance().getFriendsList()[i].getUserID() != id) {
+                newFriends[j] = UserData.getInstance().getFriendsList()[i];
+                j++;
             }
-            UserData.getInstance().setFriendsList(newFriends);
-            getActivity().getSupportFragmentManager().beginTransaction().replace(R.id.fragmentContainerView, new UserProfileFragment()).commit();
-
-
-        } catch(JSONException ex) {
-          //  loginHeader.setText(getString(R.string.login_error));
         }
+        UserData.getInstance().setFriendsList(newFriends);
+        getActivity().getSupportFragmentManager().beginTransaction().replace(R.id.fragmentContainerView, new UserProfileFragment()).commit();
+
+
     }
 
 }

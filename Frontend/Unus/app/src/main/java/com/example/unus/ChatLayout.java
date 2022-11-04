@@ -53,7 +53,7 @@ public class ChatLayout extends Activity {
             @Override
             public void onClick(View view) {
                 if(!newMessage.getText().toString().equals(""))
-                sendMessage(newMessage.getText().toString());
+                    sendMessage(newMessage.getText().toString());
             }
         });
 
@@ -155,6 +155,8 @@ public class ChatLayout extends Activity {
         URI uri;
         try {
             uri = new URI("wss://demo.piesocket.com/v3/channel_123?api_key=VCXCEuvhGcBDP7XhiJJUDvR1e1D3eiVjgZ9VRiaV&notify_self");
+            //uri = new URI("http://coms-309-029.class.las.iastate.edu:8080/lobbies/12/"+UserData.getInstance().getUserID());
+
                 //will be getString(R.string.fake_websocket)) eventually;
         } catch (URISyntaxException e) {
             TextView nextMessage = new TextView(popupView.getContext());

@@ -224,13 +224,11 @@ public class FriendRequestFragment extends Fragment {
     private void accept_decline(boolean b, String username, int id) {
         try {
             JSONObject object = new JSONObject();
-            object.put("username", username);
-            object.put("friendId", id);
             object.put("status", (b)? "accepted":"declined");
 
             JsonObjectRequest request = new JsonObjectRequest(
                     Request.Method.PUT,
-                    "http://coms-309-029.class.las.iastate.edu:8080/user/" + UserData.getInstance().getUserID()+"/pending-friend-requests",
+                    "http://coms-309-029.class.las.iastate.edu:8080/user/" + UserData.getInstance().getUserID()+"/pending-friend-requests?friendId="+id,
                     object,
                     null, null
             );
