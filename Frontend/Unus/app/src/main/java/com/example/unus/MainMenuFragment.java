@@ -62,13 +62,22 @@ public class MainMenuFragment extends Fragment {
             }
         });
 
+        //this is the global chat button and it takes you to global chat
+        ((ImageView) view.findViewById(R.id.global_chat)).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                ChatLayout cl = new ChatLayout(view);
+
+            }
+        });
+
         //add clickable interaction to leaderboard button
                 Button leaderboard = (Button) view.findViewById(R.id.leaderboard_button);
                 leaderboard.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View view) {
-                        ChatLayout cl = new ChatLayout(view);
-            }
+                        getActivity().getSupportFragmentManager().beginTransaction().replace(R.id.fragmentContainerView, new LeaderboardFragment()).commit();
+                    }
         });
 
         //add clickable interaction to logout button
