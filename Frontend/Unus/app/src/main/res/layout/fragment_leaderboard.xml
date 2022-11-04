@@ -80,16 +80,26 @@
                 />
         </LinearLayout>
 
+        <TextView
+            android:id="@+id/stat_name"
+            android:layout_width="match_parent"
+            android:layout_height="30dp"
+            android:layout_marginLeft="160dp"
+            android:textColor="@color/yellow"
+            android:text="Stat:"
+            android:textSize="20sp"
+            />
+
 
         <ScrollView
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             >
             <LinearLayout
-                android:id="@+id/results"
+                android:id="@+id/users"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                android:orientation="horizontal"
+                android:orientation="vertical"
                 android:layout_gravity="top"
                 >
             </LinearLayout>
