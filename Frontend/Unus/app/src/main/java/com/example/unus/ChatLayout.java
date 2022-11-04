@@ -68,16 +68,16 @@ public class ChatLayout extends Activity {
 
     }
 
-    private void receivedMessage(String message) throws JSONException {
+    private void receivedMessage(String s) throws JSONException {
         try {
-            JSONObject object = new JSONObject(message);
+            JSONObject object = new JSONObject(s);
             if(!object.get("username").equals(UserData.getInstance().getUsername())) {
                 TextView nextMessage = new TextView(popupView.getContext());
                 LinearLayout.LayoutParams textLayoutParams = new LinearLayout.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT);
                 textLayoutParams.setMargins(50, 10, 100, 0);
                 nextMessage.setLayoutParams(textLayoutParams);
                 nextMessage.setPadding(20, 10, 20, 10);
-                nextMessage.setText(object.get("message").toString());
+                nextMessage.setText(object.getString("message"));
                 nextMessage.setTextColor(popupView.getResources().getColor(R.color.yellow));
                 nextMessage.setBackgroundColor(popupView.getResources().getColor(R.color.bright_purple));
                 nextMessage.setTextSize(20);
@@ -113,7 +113,6 @@ public class ChatLayout extends Activity {
             textLayoutParams.setMargins(50, 10, 50, 0);
             nextMessage.setLayoutParams(textLayoutParams);
             nextMessage.setPadding(20, 10, 20, 10);
-            nextMessage.setText(message);
             nextMessage.setText(message);
             nextMessage.setTextColor(popupView.getResources().getColor(R.color.yellow));
             nextMessage.setBackgroundColor(popupView.getResources().getColor(R.color.bright_purple));
