@@ -9,6 +9,7 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.LinearLayout;
 import android.widget.PopupWindow;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import org.java_websocket.client.WebSocketClient;
@@ -27,7 +28,7 @@ public class ChatLayout extends Activity {
     private View popupView;
     private LinearLayout messageBoard;
     private WebSocketClient ws;
-    private int lastUserId = -1;
+    private String lastUser = "";
 
     public ChatLayout(View view) {
         LayoutInflater inflater = (LayoutInflater) view.getContext().getSystemService(view.getContext().LAYOUT_INFLATER_SERVICE);
@@ -70,7 +71,7 @@ public class ChatLayout extends Activity {
     private void receivedMessage(String message) throws JSONException {
         try {
             JSONObject object = new JSONObject(message);
-            if(!object.get("userId").equals(UserData.getInstance().getUserID())) {
+            if(!object.get("username").equals(UserData.getInstance().getUsername())) {
                 TextView nextMessage = new TextView(popupView.getContext());
                 LinearLayout.LayoutParams textLayoutParams = new LinearLayout.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT);
                 textLayoutParams.setMargins(50, 10, 100, 0);
@@ -92,13 +93,13 @@ public class ChatLayout extends Activity {
                 sender.setTextSize(15);
                 sender.setGravity(Gravity.LEFT);
 
-                if(lastUserId == object.getInt("userId")){
+                if(lastUser.equals(object.getString("username"))){
                     messageBoard.addView(nextMessage, 1);
                 } else {
                     messageBoard.addView(nextMessage, 0);
                     messageBoard.addView(sender, 0);
                 }
-                lastUserId = object.getInt("userId");
+                lastUser = object.getString("username");
             }
         } catch (JSONException ex) {
 
@@ -122,7 +123,6 @@ public class ChatLayout extends Activity {
             JSONObject object = new JSONObject();
 
             object.put("username", UserData.getInstance().getUsername());
-            object.put("userId", UserData.getInstance().getUserID());
             object.put("message", message);
             ws.send(object.toString());
 
@@ -138,13 +138,13 @@ public class ChatLayout extends Activity {
             sender.setTextSize(15);
             sender.setGravity(Gravity.RIGHT);
 
-            if(lastUserId == object.getInt("userId")){
+            if(lastUser.equals(object.getString("username"))){
                 messageBoard.addView(nextMessage, 1);
             } else {
                 messageBoard.addView(nextMessage, 0);
                 messageBoard.addView(sender, 0);
             }
-            lastUserId = object.getInt("userId");
+            lastUser = object.getString("username");
         } catch (JSONException ex) {
 
         }
@@ -155,7 +155,7 @@ public class ChatLayout extends Activity {
         URI uri;
         try {
             uri = new URI("wss://demo.piesocket.com/v3/channel_123?api_key=VCXCEuvhGcBDP7XhiJJUDvR1e1D3eiVjgZ9VRiaV&notify_self");
-            //uri = new URI("http://coms-309-029.class.las.iastate.edu:8080/lobbies/12/"+UserData.getInstance().getUserID());
+            //uri = new URI("http://coms-309-029.class.las.iastate.edu:8080/lobbies/global/"+UserData.getInstance().getUserID());
 
                 //will be getString(R.string.fake_websocket)) eventually;
         } catch (URISyntaxException e) {
