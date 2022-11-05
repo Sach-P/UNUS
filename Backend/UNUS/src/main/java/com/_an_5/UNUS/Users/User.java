@@ -2,12 +2,12 @@ package com._an_5.UNUS.Users;
 
 
 import com._an_5.UNUS.Friends.Friend;
+import com._an_5.UNUS.Lobbies.Lobby;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonSetter;
 
 import javax.persistence.*;
-import java.util.ArrayList;
-import java.util.List;
+import java.util.*;
 
 @Entity
 @Table(name="user")
@@ -21,18 +21,18 @@ public class User {
     private int gamesPlayed;
     private int gamesWon;
 
+    @JsonIgnore
+    @OneToOne(mappedBy = "host")
+    private Lobby lobby;
 
-    @OneToMany(cascade=CascadeType.ALL)
-    @JoinColumn(name="friends_id")
-    private List<Friend> friends;
+    @OneToMany(mappedBy = "friend")
+    private Set<Friend> friends = new HashSet<>();
 
-    @OneToMany(cascade=CascadeType.ALL)
-    @JoinColumn(name="friendRequest_id")
-    private List<Friend> friendRequests;
+    @OneToMany(mappedBy = "userRequest")
+    private Set<Friend> userRequests = new HashSet<>();
 
-    @OneToMany(cascade=CascadeType.ALL)
-    @JoinColumn(name="friendRequested_id")
-    private List<Friend> friendRequested;
+    @OneToMany(mappedBy = "requestedUser")
+    private Set<Friend> requestedUsers = new HashSet<>();
 
     public User (String username, String password){
         this.username = username;
@@ -42,11 +42,20 @@ public class User {
     public User() {
         gamesPlayed = 0;
         gamesWon = 0;
-        friends = new ArrayList<>();
-        friendRequests = new ArrayList<>();
-        friendRequested = new ArrayList<>();
     }
 
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        User user = (User) o;
+        return id == user.getId();
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(id);
+    }
 
     public int getId() {
         return id;
@@ -71,7 +80,7 @@ public class User {
     public void setPassword(String password) { this.password = password; }
 
 
-    public List<Friend> getFriends(){
+    public Set<Friend> getFriends(){
         return friends;
     }
 
@@ -84,28 +93,28 @@ public class User {
     }
 
 
-    public List<Friend> getSentFriendRequests(){
-        return friendRequests;
+    public Set<Friend> getSentFriendRequests(){
+        return userRequests;
     }
 
     public void addSentFriendRequests(Friend friend){
-        friendRequests.add(friend);
+        userRequests.add(friend);
     }
 
     public void removeSentFriendRequests(Friend friend){
-        friendRequests.remove(friend);
+        userRequests.remove(friend);
     }
 
-    public List<Friend> getReceivedFriendRequests(){
-        return friendRequested;
+    public Set<Friend> getReceivedFriendRequests(){
+        return requestedUsers;
     }
 
     public void addReceivedFriendRequests(Friend friend){
-        friendRequested.add(friend);
+        requestedUsers.add(friend);
     }
 
     public void removeReceivedFriendRequests(Friend friend){
-        friendRequested.remove(friend);
+        requestedUsers.remove(friend);
     }
 
     public void setGamesPlayed(int gamesPlayed) {
@@ -124,5 +133,11 @@ public class User {
         return gamesWon;
     }
 
+    public void setLobby(Lobby lobby){
+        this.lobby = lobby;
+    }
 
+    public Lobby getLobby(){
+        return lobby;
+    }
 }

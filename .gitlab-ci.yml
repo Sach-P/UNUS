@@ -37,7 +37,6 @@ autoDeploy:
     - sudo systemctl stop system-web-demo
     - sudo systemctl start system-web-demo 
 
-
 android-build:
   image:  gjandres/android-ci:latest
   stage: androidbuild
@@ -65,3 +64,4 @@ android_test:
     - cd Frontend/Unus
     - ./gradlew test
   
+
