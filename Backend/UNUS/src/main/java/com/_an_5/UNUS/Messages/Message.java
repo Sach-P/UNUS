@@ -2,16 +2,9 @@ package com._an_5.UNUS.Messages;
 
 import java.util.Date;
 
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
-import javax.persistence.Lob;
-import javax.persistence.Table;
-import javax.persistence.Temporal;
-import javax.persistence.TemporalType;
+import javax.persistence.*;
 
+import com._an_5.UNUS.Lobbies.Lobby;
 import lombok.Data;
 
 @Entity
@@ -32,12 +25,17 @@ public class Message {
     @Column(name = "sent")
     private Date sent = new Date();
 
+    @ManyToOne
+    @JoinColumn(name = "lobby_id", referencedColumnName = "id")
+    private Lobby lobby;
+
 
     public Message() {};
 
-    public Message(String userName, String content) {
+    public Message(String userName, String content, Lobby lobby) {
         this.userName = userName;
         this.content = content;
+        this.lobby = lobby;
     }
 
     public Long getId() {
@@ -72,7 +70,13 @@ public class Message {
         this.sent = sent;
     }
 
+    public Lobby getLobby() {
+        return lobby;
+    }
 
+    public void setLobby(Lobby lobby) {
+        this.lobby = lobby;
+    }
 }
 
 
