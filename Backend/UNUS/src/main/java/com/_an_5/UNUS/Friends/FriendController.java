@@ -2,6 +2,11 @@ package com._an_5.UNUS.Friends;
 
 import com._an_5.UNUS.Users.User;
 import com._an_5.UNUS.Users.UserRepository;
+import com.fasterxml.jackson.databind.util.JSONPObject;
+import com.mysql.cj.xdevapi.JsonParser;
+import org.apache.tomcat.util.json.JSONParser;
+import org.apache.tomcat.util.json.ParseException;
+import org.json.JSONObject;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
@@ -35,8 +40,16 @@ public class FriendController {
     }
 
     @PutMapping(path = "/user/{id}/pending-friend-requests")
-    public String acceptOrDeclineFriendRequest(@PathVariable int id, @RequestParam("friendId") int friendId, @RequestBody String status){
-        return friendService.acceptOrDeclineFriendRequest(id, friendId, status);
+    public String acceptOrDeclineFriendRequest(@PathVariable int id, @RequestParam("friendId") int friendId, @RequestBody String json){
+        JSONParser jp = new JSONParser(json);
+        try{
+            String status = (String)jp.parseObject().get("status");
+            return friendService.acceptOrDeclineFriendRequest(id, friendId, status);
+        }
+        catch (ParseException e){
+            e.printStackTrace();
+            return failure;
+        }
     }
 
     @DeleteMapping(path = "/user/{id}/friends/remove-friend")

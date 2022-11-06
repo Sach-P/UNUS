@@ -5,6 +5,7 @@ import com._an_5.UNUS.Messages.Message;
 import com._an_5.UNUS.Messages.MessageRepository;
 import com._an_5.UNUS.Users.User;
 import com._an_5.UNUS.Users.UserRepository;
+import org.json.JSONObject;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -16,10 +17,7 @@ import javax.websocket.*;
 import javax.websocket.server.PathParam;
 import javax.websocket.server.ServerEndpoint;
 import java.io.IOException;
-import java.util.Hashtable;
-import java.util.Iterator;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 @Controller
 @ServerEndpoint(value = "/lobbies/{lobbyId}/{userId}")
@@ -49,7 +47,7 @@ public class LobbySocket {
     private static Map<Session, User> sessionUserMap = new Hashtable<>();
     private static Map<User, Session> userSessionMap = new Hashtable<>();
     private static Map<Session, Lobby> sessionLobbyMap = new Hashtable<>();
-    private static Map<Lobby, Session> lobbySessionMap = new Hashtable<>();
+    private static Map<Lobby, List<Session>> lobbySessionMap = new Hashtable<>();
 
     private final Logger logger = LoggerFactory.getLogger(LobbySocket.class);
 
@@ -65,14 +63,20 @@ public class LobbySocket {
         sessionUserMap.put(session, player);
         userSessionMap.put(player, session);
 
+        if (!lobbySessionMap.containsKey(lobby)) {
+            lobbySessionMap.put(lobby, new ArrayList<>());
+        }
+
+        lobbySessionMap.get(lobby).add(session);
         sessionLobbyMap.put(session, lobby);
-        lobbySessionMap.put(lobby, session);
 
 
-
-        sendMessageToParticularUser(player, getChatHistory());
-        String message = player.getUsername() + " has joined the lobby";
-        broadcast(message);
+        sendMessageToParticularUser(player, getChatHistory(lobby));
+        JSONObject j = new JSONObject();
+        j.put("joined", player.getId());
+        broadcast(j.toString(), lobby);
+//        String message = player.getUsername() + " has joined the lobby";
+//        broadcast(message, lobby);
 
     }
 
@@ -85,12 +89,12 @@ public class LobbySocket {
             if(message.startsWith("/kick") && player.equals(lobby.getHost())) {
                 int userId = Integer.parseInt(message.split(" ")[1]);
                 User user = userRepository.findById(userId);
-                broadcast(user.getUsername() + " was kicked from the lobby");
+                broadcast(user.getUsername() + " was kicked from the lobby", lobby);
                 onClose(userSessionMap.get(user));
             }
             else{
-                broadcast(player.getUsername() + ": " + message);
-                messageRepository.save(new Message(player.getUsername(), message));
+                broadcast(player.getUsername() + ": " + message, lobby);
+                messageRepository.save(new Message(player.getUsername(), message, lobby));
             }
         }
 
@@ -103,26 +107,32 @@ public class LobbySocket {
 
         User player = sessionUserMap.get(session);
         Lobby lobby = sessionLobbyMap.get(session);
-//        if(lobby.getHost().equals(player)){
-//            if(lobby.getPlayers().size() > 0){
-//                lobby.setHost((User)lobby.getPlayers().toArray()[0]); //TODO test
-//                lobby.removePlayer(lobby.getHost());
-//                lobbyRepository.save(lobby);
-//            }
-//            else{
-//                lobbyRepository.deleteById(lobby.getId());
-//            }
-//        }
-//        else{
-//            lobby.removePlayer(player);
-//            lobbyRepository.save(lobby);
-//        }
-        lobbySessionMap.remove(lobby);
+        lobbySessionMap.get(lobby).remove(session);
         sessionLobbyMap.remove(session);
         sessionUserMap.remove(session);
         userSessionMap.remove(player);
-        String message = player.getUsername() + " left the lobby";
-        broadcast(message);
+
+        if(lobby.getHost().equals(player)){
+            if(lobbySessionMap.get(lobby).size() > 0){
+                lobby.setHost(sessionUserMap.get(lobbySessionMap.get(lobby).get(0)));
+                lobbyRepository.save(lobby);
+            }
+
+        }
+        if(lobbySessionMap.get(lobby).size() <= 0){
+            lobby.setHost(null);
+            lobby.setMessages(null);
+            lobbyRepository.save(lobby);
+            messageRepository.deleteAllByLobby(lobby);
+            lobbyRepository.deleteById(lobby.getId());
+        }
+        else{
+            JSONObject j = new JSONObject();
+            j.put("left", player.getId());
+            broadcast(j.toString(), lobby);
+//            String message = player.getUsername() + " left the lobby";
+//            broadcast(message, lobby);
+        }
     }
 
     @OnError
@@ -144,8 +154,8 @@ public class LobbySocket {
 
 
 
-    private void broadcast(String message){
-        sessionUserMap.forEach((session, player) -> {
+    private void broadcast(String message, Lobby lobby){
+        for(Session session : lobbySessionMap.get(lobby)){
             try{
                 session.getBasicRemote().sendText(message);
             }
@@ -153,12 +163,12 @@ public class LobbySocket {
                 logger.info("Exception " + e.getMessage());
                 e.printStackTrace();
             }
-        });
+        }
     }
 
     // Gets the Chat history from the repository
-    private String getChatHistory() {
-        List<Message> messages = messageRepository.findAll();
+    private String getChatHistory(Lobby lobby) {
+        List<Message> messages = messageRepository.findAllByLobby(lobby);
 
         // convert the list to a string
         StringBuilder sb = new StringBuilder();

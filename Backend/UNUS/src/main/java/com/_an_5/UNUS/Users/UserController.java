@@ -65,6 +65,19 @@ public class UserController {
     }
 
 
+    @GetMapping(path = "/user/get-lobby/{id}")
+    public int getLobbyId(@PathVariable int id){
+        User currUser = userRepository.findById(id);
+        if(currUser != null){
+            if(currUser.getLobby() != null){
+                return currUser.getLobby().getId();
+            }
+        }
+
+        return -1;
+    }
+
+
 
 
 }
