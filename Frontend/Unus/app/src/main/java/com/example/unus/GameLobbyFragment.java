@@ -232,6 +232,10 @@ public class GameLobbyFragment extends Fragment {
         space.setVisibility(View.GONE);
     }
 
+    public void onMessage(JSONObject s){
+
+    }
+
 
 
 
