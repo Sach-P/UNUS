@@ -41,8 +41,8 @@ public class MainActivity extends AppCompatActivity {
     public void connectWebSocket(int lobbyID) {
         URI uri;
         try {
-            uri = new URI("wss://demo.piesocket.com/v3/channel_123?api_key=VCXCEuvhGcBDP7XhiJJUDvR1e1D3eiVjgZ9VRiaV&notify_self");
-            //uri = new URI(String.format("ws://coms-309-029.class.las.iastate.edu:8080/%d/%d", lobbyID, UserData.getInstance().getUserID()));
+            //uri = new URI("wss://demo.piesocket.com/v3/channel_123?api_key=VCXCEuvhGcBDP7XhiJJUDvR1e1D3eiVjgZ9VRiaV&notify_self");
+            uri = new URI(String.format("ws://coms-309-029.class.las.iastate.edu:8080/lobbies/%d/%d", lobbyID, UserData.getInstance().getUserID()));
         } catch (URISyntaxException e) {
             return;
         }

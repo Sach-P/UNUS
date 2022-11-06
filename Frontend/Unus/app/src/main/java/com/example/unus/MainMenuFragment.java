@@ -12,12 +12,23 @@ import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import com.android.volley.Request;
+import com.android.volley.Response;
+import com.android.volley.VolleyError;
+import com.android.volley.toolbox.JsonObjectRequest;
+import com.android.volley.toolbox.StringRequest;
+import com.android.volley.toolbox.Volley;
+
+import org.json.JSONException;
+import org.json.JSONObject;
 import org.w3c.dom.Text;
 
 /**
  * Main Menu Screen Fragment
  */
 public class MainMenuFragment extends Fragment {
+
+    int GameLobbyId;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -58,11 +69,21 @@ public class MainMenuFragment extends Fragment {
         hostGame.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
+                try {
+                    createLobby();
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                }
+
+                setGameLobbyId();
+
                 GameLobbyFragment frag = new GameLobbyFragment();
 
                 Bundle bundle = new Bundle();
-                bundle.putInt("lobbyId", 1);
+                bundle.putInt("lobbyId", GameLobbyId);
                 bundle.putBoolean("isHost", true);
+
+                frag.setArguments(bundle);
 
                 getActivity().getSupportFragmentManager().beginTransaction().replace(R.id.fragmentContainerView, frag, "gameLobby").commit();
                 getActivity().getSupportFragmentManager().executePendingTransactions();
@@ -97,5 +118,54 @@ public class MainMenuFragment extends Fragment {
         });
 
         return view;
+    }
+
+    private void setGameLobbyId(){
+
+        StringRequest stringRequest = new StringRequest(
+                Request.Method.GET,
+                String.format("http://coms-309-029.class.las.iastate.edu:8080/user/get-lobby/%d/", UserData.getInstance().getUserID()),
+                new Response.Listener<String>() {
+                    @Override
+                    public void onResponse(String response) {
+                        setGameLobbyId(Integer.parseInt(response));
+                    }
+                },
+                new Response.ErrorListener() {
+                    @Override
+                    public void onErrorResponse(VolleyError error) {
+                    }
+                }
+        );
+        Volley.newRequestQueue(requireContext()).add(stringRequest);
+    }
+
+    private void createLobby() throws JSONException {
+        //add login credentials to the response body
+        JSONObject requestBody = new JSONObject();
+        requestBody.put("private",true);
+
+        JsonObjectRequest request = new JsonObjectRequest(
+                Request.Method.POST,
+                String.format("http://coms-309-029.class.las.iastate.edu:8080/lobbies/create-lobby?userId=%d", UserData.getInstance().getUserID()),
+                requestBody,
+                new Response.Listener<JSONObject>() {
+                    @Override
+                    public void onResponse(JSONObject response) {
+
+                    }
+                },
+                new Response.ErrorListener() {
+                    @Override
+                    public void onErrorResponse(VolleyError error) {
+                    }
+                }
+        );
+
+        Volley.newRequestQueue(requireContext()).add(request);
+    }
+
+    public void setGameLobbyId(int i){
+        GameLobbyId = i;
     }
 }

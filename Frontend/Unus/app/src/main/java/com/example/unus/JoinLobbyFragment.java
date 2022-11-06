@@ -42,6 +42,8 @@ public class JoinLobbyFragment extends Fragment {
                 bundle.putInt("lobbyId", Integer.parseInt(editText.getText().toString()));
                 bundle.putBoolean("isHost", false);
 
+                frag.setArguments(bundle);
+
                 getActivity().getSupportFragmentManager().beginTransaction().replace(R.id.fragmentContainerView, frag, "gameLobby").commit();
                 getActivity().getSupportFragmentManager().executePendingTransactions();
             }

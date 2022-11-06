@@ -62,12 +62,12 @@ public class GameLobbyFragment extends Fragment {
             gameLobbyId = bundle.getInt("lobbyId");
             isHost = bundle.getBoolean("isHost");
         } else {
-            gameLobbyId = 1;
+            gameLobbyId = -1;
             //getActivity().getSupportFragmentManager().beginTransaction().replace(R.id.fragmentContainerView, new MainMenuFragment()).commit();
         }
 
         mainActivity = (MainActivity)getActivity();
-        mainActivity.connectWebSocket(1);
+        mainActivity.connectWebSocket(gameLobbyId);
 
         playerIds = new ArrayList<Integer>();
         playerIds.add(UserData.getInstance().getUserID());
