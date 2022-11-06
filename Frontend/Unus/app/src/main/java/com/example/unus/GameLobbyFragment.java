@@ -31,7 +31,8 @@ import org.json.JSONObject;
 public class GameLobbyFragment extends Fragment {
 
     View view;
-    int[] players;
+    int[] playerIds;
+    int gameLobbyId;
 
     public GameLobbyFragment() {
         // Required empty public constructor
@@ -49,7 +50,7 @@ public class GameLobbyFragment extends Fragment {
         view = inflater.inflate(R.layout.fragment_game_lobby, container, false);
 
         String gameCode = "A6Y42";
-        int[] playerIds = {24, 21, 22, 23};
+        playerIds = new int[]{24, 21, 22, 23};
 
         addPlayer(UserData.getInstance().getUserID());
 
