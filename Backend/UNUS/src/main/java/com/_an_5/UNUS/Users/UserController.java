@@ -71,11 +71,11 @@ public class UserController {
 
 
     @GetMapping(path = "/user/get-lobby/{id}")
-    public String getLobbyId(@PathVariable int id){
+    public int getLobbyId(@PathVariable int id){
         User currUser = userRepository.findById(id);
         if(currUser != null){
             if(currUser.getLobby() != null){
-                return Integer.toString(currUser.getLobby().getId());
+                return currUser.getLobby().getId();
             }
         }
 
