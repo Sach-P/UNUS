@@ -25,14 +25,20 @@ import com.android.volley.toolbox.Volley;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.util.ArrayList;
+
 /**
  * Fragment used to handle the game lobby menu
  */
 public class GameLobbyFragment extends Fragment {
 
     View view;
-    int[] playerIds;
+    ArrayList<Integer> playerIds;
     int gameLobbyId;
+
+    MainActivity mainActivity;
+
+    //GameLobbyWebSocket gameLobbyWebSocket;
 
     public GameLobbyFragment() {
         // Required empty public constructor
@@ -49,19 +55,30 @@ public class GameLobbyFragment extends Fragment {
 
         view = inflater.inflate(R.layout.fragment_game_lobby, container, false);
 
+        if (this.getArguments() != null){
+            Bundle bundle = this.getArguments();
+            gameLobbyId = bundle.getInt("lobbyId");
+        } else {
+            gameLobbyId = 1;
+            //getActivity().getSupportFragmentManager().beginTransaction().replace(R.id.fragmentContainerView, new MainMenuFragment()).commit();
+        }
+
+        mainActivity = (MainActivity)getActivity();
+        mainActivity.connectWebSocket(1);
+
         String gameCode = "A6Y42";
-        playerIds = new int[]{24, 21, 22, 23};
+        playerIds = new ArrayList<Integer>();
 
         addPlayer(UserData.getInstance().getUserID());
 
-        for (int i = 0; i < playerIds.length; i++){
-            if (playerIds[i] != UserData.getInstance().getUserID()){
-                addPlayer(playerIds[i]);
+        for (int i = 0; i < playerIds.size(); i++){
+            if (playerIds.get(i) != UserData.getInstance().getUserID()){
+                addPlayer(playerIds.get(i));
             }
         }
 
         TextView playerCountDisp = view.findViewById(R.id.player_count);
-        playerCountDisp.setText(getString(R.string.player_count, playerIds.length));
+        playerCountDisp.setText(getString(R.string.player_count, playerIds.size()));
 
         TextView gameCodeDisp = view.findViewById(R.id.game_code);
         gameCodeDisp.setText(getString(R.string.game_code, gameCode));
@@ -89,6 +106,7 @@ public class GameLobbyFragment extends Fragment {
     private void addPlayerPlate(int playerID, String username){
         //create horizontal linear layout
         LinearLayout plate = new LinearLayout(view.getContext());
+        plate.setTag("plate"+playerID);
         plate.setLayoutParams(new ViewGroup.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT,
                 ViewGroup.LayoutParams.WRAP_CONTENT));
         plate.setOrientation(LinearLayout.HORIZONTAL);
@@ -126,6 +144,7 @@ public class GameLobbyFragment extends Fragment {
         plate.addView(viewUser);
 
         Space boxSpacing = new Space(view.getContext());
+        boxSpacing.setTag("space"+playerID);
         if (playerID != UserData.getInstance().getUserID()){
 
 
@@ -224,6 +243,7 @@ public class GameLobbyFragment extends Fragment {
     }
 
     private void leaveGame(){
+        mainActivity.disconnectWebSocket();
         getActivity().getSupportFragmentManager().beginTransaction().replace(R.id.fragmentContainerView, new MainMenuFragment()).commit();
     }
 
@@ -232,8 +252,27 @@ public class GameLobbyFragment extends Fragment {
         space.setVisibility(View.GONE);
     }
 
-    public void onMessage(JSONObject s){
+    public void onMessage(String s) throws JSONException {
 
+        JSONObject json = new JSONObject(s);
+
+        if (json.has("joined")){
+            addPlayer(json.getInt("joined"));
+            playerIds.add(json.getInt("joined"));
+        } else if (json.has("left")){
+            LinearLayout playerDisp = view.findViewById(R.id.player_display);
+            playerDisp.removeView(view.findViewWithTag("plate"+json.getInt("left")));
+            playerDisp.removeView(view.findViewWithTag("space"+json.getInt("left")));
+        }
+
+    }
+
+    private void deletePlayerArray(int id){
+        for (int i = 0; i < playerIds.size(); i++){
+            if (playerIds.get(i).equals(id)){
+                playerIds.remove(i);
+            }
+        }
     }
 
 
