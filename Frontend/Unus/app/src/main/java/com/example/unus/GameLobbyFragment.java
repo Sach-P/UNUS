@@ -68,6 +68,7 @@ public class GameLobbyFragment extends Fragment {
 
         String gameCode = "A6Y42";
         playerIds = new ArrayList<Integer>();
+        playerIds.add(UserData.getInstance().getUserID());
 
         addPlayer(UserData.getInstance().getUserID());
 
@@ -158,7 +159,7 @@ public class GameLobbyFragment extends Fragment {
             kickUser.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
-                    kickPlayer(plate, boxSpacing);
+                    kickPlayer(plate, boxSpacing, playerID);
                 }
             });
             plate.addView(kickUser);
@@ -247,9 +248,10 @@ public class GameLobbyFragment extends Fragment {
         getActivity().getSupportFragmentManager().beginTransaction().replace(R.id.fragmentContainerView, new MainMenuFragment()).commit();
     }
 
-    private void kickPlayer(View plate, Space space){
+    private void kickPlayer(View plate, Space space, int playerID){
         plate.setVisibility(View.GONE);
         space.setVisibility(View.GONE);
+        deletePlayerArray(playerID);
     }
 
     public void onMessage(String s) throws JSONException {
@@ -259,8 +261,10 @@ public class GameLobbyFragment extends Fragment {
         if (json.has("joined")){
             addPlayer(json.getInt("joined"));
             playerIds.add(json.getInt("joined"));
+            mainActivity.updateLobby(playerIds);
         } else if (json.has("left")){
             LinearLayout playerDisp = view.findViewById(R.id.player_display);
+            deletePlayerArray(json.getInt("left"));
             playerDisp.removeView(view.findViewWithTag("plate"+json.getInt("left")));
             playerDisp.removeView(view.findViewWithTag("space"+json.getInt("left")));
         }

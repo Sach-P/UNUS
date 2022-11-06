@@ -10,10 +10,13 @@ import android.os.Bundle;
 
 import org.java_websocket.client.WebSocketClient;
 import org.java_websocket.handshake.ServerHandshake;
+import org.json.JSONArray;
 import org.json.JSONException;
+import org.json.JSONObject;
 
 import java.net.URI;
 import java.net.URISyntaxException;
+import java.util.ArrayList;
 
 public class MainActivity extends AppCompatActivity {
 
@@ -79,5 +82,14 @@ public class MainActivity extends AppCompatActivity {
 
     public void disconnectWebSocket(){
         ws.close();
+    }
+
+    public void updateLobby(ArrayList<Integer> players) throws JSONException {
+
+        JSONObject obj = new JSONObject();
+        obj.put("ids", new JSONArray(players));
+        String str = obj.toString();
+
+        ws.send(str);
     }
 }
