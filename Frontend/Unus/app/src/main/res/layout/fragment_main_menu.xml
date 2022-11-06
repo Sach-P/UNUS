@@ -15,6 +15,14 @@
         android:layout_marginTop="5dp"
         >
 
+        <ImageView
+        android:id="@+id/global_chat"
+        android:layout_width="50dp"
+        android:layout_height="50dp"
+        android:src="@drawable/ic_blank_avatar"
+        android:layout_marginStart="5dp"
+        />
+
         <Space
             android:layout_width="0dp"
             android:layout_height="match_parent"

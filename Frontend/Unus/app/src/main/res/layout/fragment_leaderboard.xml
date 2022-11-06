@@ -1,0 +1,110 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    android:background="?attr/backgroundColor"
+    >
+
+    <Button
+        android:id="@+id/back"
+        android:layout_width="100dp"
+        android:layout_height="50dp"
+        android:text="@string/back"
+        android:backgroundTint="?attr/buttonTint"
+        android:textColor="?attr/colorSecondary"
+        android:layout_marginLeft="10dp"
+        />
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_marginHorizontal="50dp"
+        android:layout_marginTop="30dp"
+        android:orientation="vertical"
+        >
+
+        <LinearLayout
+            android:layout_width="fill_parent"
+            android:layout_height="50dp"
+            >
+
+            <Button
+                android:id="@+id/global_list"
+                android:layout_width="150dp"
+                android:layout_height="50dp"
+                android:text="@string/global"
+                android:backgroundTint="?attr/buttonTint"
+                android:textColor="?attr/colorSecondary"
+                />
+
+            <Space
+                android:layout_width="10dp"
+                android:layout_height="match_parent"
+                />
+            <Button
+                android:id="@+id/friends_list"
+                android:layout_width="150dp"
+                android:layout_height="50dp"
+                android:text="@string/friends"
+                android:backgroundTint="?attr/colorSecondary"
+                android:textColor="?attr/buttonTint"
+                />
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="fill_parent"
+            android:layout_height="50dp"
+            >
+
+            <Button
+                android:id="@+id/games_played"
+                android:layout_width="150dp"
+                android:layout_height="50dp"
+                android:text="@string/games_played"
+                android:backgroundTint="?attr/buttonTint"
+                android:textColor="?attr/colorSecondary"
+                />
+
+            <Space
+                android:layout_width="10dp"
+                android:layout_height="match_parent"
+                />
+            <Button
+                android:id="@+id/games_won"
+                android:layout_width="150dp"
+                android:layout_height="50dp"
+                android:text="@string/games_won"
+                android:backgroundTint="?attr/colorSecondary"
+                android:textColor="?attr/buttonTint"
+                />
+        </LinearLayout>
+
+        <TextView
+            android:id="@+id/stat_name"
+            android:layout_width="match_parent"
+            android:layout_height="30dp"
+            android:layout_marginLeft="160dp"
+            android:textColor="@color/yellow"
+            android:text="Stat:"
+            android:textSize="20sp"
+            />
+
+
+        <ScrollView
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            >
+            <LinearLayout
+                android:id="@+id/users"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:orientation="vertical"
+                android:layout_gravity="top"
+                >
+            </LinearLayout>
+        </ScrollView>
+
+    </LinearLayout>
+
+</LinearLayout>

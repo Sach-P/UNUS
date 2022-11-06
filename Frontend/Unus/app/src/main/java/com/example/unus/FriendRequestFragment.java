@@ -13,14 +13,19 @@ import android.widget.TextView;
 
 import androidx.fragment.app.Fragment;
 
+import com.android.volley.AuthFailureError;
 import com.android.volley.Request;
 import com.android.volley.Response;
 import com.android.volley.VolleyError;
 import com.android.volley.toolbox.JsonObjectRequest;
+import com.android.volley.toolbox.JsonRequest;
+import com.android.volley.toolbox.StringRequest;
 import com.android.volley.toolbox.Volley;
 
 import org.json.JSONException;
 import org.json.JSONObject;
+
+import java.io.UnsupportedEncodingException;
 
 public class FriendRequestFragment extends Fragment {
 
@@ -222,15 +227,15 @@ public class FriendRequestFragment extends Fragment {
     }
 
     private void accept_decline(boolean b, String username, int id) {
+
         try {
             JSONObject object = new JSONObject();
-            object.put("username", username);
-            object.put("friendId", id);
             object.put("status", (b)? "accepted":"declined");
+            String put =((b)? "accepted":"declined");
 
             JsonObjectRequest request = new JsonObjectRequest(
                     Request.Method.PUT,
-                    "http://coms-309-029.class.las.iastate.edu:8080/user/" + UserData.getInstance().getUserID()+"/pending-friend-requests",
+                    "http://coms-309-029.class.las.iastate.edu:8080/user/" + UserData.getInstance().getUserID()+"/pending-friend-requests?friendId="+id,
                     object,
                     null, null
             );
@@ -239,7 +244,6 @@ public class FriendRequestFragment extends Fragment {
             e.printStackTrace();
         }
     }
-
 }
 
 
