@@ -39,11 +39,10 @@ public class LobbyController {
     }
 
     @PostMapping(path = "/create-lobby")
-    public String createLobby(@RequestParam(name = "userId") int userId, @RequestBody String json){
-        JSONParser jp = new JSONParser(json);
+    public String createLobby(@RequestParam(name = "userId") int userId, @RequestParam(name = "private") int isPrivate){
+
         try{
-            boolean isPrivate = (boolean)jp.parseObject().get("private");
-            return lobbyService.createLobby(userId, isPrivate);
+            return lobbyService.createLobby(userId, isPrivate == 1);
         }
         catch (ParseException e){
             e.printStackTrace();
