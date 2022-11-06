@@ -263,7 +263,10 @@ public class GameLobbyFragment extends Fragment {
         if (json.has("joined")){
             addPlayer(json.getInt("joined"));
             playerIds.add(json.getInt("joined"));
-            mainActivity.updateLobby(playerIds);
+
+            if (isHost) {
+                mainActivity.updateLobby(playerIds);
+            }
         } else if (json.has("left")){
             LinearLayout playerDisp = view.findViewById(R.id.player_display);
             deletePlayerArray(json.getInt("left"));
