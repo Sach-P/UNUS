@@ -68,6 +68,10 @@ public class ChatLayout extends Activity {
 
     }
 
+    /*
+    this is where the messages that we get from the websocket will be assessed and displayed
+    on the chat screen, it will differtiate between the username and password as well
+     */
     private void receivedMessage(String s) throws JSONException {
         try {
             JSONObject object = new JSONObject(s);
@@ -107,7 +111,6 @@ public class ChatLayout extends Activity {
     }
 
     private void sendMessage(String message) {
-        try {
             TextView nextMessage = new TextView(popupView.getContext());
             LinearLayout.LayoutParams textLayoutParams = new LinearLayout.LayoutParams(900, ViewGroup.LayoutParams.WRAP_CONTENT);
             textLayoutParams.setMargins(50, 10, 50, 0);
@@ -119,11 +122,8 @@ public class ChatLayout extends Activity {
             nextMessage.setTextSize(20);
             nextMessage.setGravity(Gravity.RIGHT);
             newMessage.setText("");
-            JSONObject object = new JSONObject();
 
-            object.put("username", UserData.getInstance().getUsername());
-            object.put("message", message);
-            ws.send(object.toString());
+            ws.send(message);
 
             TextView sender = new TextView(popupView.getContext());
             LinearLayout.LayoutParams sendLayoutParams = new LinearLayout.LayoutParams(900, ViewGroup.LayoutParams.WRAP_CONTENT);
@@ -131,23 +131,19 @@ public class ChatLayout extends Activity {
             sender.setLayoutParams(sendLayoutParams);
             sender.setPadding(20, 0, 20, 0);
             sender.setText(message);
-            sender.setText(object.get("username").toString());
+            sender.setText(UserData.getInstance().getUsername());
             sender.setTextColor(popupView.getResources().getColor(R.color.yellow));
             //sender.setBackgroundColor(popupView.getResources().getColor(R.color.bright_purple));
             sender.setTextSize(15);
             sender.setGravity(Gravity.RIGHT);
 
-            if(lastUser.equals(object.getString("username"))){
+            if(lastUser.equals(UserData.getInstance().getUsername())){
                 messageBoard.addView(nextMessage, 1);
             } else {
                 messageBoard.addView(nextMessage, 0);
                 messageBoard.addView(sender, 0);
             }
-            lastUser = object.getString("username");
-        } catch (JSONException ex) {
-
-        }
-
+            lastUser = UserData.getInstance().getUsername();
     }
 
     private void connectWebSocket() {
