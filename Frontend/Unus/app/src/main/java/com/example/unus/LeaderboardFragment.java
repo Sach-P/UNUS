@@ -82,10 +82,10 @@ public class LeaderboardFragment extends Fragment {
             @Override
             public void onClick(View view) {
                 if(isPlayed) {
-                    won.setBackgroundColor(view.getResources().getColor(R.color.bright_purple));
+                    won.setBackgroundColor(view.getResources().getColor(R.color.purple_500));
                     won.setTextColor(view.getResources().getColor(R.color.yellow));
                     played.setBackgroundColor(view.getResources().getColor(R.color.yellow));
-                    played.setTextColor(view.getResources().getColor(R.color.bright_purple));
+                    played.setTextColor(view.getResources().getColor(R.color.purple_500));
                     isPlayed = false;
                     stat_name.setText("Games Won: ");
                     sortGamesWon();
@@ -98,10 +98,10 @@ public class LeaderboardFragment extends Fragment {
             @Override
             public void onClick(View view) {
                 if(!isPlayed) {
-                    played.setBackgroundColor(view.getResources().getColor(R.color.bright_purple));
+                    played.setBackgroundColor(view.getResources().getColor(R.color.purple_500));
                     played.setTextColor(view.getResources().getColor(R.color.yellow));
                     won.setBackgroundColor(view.getResources().getColor(R.color.yellow));
-                    won.setTextColor(view.getResources().getColor(R.color.bright_purple));
+                    won.setTextColor(view.getResources().getColor(R.color.purple_500));
                     isPlayed = true;
                     stat_name.setText("Games Played: ");
                     sortGamesPlayed();
@@ -114,10 +114,10 @@ public class LeaderboardFragment extends Fragment {
             @Override
             public void onClick(View view) {
                 if(!isGlobal) {
-                    global.setBackgroundColor(view.getResources().getColor(R.color.bright_purple));
+                    global.setBackgroundColor(view.getResources().getColor(R.color.purple_500));
                     global.setTextColor(view.getResources().getColor(R.color.yellow));
                     friends.setBackgroundColor(view.getResources().getColor(R.color.yellow));
-                    friends.setTextColor(view.getResources().getColor(R.color.bright_purple));
+                    friends.setTextColor(view.getResources().getColor(R.color.purple_500));
                     isGlobal = true;
                     stat_name.setText((isPlayed) ? "Games Played: " : "Games Won: ");
                     displayUsers(userList, isPlayed);
@@ -129,10 +129,10 @@ public class LeaderboardFragment extends Fragment {
             @Override
             public void onClick(View view) {
                 if(isGlobal) {
-                    friends.setBackgroundColor(view.getResources().getColor(R.color.bright_purple));
+                    friends.setBackgroundColor(view.getResources().getColor(R.color.purple_500));
                     friends.setTextColor(view.getResources().getColor(R.color.yellow));
                     global.setBackgroundColor(view.getResources().getColor(R.color.yellow));
-                    global.setTextColor(view.getResources().getColor(R.color.bright_purple));
+                    global.setTextColor(view.getResources().getColor(R.color.purple_500));
                     isGlobal = false;
                     stat_name.setText((isPlayed) ? "Games Played: " : "Games Won: ");
                     displayUsers(friendList, isPlayed);

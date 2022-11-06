@@ -58,7 +58,7 @@ public class MainMenuFragment extends Fragment {
         hostGame.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                getActivity().getSupportFragmentManager().beginTransaction().replace(R.id.fragmentContainerView, new GameLobbyFragment()).commit();
+                getActivity().getSupportFragmentManager().beginTransaction().replace(R.id.fragmentContainerView, new GameLobbyFragment(), "gameLobby").commit();
             }
         });
 

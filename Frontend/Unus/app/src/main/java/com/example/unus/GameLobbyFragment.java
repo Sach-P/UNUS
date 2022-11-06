@@ -69,7 +69,7 @@ public class GameLobbyFragment extends Fragment {
         leaveButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                getActivity().getSupportFragmentManager().beginTransaction().replace(R.id.fragmentContainerView, new MainMenuFragment()).commit();
+                leaveGame();
             }
         });
 
@@ -77,7 +77,7 @@ public class GameLobbyFragment extends Fragment {
         chatButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                //add chat functionality
+                ChatLayout cl = new ChatLayout(view);
             }
         });
 
@@ -124,7 +124,10 @@ public class GameLobbyFragment extends Fragment {
         });
         plate.addView(viewUser);
 
+        Space boxSpacing = new Space(view.getContext());
         if (playerID != UserData.getInstance().getUserID()){
+
+
             //add kick player button to the plate
             Button kickUser = new Button(view.getContext());
             kickUser.setLayoutParams(new ViewGroup.LayoutParams(200, ViewGroup.LayoutParams.MATCH_PARENT));
@@ -135,7 +138,7 @@ public class GameLobbyFragment extends Fragment {
             kickUser.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
-                    //add kick user function
+                    kickPlayer(plate, boxSpacing);
                 }
             });
             plate.addView(kickUser);
@@ -145,7 +148,6 @@ public class GameLobbyFragment extends Fragment {
         LinearLayout playerDisp = view.findViewById(R.id.player_display);
         playerDisp.addView(plate);
         //add space between plates
-        Space boxSpacing = new Space(view.getContext());
         boxSpacing.setLayoutParams(new ViewGroup.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, 20));
         playerDisp.addView(boxSpacing);
     }
@@ -211,7 +213,7 @@ public class GameLobbyFragment extends Fragment {
                 new Response.ErrorListener() {
                     @Override
                     public void onErrorResponse(VolleyError error) {
-                        //loginHeader.setText(getString(R.string.login_error));
+
                     }
                 }
         );
@@ -223,4 +225,13 @@ public class GameLobbyFragment extends Fragment {
     private void leaveGame(){
         getActivity().getSupportFragmentManager().beginTransaction().replace(R.id.fragmentContainerView, new MainMenuFragment()).commit();
     }
+
+    private void kickPlayer(View plate, Space space){
+        plate.setVisibility(View.GONE);
+        space.setVisibility(View.GONE);
+    }
+
+
+
+
 }

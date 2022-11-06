@@ -83,7 +83,7 @@ public class ChatLayout extends Activity {
                 nextMessage.setPadding(20, 10, 20, 10);
                 nextMessage.setText(object.getString("message"));
                 nextMessage.setTextColor(popupView.getResources().getColor(R.color.yellow));
-                nextMessage.setBackgroundColor(popupView.getResources().getColor(R.color.bright_purple));
+                nextMessage.setBackgroundColor(popupView.getResources().getColor(R.color.purple_500));
                 nextMessage.setTextSize(20);
 
                 TextView sender = new TextView(popupView.getContext());
@@ -118,7 +118,7 @@ public class ChatLayout extends Activity {
             nextMessage.setPadding(20, 10, 20, 10);
             nextMessage.setText(message);
             nextMessage.setTextColor(popupView.getResources().getColor(R.color.yellow));
-            nextMessage.setBackgroundColor(popupView.getResources().getColor(R.color.bright_purple));
+            nextMessage.setBackgroundColor(popupView.getResources().getColor(R.color.purple_500));
             nextMessage.setTextSize(20);
             nextMessage.setGravity(Gravity.RIGHT);
             newMessage.setText("");
@@ -157,7 +157,7 @@ public class ChatLayout extends Activity {
             TextView nextMessage = new TextView(popupView.getContext());
             nextMessage.setText("Couldn't Connect to Messages"); //will be getString(R.string.message_error)); eventually
             nextMessage.setTextColor(popupView.getResources().getColor(R.color.yellow));
-            nextMessage.setBackgroundColor(popupView.getResources().getColor(R.color.bright_purple));
+            nextMessage.setBackgroundColor(popupView.getResources().getColor(R.color.purple_500));
             nextMessage.setTextSize(20);
 
             messageBoard.addView(nextMessage, 0);
