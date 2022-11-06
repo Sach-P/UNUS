@@ -75,11 +75,10 @@ public class UserController {
         User currUser = userRepository.findById(id);
         if(currUser != null){
             if(currUser.getLobby() != null){
-                return Integer.toString(currUser.getLobby().getId());
+                return "{\"id\":\""+ currUser.getLobby().getId() + "\"}";
             }
         }
-
-        return -1;
+        return failure;
     }
 
 
