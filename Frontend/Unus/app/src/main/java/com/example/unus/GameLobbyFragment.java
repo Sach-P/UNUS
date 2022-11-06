@@ -10,6 +10,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
+import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.PopupWindow;
 import android.widget.Space;
@@ -31,7 +32,6 @@ public class GameLobbyFragment extends Fragment {
 
     View view;
     int[] players;
-
 
     public GameLobbyFragment() {
         // Required empty public constructor
@@ -64,6 +64,22 @@ public class GameLobbyFragment extends Fragment {
 
         TextView gameCodeDisp = view.findViewById(R.id.game_code);
         gameCodeDisp.setText(getString(R.string.game_code, gameCode));
+
+        ImageView leaveButton = (ImageView) view.findViewById(R.id.leave_lobby);
+        leaveButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                getActivity().getSupportFragmentManager().beginTransaction().replace(R.id.fragmentContainerView, new MainMenuFragment()).commit();
+            }
+        });
+
+        View chatButton = view.findViewById(R.id.lobby_chat);
+        chatButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                //add chat functionality
+            }
+        });
 
         return view;
     }
@@ -138,7 +154,7 @@ public class GameLobbyFragment extends Fragment {
 
         JsonObjectRequest request = new JsonObjectRequest(
                 Request.Method.GET,
-                "http://coms-309-029.class.las.iastate.edu:8080/user/"+Integer.toString(id),
+                getString(R.string.remote_server_url, "user", Integer.toString(id)),
                 null,
                 new Response.Listener<JSONObject>() {
                     @Override
@@ -184,9 +200,9 @@ public class GameLobbyFragment extends Fragment {
 
                         try {
                             ((TextView) popupView.findViewById(R.id.username)).setText(response.getString("username"));
-                            ((TextView) popupView.findViewById(R.id.user_id)).setText("ID: "+ response.getInt("id"));
-                            ((TextView) popupView.findViewById(R.id.games_played)).setText("Games Played: "+ response.getInt("gamesPlayed"));
-                            ((TextView) popupView.findViewById(R.id.games_won)).setText("Games Won: "+ response.getInt("gamesWon"));
+                            ((TextView) popupView.findViewById(R.id.user_id)).setText(getString(R.string.id_display, response.getInt("id")));
+                            ((TextView) popupView.findViewById(R.id.games_played)).setText(getString(R.string.games_played_display, response.getInt("gamesPlayed")));
+                            ((TextView) popupView.findViewById(R.id.games_won)).setText(getString(R.string.games_won_display, response.getInt("gamesWon")));
                         } catch (JSONException e) {
                             e.printStackTrace();
                         }
@@ -202,5 +218,9 @@ public class GameLobbyFragment extends Fragment {
 
         Volley.newRequestQueue(requireContext()).add(request);
 
+    }
+
+    private void leaveGame(){
+        getActivity().getSupportFragmentManager().beginTransaction().replace(R.id.fragmentContainerView, new MainMenuFragment()).commit();
     }
 }
