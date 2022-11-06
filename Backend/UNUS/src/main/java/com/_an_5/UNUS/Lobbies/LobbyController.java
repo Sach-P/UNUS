@@ -13,8 +13,6 @@ import org.springframework.web.bind.annotation.*;
 import java.util.List;
 
 @RestController
-//@Slf4j
-//@AllArgsConstructor
 @RequestMapping("/lobbies")
 public class LobbyController {
 
