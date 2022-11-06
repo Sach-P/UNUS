@@ -69,19 +69,17 @@ public class UserController {
         return userRepository.findById(id);
     }
 
-    @GetMapping(path = "/user/get-lobby/{id}")
-    public Map<String, Object> login(@RequestBody User user){//@ModelAttribute("user") User user){
-        HashMap<String, Object> map = new HashMap<>();
-        
-        User currUser = userRepository.findById(id);
 
+    @GetMapping(path = "/user/get-lobby/{id}")
+    public String getLobbyId(@PathVariable int id){
+        User currUser = userRepository.findById(id);
         if(currUser != null){
             if(currUser.getLobby() != null){
-                map.put("id", currUser.getLobby.getId());
-                return map;
+                return Integer.toString(currUser.getLobby().getId());
             }
         }
-        return map;
+
+        return -1;
     }
 
 
