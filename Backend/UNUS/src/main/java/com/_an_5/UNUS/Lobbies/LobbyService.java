@@ -24,7 +24,7 @@ public class LobbyService {
 
     public String createLobby(int userId, boolean isPrivate){
         User host = userRepo.findById(userId);
-        if(host == null){
+        if(host == null || host.getLobby() != null){
             return failure;
         }
         Lobby lobby = new Lobby(host, isPrivate);
