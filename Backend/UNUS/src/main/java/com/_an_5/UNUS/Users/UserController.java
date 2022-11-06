@@ -30,6 +30,11 @@ public class UserController {
         return success;
     }
 
+    @GetMapping(path = "/test")
+    public String test(){
+      return "it worked";
+    }
+
     @PostMapping(path = "/login")
     public Map<String, Object> login(@RequestBody User user){//@ModelAttribute("user") User user){
         HashMap<String, Object> map = new HashMap<>();
