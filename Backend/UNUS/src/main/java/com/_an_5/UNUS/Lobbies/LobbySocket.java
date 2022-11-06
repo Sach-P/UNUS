@@ -5,6 +5,7 @@ import com._an_5.UNUS.Messages.Message;
 import com._an_5.UNUS.Messages.MessageRepository;
 import com._an_5.UNUS.Users.User;
 import com._an_5.UNUS.Users.UserRepository;
+import org.json.JSONObject;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -71,8 +72,11 @@ public class LobbySocket {
 
 
         sendMessageToParticularUser(player, getChatHistory(lobby));
-        String message = player.getUsername() + " has joined the lobby";
-        broadcast(message, lobby);
+        JSONObject j = new JSONObject();
+        j.put("joined", player.getId());
+        broadcast(j.toString(), lobby);
+//        String message = player.getUsername() + " has joined the lobby";
+//        broadcast(message, lobby);
 
     }
 
@@ -123,8 +127,11 @@ public class LobbySocket {
             lobbyRepository.deleteById(lobby.getId());
         }
         else{
-            String message = player.getUsername() + " left the lobby";
-            broadcast(message, lobby);
+            JSONObject j = new JSONObject();
+            j.put("left", player.getId());
+            broadcast(j.toString(), lobby);
+//            String message = player.getUsername() + " left the lobby";
+//            broadcast(message, lobby);
         }
     }
 
