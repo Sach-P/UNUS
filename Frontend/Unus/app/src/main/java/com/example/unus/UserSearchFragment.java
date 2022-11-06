@@ -215,14 +215,16 @@ public class UserSearchFragment extends Fragment {
         temp[UserData.getInstance().getSentRequests().length] = newSent;
         UserData.getInstance().setSentRequestsList(temp);
 
+        /*
         JSONObject object = new JSONObject();
         object.put("username", username);
         object.put("friendId", Integer.parseInt(id));
+        */
 
         JsonObjectRequest request = new JsonObjectRequest(
-                Request.Method.PUT,
-                "http://coms-309-029.class.las.iastate.edu:8080/user/"+UserData.getInstance().getUserID()+"/send-friend-request",
-                object,
+                Request.Method.POST,
+                "http://coms-309-029.class.las.iastate.edu:8080/user/"+UserData.getInstance().getUserID()+"/send-friend-request?friendId="+id,
+                null,
                 null, null);
         Volley.newRequestQueue(requireContext()).add(request);
     }
