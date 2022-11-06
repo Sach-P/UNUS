@@ -4,6 +4,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical"
+    android:background="?attr/backgroundColor"
     >
 
     <ImageView
@@ -25,7 +26,7 @@
         android:textAlignment="center"
         android:textSize="20sp"
         android:textStyle="bold"
-        android:textColor="@color/black"
+        android:textColor="@color/white"
         />
 
     <EditText
@@ -35,6 +36,9 @@
         android:layout_marginTop="15dp"
         android:layout_marginHorizontal="30dp"
         android:hint="@string/username_hint"
+        android:textColor="@color/white"
+        android:backgroundTint="@color/white"
+        android:textColorHint="@color/white"
         />
 
     <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
@@ -53,6 +57,9 @@
             android:layout_weight="0.75"
             android:hint="@string/password_hint"
             android:inputType="textPassword"
+            android:textColor="@color/white"
+            android:backgroundTint="@color/white"
+            android:textColorHint="@color/white"
             />
 
         <Button
@@ -60,8 +67,8 @@
             android:layout_width="0dp"
             android:layout_height="fill_parent"
             android:layout_weight="0.25"
-            android:backgroundTint="#ED1C24"
-            android:textColor="#F8DA27"
+            android:backgroundTint="?attr/buttonTint"
+            android:textColor="?attr/colorSecondary"
             android:textStyle="bold"
             android:text="@string/showPassword"
             />
@@ -76,8 +83,8 @@
         android:layout_marginTop="15dp"
         android:layout_marginHorizontal="30dp"
         android:text="@string/login_button_text"
-        android:backgroundTint="#ED1C24"
-        android:textColor="#F8DA27"
+        android:backgroundTint="?attr/buttonTint"
+        android:textColor="?attr/colorSecondary"
         android:textStyle="bold"
         />
 
@@ -89,8 +96,8 @@
         android:layout_marginTop="15dp"
         android:layout_marginHorizontal="30dp"
         android:text="@string/signup_button_text"
-        android:backgroundTint="#ED1C24"
-        android:textColor="#F8DA27"
+        android:backgroundTint="?attr/buttonTint"
+        android:textColor="?attr/colorSecondary"
         android:textStyle="bold"
         />
 

@@ -6,7 +6,7 @@
     android:paddingLeft="10dp"
     android:paddingRight="10dp"
     android:gravity="center"
-    android:background="#add8e6">
+    android:background="@color/dark_gray">
 
 
     <LinearLayout
@@ -23,36 +23,52 @@
                 android:text="Username:"
                 android:textSize="20sp"
                 android:textStyle="bold"
-                android:padding="10dp"/>
+                android:padding="10dp"
+                android:textColor="@color/purple_500"
+                />
 
 
             <EditText
                 android:id="@+id/user_prompt"
                 android:layout_width="150dp"
                 android:layout_height="50dp"
+                android:layout_gravity="center"
+                android:textColor="@color/purple_500"
+                android:backgroundTint="@color/purple_500"
+                android:textColorHint="@color/purple_500"
                 />
             <TextView
-            android:id="@+id/password"
-            android:layout_gravity="center"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="Password:"
-            android:textSize="20sp"
-            android:textStyle="bold"
-            android:padding="10dp"/>
+                android:id="@+id/password"
+                android:layout_gravity="center"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Password:"
+                android:textSize="20sp"
+                android:textStyle="bold"
+                android:padding="10dp"
+                android:textColor="@color/purple_500"
+                />
 
 
             <EditText
                 android:id="@+id/pass_prompt"
                 android:layout_width="150dp"
                 android:layout_height="50dp"
+                android:layout_gravity="center"
+                android:inputType="textPassword"
+                android:textColor="@color/purple_500"
+                android:backgroundTint="@color/purple_500"
+                android:textColorHint="@color/purple_500"
                 />
 
             <Button
                 android:id="@+id/delete"
                 android:layout_width="150dp"
                 android:layout_height="60dp"
+                android:layout_gravity="center"
                 android:text="Delete Account"
+                android:backgroundTint="?attr/colorPrimary"
+                android:textColor="?attr/colorSecondary"
                 />
 
         </LinearLayout>

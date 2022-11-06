@@ -51,13 +51,13 @@ public class SignUpScreenFragment extends Fragment {
         confirmPasswordField = view.findViewById(R.id.signup_confirm_password_field);
 
         //initialize signup button
-        Button signupButton = (Button)view.findViewById(R.id.signup_button);
-        signupButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                String username = usernameField.getText().toString();
-                String password = passwordField.getText().toString();
-                String cofirmPassword = confirmPasswordField.getText().toString();
+                Button signupButton = (Button)view.findViewById(R.id.signup_button);
+                signupButton.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View view) {
+                        String username = usernameField.getText().toString();
+                        String password = passwordField.getText().toString();
+                        String confirmPassword = confirmPasswordField.getText().toString();
 
                 status.setText(getString(R.string.validatingMessage));
 
@@ -67,7 +67,7 @@ public class SignUpScreenFragment extends Fragment {
                     status.setText(getString(R.string.no_password));
                 } else if (password.length() < 8 || !containsNumber(password)){ //check if password meets requirements
                     status.setText(getString(R.string.invalid_password));
-                } else if (!password.equals(cofirmPassword)){ //check if confirm password field matches
+                } else if (!password.equals(confirmPassword)){ //check if confirm password field matches
                     status.setText(getString(R.string.password_mismatch));
                 } else { //check with server if account can be created
                     sendSignupPostRequest(username, password);
@@ -75,6 +75,14 @@ public class SignUpScreenFragment extends Fragment {
             }
         });
 
+        //initialize back button
+        Button backButton = (Button)view.findViewById(R.id.back_to_login);
+        backButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                navigateToLogin();
+            }
+        });
 
         return view;
     }
@@ -96,7 +104,7 @@ public class SignUpScreenFragment extends Fragment {
 
             JsonObjectRequest request = new JsonObjectRequest(
                     Request.Method.POST,
-                    getString(R.string.remote_server_url, "signup"),
+                    getString(R.string.remote_server_url, "signup", ""),
                     requestBody,
                     new Response.Listener<JSONObject>() {
                         @Override
@@ -140,6 +148,16 @@ public class SignUpScreenFragment extends Fragment {
 
         LogInScreenFragment loginFrag = new LogInScreenFragment();
         loginFrag.setArguments(bundle);
+
+        getActivity().getSupportFragmentManager().beginTransaction().replace(R.id.fragmentContainerView, loginFrag).commit();
+    }
+
+    /**
+     * changes screen back to unfilled login screen
+     */
+    private void navigateToLogin(){
+
+        LogInScreenFragment loginFrag = new LogInScreenFragment();
 
         getActivity().getSupportFragmentManager().beginTransaction().replace(R.id.fragmentContainerView, loginFrag).commit();
     }

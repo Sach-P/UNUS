@@ -1,0 +1,39 @@
+stages:
+  - mavenbuild
+  - maventest
+  - mavenDeploy
+  - androidbuild
+  - androidtest
+
+maven-build:
+  stage: mavenbuild
+  tags:
+    - springboot_tag  					 
+  script:
+    - cd Backend/UNUS					
+    - mvn package
+
+maven-test:
+  stage: maventest
+  tags:
+    - springboot_tag
+  script:
+    - cd Backend/UNUS
+    - mvn test
+  artifacts:
+    paths:
+      - Backend/target/*.jar
+
+# autoDeploy:
+#   only:
+#     - main
+#   stage: mavenDeploy
+#   tags:
+#     - springboot_tag
+#   script:
+#     - cd Backend/UNUS
+#     - mvn package
+#     - sudo mv target/*.jar /target/web-demo.jar
+#     - sudo systemctl stop system-web-demo
+#     - sudo systemctl start system-web-demo 
+

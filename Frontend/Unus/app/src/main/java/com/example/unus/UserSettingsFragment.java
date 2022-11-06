@@ -109,7 +109,7 @@ public class UserSettingsFragment extends Fragment {
                     deleteUser(UserData.getInstance().getUserID());
                 } else {
                     popupWindow.dismiss();
-                    top_text.setText("Incorrect Username or Password");
+                    top_text.setText(getString(R.string.invalid_credentials));
                 }
 
             }
@@ -139,14 +139,14 @@ public class UserSettingsFragment extends Fragment {
         //Set the location of the window on the screen
         popupWindow.showAtLocation(view, Gravity.CENTER, 50, 30);
         if(name) {
-            ((TextView) popupView.findViewById(R.id.username)).setText("New Username:");
+            ((TextView) popupView.findViewById(R.id.username)).setText(getString(R.string.new_username));
         } else {
-            ((TextView) popupView.findViewById(R.id.username)).setText("New Password:");
-            ((TextView) popupView.findViewById(R.id.password)).setText("Old Password:");
+            ((TextView) popupView.findViewById(R.id.username)).setText(getString(R.string.new_password));
+            ((TextView) popupView.findViewById(R.id.password)).setText(getString(R.string.old_password));
         }
 
 
-        ((Button) popupView.findViewById(R.id.delete)).setText("Change");
+        ((Button) popupView.findViewById(R.id.delete)).setText(getString(R.string.change_button));
 
         Button delete = (Button) popupView.findViewById(R.id.delete);
         delete.setOnClickListener(new View.OnClickListener() {
@@ -156,7 +156,7 @@ public class UserSettingsFragment extends Fragment {
                 if(((EditText) popupView.findViewById(R.id.pass_prompt)).getText().toString().equals(UserData.getInstance().getPassword())) {
                     changeUser(name, ((EditText) popupView.findViewById(R.id.user_prompt)).getText().toString());
                 } else {
-                    top_text.setText("Username/Password Incorrect");
+                    top_text.setText(getString(R.string.invalid_credentials));
                 }
             }
         });
@@ -175,7 +175,7 @@ public class UserSettingsFragment extends Fragment {
 
         JsonObjectRequest request = new JsonObjectRequest(
                 Request.Method.DELETE,
-                getString(R.string.remote_server_url, "user")+Integer.toString(id),
+                getString(R.string.remote_server_url, "user", Integer.toString(id)),
                 null,
                 new Response.Listener<JSONObject>() {
                     @Override
@@ -221,7 +221,7 @@ public class UserSettingsFragment extends Fragment {
 
             JsonObjectRequest request = new JsonObjectRequest(
                     Request.Method.PUT,
-                    getString(R.string.remote_server_url, "user/"+UserData.getInstance().getUserID()),
+                    getString(R.string.remote_server_url, "user", Integer.toString(UserData.getInstance().getUserID())),
                     requestBody,
                     null,
                     new Response.ErrorListener() {
