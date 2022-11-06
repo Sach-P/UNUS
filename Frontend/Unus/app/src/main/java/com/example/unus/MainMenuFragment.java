@@ -49,7 +49,7 @@ public class MainMenuFragment extends Fragment {
         joinGame.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                //put navigation to join game fragment
+                getActivity().getSupportFragmentManager().beginTransaction().replace(R.id.fragmentContainerView, new JoinLobbyFragment()).commit();
             }
         });
 
@@ -58,7 +58,13 @@ public class MainMenuFragment extends Fragment {
         hostGame.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                getActivity().getSupportFragmentManager().beginTransaction().replace(R.id.fragmentContainerView, new GameLobbyFragment(), "gameLobby").commit();
+                GameLobbyFragment frag = new GameLobbyFragment();
+
+                Bundle bundle = new Bundle();
+                bundle.putInt("lobbyId", 1);
+                bundle.putBoolean("isHost", true);
+
+                getActivity().getSupportFragmentManager().beginTransaction().replace(R.id.fragmentContainerView, frag, "gameLobby").commit();
                 getActivity().getSupportFragmentManager().executePendingTransactions();
             }
         });

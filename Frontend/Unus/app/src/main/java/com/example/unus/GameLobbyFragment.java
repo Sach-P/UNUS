@@ -36,6 +36,8 @@ public class GameLobbyFragment extends Fragment {
     ArrayList<Integer> playerIds;
     int gameLobbyId;
 
+    boolean isHost;
+
     MainActivity mainActivity;
 
     //GameLobbyWebSocket gameLobbyWebSocket;
@@ -58,6 +60,7 @@ public class GameLobbyFragment extends Fragment {
         if (this.getArguments() != null){
             Bundle bundle = this.getArguments();
             gameLobbyId = bundle.getInt("lobbyId");
+            isHost = bundle.getBoolean("isHost");
         } else {
             gameLobbyId = 1;
             //getActivity().getSupportFragmentManager().beginTransaction().replace(R.id.fragmentContainerView, new MainMenuFragment()).commit();
@@ -66,7 +69,6 @@ public class GameLobbyFragment extends Fragment {
         mainActivity = (MainActivity)getActivity();
         mainActivity.connectWebSocket(1);
 
-        String gameCode = "A6Y42";
         playerIds = new ArrayList<Integer>();
         playerIds.add(UserData.getInstance().getUserID());
 
@@ -82,7 +84,7 @@ public class GameLobbyFragment extends Fragment {
         playerCountDisp.setText(getString(R.string.player_count, playerIds.size()));
 
         TextView gameCodeDisp = view.findViewById(R.id.game_code);
-        gameCodeDisp.setText(getString(R.string.game_code, gameCode));
+        gameCodeDisp.setText(getString(R.string.game_code, Integer.toString(gameLobbyId)));
 
         ImageView leaveButton = (ImageView) view.findViewById(R.id.leave_lobby);
         leaveButton.setOnClickListener(new View.OnClickListener() {
@@ -146,7 +148,7 @@ public class GameLobbyFragment extends Fragment {
 
         Space boxSpacing = new Space(view.getContext());
         boxSpacing.setTag("space"+playerID);
-        if (playerID != UserData.getInstance().getUserID()){
+        if (playerID != UserData.getInstance().getUserID() && isHost){
 
 
             //add kick player button to the plate
