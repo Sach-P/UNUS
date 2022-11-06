@@ -70,6 +70,8 @@ public class MainActivity extends AppCompatActivity {
 
             @Override
             public void onClose(int i, String s, boolean b) {
+                GameLobbyFragment gameLobbyFrag = (GameLobbyFragment) getSupportFragmentManager().findFragmentByTag("gameLobby");
+                gameLobbyFrag.leaveGame();
             }
 
             @Override
@@ -91,5 +93,10 @@ public class MainActivity extends AppCompatActivity {
         String str = obj.toString();
 
         ws.send(str);
+    }
+
+    public void kickUser(int id) throws JSONException {
+
+        ws.send(String.format("/kick %d", id));
     }
 }

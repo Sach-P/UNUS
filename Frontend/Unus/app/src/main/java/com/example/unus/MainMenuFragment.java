@@ -75,18 +75,7 @@ public class MainMenuFragment extends Fragment {
                     e.printStackTrace();
                 }
 
-                setGameLobbyId();
-
-                GameLobbyFragment frag = new GameLobbyFragment();
-
-                Bundle bundle = new Bundle();
-                bundle.putInt("lobbyId", GameLobbyId);
-                bundle.putBoolean("isHost", true);
-
-                frag.setArguments(bundle);
-
-                getActivity().getSupportFragmentManager().beginTransaction().replace(R.id.fragmentContainerView, frag, "gameLobby").commit();
-                getActivity().getSupportFragmentManager().executePendingTransactions();
+                startHostedLobby();
             }
         });
 
@@ -120,26 +109,6 @@ public class MainMenuFragment extends Fragment {
         return view;
     }
 
-    private void setGameLobbyId(){
-
-        StringRequest stringRequest = new StringRequest(
-                Request.Method.GET,
-                String.format("http://coms-309-029.class.las.iastate.edu:8080/user/get-lobby/%d/", UserData.getInstance().getUserID()),
-                new Response.Listener<String>() {
-                    @Override
-                    public void onResponse(String response) {
-                        setGameLobbyId(Integer.parseInt(response));
-                    }
-                },
-                new Response.ErrorListener() {
-                    @Override
-                    public void onErrorResponse(VolleyError error) {
-                    }
-                }
-        );
-        Volley.newRequestQueue(requireContext()).add(stringRequest);
-    }
-
     private void createLobby() throws JSONException {
         //add login credentials to the response body
         JSONObject requestBody = new JSONObject();
@@ -165,7 +134,54 @@ public class MainMenuFragment extends Fragment {
         Volley.newRequestQueue(requireContext()).add(request);
     }
 
+    private void startHostedLobby(){
+
+        StringRequest stringRequest = new StringRequest(Request.Method.GET,
+                String.format("http://coms-309-029.class.las.iastate.edu:8080/user/get-lobby/%d",UserData.getInstance().getUserID()),
+                new Response.Listener<String>() {
+                    @Override
+                    public void onResponse(String response) {
+
+                        try {
+                            JSONObject json = new JSONObject(response);
+                            setGameLobbyId(json.getInt("id"));
+                            changeToLobby(json.getInt("id"));
+
+                        } catch (JSONException e) {
+                            e.printStackTrace();
+                        }
+
+
+                    }
+                }, new Response.ErrorListener() {
+            @Override
+            public void onErrorResponse(VolleyError error) {
+
+            }
+        });
+
+        Volley.newRequestQueue(requireContext()).add(stringRequest);
+
+    }
+
+
+
     public void setGameLobbyId(int i){
         GameLobbyId = i;
     }
+
+    public void changeToLobby(int id){
+        GameLobbyFragment frag = new GameLobbyFragment();
+
+        Bundle bundle = new Bundle();
+        bundle.putInt("lobbyId", id);
+        bundle.putBoolean("isHost", true);
+
+        frag.setArguments(bundle);
+
+        getActivity().getSupportFragmentManager().beginTransaction().replace(R.id.fragmentContainerView, frag, "gameLobby").commit();
+        getActivity().getSupportFragmentManager().executePendingTransactions();
+    }
+
+
 }

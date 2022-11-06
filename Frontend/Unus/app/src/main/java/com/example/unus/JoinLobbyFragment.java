@@ -9,6 +9,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.ImageView;
 
 public class JoinLobbyFragment extends Fragment {
 
@@ -31,6 +32,14 @@ public class JoinLobbyFragment extends Fragment {
         view = inflater.inflate(R.layout.fragment_join_lobby, container, false);
 
         EditText editText = view.findViewById(R.id.lobby_code);
+
+        ImageView leaveButton = (ImageView) view.findViewById(R.id.leave_join_lobby);
+        leaveButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                getActivity().getSupportFragmentManager().beginTransaction().replace(R.id.fragmentContainerView, new MainMenuFragment()).commit();
+            }
+        });
 
         Button button = view.findViewById(R.id.join_lobby_button);
         button.setOnClickListener(new View.OnClickListener() {

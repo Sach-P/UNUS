@@ -22,6 +22,7 @@ import com.android.volley.VolleyError;
 import com.android.volley.toolbox.JsonObjectRequest;
 import com.android.volley.toolbox.Volley;
 
+import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
@@ -35,6 +36,8 @@ public class GameLobbyFragment extends Fragment {
     View view;
     ArrayList<Integer> playerIds;
     int gameLobbyId;
+
+    TextView playerCountDisp;
 
     boolean isHost;
 
@@ -63,7 +66,7 @@ public class GameLobbyFragment extends Fragment {
             isHost = bundle.getBoolean("isHost");
         } else {
             gameLobbyId = -1;
-            //getActivity().getSupportFragmentManager().beginTransaction().replace(R.id.fragmentContainerView, new MainMenuFragment()).commit();
+            getActivity().getSupportFragmentManager().beginTransaction().replace(R.id.fragmentContainerView, new MainMenuFragment()).commit();
         }
 
         mainActivity = (MainActivity)getActivity();
@@ -80,7 +83,7 @@ public class GameLobbyFragment extends Fragment {
             }
         }
 
-        TextView playerCountDisp = view.findViewById(R.id.player_count);
+        playerCountDisp = view.findViewById(R.id.player_count);
         playerCountDisp.setText(getString(R.string.player_count, playerIds.size()));
 
         TextView gameCodeDisp = view.findViewById(R.id.game_code);
@@ -161,7 +164,11 @@ public class GameLobbyFragment extends Fragment {
             kickUser.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
-                    kickPlayer(plate, boxSpacing, playerID);
+                    try {
+                        kickPlayer(plate, boxSpacing, playerID);
+                    } catch (JSONException e) {
+                        e.printStackTrace();
+                    }
                 }
             });
             plate.addView(kickUser);
@@ -190,7 +197,6 @@ public class GameLobbyFragment extends Fragment {
                         } catch (JSONException e) {
                             e.printStackTrace();
                         }
-
                     }
                 },
                 new Response.ErrorListener() {
@@ -245,22 +251,21 @@ public class GameLobbyFragment extends Fragment {
 
     }
 
-    private void leaveGame(){
+    public void leaveGame(){
         mainActivity.disconnectWebSocket();
         getActivity().getSupportFragmentManager().beginTransaction().replace(R.id.fragmentContainerView, new MainMenuFragment()).commit();
     }
 
-    private void kickPlayer(View plate, Space space, int playerID){
-        plate.setVisibility(View.GONE);
-        space.setVisibility(View.GONE);
+    private void kickPlayer(View plate, Space space, int playerID) throws JSONException {
         deletePlayerArray(playerID);
+        mainActivity.kickUser(playerID);
     }
 
     public void onMessage(String s) throws JSONException {
 
         JSONObject json = new JSONObject(s);
 
-        if (json.has("joined")){
+        if (json.has("joined") && json.getInt("joined") != UserData.getInstance().getUserID()){
             addPlayer(json.getInt("joined"));
             playerIds.add(json.getInt("joined"));
 
@@ -272,7 +277,16 @@ public class GameLobbyFragment extends Fragment {
             deletePlayerArray(json.getInt("left"));
             playerDisp.removeView(view.findViewWithTag("plate"+json.getInt("left")));
             playerDisp.removeView(view.findViewWithTag("space"+json.getInt("left")));
+        } else if (json.has("ids")){
+            JSONArray array = json.getJSONArray("ids");
+            for (int i = 0; i < array.length(); i++){
+                addPlayer((int)array.get(i));
+            }
+        } else if (s.equals(String.format("%1s was kicked from the lobby", UserData.getInstance().getUsername()))){
+            leaveGame();
         }
+
+        playerCountDisp.setText(getString(R.string.player_count, playerIds.size()));
 
     }
 
