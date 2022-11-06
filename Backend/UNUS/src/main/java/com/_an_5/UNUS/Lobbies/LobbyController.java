@@ -3,6 +3,8 @@ package com._an_5.UNUS.Lobbies;
 import com._an_5.UNUS.Users.User;
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.apache.tomcat.util.json.JSONParser;
+import org.apache.tomcat.util.json.ParseException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.messaging.handler.annotation.SendTo;
 import org.springframework.messaging.simp.SimpMessagingTemplate;
@@ -39,9 +41,16 @@ public class LobbyController {
     }
 
     @PostMapping(path = "/create-lobby")
-    public String createLobby(@RequestParam(name = "userId") int userId, @RequestBody boolean isPrivate){
-        return lobbyService.createLobby(userId, isPrivate);
-
+    public String createLobby(@RequestParam(name = "userId") int userId, @RequestBody String json){
+        JSONParser jp = new JSONParser(json);
+        try{
+            boolean isPrivate = (boolean)jp.parseObject().get("private");
+            return lobbyService.createLobby(userId, isPrivate);
+        }
+        catch (ParseException e){
+            e.printStackTrace();
+            return failure;
+        }
     }
 
     @DeleteMapping(path = "/delete-lobby/{lobbyId}")
