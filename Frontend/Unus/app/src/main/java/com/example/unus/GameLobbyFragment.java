@@ -297,6 +297,7 @@ public class GameLobbyFragment extends Fragment {
             for (int i = 0; i < array.length(); i++){
                 if((int)array.get(i) != UserData.getInstance().getUserID()) {
                     addPlayer((int) array.get(i));
+                    playerIds.add((int)array.get(i));
                 }
             }
             prefill = true;
