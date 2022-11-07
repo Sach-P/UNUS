@@ -5,11 +5,13 @@ import android.os.Bundle;
 
 import androidx.fragment.app.Fragment;
 
+import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.ImageView;
+import android.widget.PopupWindow;
 import android.widget.TextView;
 
 import com.android.volley.Request;
@@ -105,6 +107,23 @@ public class MainMenuFragment extends Fragment {
                 getActivity().getSupportFragmentManager().beginTransaction().replace(R.id.fragmentContainerView, new LogInScreenFragment()).commit();
             }
         });
+
+        if (getArguments() != null){
+            Bundle bundle = getArguments();
+            if (bundle.getBoolean("kicked")){
+                View popupView = inflater.inflate(R.layout.booted_popup, null);
+
+                //Make Inactive Items Outside Of PopupWindow
+                boolean focusable = true;
+
+                //Create a window with our parameters
+                final PopupWindow popupWindow = new PopupWindow(popupView, 1000, 1000, focusable);
+
+                //Set the location of the window on the screen
+                popupWindow.showAtLocation(view, Gravity.CENTER, 0, 0);
+
+            }
+        }
 
         return view;
     }

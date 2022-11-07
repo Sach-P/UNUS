@@ -40,6 +40,7 @@ public class GameLobbyFragment extends Fragment {
     TextView playerCountDisp;
 
     boolean isHost;
+    boolean prefill = false;
 
     MainActivity mainActivity;
 
@@ -256,6 +257,20 @@ public class GameLobbyFragment extends Fragment {
         getActivity().getSupportFragmentManager().beginTransaction().replace(R.id.fragmentContainerView, new MainMenuFragment()).commit();
     }
 
+    private void kicked(){
+        mainActivity.disconnectWebSocket();
+
+        MainMenuFragment frag = new MainMenuFragment();
+
+        Bundle bundle = new Bundle();
+        bundle.putBoolean("kicked", true);
+
+        frag.setArguments(bundle);
+
+        getActivity().getSupportFragmentManager().beginTransaction().replace(R.id.fragmentContainerView, frag).commit();
+
+    }
+
     private void kickPlayer(View plate, Space space, int playerID) throws JSONException {
         deletePlayerArray(playerID);
         mainActivity.kickUser(playerID);
@@ -277,13 +292,16 @@ public class GameLobbyFragment extends Fragment {
             deletePlayerArray(json.getInt("left"));
             playerDisp.removeView(view.findViewWithTag("plate"+json.getInt("left")));
             playerDisp.removeView(view.findViewWithTag("space"+json.getInt("left")));
-        } else if (json.has("ids")){
+        } else if (json.has("ids") && !isHost && !prefill){
             JSONArray array = json.getJSONArray("ids");
             for (int i = 0; i < array.length(); i++){
-                addPlayer((int)array.get(i));
+                if((int)array.get(i) != UserData.getInstance().getUserID()) {
+                    addPlayer((int) array.get(i));
+                }
             }
-        } else if (s.equals(String.format("%1s was kicked from the lobby", UserData.getInstance().getUsername()))){
-            leaveGame();
+            prefill = true;
+        } else if (json.has("kicked") && json.getInt("kicked") == UserData.getInstance().getUserID()){
+            kicked();
         }
 
         playerCountDisp.setText(getString(R.string.player_count, playerIds.size()));

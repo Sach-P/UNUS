@@ -97,6 +97,11 @@ public class MainActivity extends AppCompatActivity {
 
     public void kickUser(int id) throws JSONException {
 
-        ws.send(String.format("/kick %d", id));
+        JSONObject obj = new JSONObject();
+        obj.put("kicked", id);
+        String str = obj.toString();
+
+        ws.send(str);
+
     }
 }

@@ -45,16 +45,18 @@ public class JoinLobbyFragment extends Fragment {
         button.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                GameLobbyFragment frag = new GameLobbyFragment();
+                if ((!editText.getText().toString().isEmpty() && editText.getText().toString().matches("[0-9]+"))) {
+                    GameLobbyFragment frag = new GameLobbyFragment();
 
-                Bundle bundle = new Bundle();
-                bundle.putInt("lobbyId", Integer.parseInt(editText.getText().toString()));
-                bundle.putBoolean("isHost", false);
+                    Bundle bundle = new Bundle();
+                    bundle.putInt("lobbyId", Integer.parseInt(editText.getText().toString()));
+                    bundle.putBoolean("isHost", false);
 
-                frag.setArguments(bundle);
+                    frag.setArguments(bundle);
 
-                getActivity().getSupportFragmentManager().beginTransaction().replace(R.id.fragmentContainerView, frag, "gameLobby").commit();
-                getActivity().getSupportFragmentManager().executePendingTransactions();
+                    getActivity().getSupportFragmentManager().beginTransaction().replace(R.id.fragmentContainerView, frag, "gameLobby").commit();
+                    getActivity().getSupportFragmentManager().executePendingTransactions();
+                }
             }
         });
 
