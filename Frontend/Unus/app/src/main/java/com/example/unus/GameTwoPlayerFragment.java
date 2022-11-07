@@ -35,7 +35,7 @@ public class GameTwoPlayerFragment extends Fragment {
 
     MainActivity mainActivity;
 
-    boolean isHost;
+    boolean isHost = true;
 
     public GameTwoPlayerFragment() {
         // Required empty public constructor

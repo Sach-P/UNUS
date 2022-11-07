@@ -110,14 +110,9 @@ public class GameLobbyFragment extends Fragment {
         startButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                GameTwoPlayerFragment frag = new GameTwoPlayerFragment();
+                mainActivity.disconnectWebSocket();
 
-                Bundle bundle = new Bundle();
-                bundle.putBoolean("isHost", isHost);
-
-                frag.setArguments(bundle);
-
-                getActivity().getSupportFragmentManager().beginTransaction().replace(R.id.fragmentContainerView, frag, "game").commit();
+                getActivity().getSupportFragmentManager().beginTransaction().replace(R.id.fragmentContainerView, new GameTwoPlayerFragment()).commit();
             }
         });
 
