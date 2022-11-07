@@ -1,9 +1,13 @@
 package com.example.unus;
 
+import android.content.Context;
+import android.graphics.drawable.Drawable;
+
 public class Card {
 
     CardRank rank;
     CardColor color;
+    Context context;
 
     /**
      * constructor to create a card of given rank and color
@@ -19,9 +23,10 @@ public class Card {
     /**
      * constructor to create a random card based on weights
      */
-    public Card() {
+    public Card(Context context) {
         this.color = randomColor();
         this.rank = randomRank(color);
+        this.context = context;
     }
 
     /**
@@ -123,5 +128,203 @@ public class Card {
             }
         }
         throw new RuntimeException("code is broke");
+    }
+
+    public Drawable getImage(){
+        Drawable drawable;
+
+        drawable = context.getResources().getDrawable(R.drawable.ic_ub);
+
+        switch (color){
+
+            case RED:
+                switch (rank){
+                    case ZERO:
+                        drawable = context.getResources().getDrawable(R.drawable.ic_r0);
+                        break;
+                    case ONE:
+                        drawable = context.getResources().getDrawable(R.drawable.ic_r1);
+                        break;
+                    case TWO:
+                        drawable = context.getResources().getDrawable(R.drawable.ic_r2);
+                        break;
+                    case THREE:
+                        drawable = context.getResources().getDrawable(R.drawable.ic_r3);
+                        break;
+                    case FOUR:
+                        drawable = context.getResources().getDrawable(R.drawable.ic_r4);
+                        break;
+                    case FIVE:
+                        drawable = context.getResources().getDrawable(R.drawable.ic_r5);
+                        break;
+                    case SIX:
+                        drawable = context.getResources().getDrawable(R.drawable.ic_r6);
+                        break;
+                    case SEVEN:
+                        drawable = context.getResources().getDrawable(R.drawable.ic_r7);
+                        break;
+                    case EIGHT:
+                        drawable = context.getResources().getDrawable(R.drawable.ic_r8);
+                        break;
+                    case NINE:
+                        drawable = context.getResources().getDrawable(R.drawable.ic_r9);
+                        break;
+                    case DRAW_TWO:
+                        drawable = context.getResources().getDrawable(R.drawable.ic_rd);
+                        break;
+                    case REVERSE:
+                        drawable = context.getResources().getDrawable(R.drawable.ic_rr);
+                        break;
+                    case SKIP:
+                        drawable = context.getResources().getDrawable(R.drawable.ic_rs);
+                        break;
+                }
+                break;
+
+            case PURPLE:
+                switch (rank){
+                    case ZERO:
+                        drawable = context.getResources().getDrawable(R.drawable.ic_p0);
+                        break;
+                    case ONE:
+                        drawable = context.getResources().getDrawable(R.drawable.ic_p1);
+                        break;
+                    case TWO:
+                        drawable = context.getResources().getDrawable(R.drawable.ic_p2);
+                        break;
+                    case THREE:
+                        drawable = context.getResources().getDrawable(R.drawable.ic_p3);
+                        break;
+                    case FOUR:
+                        drawable = context.getResources().getDrawable(R.drawable.ic_p4);
+                        break;
+                    case FIVE:
+                        drawable = context.getResources().getDrawable(R.drawable.ic_p5);
+                        break;
+                    case SIX:
+                        drawable = context.getResources().getDrawable(R.drawable.ic_p6);
+                        break;
+                    case SEVEN:
+                        drawable = context.getResources().getDrawable(R.drawable.ic_p7);
+                        break;
+                    case EIGHT:
+                        drawable = context.getResources().getDrawable(R.drawable.ic_p8);
+                        break;
+                    case NINE:
+                        drawable = context.getResources().getDrawable(R.drawable.ic_p9);
+                        break;
+                    case DRAW_TWO:
+                        drawable = context.getResources().getDrawable(R.drawable.ic_pd);
+                        break;
+                    case REVERSE:
+                        drawable = context.getResources().getDrawable(R.drawable.ic_pr);
+                        break;
+                    case SKIP:
+                        drawable = context.getResources().getDrawable(R.drawable.ic_ps);
+                        break;
+                }
+                break;
+
+            case GREEN:
+                switch (rank){
+                    case ZERO:
+                        drawable = context.getResources().getDrawable(R.drawable.ic_g0);
+                        break;
+                    case ONE:
+                        drawable = context.getResources().getDrawable(R.drawable.ic_g1);
+                        break;
+                    case TWO:
+                        drawable = context.getResources().getDrawable(R.drawable.ic_g2);
+                        break;
+                    case THREE:
+                        drawable = context.getResources().getDrawable(R.drawable.ic_g3);
+                        break;
+                    case FOUR:
+                        drawable = context.getResources().getDrawable(R.drawable.ic_g4);
+                        break;
+                    case FIVE:
+                        drawable = context.getResources().getDrawable(R.drawable.ic_g5);
+                        break;
+                    case SIX:
+                        drawable = context.getResources().getDrawable(R.drawable.ic_g6);
+                        break;
+                    case SEVEN:
+                        drawable = context.getResources().getDrawable(R.drawable.ic_g7);
+                        break;
+                    case EIGHT:
+                        drawable = context.getResources().getDrawable(R.drawable.ic_g8);
+                        break;
+                    case NINE:
+                        drawable = context.getResources().getDrawable(R.drawable.ic_g9);
+                        break;
+                    case DRAW_TWO:
+                        drawable = context.getResources().getDrawable(R.drawable.ic_gd);
+                        break;
+                    case REVERSE:
+                        drawable = context.getResources().getDrawable(R.drawable.ic_gr);
+                        break;
+                    case SKIP:
+                        drawable = context.getResources().getDrawable(R.drawable.ic_gs);
+                        break;
+                }
+                break;
+
+            case YELLOW:
+                switch (rank){
+                    case ZERO:
+                        drawable = context.getResources().getDrawable(R.drawable.ic_y0);
+                        break;
+                    case ONE:
+                        drawable = context.getResources().getDrawable(R.drawable.ic_y1);
+                        break;
+                    case TWO:
+                        drawable = context.getResources().getDrawable(R.drawable.ic_y2);
+                        break;
+                    case THREE:
+                        drawable = context.getResources().getDrawable(R.drawable.ic_y3);
+                        break;
+                    case FOUR:
+                        drawable = context.getResources().getDrawable(R.drawable.ic_y4);
+                        break;
+                    case FIVE:
+                        drawable = context.getResources().getDrawable(R.drawable.ic_y5);
+                        break;
+                    case SIX:
+                        drawable = context.getResources().getDrawable(R.drawable.ic_y6);
+                        break;
+                    case SEVEN:
+                        drawable = context.getResources().getDrawable(R.drawable.ic_y7);
+                        break;
+                    case EIGHT:
+                        drawable = context.getResources().getDrawable(R.drawable.ic_y8);
+                        break;
+                    case NINE:
+                        drawable = context.getResources().getDrawable(R.drawable.ic_y9);
+                        break;
+                    case DRAW_TWO:
+                        drawable = context.getResources().getDrawable(R.drawable.ic_yd);
+                        break;
+                    case REVERSE:
+                        drawable = context.getResources().getDrawable(R.drawable.ic_yr);
+                        break;
+                    case SKIP:
+                        drawable = context.getResources().getDrawable(R.drawable.ic_ys);
+                        break;
+                }
+                break;
+
+            case WILD:
+                switch (rank){
+                    case DRAW_FOUR:
+                        drawable = context.getResources().getDrawable(R.drawable.ic_wd);
+                        break;
+                    case CHANGE_COLOR:
+                        drawable = context.getResources().getDrawable(R.drawable.ic_wc);
+                        break;
+                }
+                break;
+        }
+
+        return drawable;
     }
 }
