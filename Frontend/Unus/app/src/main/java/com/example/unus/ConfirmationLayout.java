@@ -8,7 +8,8 @@ import android.widget.PopupWindow;
 
 import org.java_websocket.client.WebSocketClient;
 
-public class ConfirmationLayout {
+public class
+ConfirmationLayout {
     private Button confirm;
     private Button back;
     private View popupView;
