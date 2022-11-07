@@ -93,7 +93,7 @@ public class LobbySocket {
                 onClose(userSessionMap.get(user));
             }
             else{
-                broadcast(player.getUsername() + ": " + message, lobby);
+                broadcast(message, lobby);
                 messageRepository.save(new Message(player.getUsername(), message, lobby));
             }
         }
