@@ -3,6 +3,8 @@ package com.example.unus;
 import android.content.Context;
 import android.graphics.drawable.Drawable;
 
+import androidx.core.content.ContextCompat;
+
 public class Card {
 
     CardRank rank;
@@ -31,7 +33,7 @@ public class Card {
 
     /**
      * checks whether a card can be played on top of another card.
-     * @param card
+     * @param card card to be compared to the current object
      * @return card can be played
      */
     public boolean cardPlayable (Card card){
@@ -40,7 +42,7 @@ public class Card {
 
     /**
      * changes the card color to a given color. Used for wild cards when changing colors.
-     * @param color
+     * @param color card color
      */
     public void setColor(CardColor color){
         this.color = color;
@@ -86,7 +88,7 @@ public class Card {
 
     /**
      * determines a random rank for the card based on weights and a given color
-     * @param color
+     * @param color color of card to determine ranks possible
      * @return card rank
      */
     private CardRank randomRank(CardColor color) {
@@ -133,50 +135,50 @@ public class Card {
     public Drawable getImage(){
         Drawable drawable;
 
-        drawable = context.getResources().getDrawable(R.drawable.ic_ub);
+        drawable = ContextCompat.getDrawable(context, R.drawable.ic_ub);
 
         switch (color){
 
             case RED:
                 switch (rank){
                     case ZERO:
-                        drawable = context.getResources().getDrawable(R.drawable.ic_r0);
+                        drawable = ContextCompat.getDrawable(context, R.drawable.ic_r0);
                         break;
                     case ONE:
-                        drawable = context.getResources().getDrawable(R.drawable.ic_r1);
+                        drawable = ContextCompat.getDrawable(context, R.drawable.ic_r1);
                         break;
                     case TWO:
-                        drawable = context.getResources().getDrawable(R.drawable.ic_r2);
+                        drawable = ContextCompat.getDrawable(context, R.drawable.ic_r2);
                         break;
                     case THREE:
-                        drawable = context.getResources().getDrawable(R.drawable.ic_r3);
+                        drawable = ContextCompat.getDrawable(context, R.drawable.ic_r3);
                         break;
                     case FOUR:
-                        drawable = context.getResources().getDrawable(R.drawable.ic_r4);
+                        drawable = ContextCompat.getDrawable(context, R.drawable.ic_r4);
                         break;
                     case FIVE:
-                        drawable = context.getResources().getDrawable(R.drawable.ic_r5);
+                        drawable = ContextCompat.getDrawable(context, R.drawable.ic_r5);
                         break;
                     case SIX:
-                        drawable = context.getResources().getDrawable(R.drawable.ic_r6);
+                        drawable = ContextCompat.getDrawable(context, R.drawable.ic_r6);
                         break;
                     case SEVEN:
-                        drawable = context.getResources().getDrawable(R.drawable.ic_r7);
+                        drawable = ContextCompat.getDrawable(context, R.drawable.ic_r7);
                         break;
                     case EIGHT:
-                        drawable = context.getResources().getDrawable(R.drawable.ic_r8);
+                        drawable = ContextCompat.getDrawable(context, R.drawable.ic_r8);
                         break;
                     case NINE:
-                        drawable = context.getResources().getDrawable(R.drawable.ic_r9);
+                        drawable = ContextCompat.getDrawable(context, R.drawable.ic_r9);
                         break;
                     case DRAW_TWO:
-                        drawable = context.getResources().getDrawable(R.drawable.ic_rd);
+                        drawable = ContextCompat.getDrawable(context, R.drawable.ic_rd);
                         break;
                     case REVERSE:
-                        drawable = context.getResources().getDrawable(R.drawable.ic_rr);
+                        drawable = ContextCompat.getDrawable(context, R.drawable.ic_rr);
                         break;
                     case SKIP:
-                        drawable = context.getResources().getDrawable(R.drawable.ic_rs);
+                        drawable = ContextCompat.getDrawable(context, R.drawable.ic_rs);
                         break;
                 }
                 break;
@@ -184,43 +186,43 @@ public class Card {
             case PURPLE:
                 switch (rank){
                     case ZERO:
-                        drawable = context.getResources().getDrawable(R.drawable.ic_p0);
+                        drawable = ContextCompat.getDrawable(context, R.drawable.ic_p0);
                         break;
                     case ONE:
-                        drawable = context.getResources().getDrawable(R.drawable.ic_p1);
+                        drawable = ContextCompat.getDrawable(context, R.drawable.ic_p1);
                         break;
                     case TWO:
-                        drawable = context.getResources().getDrawable(R.drawable.ic_p2);
+                        drawable = ContextCompat.getDrawable(context, R.drawable.ic_p2);
                         break;
                     case THREE:
-                        drawable = context.getResources().getDrawable(R.drawable.ic_p3);
+                        drawable = ContextCompat.getDrawable(context, R.drawable.ic_p3);
                         break;
                     case FOUR:
-                        drawable = context.getResources().getDrawable(R.drawable.ic_p4);
+                        drawable = ContextCompat.getDrawable(context, R.drawable.ic_p4);
                         break;
                     case FIVE:
-                        drawable = context.getResources().getDrawable(R.drawable.ic_p5);
+                        drawable = ContextCompat.getDrawable(context, R.drawable.ic_p5);
                         break;
                     case SIX:
-                        drawable = context.getResources().getDrawable(R.drawable.ic_p6);
+                        drawable = ContextCompat.getDrawable(context, R.drawable.ic_p6);
                         break;
                     case SEVEN:
-                        drawable = context.getResources().getDrawable(R.drawable.ic_p7);
+                        drawable = ContextCompat.getDrawable(context, R.drawable.ic_p7);
                         break;
                     case EIGHT:
-                        drawable = context.getResources().getDrawable(R.drawable.ic_p8);
+                        drawable = ContextCompat.getDrawable(context, R.drawable.ic_p8);
                         break;
                     case NINE:
-                        drawable = context.getResources().getDrawable(R.drawable.ic_p9);
+                        drawable = ContextCompat.getDrawable(context, R.drawable.ic_p9);
                         break;
                     case DRAW_TWO:
-                        drawable = context.getResources().getDrawable(R.drawable.ic_pd);
+                        drawable = ContextCompat.getDrawable(context, R.drawable.ic_pd);
                         break;
                     case REVERSE:
-                        drawable = context.getResources().getDrawable(R.drawable.ic_pr);
+                        drawable = ContextCompat.getDrawable(context, R.drawable.ic_pr);
                         break;
                     case SKIP:
-                        drawable = context.getResources().getDrawable(R.drawable.ic_ps);
+                        drawable = ContextCompat.getDrawable(context, R.drawable.ic_ps);
                         break;
                 }
                 break;
@@ -228,43 +230,43 @@ public class Card {
             case GREEN:
                 switch (rank){
                     case ZERO:
-                        drawable = context.getResources().getDrawable(R.drawable.ic_g0);
+                        drawable = ContextCompat.getDrawable(context, R.drawable.ic_g0);
                         break;
                     case ONE:
-                        drawable = context.getResources().getDrawable(R.drawable.ic_g1);
+                        drawable = ContextCompat.getDrawable(context, R.drawable.ic_g1);
                         break;
                     case TWO:
-                        drawable = context.getResources().getDrawable(R.drawable.ic_g2);
+                        drawable = ContextCompat.getDrawable(context, R.drawable.ic_g2);
                         break;
                     case THREE:
-                        drawable = context.getResources().getDrawable(R.drawable.ic_g3);
+                        drawable = ContextCompat.getDrawable(context, R.drawable.ic_g3);
                         break;
                     case FOUR:
-                        drawable = context.getResources().getDrawable(R.drawable.ic_g4);
+                        drawable = ContextCompat.getDrawable(context, R.drawable.ic_g4);
                         break;
                     case FIVE:
-                        drawable = context.getResources().getDrawable(R.drawable.ic_g5);
+                        drawable = ContextCompat.getDrawable(context, R.drawable.ic_g5);
                         break;
                     case SIX:
-                        drawable = context.getResources().getDrawable(R.drawable.ic_g6);
+                        drawable = ContextCompat.getDrawable(context, R.drawable.ic_g6);
                         break;
                     case SEVEN:
-                        drawable = context.getResources().getDrawable(R.drawable.ic_g7);
+                        drawable = ContextCompat.getDrawable(context, R.drawable.ic_g7);
                         break;
                     case EIGHT:
-                        drawable = context.getResources().getDrawable(R.drawable.ic_g8);
+                        drawable = ContextCompat.getDrawable(context, R.drawable.ic_g8);
                         break;
                     case NINE:
-                        drawable = context.getResources().getDrawable(R.drawable.ic_g9);
+                        drawable = ContextCompat.getDrawable(context, R.drawable.ic_g9);
                         break;
                     case DRAW_TWO:
-                        drawable = context.getResources().getDrawable(R.drawable.ic_gd);
+                        drawable = ContextCompat.getDrawable(context, R.drawable.ic_gd);
                         break;
                     case REVERSE:
-                        drawable = context.getResources().getDrawable(R.drawable.ic_gr);
+                        drawable = ContextCompat.getDrawable(context, R.drawable.ic_gr);
                         break;
                     case SKIP:
-                        drawable = context.getResources().getDrawable(R.drawable.ic_gs);
+                        drawable = ContextCompat.getDrawable(context, R.drawable.ic_gs);
                         break;
                 }
                 break;
@@ -272,43 +274,43 @@ public class Card {
             case YELLOW:
                 switch (rank){
                     case ZERO:
-                        drawable = context.getResources().getDrawable(R.drawable.ic_y0);
+                        drawable = ContextCompat.getDrawable(context, R.drawable.ic_y0);
                         break;
                     case ONE:
-                        drawable = context.getResources().getDrawable(R.drawable.ic_y1);
+                        drawable = ContextCompat.getDrawable(context, R.drawable.ic_y1);
                         break;
                     case TWO:
-                        drawable = context.getResources().getDrawable(R.drawable.ic_y2);
+                        drawable = ContextCompat.getDrawable(context, R.drawable.ic_y2);
                         break;
                     case THREE:
-                        drawable = context.getResources().getDrawable(R.drawable.ic_y3);
+                        drawable = ContextCompat.getDrawable(context, R.drawable.ic_y3);
                         break;
                     case FOUR:
-                        drawable = context.getResources().getDrawable(R.drawable.ic_y4);
+                        drawable = ContextCompat.getDrawable(context, R.drawable.ic_y4);
                         break;
                     case FIVE:
-                        drawable = context.getResources().getDrawable(R.drawable.ic_y5);
+                        drawable = ContextCompat.getDrawable(context, R.drawable.ic_y5);
                         break;
                     case SIX:
-                        drawable = context.getResources().getDrawable(R.drawable.ic_y6);
+                        drawable = ContextCompat.getDrawable(context, R.drawable.ic_y6);
                         break;
                     case SEVEN:
-                        drawable = context.getResources().getDrawable(R.drawable.ic_y7);
+                        drawable = ContextCompat.getDrawable(context, R.drawable.ic_y7);
                         break;
                     case EIGHT:
-                        drawable = context.getResources().getDrawable(R.drawable.ic_y8);
+                        drawable = ContextCompat.getDrawable(context, R.drawable.ic_y8);
                         break;
                     case NINE:
-                        drawable = context.getResources().getDrawable(R.drawable.ic_y9);
+                        drawable = ContextCompat.getDrawable(context, R.drawable.ic_y9);
                         break;
                     case DRAW_TWO:
-                        drawable = context.getResources().getDrawable(R.drawable.ic_yd);
+                        drawable = ContextCompat.getDrawable(context, R.drawable.ic_yd);
                         break;
                     case REVERSE:
-                        drawable = context.getResources().getDrawable(R.drawable.ic_yr);
+                        drawable = ContextCompat.getDrawable(context, R.drawable.ic_yr);
                         break;
                     case SKIP:
-                        drawable = context.getResources().getDrawable(R.drawable.ic_ys);
+                        drawable = ContextCompat.getDrawable(context, R.drawable.ic_ys);
                         break;
                 }
                 break;
@@ -316,10 +318,10 @@ public class Card {
             case WILD:
                 switch (rank){
                     case DRAW_FOUR:
-                        drawable = context.getResources().getDrawable(R.drawable.ic_wd);
+                        drawable = ContextCompat.getDrawable(context, R.drawable.ic_wd);
                         break;
                     case CHANGE_COLOR:
-                        drawable = context.getResources().getDrawable(R.drawable.ic_wc);
+                        drawable = ContextCompat.getDrawable(context, R.drawable.ic_wc);
                         break;
                 }
                 break;
