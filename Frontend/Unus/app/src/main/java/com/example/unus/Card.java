@@ -72,7 +72,7 @@ public class Card {
             case 2:
                 return CardColor.YELLOW;
             case 3:
-                return CardColor.BLUE;
+                return CardColor.PURPLE;
             case 4:
                 return CardColor.WILD;
         }
