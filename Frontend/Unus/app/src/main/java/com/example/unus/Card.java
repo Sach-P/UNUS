@@ -17,9 +17,10 @@ public class Card {
      * @param rank
      * @param color
      */
-    public Card(CardRank rank, CardColor color) {
+    public Card(CardRank rank, CardColor color, Context context) {
         this.rank = rank;
         this.color = color;
+        this.context = context;
     }
 
     /**
@@ -37,7 +38,7 @@ public class Card {
      * @return card can be played
      */
     public boolean cardPlayable (Card card){
-        return card.getColor() == color || card.getRank() == rank || card.getColor() == CardColor.WILD;
+        return card.getColor() == color || card.getRank() == rank || color == CardColor.WILD;
     }
 
     /**
@@ -180,6 +181,12 @@ public class Card {
                     case SKIP:
                         drawable = ContextCompat.getDrawable(context, R.drawable.ic_rs);
                         break;
+                    case DRAW_FOUR:
+                        drawable = ContextCompat.getDrawable(context, R.drawable.ic_rwd);
+                        break;
+                    case CHANGE_COLOR:
+                        drawable = ContextCompat.getDrawable(context, R.drawable.ic_rwc);
+                        break;
                 }
                 break;
 
@@ -223,6 +230,12 @@ public class Card {
                         break;
                     case SKIP:
                         drawable = ContextCompat.getDrawable(context, R.drawable.ic_ps);
+                        break;
+                    case DRAW_FOUR:
+                        drawable = ContextCompat.getDrawable(context, R.drawable.ic_pwd);
+                        break;
+                    case CHANGE_COLOR:
+                        drawable = ContextCompat.getDrawable(context, R.drawable.ic_pwc);
                         break;
                 }
                 break;
@@ -268,6 +281,12 @@ public class Card {
                     case SKIP:
                         drawable = ContextCompat.getDrawable(context, R.drawable.ic_gs);
                         break;
+                    case DRAW_FOUR:
+                        drawable = ContextCompat.getDrawable(context, R.drawable.ic_gwd);
+                        break;
+                    case CHANGE_COLOR:
+                        drawable = ContextCompat.getDrawable(context, R.drawable.ic_gwc);
+                        break;
                 }
                 break;
 
@@ -311,6 +330,12 @@ public class Card {
                         break;
                     case SKIP:
                         drawable = ContextCompat.getDrawable(context, R.drawable.ic_ys);
+                        break;
+                    case DRAW_FOUR:
+                        drawable = ContextCompat.getDrawable(context, R.drawable.ic_ywd);
+                        break;
+                    case CHANGE_COLOR:
+                        drawable = ContextCompat.getDrawable(context, R.drawable.ic_ywc);
                         break;
                 }
                 break;

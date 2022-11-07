@@ -11,4 +11,9 @@
     <color name="yellow">#FFEB3B</color>
     <color name="dark_gray">#1A1A1A</color>
     <color name="bright_purple">#9D00FF</color>
+
+    <color name="card_purple">#6200ee</color>
+    <color name="card_red">#ff2a2a</color>
+    <color name="card_green">#00ff00</color>
+    <color name="card_yellow">#ffff00</color>
 </resources>

@@ -8,7 +8,7 @@
 
     <androidx.fragment.app.FragmentContainerView
         android:id="@+id/fragmentContainerView"
-        android:name="com.example.unus.LogInScreenFragment"
+        android:name="com.example.unus.GameTwoPlayerFragment"
         android:layout_width="fill_parent"
         android:layout_height="fill_parent"
         app:layout_constraintTop_toTopOf="parent"
@@ -16,6 +16,6 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
 
-        tools:layout="@layout/fragment_log_in_screen" />
+        tools:layout="@layout/fragment_game_two_player" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

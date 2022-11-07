@@ -59,11 +59,23 @@ public class MainActivity extends AppCompatActivity {
                     @Override
                     public void run() {
                         GameLobbyFragment gameLobbyFrag = (GameLobbyFragment) getSupportFragmentManager().findFragmentByTag("gameLobby");
-                        try {
-                            gameLobbyFrag.onMessage(s);
-                        } catch (JSONException e) {
-                            e.printStackTrace();
+                        if (gameLobbyFrag.isVisible()) {
+                            try {
+                                gameLobbyFrag.onMessage(s);
+                            } catch (JSONException e) {
+                                e.printStackTrace();
+                            }
                         }
+
+                        GameTwoPlayerFragment gameTwoPlayerFragment = (GameTwoPlayerFragment) getSupportFragmentManager().findFragmentByTag("game");
+                        if (gameTwoPlayerFragment.isVisible()) {
+                            try {
+                                gameTwoPlayerFragment.onMessage(s);
+                            } catch (JSONException e) {
+                                e.printStackTrace();
+                            }
+                        }
+
                     }
                 });
             }
@@ -103,5 +115,10 @@ public class MainActivity extends AppCompatActivity {
 
         ws.send(str);
 
+    }
+
+    public void sendMessage(JSONObject jsonObject){
+        String str = jsonObject.toString();
+        ws.send(str);
     }
 }

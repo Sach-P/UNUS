@@ -106,6 +106,22 @@ public class GameLobbyFragment extends Fragment {
             }
         });
 
+        Button startButton = view.findViewById(R.id.start_ready_game_button);
+        startButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                GameTwoPlayerFragment frag = new GameTwoPlayerFragment();
+
+                Bundle bundle = new Bundle();
+                bundle.putBoolean("isHost", isHost);
+
+                frag.setArguments(bundle);
+
+                getActivity().getSupportFragmentManager().beginTransaction().replace(R.id.fragmentContainerView, frag, "game").commit();
+            }
+        });
+
+
         return view;
     }
 
@@ -316,8 +332,5 @@ public class GameLobbyFragment extends Fragment {
             }
         }
     }
-
-
-
 
 }
