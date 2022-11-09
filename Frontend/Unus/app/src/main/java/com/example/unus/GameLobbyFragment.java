@@ -110,8 +110,6 @@ public class GameLobbyFragment extends Fragment {
         startButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                mainActivity.disconnectWebSocket();
-
                 getActivity().getSupportFragmentManager().beginTransaction().replace(R.id.fragmentContainerView, new GameTwoPlayerFragment()).commit();
             }
         });

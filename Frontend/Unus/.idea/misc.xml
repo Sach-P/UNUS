@@ -3,78 +3,23 @@
   <component name="DesignSurface">
     <option name="filePathToZoomLevelMap">
       <map>
+        <entry key="..\:/Git/2_an_5/Frontend/Unus/app/src/main/res/drawable/ic_g6.xml" value="0.1" />
+        <entry key="..\:/Git/2_an_5/Frontend/Unus/app/src/main/res/drawable/ic_g8.xml" value="0.1385" />
+        <entry key="..\:/Git/2_an_5/Frontend/Unus/app/src/main/res/drawable/ic_p2.xml" value="0.1385" />
+        <entry key="..\:/Git/2_an_5/Frontend/Unus/app/src/main/res/drawable/ic_ub.xml" value="0.1385" />
         <entry key="..\:/Git/2_an_5/Frontend/Unus/app/src/main/res/drawable/ic_uno_logo.xml" value="0.1385" />
+        <entry key="..\:/Git/2_an_5/Frontend/Unus/app/src/main/res/drawable/ic_wc.xml" value="0.1385" />
+        <entry key="..\:/Git/2_an_5/Frontend/Unus/app/src/main/res/drawable/ic_wd.xml" value="0.1385" />
+        <entry key="..\:/Git/2_an_5/Frontend/Unus/app/src/main/res/drawable/ic_y4.xml" value="0.1" />
         <entry key="..\:/Git/2_an_5/Frontend/Unus/app/src/main/res/layout/activity_main.xml" value="0.22135416666666666" />
+        <entry key="..\:/Git/2_an_5/Frontend/Unus/app/src/main/res/layout/color_popup.xml" value="0.18162393162393162" />
         <entry key="..\:/Git/2_an_5/Frontend/Unus/app/src/main/res/layout/fragment_log_in_screen.xml" value="0.17504118616144976" />
         <entry key="..\:/Git/2_an_5/Frontend/Unus/app/src/main/res/layout/fragment_main_menu.xml" value="0.18162393162393162" />
         <entry key="..\:/Git/2_an_5/Frontend/Unus/app/src/main/res/layout/fragment_sign_up_screen.xml" value="0.18162393162393162" />
         <entry key="..\:/Users/geoff/Documents/GitHub/2_an_5/Frontend/Unus/app/src/main/res/drawable/ic_blank_avatar.xml" value="0.365" />
-        <entry key="..\:/Users/geoff/Documents/GitHub/2_an_5/Frontend/Unus/app/src/main/res/drawable/ic_g0.xml" value="0.365" />
-        <entry key="..\:/Users/geoff/Documents/GitHub/2_an_5/Frontend/Unus/app/src/main/res/drawable/ic_g1.xml" value="0.365" />
-        <entry key="..\:/Users/geoff/Documents/GitHub/2_an_5/Frontend/Unus/app/src/main/res/drawable/ic_g3.xml" value="0.2205" />
-        <entry key="..\:/Users/geoff/Documents/GitHub/2_an_5/Frontend/Unus/app/src/main/res/drawable/ic_g4.xml" value="0.2205" />
-        <entry key="..\:/Users/geoff/Documents/GitHub/2_an_5/Frontend/Unus/app/src/main/res/drawable/ic_g8.xml" value="0.196" />
-        <entry key="..\:/Users/geoff/Documents/GitHub/2_an_5/Frontend/Unus/app/src/main/res/drawable/ic_g9.xml" value="0.365" />
-        <entry key="..\:/Users/geoff/Documents/GitHub/2_an_5/Frontend/Unus/app/src/main/res/drawable/ic_gs.xml" value="0.365" />
-        <entry key="..\:/Users/geoff/Documents/GitHub/2_an_5/Frontend/Unus/app/src/main/res/drawable/ic_gwc.xml" value="0.196" />
-        <entry key="..\:/Users/geoff/Documents/GitHub/2_an_5/Frontend/Unus/app/src/main/res/drawable/ic_gwd.xml" value="0.196" />
-        <entry key="..\:/Users/geoff/Documents/GitHub/2_an_5/Frontend/Unus/app/src/main/res/drawable/ic_p0.xml" value="0.2205" />
-        <entry key="..\:/Users/geoff/Documents/GitHub/2_an_5/Frontend/Unus/app/src/main/res/drawable/ic_p1.xml" value="0.2205" />
-        <entry key="..\:/Users/geoff/Documents/GitHub/2_an_5/Frontend/Unus/app/src/main/res/drawable/ic_p2.xml" value="0.2205" />
-        <entry key="..\:/Users/geoff/Documents/GitHub/2_an_5/Frontend/Unus/app/src/main/res/drawable/ic_p3.xml" value="0.2205" />
-        <entry key="..\:/Users/geoff/Documents/GitHub/2_an_5/Frontend/Unus/app/src/main/res/drawable/ic_p4.xml" value="0.2205" />
-        <entry key="..\:/Users/geoff/Documents/GitHub/2_an_5/Frontend/Unus/app/src/main/res/drawable/ic_p5.xml" value="0.2205" />
-        <entry key="..\:/Users/geoff/Documents/GitHub/2_an_5/Frontend/Unus/app/src/main/res/drawable/ic_p6.xml" value="0.2205" />
-        <entry key="..\:/Users/geoff/Documents/GitHub/2_an_5/Frontend/Unus/app/src/main/res/drawable/ic_p7.xml" value="0.2205" />
-        <entry key="..\:/Users/geoff/Documents/GitHub/2_an_5/Frontend/Unus/app/src/main/res/drawable/ic_p8.xml" value="0.2205" />
-        <entry key="..\:/Users/geoff/Documents/GitHub/2_an_5/Frontend/Unus/app/src/main/res/drawable/ic_p9.xml" value="0.365" />
-        <entry key="..\:/Users/geoff/Documents/GitHub/2_an_5/Frontend/Unus/app/src/main/res/drawable/ic_pd.xml" value="0.2205" />
-        <entry key="..\:/Users/geoff/Documents/GitHub/2_an_5/Frontend/Unus/app/src/main/res/drawable/ic_pr.xml" value="0.2205" />
-        <entry key="..\:/Users/geoff/Documents/GitHub/2_an_5/Frontend/Unus/app/src/main/res/drawable/ic_ps.xml" value="0.2205" />
-        <entry key="..\:/Users/geoff/Documents/GitHub/2_an_5/Frontend/Unus/app/src/main/res/drawable/ic_pwc.xml" value="0.196" />
-        <entry key="..\:/Users/geoff/Documents/GitHub/2_an_5/Frontend/Unus/app/src/main/res/drawable/ic_pwd.xml" value="0.196" />
-        <entry key="..\:/Users/geoff/Documents/GitHub/2_an_5/Frontend/Unus/app/src/main/res/drawable/ic_r0.xml" value="0.365" />
-        <entry key="..\:/Users/geoff/Documents/GitHub/2_an_5/Frontend/Unus/app/src/main/res/drawable/ic_r1.xml" value="0.365" />
-        <entry key="..\:/Users/geoff/Documents/GitHub/2_an_5/Frontend/Unus/app/src/main/res/drawable/ic_r2.xml" value="0.365" />
-        <entry key="..\:/Users/geoff/Documents/GitHub/2_an_5/Frontend/Unus/app/src/main/res/drawable/ic_r3.xml" value="0.365" />
-        <entry key="..\:/Users/geoff/Documents/GitHub/2_an_5/Frontend/Unus/app/src/main/res/drawable/ic_r4.xml" value="0.365" />
-        <entry key="..\:/Users/geoff/Documents/GitHub/2_an_5/Frontend/Unus/app/src/main/res/drawable/ic_r5.xml" value="0.365" />
-        <entry key="..\:/Users/geoff/Documents/GitHub/2_an_5/Frontend/Unus/app/src/main/res/drawable/ic_r6.xml" value="0.365" />
-        <entry key="..\:/Users/geoff/Documents/GitHub/2_an_5/Frontend/Unus/app/src/main/res/drawable/ic_r7.xml" value="0.365" />
-        <entry key="..\:/Users/geoff/Documents/GitHub/2_an_5/Frontend/Unus/app/src/main/res/drawable/ic_r8.xml" value="0.365" />
-        <entry key="..\:/Users/geoff/Documents/GitHub/2_an_5/Frontend/Unus/app/src/main/res/drawable/ic_r9.xml" value="0.365" />
-        <entry key="..\:/Users/geoff/Documents/GitHub/2_an_5/Frontend/Unus/app/src/main/res/drawable/ic_rd.xml" value="0.365" />
-        <entry key="..\:/Users/geoff/Documents/GitHub/2_an_5/Frontend/Unus/app/src/main/res/drawable/ic_rr.xml" value="0.365" />
-        <entry key="..\:/Users/geoff/Documents/GitHub/2_an_5/Frontend/Unus/app/src/main/res/drawable/ic_rs.xml" value="0.365" />
-        <entry key="..\:/Users/geoff/Documents/GitHub/2_an_5/Frontend/Unus/app/src/main/res/drawable/ic_rwc.xml" value="0.196" />
-        <entry key="..\:/Users/geoff/Documents/GitHub/2_an_5/Frontend/Unus/app/src/main/res/drawable/ic_rwd.xml" value="0.196" />
-        <entry key="..\:/Users/geoff/Documents/GitHub/2_an_5/Frontend/Unus/app/src/main/res/drawable/ic_ub.xml" value="0.365" />
         <entry key="..\:/Users/geoff/Documents/GitHub/2_an_5/Frontend/Unus/app/src/main/res/drawable/ic_uno_logo.xml" value="0.13" />
-        <entry key="..\:/Users/geoff/Documents/GitHub/2_an_5/Frontend/Unus/app/src/main/res/drawable/ic_y0.xml" value="0.2205" />
-        <entry key="..\:/Users/geoff/Documents/GitHub/2_an_5/Frontend/Unus/app/src/main/res/drawable/ic_y1.xml" value="0.2205" />
-        <entry key="..\:/Users/geoff/Documents/GitHub/2_an_5/Frontend/Unus/app/src/main/res/drawable/ic_y2.xml" value="0.2205" />
-        <entry key="..\:/Users/geoff/Documents/GitHub/2_an_5/Frontend/Unus/app/src/main/res/drawable/ic_y3.xml" value="0.2205" />
-        <entry key="..\:/Users/geoff/Documents/GitHub/2_an_5/Frontend/Unus/app/src/main/res/drawable/ic_y4.xml" value="0.2205" />
-        <entry key="..\:/Users/geoff/Documents/GitHub/2_an_5/Frontend/Unus/app/src/main/res/drawable/ic_y5.xml" value="0.2205" />
-        <entry key="..\:/Users/geoff/Documents/GitHub/2_an_5/Frontend/Unus/app/src/main/res/drawable/ic_y6.xml" value="0.2205" />
-        <entry key="..\:/Users/geoff/Documents/GitHub/2_an_5/Frontend/Unus/app/src/main/res/drawable/ic_y7.xml" value="0.2205" />
-        <entry key="..\:/Users/geoff/Documents/GitHub/2_an_5/Frontend/Unus/app/src/main/res/drawable/ic_y8.xml" value="0.2205" />
-        <entry key="..\:/Users/geoff/Documents/GitHub/2_an_5/Frontend/Unus/app/src/main/res/drawable/ic_y9.xml" value="0.2205" />
-        <entry key="..\:/Users/geoff/Documents/GitHub/2_an_5/Frontend/Unus/app/src/main/res/drawable/ic_yd.xml" value="0.2205" />
-        <entry key="..\:/Users/geoff/Documents/GitHub/2_an_5/Frontend/Unus/app/src/main/res/drawable/ic_yr.xml" value="0.2205" />
-        <entry key="..\:/Users/geoff/Documents/GitHub/2_an_5/Frontend/Unus/app/src/main/res/drawable/ic_ys.xml" value="0.2205" />
-        <entry key="..\:/Users/geoff/Documents/GitHub/2_an_5/Frontend/Unus/app/src/main/res/drawable/ic_ywc.xml" value="0.196" />
-        <entry key="..\:/Users/geoff/Documents/GitHub/2_an_5/Frontend/Unus/app/src/main/res/drawable/ic_ywd.xml" value="0.196" />
         <entry key="..\:/Users/geoff/Documents/GitHub/2_an_5/Frontend/Unus/app/src/main/res/layout/activity_main.xml" value="0.1111111111111111" />
-        <entry key="..\:/Users/geoff/Documents/GitHub/2_an_5/Frontend/Unus/app/src/main/res/layout/booted_popup.xml" value="0.136" />
-        <entry key="..\:/Users/geoff/Documents/GitHub/2_an_5/Frontend/Unus/app/src/main/res/layout/color_popup.xml" value="0.3537037037037037" />
-        <entry key="..\:/Users/geoff/Documents/GitHub/2_an_5/Frontend/Unus/app/src/main/res/layout/confirmation_layout.xml" value="0.4041666666666667" />
         <entry key="..\:/Users/geoff/Documents/GitHub/2_an_5/Frontend/Unus/app/src/main/res/layout/fragment_friend_request.xml" value="0.4041666666666667" />
-        <entry key="..\:/Users/geoff/Documents/GitHub/2_an_5/Frontend/Unus/app/src/main/res/layout/fragment_game_four_player.xml" value="0.4041666666666667" />
-        <entry key="..\:/Users/geoff/Documents/GitHub/2_an_5/Frontend/Unus/app/src/main/res/layout/fragment_game_lobby.xml" value="0.4041666666666667" />
-        <entry key="..\:/Users/geoff/Documents/GitHub/2_an_5/Frontend/Unus/app/src/main/res/layout/fragment_game_two_player.xml" value="0.39010416666666664" />
-        <entry key="..\:/Users/geoff/Documents/GitHub/2_an_5/Frontend/Unus/app/src/main/res/layout/fragment_hand.xml" value="0.264" />
-        <entry key="..\:/Users/geoff/Documents/GitHub/2_an_5/Frontend/Unus/app/src/main/res/layout/fragment_join_lobby.xml" value="0.176" />
         <entry key="..\:/Users/geoff/Documents/GitHub/2_an_5/Frontend/Unus/app/src/main/res/layout/fragment_log_in_screen.xml" value="0.264" />
         <entry key="..\:/Users/geoff/Documents/GitHub/2_an_5/Frontend/Unus/app/src/main/res/layout/fragment_main_menu.xml" value="0.264" />
         <entry key="..\:/Users/geoff/Documents/GitHub/2_an_5/Frontend/Unus/app/src/main/res/layout/fragment_sign_up_screen.xml" value="0.4041666666666667" />
@@ -86,7 +31,7 @@
       </map>
     </option>
   </component>
-  <component name="ProjectRootManager" version="2" languageLevel="JDK_11" default="true" project-jdk-name="1.8" project-jdk-type="JavaSDK">
+  <component name="ProjectRootManager" version="2" languageLevel="JDK_11" project-jdk-name="1.8" project-jdk-type="JavaSDK">
     <output url="file://$PROJECT_DIR$/build/classes" />
   </component>
   <component name="ProjectType">
