@@ -16,13 +16,13 @@ public class Lobby {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int id;
     private boolean isPrivate;
+    private int numPlayers;
 
     @OneToOne(cascade=CascadeType.ALL)
     @JoinColumn(name = "host_id", referencedColumnName = "id")
     private User host;
 
-//    @OneToMany(mappedBy = "lobby")
-    @Transient
+    @OneToMany(mappedBy = "joinedLobby")
     private Set<User> players = new HashSet<>();
 
     @JsonIgnore
@@ -33,9 +33,11 @@ public class Lobby {
     public Lobby(User host, boolean isPrivate){
         this.host = host;
         this.isPrivate = isPrivate;
+        this.numPlayers = 0;
     }
 
     public Lobby() {
+        this.numPlayers = 0;
     }
 
     @Override
@@ -98,5 +100,13 @@ public class Lobby {
 
     public void setMessages(Set<Message> messages) {
         this.messages = messages;
+    }
+
+    public int getNumPlayers() {
+        return numPlayers;
+    }
+
+    public void setNumPlayers(int numPlayers) {
+        this.numPlayers = numPlayers;
     }
 }

@@ -11,6 +11,7 @@ import org.springframework.messaging.simp.SimpMessagingTemplate;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
+import java.util.Set;
 
 @RestController
 @RequestMapping("/lobbies")
@@ -56,15 +57,40 @@ public class LobbyController {
         return lobbyService.deleteLobby(lobbyId, userId);
     }
 
-    @PutMapping("{lobbyId}/join")
-    public String joinLobby(@PathVariable int lobbyId, @RequestParam(name = "userId") int userId){
-        return lobbyService.joinLobby(lobbyId, userId);
+//    @PutMapping("{lobbyId}/join")
+//    public String joinLobby(@PathVariable int lobbyId, @RequestParam(name = "userId") int userId){
+//        return lobbyService.joinLobby(lobbyId, userId);
+//    }
+
+//    @PutMapping("{lobbyId}/kick-player")
+//    @SendTo("/lobbies/{lobbyId}/{userId}")
+//    public String kickPlayer(@PathVariable int lobbyId, @RequestParam(name = "userId") int userId){
+//        return lobbyService.kickPlayer(lobbyId, userId);
+//    }
+//
+
+    @GetMapping("/get-players/{lobbyId}")
+    public Set<User> getPlayers(@PathVariable int lobbyId){
+        Lobby lobby = lobbyRepository.findById(lobbyId);
+        if(lobby != null){
+            return lobby.getPlayers();
+        }
+        return null;
     }
 
-    @PutMapping("{lobbyId}/kick-player")
-    @SendTo("/lobbies/{lobbyId}/{userId}")
-    public String kickPlayer(@PathVariable int lobbyId, @RequestParam(name = "userId") int userId){
-        return lobbyService.kickPlayer(lobbyId, userId);
+    @GetMapping("/player-count/{lobbyId}")
+    public int getNumPlayers(@PathVariable int lobbyId) {
+        Lobby lobby = lobbyRepository.findById(lobbyId);
+        if(lobby != null){
+            return lobby.getNumPlayers();
+        }
+
+        return -1;
+    }
+
+    @GetMapping("/lobby-exists/{lobbyId")
+    public boolean doesLobbyExist(@PathVariable int lobbyId){
+        return lobbyRepository.existsById((long)lobbyId);
     }
 
 }

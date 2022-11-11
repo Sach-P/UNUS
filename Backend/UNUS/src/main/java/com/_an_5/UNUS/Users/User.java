@@ -25,6 +25,11 @@ public class User {
     @OneToOne(mappedBy = "host")
     private Lobby lobby;
 
+    @JsonIgnore
+    @ManyToOne(cascade = CascadeType.ALL)
+    @JoinColumn(name = "user_id", referencedColumnName = "id")
+    private Lobby joinedLobby;
+
     @OneToMany(mappedBy = "friend")
     private Set<Friend> friends = new HashSet<>();
 
@@ -139,5 +144,13 @@ public class User {
 
     public Lobby getLobby(){
         return lobby;
+    }
+
+    public Lobby getJoinedLobby() {
+        return joinedLobby;
+    }
+
+    public void setJoinedLobby(Lobby joinedLobby) {
+        this.joinedLobby = joinedLobby;
     }
 }
