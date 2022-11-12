@@ -25,6 +25,16 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+/**
+ * This fragment displays the user settings, for now they include
+ * change username, change password and delete user but will most
+ * likely be expanded in the future
+ * Change user will permanently change the name of the current user
+ * logged in
+ * change password changes the password
+ * delete user will remove the user from the database
+ */
+
 public class UserSettingsFragment extends Fragment {
 
     private View view;

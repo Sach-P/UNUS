@@ -22,6 +22,14 @@ import com.android.volley.toolbox.Volley;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+/**
+ * This fragment displays the stats of the user along with the users friends,
+ * from here the user can navigate to the user Settings
+ * You can also navigate to the user search fragment and friend requests
+ * fragment
+ * you can also remove friends on this page
+ */
+
 public class UserProfileFragment extends Fragment {
 
     private View view;

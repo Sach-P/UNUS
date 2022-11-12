@@ -20,6 +20,13 @@ import org.json.JSONObject;
 import java.net.URI;
 import java.net.URISyntaxException;
 
+/**
+ * this is the global chat for the app.
+ * It works with a websocket that will both send and receive messages
+ * It will not save messages if the global chat is closed nor will it
+ * continue to receive them if it's not open
+ */
+
 public class ChatLayout extends Activity {
 
     private EditText newMessage;
