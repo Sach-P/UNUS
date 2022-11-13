@@ -48,37 +48,37 @@ public class LobbyService {
         }
     }
 
-    public String joinLobby(int lobbyId, int userId){
-        Lobby lobby = lobbyRepo.findById(lobbyId);
-        if(lobby == null || lobby.getPrivacy() == true){
-            return failure;
-        }
-        else{
-            User player = userRepo.findById(userId);
-            player.setLobby(lobby);
-//            lobby.addPlayer(userRepo.findById(userId));
-            userRepo.save(player);
-//            lobbyRepo.save(lobby);
-            return  success;
-        }
+//    public String joinLobby(int lobbyId, int userId){
+//        Lobby lobby = lobbyRepo.findById(lobbyId);
+//        if(lobby == null || lobby.getPrivacy() == true){
+//            return failure;
+//        }
+//        else{
+//            User player = userRepo.findById(userId);
+//            player.setLobby(lobby);
+////            lobby.addPlayer(userRepo.findById(userId));
+//            userRepo.save(player);
+////            lobbyRepo.save(lobby);
+//            return  success;
+//        }
+//
+//    }
 
-    }
-
-    public String kickPlayer(int lobbyId, int playerId){
-        Lobby lobby = lobbyRepo.findById(lobbyId);
-        if(lobby != null){
-                User player = userRepo.findById(playerId);
-                Iterator<User> it = lobby.getPlayers().iterator();
-                while(it.hasNext()) {
-                    User user = it.next();
-                    if (user.getId() == playerId) {
-                        user.setLobby(null);
-                        userRepo.save(user);
-                        return "/kick " + playerId;
-                    }
-
-                }
-        }
-        return failure;
-    }
+//    public String kickPlayer(int lobbyId, int playerId){
+//        Lobby lobby = lobbyRepo.findById(lobbyId);
+//        if(lobby != null){
+//                User player = userRepo.findById(playerId);
+//                Iterator<User> it = lobby.getPlayers().iterator();
+//                while(it.hasNext()) {
+//                    User user = it.next();
+//                    if (user.getId() == playerId) {
+//                        user.setLobby(null);
+//                        userRepo.save(user);
+//                        return "/kick " + playerId;
+//                    }
+//
+//                }
+//        }
+//        return failure;
+//    }
 }

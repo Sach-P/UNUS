@@ -3,6 +3,8 @@ package com._an_5.UNUS.Friends;
 import com._an_5.UNUS.Users.User;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonSetter;
+import com.sun.istack.NotNull;
+import io.swagger.annotations.ApiModelProperty;
 
 import javax.persistence.*;
 import java.util.HashSet;
@@ -16,20 +18,32 @@ public class Friend {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int id;
+
+    @ApiModelProperty(notes = "ID of friend",name="fId",required=true)
+    @NotNull
     private int fId;
+
+    @ApiModelProperty(notes = "username of friend",name="username",required=true)
+    @NotNull
     private String username;
+
+    @ApiModelProperty(notes = "friendship status",name="status",required=true)
+    @NotNull
     private String status;
 
+    @ApiModelProperty(notes = "user that is the friend",name="friend",required=false)
     @JsonIgnore
     @ManyToOne(cascade = CascadeType.ALL)
     @JoinColumn(name = "friend_id", referencedColumnName = "id")
     private User friend;
 
+    @ApiModelProperty(notes = "user who requested friend request",name="userRequest",required=false)
     @JsonIgnore
     @ManyToOne(cascade = CascadeType.ALL)
     @JoinColumn(name = "userRequest_id", referencedColumnName = "id")
     private User userRequest;
 
+    @ApiModelProperty(notes = "user who received the friend request",name="requestedUser",required=false)
     @JsonIgnore
     @ManyToOne(cascade = CascadeType.ALL)
     @JoinColumn(name = "requestedUser_id", referencedColumnName = "id")

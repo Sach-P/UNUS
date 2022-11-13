@@ -5,6 +5,8 @@ import com._an_5.UNUS.Friends.Friend;
 import com._an_5.UNUS.Lobbies.Lobby;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonSetter;
+import com.sun.istack.NotNull;
+import io.swagger.annotations.ApiModelProperty;
 
 import javax.persistence.*;
 import java.util.*;
@@ -16,26 +18,42 @@ public class User {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int id;
+
+    @ApiModelProperty(notes = "username",name="username",required=true)
+    @NotNull
     private String username;
+
+    @ApiModelProperty(notes = "password",name="password",required=true)
+    @NotNull
     private String password;
+
+    @ApiModelProperty(notes = "number of games this user played",name="gamesPlayed",required=false)
     private int gamesPlayed;
+
+    @ApiModelProperty(notes = "number of games this user won",name="gamesWon",required=false)
     private int gamesWon;
 
+
+    @ApiModelProperty(notes = "Lobby this user is a host of",name="lobby",required=true)
     @JsonIgnore
     @OneToOne(mappedBy = "host")
     private Lobby lobby;
 
-    @JsonIgnore
-    @ManyToOne(cascade = CascadeType.ALL)
-    @JoinColumn(name = "user_id", referencedColumnName = "id")
-    private Lobby joinedLobby;
+//    @ApiModelProperty(notes = "Lobby thi",name="fId",required=true)
+//    @JsonIgnore
+//    @ManyToOne(cascade = CascadeType.ALL)
+//    @JoinColumn(name = "user_id", referencedColumnName = "id")
+//    private Lobby joinedLobby;
 
+    @ApiModelProperty(notes = "list of friends",name="friends",required=false)
     @OneToMany(mappedBy = "friend")
     private Set<Friend> friends = new HashSet<>();
 
+    @ApiModelProperty(notes = "list of sent friend requests",name="userRequests",required=false)
     @OneToMany(mappedBy = "userRequest")
     private Set<Friend> userRequests = new HashSet<>();
 
+    @ApiModelProperty(notes = "list of received friend requests",name="requestedUsers",required=false)
     @OneToMany(mappedBy = "requestedUser")
     private Set<Friend> requestedUsers = new HashSet<>();
 
@@ -146,11 +164,11 @@ public class User {
         return lobby;
     }
 
-    public Lobby getJoinedLobby() {
-        return joinedLobby;
-    }
-
-    public void setJoinedLobby(Lobby joinedLobby) {
-        this.joinedLobby = joinedLobby;
-    }
+//    public Lobby getJoinedLobby() {
+//        return joinedLobby;
+//    }
+//
+//    public void setJoinedLobby(Lobby joinedLobby) {
+//        this.joinedLobby = joinedLobby;
+//    }
 }
