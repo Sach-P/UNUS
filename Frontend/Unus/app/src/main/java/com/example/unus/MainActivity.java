@@ -37,11 +37,15 @@ public class MainActivity extends AppCompatActivity {
         return (GameLobbyFragment) getSupportFragmentManager().findFragmentByTag("gameLobby");
     }
 
+    /**
+     * Creates a connection to the lobby websocket with an id number to connect to a specific game lobby.
+     *
+     * @param lobbyID id number of the game lobby to connect to
+     */
     @SuppressLint("DefaultLocale")
     public void connectWebSocket(int lobbyID) {
         URI uri;
         try {
-            //uri = new URI("wss://demo.piesocket.com/v3/channel_123?api_key=VCXCEuvhGcBDP7XhiJJUDvR1e1D3eiVjgZ9VRiaV&notify_self");
             uri = new URI(String.format("ws://coms-309-029.class.las.iastate.edu:8080/lobbies/%d/%d", lobbyID, UserData.getInstance().getUserID()));
         } catch (URISyntaxException e) {
             return;
@@ -85,10 +89,19 @@ public class MainActivity extends AppCompatActivity {
         ws.connect();
     }
 
+    /**
+     * disconnects the user from the active web socket
+     */
     public void disconnectWebSocket(){
         ws.close();
     }
 
+    /**
+     * Method called by host of lobby to send an updated list of ids to the other users
+     *
+     * @param players ArrayList of players' id numbers in the current lobby
+     * @throws JSONException
+     */
     public void updateLobby(ArrayList<Integer> players) throws JSONException {
 
         JSONObject obj = new JSONObject();
@@ -98,6 +111,12 @@ public class MainActivity extends AppCompatActivity {
         ws.send(str);
     }
 
+    /**
+     * sends a message to kick a user by id number
+     *
+     * @param id id number of the user to be kicked
+     * @throws JSONException
+     */
     public void kickUser(int id) throws JSONException {
 
         JSONObject obj = new JSONObject();
@@ -108,6 +127,11 @@ public class MainActivity extends AppCompatActivity {
 
     }
 
+    /**
+     * send a message as a JSON String from a JSON Object to the active websocket
+     *
+     * @param jsonObject
+     */
     public void sendMessage(JSONObject jsonObject){
         String str = jsonObject.toString();
         ws.send(str);

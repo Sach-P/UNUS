@@ -187,6 +187,9 @@ public class LogInScreenFragment extends Fragment {
         getActivity().getSupportFragmentManager().beginTransaction().replace(R.id.fragmentContainerView, new MainMenuFragment()).commit();
     }
 
+    /**
+     * changes the fragment in the contariner to the signup fragment
+     */
     private void navigateToSignup(){
         getActivity().getSupportFragmentManager().beginTransaction().replace(R.id.fragmentContainerView, new SignUpScreenFragment()).commit();
     }

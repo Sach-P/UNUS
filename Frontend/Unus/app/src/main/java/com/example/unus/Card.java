@@ -7,8 +7,10 @@ import androidx.core.content.ContextCompat;
 
 public class Card {
 
+    //declare card properties
     CardRank rank;
     CardColor color;
+    //declare context needed to get image assets
     Context context;
 
     /**
@@ -133,6 +135,11 @@ public class Card {
         throw new RuntimeException("code is broke");
     }
 
+    /**
+     * returns the drawable associated with the current card object based on its color and rank
+     *
+     * @return image asset of the given card
+     */
     public Drawable getImage(){
         Drawable drawable;
 

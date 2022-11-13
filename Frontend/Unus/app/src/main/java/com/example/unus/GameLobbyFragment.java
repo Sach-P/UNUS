@@ -44,8 +44,6 @@ public class GameLobbyFragment extends Fragment {
 
     MainActivity mainActivity;
 
-    //GameLobbyWebSocket gameLobbyWebSocket;
-
     public GameLobbyFragment() {
         // Required empty public constructor
     }
@@ -70,6 +68,7 @@ public class GameLobbyFragment extends Fragment {
             getActivity().getSupportFragmentManager().beginTransaction().replace(R.id.fragmentContainerView, new MainMenuFragment()).commit();
         }
 
+        //declare a main activity to call the web socket
         mainActivity = (MainActivity)getActivity();
         mainActivity.connectWebSocket(gameLobbyId);
 
@@ -90,6 +89,7 @@ public class GameLobbyFragment extends Fragment {
         TextView gameCodeDisp = view.findViewById(R.id.game_code);
         gameCodeDisp.setText(getString(R.string.game_code, Integer.toString(gameLobbyId)));
 
+        //add listener to leave button
         ImageView leaveButton = (ImageView) view.findViewById(R.id.leave_lobby);
         leaveButton.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -98,6 +98,7 @@ public class GameLobbyFragment extends Fragment {
             }
         });
 
+        //add listener to chat button
         View chatButton = view.findViewById(R.id.lobby_chat);
         chatButton.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -106,6 +107,7 @@ public class GameLobbyFragment extends Fragment {
             }
         });
 
+        //add listener to start game button
         Button startButton = view.findViewById(R.id.start_ready_game_button);
         startButton.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -118,7 +120,12 @@ public class GameLobbyFragment extends Fragment {
         return view;
     }
 
-    //create the UI display of a player in the lobby
+    /**
+     * Helper method for addPlayer() that adds a display plate for a user into the game lobby UI which displays the username, a view profile button, and a kick button if you are the host.
+     *
+     * @param playerID id number of the player to be added to the UI
+     * @param username username of the player to be aded to the UI
+     */
     private void addPlayerPlate(int playerID, String username){
         //create horizontal linear layout
         LinearLayout plate = new LinearLayout(view.getContext());
@@ -159,11 +166,12 @@ public class GameLobbyFragment extends Fragment {
         });
         plate.addView(viewUser);
 
+        //add spacing
         Space boxSpacing = new Space(view.getContext());
         boxSpacing.setTag("space"+playerID);
+
+        //add kick button if host
         if (playerID != UserData.getInstance().getUserID() && isHost){
-
-
             //add kick player button to the plate
             Button kickUser = new Button(view.getContext());
             kickUser.setLayoutParams(new ViewGroup.LayoutParams(200, ViewGroup.LayoutParams.MATCH_PARENT));
@@ -192,6 +200,11 @@ public class GameLobbyFragment extends Fragment {
         playerDisp.addView(boxSpacing);
     }
 
+    /**
+     * calls other helper methods for adding a player to the lobby based on user data retrieved from the server
+     *
+     * @param id id number for the player to be added
+     */
     public void addPlayer(int id){
 
         JsonObjectRequest request = new JsonObjectRequest(
@@ -218,6 +231,11 @@ public class GameLobbyFragment extends Fragment {
         Volley.newRequestQueue(requireContext()).add(request);
     }
 
+    /**
+     * creates a popup with an account summary for a user based on their id
+     *
+     * @param id id number of account to be viewed
+     */
     public void userPopup(int id) {
         LayoutInflater inflater = (LayoutInflater) view.getContext().getSystemService(view.getContext().LAYOUT_INFLATER_SERVICE);
         View popupView = inflater.inflate(R.layout.profile_view_layout, null);
@@ -261,11 +279,17 @@ public class GameLobbyFragment extends Fragment {
 
     }
 
+    /**
+     * disconnects the user from the websocket and sends back to the main menu
+     */
     public void leaveGame(){
         mainActivity.disconnectWebSocket();
         getActivity().getSupportFragmentManager().beginTransaction().replace(R.id.fragmentContainerView, new MainMenuFragment()).commit();
     }
 
+    /**
+     * disconnects the user from the websocket and sends them back to the main menu. Adds argument to create popup on the main menu
+     */
     private void kicked(){
         mainActivity.disconnectWebSocket();
 
@@ -280,11 +304,25 @@ public class GameLobbyFragment extends Fragment {
 
     }
 
+    /**
+     * Removed the player from the lobby websocket and removes associated UI elements
+     *
+     * @param plate UI plate to be deleted
+     * @param space UI space to be deleted
+     * @param playerID id number of the user that is being kicked
+     * @throws JSONException
+     */
     private void kickPlayer(View plate, Space space, int playerID) throws JSONException {
         deletePlayerArray(playerID);
         mainActivity.kickUser(playerID);
     }
 
+    /**
+     * public method called by the web socket controller in mainActivity. responds to recieved messages
+     *
+     * @param s String of message received from web socket
+     * @throws JSONException
+     */
     public void onMessage(String s) throws JSONException {
 
         JSONObject json = new JSONObject(s);
@@ -318,6 +356,11 @@ public class GameLobbyFragment extends Fragment {
 
     }
 
+    /**
+     * Iterates through array of user ids and removes by the given id.
+     *
+     * @param id id number of user to be removed from the array
+     */
     private void deletePlayerArray(int id){
         for (int i = 0; i < playerIds.size(); i++){
             if (playerIds.get(i).equals(id)){
