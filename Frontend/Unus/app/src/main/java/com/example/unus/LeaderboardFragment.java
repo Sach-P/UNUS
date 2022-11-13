@@ -30,6 +30,13 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.ListIterator;
 
+/**
+ * This fragment displays the leaderboard
+ * leaderboards include both friend sections and global sections
+ * it displays stats based on what you selected, that can be either
+ * friend or global and games played or games won
+ */
+
 public class LeaderboardFragment extends Fragment {
 
     private View view;

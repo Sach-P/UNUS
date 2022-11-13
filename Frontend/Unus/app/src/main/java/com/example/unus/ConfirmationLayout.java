@@ -6,6 +6,12 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.PopupWindow;
 
+/**
+ * This popup view will be displayed when the user does an action
+ * that may need to be confirmed. Such as logging out or removing
+ * a friend or changing a user/password
+ */
+
 import org.java_websocket.client.WebSocketClient;
 
 public class

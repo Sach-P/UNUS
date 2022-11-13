@@ -27,6 +27,12 @@ import org.json.JSONObject;
 
 import java.io.UnsupportedEncodingException;
 
+
+/**
+ * This fragment will get all of the incoming friend requests and
+ * display them so that the user can decide to either accept or decline then
+ */
+
 public class FriendRequestFragment extends Fragment {
 
     private View view;
