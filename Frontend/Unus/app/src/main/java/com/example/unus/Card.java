@@ -5,6 +5,11 @@ import android.graphics.drawable.Drawable;
 
 import androidx.core.content.ContextCompat;
 
+/**
+ * Object used to represent a playing card for this game. Stores rank and color along with providing methods used for gameplay
+ *
+ * @author Isaac Blandin
+ */
 public class Card {
 
     //declare card properties

@@ -19,6 +19,11 @@ import org.json.JSONObject;
 
 import java.util.ArrayList;
 
+/**
+ * Fragment used for gameplay when a game has two players
+ *
+ * @author Isaac Blandin
+ */
 public class GameTwoPlayerFragment extends Fragment {
 
     //number of cards given to user at the beginning of the game

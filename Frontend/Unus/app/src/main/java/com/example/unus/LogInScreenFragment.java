@@ -23,8 +23,9 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 /**
- * A simply login screen fragment which takes the a user's username
- * and password and sends it to the server for verification
+ * First Fragment you see when opening a screen. Prompts a user for their username and password. Verifies credentials with the remote server
+ *
+ * @author Isaac Blandin
  */
 public class LogInScreenFragment extends Fragment {
 

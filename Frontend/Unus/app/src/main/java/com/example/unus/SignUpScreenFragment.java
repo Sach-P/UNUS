@@ -25,6 +25,8 @@ import org.json.JSONObject;
  * have an account for the app. It will require the user to pick a username along with a password.
  * The password will have to be confirmed by the user. The credentials will be sent to the server
  * to be checked whether it is already used.
+ *
+ * @author Isaac Blandin
  */
 public class SignUpScreenFragment extends Fragment {
 

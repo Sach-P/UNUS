@@ -18,6 +18,11 @@ import java.net.URI;
 import java.net.URISyntaxException;
 import java.util.ArrayList;
 
+/**
+ * Main activity that fragments are run within. Handles web socket messages for the game
+ *
+ * @author Isaac Blandin
+ */
 public class MainActivity extends AppCompatActivity {
 
     WebSocketClient ws;

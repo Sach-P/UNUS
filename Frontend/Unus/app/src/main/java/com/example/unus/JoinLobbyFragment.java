@@ -11,6 +11,11 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
 
+/**
+ * Fragment used when joining a lobby based on lobby code
+ *
+ * @author Isaac Blandin
+ */
 public class JoinLobbyFragment extends Fragment {
 
     View view;

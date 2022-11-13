@@ -26,7 +26,9 @@ import org.json.JSONObject;
 import org.w3c.dom.Text;
 
 /**
- * Main Menu Screen Fragment
+ * Fragment used for the primary navigation around the menu screens. Very graphical
+ *
+ * @author Isaac Blandin
  */
 public class MainMenuFragment extends Fragment {
 
@@ -43,6 +45,7 @@ public class MainMenuFragment extends Fragment {
 
         View view = inflater.inflate(R.layout.fragment_main_menu, container, false);
 
+        //add user's data to the profile preview
         TextView username = (TextView) view.findViewById(R.id.username_display);
         username.setText(UserData.getInstance().getUsername());
         TextView id = (TextView) view.findViewById(R.id.id_display) ;
@@ -108,6 +111,7 @@ public class MainMenuFragment extends Fragment {
             }
         });
 
+        //create kicked popup if the user was kicked from a lobby
         if (getArguments() != null){
             Bundle bundle = getArguments();
             if (bundle.getBoolean("kicked")){
@@ -128,6 +132,11 @@ public class MainMenuFragment extends Fragment {
         return view;
     }
 
+    /**
+     * Sends http request to create a lobby on the server
+     *
+     * @throws JSONException
+     */
     private void createLobby() throws JSONException {
         //add login credentials to the response body
         JSONObject requestBody = new JSONObject();
@@ -153,6 +162,9 @@ public class MainMenuFragment extends Fragment {
         Volley.newRequestQueue(requireContext()).add(request);
     }
 
+    /**
+     * retrieve lobby that is being hosted by the user. Change screen to lobby
+     */
     private void startHostedLobby(){
 
         StringRequest stringRequest = new StringRequest(Request.Method.GET,
@@ -183,21 +195,30 @@ public class MainMenuFragment extends Fragment {
 
     }
 
-
-
-    public void setGameLobbyId(int i){
-        GameLobbyId = i;
+    /**
+     * Sets the global variable of the game lobby
+     *
+     * @param id id number of game lobby that is being hosted
+     */
+    public void setGameLobbyId(int id){
+        GameLobbyId = id;
     }
 
+    /**
+     * Change fragment to game lobby based on id number
+     *
+     * @param id game lobby's id number
+     */
     public void changeToLobby(int id){
         GameLobbyFragment frag = new GameLobbyFragment();
 
+        //add arguments to game lobby fragment before committing
         Bundle bundle = new Bundle();
         bundle.putInt("lobbyId", id);
         bundle.putBoolean("isHost", true);
-
         frag.setArguments(bundle);
 
+        //change fragments
         getActivity().getSupportFragmentManager().beginTransaction().replace(R.id.fragmentContainerView, frag, "gameLobby").commit();
         getActivity().getSupportFragmentManager().executePendingTransactions();
     }

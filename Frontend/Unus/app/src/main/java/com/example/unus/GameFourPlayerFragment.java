@@ -8,6 +8,11 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
+/**
+ * Fragment to be used for gameplay when a game has four players. Current empty
+ *
+ * @author Isaac Blandin
+ */
 public class GameFourPlayerFragment extends Fragment {
 
 

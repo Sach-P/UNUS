@@ -29,7 +29,9 @@ import org.json.JSONObject;
 import java.util.ArrayList;
 
 /**
- * Fragment used to handle the game lobby menu
+ * Fragment used to handle the pre-game lobby
+ *
+ * @author Isaac Blandin
  */
 public class GameLobbyFragment extends Fragment {
 

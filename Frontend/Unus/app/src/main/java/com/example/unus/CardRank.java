@@ -1,5 +1,10 @@
 package com.example.unus;
 
+/**
+ * enum used to store the different values/ranks of the playing cards
+ *
+ * @author Isaac Blandin
+ */
 public enum CardRank {
     ZERO,
     ONE,
