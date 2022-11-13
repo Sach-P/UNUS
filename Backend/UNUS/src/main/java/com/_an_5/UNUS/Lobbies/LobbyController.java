@@ -88,7 +88,7 @@ public class LobbyController {
         return -1;
     }
 
-    @GetMapping("/lobby-exists/{lobbyId")
+    @GetMapping("/lobby-exists/{lobbyId}")
     public boolean doesLobbyExist(@PathVariable int lobbyId){
         return lobbyRepository.existsById((long)lobbyId);
     }

@@ -74,7 +74,7 @@ public class LobbySocket {
             lobbyUserMap.put(lobby, new HashSet<>());
         }
         lobbyUserMap.get(lobby).add(player);
-        lobby.setPlayers(lobbyUserMap.get(lobby));
+//        lobby.setPlayers(lobbyUserMap.get(lobby));
         lobby.setNumPlayers(lobby.getNumPlayers() + 1);
         lobbyRepository.save(lobby);
 
@@ -119,7 +119,7 @@ public class LobbySocket {
         sessionUserMap.remove(session);
         userSessionMap.remove(player);
         lobbyUserMap.get(lobby).remove(player);
-        lobby.setPlayers(lobbyUserMap.get(lobby));
+//        lobby.setPlayers(lobbyUserMap.get(lobby));
         lobby.setNumPlayers(lobby.getNumPlayers() - 1);
         lobbyRepository.save(lobby);
         if(lobby.getHost().equals(player)){
