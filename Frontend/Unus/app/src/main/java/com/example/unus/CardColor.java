@@ -5,7 +5,7 @@ public enum CardColor {
     RED,
     YELLOW,
     GREEN,
-    BLUE,
+    PURPLE,
     WILD
 
 }
