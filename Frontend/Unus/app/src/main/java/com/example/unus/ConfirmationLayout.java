@@ -10,6 +10,8 @@ import android.widget.PopupWindow;
  * This popup view will be displayed when the user does an action
  * that may need to be confirmed. Such as logging out or removing
  * a friend or changing a user/password
+ *
+ * @author Abe Demo
  */
 
 import org.java_websocket.client.WebSocketClient;
@@ -58,10 +60,18 @@ ConfirmationLayout {
         });
     }
 
+    /**
+     * returns the boolean result which is true if the confirm button was pressed
+     * @return
+     */
     public boolean confirm() {
         return result;
     }
 
+    /**
+     * returns the boolean press which is true if the button was pressed or not
+     * @return
+     */
     public boolean pressed() {
         return press;
     }

@@ -25,6 +25,8 @@ import java.net.URISyntaxException;
  * It works with a websocket that will both send and receive messages
  * It will not save messages if the global chat is closed nor will it
  * continue to receive them if it's not open
+ *
+ * @author Abe Demo
  */
 
 public class ChatLayout extends Activity {
@@ -75,9 +77,11 @@ public class ChatLayout extends Activity {
 
     }
 
-    /*
-    this is where the messages that we get from the websocket will be assessed and displayed
-    on the chat screen, it will differtiate between the username and password as well
+    /**
+     * this is where the messages that we get from the websocket will be assessed and displayed
+     * on the chat screen, it will differtiate between the username and password as well
+     * @param s
+     * @throws JSONException
      */
     private void receivedMessage(String s) throws JSONException {
         try {
@@ -117,6 +121,11 @@ public class ChatLayout extends Activity {
         }
     }
 
+    /**
+     * this function will display the message that the user sent on the chat screen
+     * as well as sending it to the server so that every other user can see it
+     * @param message
+     */
     private void sendMessage(String message) {
             TextView nextMessage = new TextView(popupView.getContext());
             LinearLayout.LayoutParams textLayoutParams = new LinearLayout.LayoutParams(900, ViewGroup.LayoutParams.WRAP_CONTENT);
@@ -153,6 +162,10 @@ public class ChatLayout extends Activity {
             lastUser = UserData.getInstance().getUsername();
     }
 
+    /**
+     * this function connects to the websocket every time the  user hits the
+     * global chat button, it handles all of the websocket functions
+     */
     private void connectWebSocket() {
         URI uri;
         try {

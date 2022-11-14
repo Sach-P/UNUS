@@ -35,6 +35,8 @@ import java.util.ListIterator;
  * leaderboards include both friend sections and global sections
  * it displays stats based on what you selected, that can be either
  * friend or global and games played or games won
+ *
+ * @author Abe Demo
  */
 
 public class LeaderboardFragment extends Fragment {
@@ -151,6 +153,9 @@ public class LeaderboardFragment extends Fragment {
         return view;
     }
 
+    /**
+     * gets all of the users in the database and puts them all into a list of Users
+     */
     private void getUsers() {
 
         JsonArrayRequest request = new JsonArrayRequest(
@@ -192,6 +197,9 @@ public class LeaderboardFragment extends Fragment {
 
     }
 
+    /**
+     * sorts the list of users by how many games they have played
+     */
     private void sortGamesPlayed() {
         List<Friend> temp = new ArrayList<Friend>();
         temp.add(userList.get(0));
@@ -212,6 +220,9 @@ public class LeaderboardFragment extends Fragment {
         friendList = temp2;
     }
 
+    /**
+     * sorts the list of users by the amount of games they have won
+     */
     private void sortGamesWon() {
         List<Friend> temp = new ArrayList<Friend>();
         temp.add(userList.get(0));
@@ -232,6 +243,15 @@ public class LeaderboardFragment extends Fragment {
         friendList = temp2;
     }
 
+    /**
+     * displays the list of users by username and stat on the screen
+     * It will display The name followed by either games played or games won
+     * This function is called every time any button is hit in the leaderboard
+     * screen
+     *
+     * @param list
+     * @param played
+     */
     private void displayUsers(List<Friend> list, boolean played) {
         board.removeViews(0, board.getChildCount());
         for(int i = 0; i < list.size(); i++) {

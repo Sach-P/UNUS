@@ -33,6 +33,8 @@ import org.json.JSONObject;
  * logged in
  * change password changes the password
  * delete user will remove the user from the database
+ *
+ * @author Abe Demo
  */
 
 public class UserSettingsFragment extends Fragment {
@@ -94,6 +96,10 @@ public class UserSettingsFragment extends Fragment {
         return view;
     }
 
+    /**
+     * This function will prompt the user on whether or not they want to fully delete
+     * their account from the database
+     */
     public void deleteConfirmation( ) {
         //Create a View object yourself through inflater
         LayoutInflater inflater = (LayoutInflater) view.getContext().getSystemService(view.getContext().LAYOUT_INFLATER_SERVICE);
@@ -135,6 +141,12 @@ public class UserSettingsFragment extends Fragment {
         });
     }
 
+    /**
+     * this function will prompt the user with how they'd like to change their
+     * information. They can then enter their desired username or password
+     *
+     * @param name
+     */
     public void change(boolean name) {
         //Create a View object yourself through inflater
         LayoutInflater inflater = (LayoutInflater) view.getContext().getSystemService(view.getContext().LAYOUT_INFLATER_SERVICE);
@@ -181,6 +193,10 @@ public class UserSettingsFragment extends Fragment {
         });
     }
 
+    /**
+     * This function will delete the user logged in from the database entirely
+     * including removing them from anyone else's friends list
+     */
     private void deleteUser(int id) {
 
         JsonObjectRequest request = new JsonObjectRequest(
@@ -205,6 +221,13 @@ public class UserSettingsFragment extends Fragment {
 
     }
 
+    /**
+     * this function will change either the username of the user or the password and update
+     * the change in the backend
+     *
+     * @param b
+     * @param s
+     */
     public void changeUser(boolean b, String s) {
         try {
             JSONArray friendsList = new JSONArray();

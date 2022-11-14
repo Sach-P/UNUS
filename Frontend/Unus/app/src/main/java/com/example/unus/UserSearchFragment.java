@@ -27,6 +27,15 @@ import org.json.JSONException;
 import org.json.JSONObject;
 import org.w3c.dom.Text;
 
+/**
+ * This class handles searching for a user and either viewing their stats or
+ * sending them a friend request
+ * You can also accept friend requests here given that they have already sent
+ * you a request
+ *
+ * @author Abe Demo
+ */
+
 public class UserSearchFragment extends Fragment {
 
     private View view;
@@ -71,6 +80,15 @@ public class UserSearchFragment extends Fragment {
         });
         return view;
     }
+
+    /**
+     * This function will take in the number that was put into the input field
+     * and search the database to see if the user exists
+     * If the user does exist it will display the user and a button that will show their stats
+     * and other that will send them friend requests
+     *
+     * @param id
+     */
     private void search(String id) {
         for(int i = 0; i < id.length(); i++) {
             if (id.charAt(i) != '0' && id.charAt(i) != '1' && id.charAt(i) != '2' && id.charAt(i) != '3' && id.charAt(i) != '4' &&
@@ -205,6 +223,14 @@ public class UserSearchFragment extends Fragment {
         }
     }
 
+    /**
+     * this function will send a friend requests to the user that was searched
+     * the backend will then save the request and send it to the other user
+     *
+     * @param username
+     * @param id
+     * @throws JSONException
+     */
     private void sendFriendRequest(String username, String id) throws JSONException {
 
         Friend newSent = new Friend(Integer.parseInt(id), username);
@@ -229,6 +255,14 @@ public class UserSearchFragment extends Fragment {
         Volley.newRequestQueue(requireContext()).add(request);
     }
 
+    /**
+     * this function will only be able to be accessed if the user searched for
+     * a user that had already sent them a request, in this case, instead of sending a
+     * friend request, the user will instead accept the friend request and the backend
+     * will be update so that they are both each others friends
+     * @param username
+     * @param id
+     */
     private void acceptFriend(String username, String id) {
 
         Friend newFriend = new Friend(Integer.parseInt(id), username);
