@@ -5,6 +5,7 @@ import com._an_5.UNUS.Messages.Message;
 import com._an_5.UNUS.Messages.MessageRepository;
 import com._an_5.UNUS.Users.User;
 import com._an_5.UNUS.Users.UserRepository;
+import io.swagger.annotations.Api;
 import org.json.JSONObject;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -19,6 +20,7 @@ import javax.websocket.server.ServerEndpoint;
 import java.io.IOException;
 import java.util.*;
 
+@Api(value = "Lobby Web Socket")
 @Controller
 @ServerEndpoint(value = "/lobbies/{lobbyId}/{userId}")
 public class LobbySocket {

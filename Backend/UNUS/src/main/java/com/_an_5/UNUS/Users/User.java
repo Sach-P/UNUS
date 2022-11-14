@@ -12,7 +12,7 @@ import javax.persistence.*;
 import java.util.*;
 
 @Entity
-@Table(name="user")
+@Table(name="users")
 public class User {
 
     @Id
@@ -26,6 +26,14 @@ public class User {
     @ApiModelProperty(notes = "password",name="password",required=true)
     @NotNull
     private String password;
+
+    @ApiModelProperty(notes = "user's role in app (player, admin, guest)", name = "role", required = true)
+    @NotNull
+    private String role;
+
+//    @ApiModelProperty(notes = "checks if user is online")
+//    @NotNull
+//    private boolean online;
 
     @ApiModelProperty(notes = "number of games this user played",name="gamesPlayed",required=false)
     private int gamesPlayed;
@@ -63,6 +71,7 @@ public class User {
     }
 
     public User() {
+        this.role = "player";
         gamesPlayed = 0;
         gamesWon = 0;
     }
@@ -164,7 +173,15 @@ public class User {
         return lobby;
     }
 
-//    public Lobby getJoinedLobby() {
+    public String getRole() {
+        return role;
+    }
+
+    public void setRole(String role) {
+        this.role = role;
+    }
+
+    //    public Lobby getJoinedLobby() {
 //        return joinedLobby;
 //    }
 //

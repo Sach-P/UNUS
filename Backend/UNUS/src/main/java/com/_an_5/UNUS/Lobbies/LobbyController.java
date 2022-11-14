@@ -15,7 +15,7 @@ import org.springframework.web.bind.annotation.*;
 import java.util.List;
 import java.util.Set;
 
-@Api(value = "LobbyController")
+@Api(value = "lobby-controller")
 @RestController
 @RequestMapping("/lobbies")
 public class LobbyController {
@@ -37,13 +37,13 @@ public class LobbyController {
     private String success = "{\"message\":\"success\"}";
     private String failure = "{\"message\":\"failed\"}";
 
-    @ApiOperation(value = "get all current lobbies", response = List.class, tags = "getLobbies")
+    @ApiOperation(value = "get all current lobbies", response = List.class, tags = "lobby-controller")
     @GetMapping
     public List<Lobby> getLobbies(){
         return lobbyRepository.findAll();
     }
 
-    @ApiOperation(value = "create a lobby", response = String.class, tags = "createLobby")
+    @ApiOperation(value = "create a lobby", response = String.class, tags = "lobby-controller")
     @PostMapping(path = "/create-lobby")
     public String createLobby(@RequestParam(name = "userId") int userId, @RequestBody String json){
         JSONParser jp = new JSONParser(json);
@@ -57,7 +57,7 @@ public class LobbyController {
         }
     }
 
-    @ApiOperation(value = "delete a lobby", response = String.class, tags = "deleteLobby")
+    @ApiOperation(value = "delete a lobby", response = String.class, tags = "lobby-controller")
     @DeleteMapping(path = "/delete-lobby/{lobbyId}")
     public String deleteLobby(@RequestParam(name = "userId") int userId, @PathVariable int lobbyId){
         return lobbyService.deleteLobby(lobbyId, userId);
@@ -86,7 +86,7 @@ public class LobbyController {
 //        return null;
 //    }
 
-    @ApiOperation(value = "Get the number of players in the lobby", response = int.class, tags = "getNumPlayers")
+    @ApiOperation(value = "Get the number of players in the lobby", response = int.class, tags = "lobby-controller")
     @GetMapping("/player-count/{lobbyId}")
     public int getNumPlayers(@PathVariable int lobbyId) {
         Lobby lobby = lobbyRepository.findById(lobbyId);
@@ -97,7 +97,7 @@ public class LobbyController {
         return -1;
     }
 
-    @ApiOperation(value = "check if a lobby exists", response = String.class, tags = "doesLobbyExist")
+    @ApiOperation(value = "check if a lobby exists", response = String.class, tags = "lobby-controller")
     @GetMapping("/lobby-exists/{lobbyId}")
     public boolean doesLobbyExist(@PathVariable int lobbyId){
         return lobbyRepository.existsById((long)lobbyId);

@@ -5,13 +5,15 @@ import com._an_5.UNUS.Messages.Message;
 import com._an_5.UNUS.Users.User;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.sun.istack.NotNull;
+import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiModelProperty;
 
 import java.util.*;
 import javax.persistence.*;
 
+
 @Entity
-@Table(name="lobby")
+@Table(name="lobbies")
 public class Lobby {
 
     @Id

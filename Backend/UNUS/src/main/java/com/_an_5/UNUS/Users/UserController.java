@@ -11,7 +11,7 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 
-@Api(value = "UserController")
+@Api(value = "user-controller")
 @RestController
 public class UserController {
 
@@ -25,7 +25,7 @@ public class UserController {
     private String failure = "{\"message\":\"failed\"}";
 
 
-    @ApiOperation(value = "register a user", response = String.class, tags = "addUser")
+    @ApiOperation(value = "register a user", response = String.class, tags = "user-controller")
     @PostMapping(path = "/signup")
     public String addUser(@RequestBody User user){
         if (user == null)
@@ -34,7 +34,7 @@ public class UserController {
         return success;
     }
 
-    @ApiOperation(value = "login a user", response = Map.class, tags = "login")
+    @ApiOperation(value = "login a user", response = Map.class, tags = "user-controller")
     @PostMapping(path = "/login")
     public Map<String, Object> login(@RequestBody User user){//@ModelAttribute("user") User user){
         HashMap<String, Object> map = new HashMap<>();
@@ -49,17 +49,17 @@ public class UserController {
         return map;
     }
 
-    @ApiOperation(value = "Get a list of all users", response = List.class, tags = "getAllUsers")
+    @ApiOperation(value = "Get a list of all users", response = List.class, tags = "user-controller")
     @GetMapping(path = "/user")
     public List<User> getAllUsers(){
         return userRepository.findAll();
     }
 
-    @ApiOperation(value = "get a specific user", response = User.class, tags = "getUser")
+    @ApiOperation(value = "get a specific user", response = User.class, tags = "user-controller")
     @GetMapping(path = "/user/{id}")
     public User getUser(@PathVariable int id){ return userRepository.findById(id); }
 
-    @ApiOperation(value = "delete a user", response = String.class, tags = "deleteUser")
+    @ApiOperation(value = "delete a user", response = String.class, tags = "user-controller")
     @DeleteMapping(path = "/user/{id}")
     public String deleteUser(@PathVariable int id) {
         if(!userRepository.existsById((long)id))
@@ -68,7 +68,7 @@ public class UserController {
         return success;
     }
 
-    @ApiOperation(value = "Update a user", response = String.class, tags = "sendFriendRequest")
+    @ApiOperation(value = "Update a user", response = String.class, tags = "user-controller")
     @PutMapping(path = "/user/{id}")
     public User updateUser(@PathVariable int id, @RequestBody User user) {
         User currUser = userRepository.findById(id);
@@ -78,7 +78,7 @@ public class UserController {
         return userRepository.findById(id);
     }
 
-    @ApiOperation(value = "get the lobby ID the user is a host of", response = int.class, tags = "getLobbyId")
+    @ApiOperation(value = "get the lobby ID the user is a host of", response = int.class, tags = "user-controller")
     @GetMapping(path = "/user/get-lobby/{id}")
     public int getLobbyId(@PathVariable int id){
         User currUser = userRepository.findById(id);

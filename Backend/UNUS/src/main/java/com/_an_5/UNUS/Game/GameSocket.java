@@ -1,4 +1,5 @@
-package com._an_5.UNUS.GlobalChat;
+package com._an_5.UNUS.Game;
+
 
 import com._an_5.UNUS.Messages.MessageRepository;
 import com._an_5.UNUS.Users.User;
@@ -9,6 +10,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
+
 import javax.websocket.*;
 import javax.websocket.server.PathParam;
 import javax.websocket.server.ServerEndpoint;
@@ -16,10 +18,10 @@ import java.io.IOException;
 import java.util.Hashtable;
 import java.util.Map;
 
-@Api(value = "Global Web Socket")
+@Api(value = "Game Web Socket")
 @Controller
-@ServerEndpoint(value = "/global/{userId}")
-public class GlobalSocket {
+@ServerEndpoint(value = "/lobbies/{lobbyId}/game/{userId}")
+public class GameSocket {
 
     private static UserRepository userRepository;
 
@@ -38,7 +40,7 @@ public class GlobalSocket {
     private static Map<Session, User> sessionUserMap = new Hashtable<>();
     private static Map<User, Session> userSessionMap = new Hashtable<>();
 
-    private final Logger logger = LoggerFactory.getLogger(GlobalSocket.class);
+    private final Logger logger = LoggerFactory.getLogger(GameSocket.class);
 
 
     @OnOpen
@@ -50,6 +52,10 @@ public class GlobalSocket {
         sessionUserMap.put(session, player);
         userSessionMap.put(player, session);
 
+//        sendMessageToParticularUser(player, getChatHistory());
+//        String message = player.getUsername() + " has joined the lobby";
+//        broadcast(message);
+
     }
 
     @OnMessage
@@ -57,11 +63,22 @@ public class GlobalSocket {
         logger.info("Entered into Message: Got Message:" + message);
         if(sessionUserMap.containsKey(session)){
             User user = sessionUserMap.get(session);
+//            Lobby lobby = sessionLobbyMap.get(session);
+//            if(message.startsWith("/kick") && player.equals(lobby.getHost())) {
+//                int userId = Integer.parseInt(message.split(" ")[1]);
+//                User user = userRepository.findById(userId);
+//                broadcast(user.getUsername() + " was kicked from the lobby");
+//                onClose(userSessionMap.get(user));
+//            }
+//            else{
+
+//            }
 
             JSONObject j = new JSONObject();
             j.put("message", message);
             j.put("username", user.getUsername());
             broadcast(j.toString());
+//            messageRepository.save(new Message(user.getUsername(), message));
         }
 
     }
@@ -71,8 +88,27 @@ public class GlobalSocket {
     public void onClose(Session session) throws IOException {
         logger.info("Entered into Close");
         User user = sessionUserMap.get(session);
+//        Lobby lobby = sessionLobbyMap.get(session);
+//        if(lobby.getHost().equals(player)){
+//            if(lobby.getPlayers().size() > 0){
+//                lobby.setHost((User)lobby.getPlayers().toArray()[0]); //TODO test
+//                lobby.removePlayer(lobby.getHost());
+//                lobbyRepository.save(lobby);
+//            }
+//            else{
+//                lobbyRepository.deleteById(lobby.getId());
+//            }
+//        }
+//        else{
+//            lobby.removePlayer(player);
+//            lobbyRepository.save(lobby);
+//        }
+//        lobbySessionMap.remove(lobby);
+//        sessionLobbyMap.remove(session);
         sessionUserMap.remove(session);
         userSessionMap.remove(user);
+//        String message = "{\"" + user.getUsername() + "\":\"left th\"}";
+//        broadcast(message);
     }
 
     @OnError
@@ -80,6 +116,19 @@ public class GlobalSocket {
         logger.info("Entered into Error");
         throwable.printStackTrace();
     }
+
+
+//    private void sendMessageToParticularUser(User user, String message) {
+//        try {
+//            userSessionMap.get(user).getBasicRemote().sendText(message);
+//        }
+//        catch (IOException e) {
+//            logger.info("Exception: " + e.getMessage().toString());
+//            e.printStackTrace();
+//        }
+//    }
+
+
 
     private void broadcast(String message){
         sessionUserMap.forEach((session, player) -> {
@@ -92,5 +141,21 @@ public class GlobalSocket {
             }
         });
     }
+
+    // Gets the Chat history from the repository
+//    private String getChatHistory() {
+//        List<Message> messages = messageRepository.findAll();
+//
+//        // convert the list to a string
+//        StringBuilder sb = new StringBuilder();
+//        if(messages != null && messages.size() != 0) {
+//            for (Message message : messages) {
+//                sb.append(message.getUsername() + ": " + message.getContent() + "\n");
+//            }
+//        }
+//        return sb.toString();
+//    }
+
+
 
 }
