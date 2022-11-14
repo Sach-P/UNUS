@@ -69,7 +69,7 @@ android-build:
 android_test:
   only:
     changes:
-      - Backend/**/*
+      - Frontend/**/*
   image: gjandres/android-ci:latest
   stage: androidtest
   tags:
