@@ -6,6 +6,9 @@ stages:
   - androidtest
 
 maven-build:
+  only:
+    changes:
+      - Backend/**/*
   stage: mavenbuild
   tags:
     - springboot_tag  					 
@@ -14,6 +17,9 @@ maven-build:
     - mvn package
 
 maven-test:
+  only:
+    changes:
+      - Backend/**/*
   stage: maventest
   tags:
     - springboot_tag
@@ -26,7 +32,12 @@ maven-test:
 
 autoDeploy:
   only:
-    - main
+    refs:
+      - main
+    changes:
+      - Backend/**/*
+    
+
   stage: mavenDeploy
   tags:
     - springboot_tag
@@ -38,6 +49,9 @@ autoDeploy:
     - sudo systemctl start system-web-demo 
 
 android-build:
+  only:
+    changes:
+      - Frontend/**/*
   image:  gjandres/android-ci:latest
   stage: androidbuild
   tags:
@@ -53,6 +67,9 @@ android-build:
       - Android_test/app/build/outputs/
 
 android_test:
+  only:
+    changes:
+      - Backend/**/*
   image: gjandres/android-ci:latest
   stage: androidtest
   tags:
