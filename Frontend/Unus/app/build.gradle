@@ -48,6 +48,7 @@ task javadoc(type: Javadoc) {
     classpath += fileTree(dir: "$buildDir/tmp/aarsToJars/")
     destinationDir = file("${project.buildDir}/outputs/javadoc/")
     options.memberLevel = JavadocMemberLevel.PRIVATE
+    options.author = true
     failOnError false
     exclude '**/BuildConfig.java'
     exclude '**/R.java'
