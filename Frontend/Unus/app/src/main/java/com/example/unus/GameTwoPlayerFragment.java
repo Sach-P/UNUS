@@ -225,6 +225,12 @@ public class GameTwoPlayerFragment extends Fragment {
         discard(new Card(rank, color, getContext()));
     }
 
+    /**
+     * Takes in string (should be from web socket) and makes changes accordingly
+     *
+     * @param s
+     * @throws JSONException
+     */
     public void onMessage(String s) throws JSONException {
         JSONObject obj = new JSONObject(s);
         if (obj.getInt("id") != UserData.getInstance().getUserID() && obj.has("id")){
