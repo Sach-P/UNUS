@@ -21,8 +21,9 @@ public class Card {
     /**
      * constructor to create a card of given rank and color
      *
-     * @param rank
-     * @param color
+     * @param rank value/rank of the card
+     * @param color color of the card
+     * @param context current context (needed for image assets)
      */
     public Card(CardRank rank, CardColor color, Context context) {
         this.rank = rank;
@@ -41,6 +42,7 @@ public class Card {
 
     /**
      * checks whether a card can be played on top of another card.
+     *
      * @param card card to be compared to the current object
      * @return card can be played
      */
@@ -50,6 +52,7 @@ public class Card {
 
     /**
      * changes the card color to a given color. Used for wild cards when changing colors.
+     *
      * @param color card color
      */
     public void setColor(CardColor color){
@@ -96,6 +99,7 @@ public class Card {
 
     /**
      * determines a random rank for the card based on weights and a given color
+     *
      * @param color color of card to determine ranks possible
      * @return card rank
      */

@@ -228,7 +228,7 @@ public class GameTwoPlayerFragment extends Fragment {
     /**
      * Takes in string (should be from web socket) and makes changes accordingly
      *
-     * @param s
+     * @param s string from the websocket message
      * @throws JSONException
      */
     public void onMessage(String s) throws JSONException {

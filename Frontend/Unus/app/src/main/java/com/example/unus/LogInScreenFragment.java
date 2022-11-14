@@ -99,8 +99,8 @@ public class LogInScreenFragment extends Fragment {
      * sends a post request with Strings for username and password to a
      * url stored in the strings xml.
      *
-     * @param username
-     * @param password
+     * @param username username to be sent to the server
+     * @param password password to be sent to the server
      */
     private void sendLoginPostRequest(String username, String password){
         try{

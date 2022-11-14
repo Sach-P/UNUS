@@ -93,8 +93,8 @@ public class SignUpScreenFragment extends Fragment {
      * sends a post request with Strings for username and password to a
      * url stored in the strings xml.
      *
-     * @param username
-     * @param password
+     * @param username username to be sent to the server
+     * @param password password to be sent to the server
      */
     private void sendSignupPostRequest(String username, String password){
         try{
@@ -142,6 +142,8 @@ public class SignUpScreenFragment extends Fragment {
 
     /**
      * changes screen back to the login screen with the username prefilled
+     *
+     * @param username username to be prefilled in the login screen
      */
     private void navigateToLogin(String username){
 
@@ -166,6 +168,10 @@ public class SignUpScreenFragment extends Fragment {
 
     /**
      * checks a string for a number, returns true if there is a number
+     *
+     * @param str string to be checked for numbers
+     *
+     * @return whether the string contains a number or not
      */
     private boolean containsNumber(String str){
         for (int i = 0; i < str.length(); i++){
