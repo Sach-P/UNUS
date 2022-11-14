@@ -218,7 +218,7 @@ public class GameTwoPlayerFragment extends Fragment {
     /**
      * create a colored wild card and place on the discard pile
      *
-     * @param rank which wild card is being used
+     * @param rank which wild card is being played
      * @param color color that is selected
      */
     private void setWild(CardRank rank, CardColor color){
