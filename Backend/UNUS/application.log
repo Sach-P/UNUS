@@ -80,3 +80,35 @@
 2022-11-15 14:38:57.878  INFO 36392 --- [http-nio-8080-exec-1] o.a.c.c.C.[Tomcat].[localhost].[/]       : Initializing Spring DispatcherServlet 'dispatcherServlet'
 2022-11-15 14:38:57.888  INFO 36392 --- [http-nio-8080-exec-1] o.s.web.servlet.DispatcherServlet        : Initializing Servlet 'dispatcherServlet'
 2022-11-15 14:38:57.888  INFO 36392 --- [http-nio-8080-exec-1] o.s.web.servlet.DispatcherServlet        : Completed initialization in 0 ms
+2022-11-15 17:11:46.965  WARN 37392 --- [main] ory$DuplicateJsonObjectContextCustomizer : 
+
+Found multiple occurrences of org.json.JSONObject on the class path:
+
+	jar:file:/C:/Users/sachp/.m2/repository/com/vaadin/external/google/android-json/0.0.20131108.vaadin1/android-json-0.0.20131108.vaadin1.jar!/org/json/JSONObject.class
+	jar:file:/C:/Users/sachp/.m2/repository/org/json/json/20180130/json-20180130.jar!/org/json/JSONObject.class
+
+You may wish to exclude one of them to ensure predictable runtime behavior
+
+2022-11-15 17:11:46.987  INFO 37392 --- [main] com._an_5.UNUS.UnusApplicationTests      : Starting UnusApplicationTests using Java 11.0.10 on Wintermancer with PID 37392 (started by sachp in C:\Users\sachp\Workspace\2_an_5\Backend\UNUS)
+2022-11-15 17:11:46.988  INFO 37392 --- [main] com._an_5.UNUS.UnusApplicationTests      : No active profile set, falling back to 1 default profile: "default"
+2022-11-15 17:11:47.962  INFO 37392 --- [main] .s.d.r.c.RepositoryConfigurationDelegate : Bootstrapping Spring Data JPA repositories in DEFAULT mode.
+2022-11-15 17:11:48.057  INFO 37392 --- [main] .s.d.r.c.RepositoryConfigurationDelegate : Finished Spring Data repository scanning in 83 ms. Found 5 JPA repository interfaces.
+2022-11-15 17:11:49.498  INFO 37392 --- [main] o.s.b.w.embedded.tomcat.TomcatWebServer  : Tomcat initialized with port(s): 0 (http)
+2022-11-15 17:11:49.515  INFO 37392 --- [main] o.apache.catalina.core.StandardService   : Starting service [Tomcat]
+2022-11-15 17:11:49.516  INFO 37392 --- [main] org.apache.catalina.core.StandardEngine  : Starting Servlet engine: [Apache Tomcat/9.0.68]
+2022-11-15 17:11:49.726  INFO 37392 --- [main] o.a.c.c.C.[Tomcat].[localhost].[/]       : Initializing Spring embedded WebApplicationContext
+2022-11-15 17:11:49.727  INFO 37392 --- [main] w.s.c.ServletWebServerApplicationContext : Root WebApplicationContext: initialization completed in 2702 ms
+2022-11-15 17:11:50.079  INFO 37392 --- [main] o.hibernate.jpa.internal.util.LogHelper  : HHH000204: Processing PersistenceUnitInfo [name: default]
+2022-11-15 17:11:50.175  INFO 37392 --- [main] org.hibernate.Version                    : HHH000412: Hibernate ORM core version 5.6.10.Final
+2022-11-15 17:11:50.459  INFO 37392 --- [main] o.hibernate.annotations.common.Version   : HCANN000001: Hibernate Commons Annotations {5.1.2.Final}
+2022-11-15 17:11:50.651  INFO 37392 --- [main] com.zaxxer.hikari.HikariDataSource       : HikariPool-1 - Starting...
+2022-11-15 17:11:50.909  INFO 37392 --- [main] com.zaxxer.hikari.HikariDataSource       : HikariPool-1 - Start completed.
+2022-11-15 17:11:50.959  INFO 37392 --- [main] org.hibernate.dialect.Dialect            : HHH000400: Using dialect: org.hibernate.dialect.MySQL8Dialect
+2022-11-15 17:11:52.044  INFO 37392 --- [main] o.h.e.t.j.p.i.JtaPlatformInitiator       : HHH000490: Using JtaPlatform implementation: [org.hibernate.engine.transaction.jta.platform.internal.NoJtaPlatform]
+2022-11-15 17:11:52.055  INFO 37392 --- [main] j.LocalContainerEntityManagerFactoryBean : Initialized JPA EntityManagerFactory for persistence unit 'default'
+2022-11-15 17:11:53.193  WARN 37392 --- [main] JpaBaseConfiguration$JpaWebConfiguration : spring.jpa.open-in-view is enabled by default. Therefore, database queries may be performed during view rendering. Explicitly configure spring.jpa.open-in-view to disable this warning
+2022-11-15 17:11:54.069  INFO 37392 --- [main] o.s.b.w.embedded.tomcat.TomcatWebServer  : Tomcat started on port(s): 49815 (http) with context path ''
+2022-11-15 17:11:54.516  INFO 37392 --- [main] com._an_5.UNUS.UnusApplicationTests      : Started UnusApplicationTests in 7.977 seconds (JVM running for 9.342)
+2022-11-15 17:11:54.911  INFO 37392 --- [SpringApplicationShutdownHook] j.LocalContainerEntityManagerFactoryBean : Closing JPA EntityManagerFactory for persistence unit 'default'
+2022-11-15 17:11:54.914  INFO 37392 --- [SpringApplicationShutdownHook] com.zaxxer.hikari.HikariDataSource       : HikariPool-1 - Shutdown initiated...
+2022-11-15 17:11:54.937  INFO 37392 --- [SpringApplicationShutdownHook] com.zaxxer.hikari.HikariDataSource       : HikariPool-1 - Shutdown completed.
