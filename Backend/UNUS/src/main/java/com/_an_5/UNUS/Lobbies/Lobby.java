@@ -4,27 +4,38 @@ package com._an_5.UNUS.Lobbies;
 import com._an_5.UNUS.Messages.Message;
 import com._an_5.UNUS.Users.User;
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.sun.istack.NotNull;
+import io.swagger.annotations.Api;
+import io.swagger.annotations.ApiModelProperty;
 
 import java.util.*;
 import javax.persistence.*;
 
+
 @Entity
-@Table(name="lobby")
+@Table(name="lobbies")
 public class Lobby {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int id;
+
+    @ApiModelProperty(notes = "whether the lobby is private or not",name="isPrivate",required=true)
+    @NotNull
     private boolean isPrivate;
 
+    @ApiModelProperty(notes = "number of players in the lobby",name="numPlayers",required=false)
+    private int numPlayers;
+
+    @ApiModelProperty(notes = "host of the lobby",name="host",required=true)
     @OneToOne(cascade=CascadeType.ALL)
     @JoinColumn(name = "host_id", referencedColumnName = "id")
     private User host;
+//
+//    @OneToMany(mappedBy = "joinedLobby")
+//    private Set<User> players = new HashSet<>();
 
-//    @OneToMany(mappedBy = "lobby")
-    @Transient
-    private Set<User> players = new HashSet<>();
-
+    @ApiModelProperty(notes = "All messages sent in a lobby",name="messages",required=false)
     @JsonIgnore
     @OneToMany(mappedBy = "lobby")
     private Set<Message> messages = new HashSet<>();
@@ -33,9 +44,11 @@ public class Lobby {
     public Lobby(User host, boolean isPrivate){
         this.host = host;
         this.isPrivate = isPrivate;
+        this.numPlayers = 0;
     }
 
     public Lobby() {
+        this.numPlayers = 0;
     }
 
     @Override
@@ -74,23 +87,23 @@ public class Lobby {
     public void setPrivate(boolean aPrivate) {
         isPrivate = aPrivate;
     }
-
-    public Set<User> getPlayers() {
-        return players;
-    }
-
-    public void setPlayers(Set<User> players){
-        this.players = players;
-    }
-
-
-    public void addPlayer(User player){
-        players.add(player);
-    }
-
-    public void removePlayer(User player) {
-        players.remove(player);
-    }
+//
+//    public Set<User> getPlayers() {
+//        return players;
+//    }
+//
+//    public void setPlayers(Set<User> players){
+//        this.players = players;
+//    }
+//
+//
+//    public void addPlayer(User player){
+//        players.add(player);
+//    }
+//
+//    public void removePlayer(User player) {
+//        players.remove(player);
+//    }
 
     public Set<Message> getMessages() {
         return messages;
@@ -98,5 +111,13 @@ public class Lobby {
 
     public void setMessages(Set<Message> messages) {
         this.messages = messages;
+    }
+
+    public int getNumPlayers() {
+        return numPlayers;
+    }
+
+    public void setNumPlayers(int numPlayers) {
+        this.numPlayers = numPlayers;
     }
 }

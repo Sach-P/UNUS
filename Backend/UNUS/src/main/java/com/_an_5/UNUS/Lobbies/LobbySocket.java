@@ -5,6 +5,7 @@ import com._an_5.UNUS.Messages.Message;
 import com._an_5.UNUS.Messages.MessageRepository;
 import com._an_5.UNUS.Users.User;
 import com._an_5.UNUS.Users.UserRepository;
+import io.swagger.annotations.Api;
 import org.json.JSONObject;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -19,6 +20,7 @@ import javax.websocket.server.ServerEndpoint;
 import java.io.IOException;
 import java.util.*;
 
+@Api(value = "Lobby Web Socket")
 @Controller
 @ServerEndpoint(value = "/lobbies/{lobbyId}/{userId}")
 public class LobbySocket {
@@ -48,6 +50,7 @@ public class LobbySocket {
     private static Map<User, Session> userSessionMap = new Hashtable<>();
     private static Map<Session, Lobby> sessionLobbyMap = new Hashtable<>();
     private static Map<Lobby, List<Session>> lobbySessionMap = new Hashtable<>();
+    private static Map<Lobby, Set<User>> lobbyUserMap = new Hashtable<>();
 
     private final Logger logger = LoggerFactory.getLogger(LobbySocket.class);
 
@@ -69,7 +72,13 @@ public class LobbySocket {
 
         lobbySessionMap.get(lobby).add(session);
         sessionLobbyMap.put(session, lobby);
-
+        if(!lobbyUserMap.containsKey(lobby)){
+            lobbyUserMap.put(lobby, new HashSet<>());
+        }
+        lobbyUserMap.get(lobby).add(player);
+//        lobby.setPlayers(lobbyUserMap.get(lobby));
+        lobby.setNumPlayers(lobby.getNumPlayers() + 1);
+        lobbyRepository.save(lobby);
 
         sendMessageToParticularUser(player, getChatHistory(lobby));
         JSONObject j = new JSONObject();
@@ -111,7 +120,10 @@ public class LobbySocket {
         sessionLobbyMap.remove(session);
         sessionUserMap.remove(session);
         userSessionMap.remove(player);
-
+        lobbyUserMap.get(lobby).remove(player);
+//        lobby.setPlayers(lobbyUserMap.get(lobby));
+        lobby.setNumPlayers(lobby.getNumPlayers() - 1);
+        lobbyRepository.save(lobby);
         if(lobby.getHost().equals(player)){
             if(lobbySessionMap.get(lobby).size() > 0){
                 lobby.setHost(sessionUserMap.get(lobbySessionMap.get(lobby).get(0)));

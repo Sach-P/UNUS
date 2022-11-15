@@ -1,26 +1,19 @@
-package com._an_5.UNUS.GlobalChat;
+package com._an_5.UNUS.Users;
 
+import com._an_5.UNUS.GlobalChat.GlobalSocket;
 import com._an_5.UNUS.Messages.MessageRepository;
-import com._an_5.UNUS.Users.User;
-import com._an_5.UNUS.Users.UserRepository;
-import io.swagger.annotations.Api;
 import org.json.JSONObject;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Controller;
+
 import javax.websocket.*;
 import javax.websocket.server.PathParam;
-import javax.websocket.server.ServerEndpoint;
 import java.io.IOException;
 import java.util.Hashtable;
 import java.util.Map;
 
-@Api(value = "Global Web Socket")
-@Controller
-@ServerEndpoint(value = "/global/{userId}")
-public class GlobalSocket {
-
+public class UserSocket {
     private static UserRepository userRepository;
 
     private static MessageRepository messageRepository;
@@ -92,5 +85,4 @@ public class GlobalSocket {
             }
         });
     }
-
 }
