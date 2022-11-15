@@ -1,7 +1,6 @@
 package com._an_5.UNUS.Teams;
 
 import com._an_5.UNUS.Users.User;
-import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
 
 import javax.persistence.*;
