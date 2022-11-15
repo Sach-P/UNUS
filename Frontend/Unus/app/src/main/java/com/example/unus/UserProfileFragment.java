@@ -22,6 +22,16 @@ import com.android.volley.toolbox.Volley;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+/**
+ * This fragment displays the stats of the user along with the users friends,
+ * from here the user can navigate to the user Settings
+ * You can also navigate to the user search fragment and friend requests
+ * fragment
+ * you can also remove friends on this page
+ *
+ * @author Abe Demo
+ */
+
 public class UserProfileFragment extends Fragment {
 
     private View view;
@@ -76,6 +86,10 @@ public class UserProfileFragment extends Fragment {
         return view;
     }
 
+    /**
+     * This function will iterate thorugh the users list of friends and display them
+     * in the profile with options to view users and remove them from your friends
+     */
     public void getFriends() {
         LinearLayout flayout = view.findViewById(R.id.friend_buttons);
         Button make_friends = new Button(view.getContext());
@@ -158,6 +172,11 @@ public class UserProfileFragment extends Fragment {
         }
     }
 
+    /**
+     * this function will get a user from the database based on the ID of the user
+     * and it will display the users information in a popup window
+     * @param id
+     */
     public void getUser(int id) {
         LayoutInflater inflater = (LayoutInflater) view.getContext().getSystemService(view.getContext().LAYOUT_INFLATER_SERVICE);
         View popupView = inflater.inflate(R.layout.profile_view_layout, null);
@@ -201,6 +220,12 @@ public class UserProfileFragment extends Fragment {
 
     }
 
+    /**
+     * this function will remove the user from the logged in users friend list and it will also remove the
+     * current user from the other users friend list by removing them in the backend
+     * @param id
+     * @param name
+     */
     private void unfriend(int id, String name) {
         JsonObjectRequest request = new JsonObjectRequest(
                 Request.Method.DELETE,

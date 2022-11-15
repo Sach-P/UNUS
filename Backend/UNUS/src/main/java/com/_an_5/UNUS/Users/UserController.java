@@ -80,15 +80,14 @@ public class UserController {
 
     @ApiOperation(value = "get the lobby ID the user is a host of", response = int.class, tags = "user-controller")
     @GetMapping(path = "/user/get-lobby/{id}")
-    public int getLobbyId(@PathVariable int id){
+    public String getLobbyId(@PathVariable int id){
         User currUser = userRepository.findById(id);
         if(currUser != null){
             if(currUser.getLobby() != null){
-                return currUser.getLobby().getId();
+                return "{\"id\":\""+ currUser.getLobby().getId() + "\"}";
             }
         }
-
-        return -1;
+        return failure;
     }
 
 

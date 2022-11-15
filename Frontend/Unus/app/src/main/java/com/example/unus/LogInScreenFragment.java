@@ -23,8 +23,9 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 /**
- * A simply login screen fragment which takes the a user's username
- * and password and sends it to the server for verification
+ * First Fragment you see when opening a screen. Prompts a user for their username and password. Verifies credentials with the remote server
+ *
+ * @author Isaac Blandin
  */
 public class LogInScreenFragment extends Fragment {
 
@@ -98,8 +99,8 @@ public class LogInScreenFragment extends Fragment {
      * sends a post request with Strings for username and password to a
      * url stored in the strings xml.
      *
-     * @param username
-     * @param password
+     * @param username username to be sent to the server
+     * @param password password to be sent to the server
      */
     private void sendLoginPostRequest(String username, String password){
         try{
@@ -187,6 +188,9 @@ public class LogInScreenFragment extends Fragment {
         getActivity().getSupportFragmentManager().beginTransaction().replace(R.id.fragmentContainerView, new MainMenuFragment()).commit();
     }
 
+    /**
+     * changes the fragment in the contariner to the signup fragment
+     */
     private void navigateToSignup(){
         getActivity().getSupportFragmentManager().beginTransaction().replace(R.id.fragmentContainerView, new SignUpScreenFragment()).commit();
     }

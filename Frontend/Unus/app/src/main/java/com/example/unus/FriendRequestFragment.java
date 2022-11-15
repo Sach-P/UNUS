@@ -27,6 +27,14 @@ import org.json.JSONObject;
 
 import java.io.UnsupportedEncodingException;
 
+
+/**
+ * This fragment will get all of the incoming friend requests and
+ * display them so that the user can decide to either accept or decline then
+ *
+ * @author Abe Demo
+ */
+
 public class FriendRequestFragment extends Fragment {
 
     private View view;
@@ -94,6 +102,12 @@ public class FriendRequestFragment extends Fragment {
         return view;
     }
 
+    /**
+     * Takes a request that the user has and turns it into a popup
+     * that the user can either accept or decline using buttons
+     * @param username
+     * @param id
+     */
     private void createRequest(String username, int id) {
         LinearLayout newLayout = new LinearLayout(view.getContext());
         newLayout.setLayoutParams(new ViewGroup.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT,
@@ -183,6 +197,11 @@ public class FriendRequestFragment extends Fragment {
 
     }
 
+    /**
+     * Gets the stats of a user from the database and display their
+     * stats in a popup window
+     * @param id
+     */
     public void getUser(int id) {
         LayoutInflater inflater = (LayoutInflater) view.getContext().getSystemService(view.getContext().LAYOUT_INFLATER_SERVICE);
         View popupView = inflater.inflate(R.layout.profile_view_layout, null);
@@ -226,6 +245,14 @@ public class FriendRequestFragment extends Fragment {
         Volley.newRequestQueue(requireContext()).add(request);
     }
 
+    /**
+     * Sends a put request to the server that will either
+     * accept or decline the friend request and update the users friends
+     * accordingly
+     * @param b
+     * @param username
+     * @param id
+     */
     private void accept_decline(boolean b, String username, int id) {
 
         try {

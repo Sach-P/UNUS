@@ -19,7 +19,7 @@
         android:id="@+id/global_chat"
         android:layout_width="50dp"
         android:layout_height="50dp"
-        android:src="@drawable/ic_blank_avatar"
+        android:src="@drawable/ic_chat_button"
         android:layout_marginStart="5dp"
         />
 

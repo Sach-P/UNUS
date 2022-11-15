@@ -56,6 +56,14 @@
     <string name="old_password">Old Password:</string>
     <string name="change_button">Change</string>
 
+    <!--game lobby strings-->
+    <string name="pre_game_lobby">Pre-Game Lobby</string>
+    <string name="players">Players:</string>
+    <string name="player_count">%d (min 2)</string>
+    <string name="start_game">Start Game</string>
+    <string name="ready">Ready</string>
+    <string name="game_code">Code: %1$s</string>
+
     <!-- Leaderboard screen-->
     <string name="global">Global</string>
     <string name="friends">Friends</string>
@@ -65,5 +73,10 @@
 
     <!--chat strings-->
     <string name="message_error">Couldn\'t connect to messages</string>
+    <!-- TODO: Remove or change this placeholder text -->
+    <string name="hello_blank_fragment">Hello blank fragment</string>
+
+    <!--booted popup-->
+    <string name="booted">GET BOOTED \n LMAO</string>
 
 </resources>
