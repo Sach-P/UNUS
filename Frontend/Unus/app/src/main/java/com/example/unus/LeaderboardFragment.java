@@ -30,6 +30,15 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.ListIterator;
 
+/**
+ * This fragment displays the leaderboard
+ * leaderboards include both friend sections and global sections
+ * it displays stats based on what you selected, that can be either
+ * friend or global and games played or games won
+ *
+ * @author Abe Demo
+ */
+
 public class LeaderboardFragment extends Fragment {
 
     private View view;
@@ -82,10 +91,10 @@ public class LeaderboardFragment extends Fragment {
             @Override
             public void onClick(View view) {
                 if(isPlayed) {
-                    won.setBackgroundColor(view.getResources().getColor(R.color.bright_purple));
+                    won.setBackgroundColor(view.getResources().getColor(R.color.purple_500));
                     won.setTextColor(view.getResources().getColor(R.color.yellow));
                     played.setBackgroundColor(view.getResources().getColor(R.color.yellow));
-                    played.setTextColor(view.getResources().getColor(R.color.bright_purple));
+                    played.setTextColor(view.getResources().getColor(R.color.purple_500));
                     isPlayed = false;
                     stat_name.setText("Games Won: ");
                     sortGamesWon();
@@ -98,10 +107,10 @@ public class LeaderboardFragment extends Fragment {
             @Override
             public void onClick(View view) {
                 if(!isPlayed) {
-                    played.setBackgroundColor(view.getResources().getColor(R.color.bright_purple));
+                    played.setBackgroundColor(view.getResources().getColor(R.color.purple_500));
                     played.setTextColor(view.getResources().getColor(R.color.yellow));
                     won.setBackgroundColor(view.getResources().getColor(R.color.yellow));
-                    won.setTextColor(view.getResources().getColor(R.color.bright_purple));
+                    won.setTextColor(view.getResources().getColor(R.color.purple_500));
                     isPlayed = true;
                     stat_name.setText("Games Played: ");
                     sortGamesPlayed();
@@ -114,10 +123,10 @@ public class LeaderboardFragment extends Fragment {
             @Override
             public void onClick(View view) {
                 if(!isGlobal) {
-                    global.setBackgroundColor(view.getResources().getColor(R.color.bright_purple));
+                    global.setBackgroundColor(view.getResources().getColor(R.color.purple_500));
                     global.setTextColor(view.getResources().getColor(R.color.yellow));
                     friends.setBackgroundColor(view.getResources().getColor(R.color.yellow));
-                    friends.setTextColor(view.getResources().getColor(R.color.bright_purple));
+                    friends.setTextColor(view.getResources().getColor(R.color.purple_500));
                     isGlobal = true;
                     stat_name.setText((isPlayed) ? "Games Played: " : "Games Won: ");
                     displayUsers(userList, isPlayed);
@@ -129,10 +138,10 @@ public class LeaderboardFragment extends Fragment {
             @Override
             public void onClick(View view) {
                 if(isGlobal) {
-                    friends.setBackgroundColor(view.getResources().getColor(R.color.bright_purple));
+                    friends.setBackgroundColor(view.getResources().getColor(R.color.purple_500));
                     friends.setTextColor(view.getResources().getColor(R.color.yellow));
                     global.setBackgroundColor(view.getResources().getColor(R.color.yellow));
-                    global.setTextColor(view.getResources().getColor(R.color.bright_purple));
+                    global.setTextColor(view.getResources().getColor(R.color.purple_500));
                     isGlobal = false;
                     stat_name.setText((isPlayed) ? "Games Played: " : "Games Won: ");
                     displayUsers(friendList, isPlayed);
@@ -144,6 +153,9 @@ public class LeaderboardFragment extends Fragment {
         return view;
     }
 
+    /**
+     * gets all of the users in the database and puts them all into a list of Users
+     */
     private void getUsers() {
 
         JsonArrayRequest request = new JsonArrayRequest(
@@ -185,6 +197,9 @@ public class LeaderboardFragment extends Fragment {
 
     }
 
+    /**
+     * sorts the list of users by how many games they have played
+     */
     private void sortGamesPlayed() {
         List<Friend> temp = new ArrayList<Friend>();
         temp.add(userList.get(0));
@@ -205,6 +220,9 @@ public class LeaderboardFragment extends Fragment {
         friendList = temp2;
     }
 
+    /**
+     * sorts the list of users by the amount of games they have won
+     */
     private void sortGamesWon() {
         List<Friend> temp = new ArrayList<Friend>();
         temp.add(userList.get(0));
@@ -225,6 +243,15 @@ public class LeaderboardFragment extends Fragment {
         friendList = temp2;
     }
 
+    /**
+     * displays the list of users by username and stat on the screen
+     * It will display The name followed by either games played or games won
+     * This function is called every time any button is hit in the leaderboard
+     * screen
+     *
+     * @param list
+     * @param played
+     */
     private void displayUsers(List<Friend> list, boolean played) {
         board.removeViews(0, board.getChildCount());
         for(int i = 0; i < list.size(); i++) {

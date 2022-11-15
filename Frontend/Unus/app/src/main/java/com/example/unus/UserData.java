@@ -2,6 +2,8 @@ package com.example.unus;
 
 /**
  * Singleton class designed to store user data which is accessible to all activities and fragments
+ *
+ * @author Isaac Blandin
  */
 public class UserData {
 

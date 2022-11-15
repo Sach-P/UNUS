@@ -1,0 +1,157 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    android:background="?attr/backgroundColor"
+    >
+
+    <LinearLayout
+
+        android:layout_width="match_parent"
+        android:layout_height="50dp"
+        android:orientation="horizontal"
+        android:focusable="true"
+        >
+
+        <ImageView
+            android:id="@+id/leave_lobby"
+            android:layout_width="50dp"
+            android:layout_height="50dp"
+            android:src="@drawable/ic_back_button"
+            android:clickable="true"
+            android:focusable="true"
+            />
+
+        <Space
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="1"
+            />
+
+        <ImageView
+            android:id="@+id/lobby_chat"
+            android:layout_width="50dp"
+            android:layout_height="match_parent"
+            android:src="@drawable/ic_chat_button"
+            android:clickable="true"
+            android:focusable="true"
+            />
+
+    </LinearLayout>
+
+    <Space
+        android:layout_width="match_parent"
+        android:layout_height="30dp"
+        />
+
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="@string/pre_game_lobby"
+        android:textColor="?attr/colorPrimary"
+        android:textSize="40sp"
+        android:textAlignment="center"
+        android:textStyle="bold"
+        />
+
+    <TextView
+        android:id="@+id/game_code"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="@string/game_code"
+        android:textColor="?attr/colorPrimary"
+        android:textSize="30sp"
+        android:textAlignment="center"
+        android:textStyle="bold"
+        />
+
+    <LinearLayout
+
+        android:id="@+id/player_display"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:orientation="vertical"
+        android:layout_marginHorizontal="50dp"
+        android:layout_weight="1"
+        >
+
+        <Space
+            android:layout_width="match_parent"
+            android:layout_height="10dp"
+            />
+
+        <LinearLayout
+
+            android:layout_width="match_parent"
+            android:layout_height="50dp"
+            android:orientation="horizontal"
+            >
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textColor="?attr/colorPrimary"
+                android:textSize="20sp"
+                android:textStyle="bold"
+                android:text="@string/players"
+                />
+
+            <Space
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_weight="1"
+                />
+
+            <TextView
+                android:id="@+id/player_count"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textColor="?attr/colorPrimary"
+                android:textSize="15sp"
+                android:textStyle="bold"
+                android:text="@string/player_count"
+                />
+
+        </LinearLayout>
+
+    </LinearLayout>
+
+    <LinearLayout
+
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:layout_marginHorizontal="50dp"
+        >
+
+        <LinearLayout
+
+            android:id="@+id/host_lobby_buttons"
+            android:layout_width="match_parent"
+            android:layout_height="50dp"
+            android:orientation="horizontal"
+            >
+
+        </LinearLayout>
+
+        <Button
+            android:id="@+id/start_ready_game_button"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="@string/start_game"
+            android:textColor="?attr/colorSecondary"
+            android:textSize="30dp"
+            android:textStyle="bold"
+            android:backgroundTint="?attr/buttonTint"
+            />
+
+    </LinearLayout>
+
+    <Space
+        android:layout_width="match_parent"
+        android:layout_height="50dp"
+        />
+
+</LinearLayout>
