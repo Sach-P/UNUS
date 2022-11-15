@@ -15,7 +15,7 @@ import org.springframework.web.bind.annotation.*;
 import java.util.List;
 import java.util.Set;
 
-@Api(value = "friend-controller")
+//@Api(value = "friend-controller")
 @RestController
 public class FriendController {
 

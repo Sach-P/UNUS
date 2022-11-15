@@ -15,7 +15,7 @@ import org.springframework.web.bind.annotation.*;
 import java.util.List;
 import java.util.Set;
 
-@Api(value = "lobby-controller")
+//@Api(value = "lobby-controller")
 @RestController
 @RequestMapping("/lobbies")
 public class LobbyController {

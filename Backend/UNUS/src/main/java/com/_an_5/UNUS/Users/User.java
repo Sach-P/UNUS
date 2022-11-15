@@ -3,6 +3,7 @@ package com._an_5.UNUS.Users;
 
 import com._an_5.UNUS.Friends.Friend;
 import com._an_5.UNUS.Lobbies.Lobby;
+import com._an_5.UNUS.Teams.Team;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonSetter;
 import com.sun.istack.NotNull;
@@ -42,10 +43,15 @@ public class User {
     private int gamesWon;
 
 
-    @ApiModelProperty(notes = "Lobby this user is a host of",name="lobby",required=true)
+    @ApiModelProperty(notes = "Lobby this user is a host of",name="hostedLobby",required=false)
     @JsonIgnore
     @OneToOne(mappedBy = "host")
-    private Lobby lobby;
+    private Lobby hostedLobby;
+
+    @ApiModelProperty(notes = "Team this user is a owner of",name="ownedTeam",required=false)
+    @JsonIgnore
+    @OneToOne(mappedBy = "leader")
+    private Team ownedTeam;
 
 //    @ApiModelProperty(notes = "Lobby thi",name="fId",required=true)
 //    @JsonIgnore
@@ -64,6 +70,11 @@ public class User {
     @ApiModelProperty(notes = "list of received friend requests",name="requestedUsers",required=false)
     @OneToMany(mappedBy = "requestedUser")
     private Set<Friend> requestedUsers = new HashSet<>();
+
+    @ApiModelProperty(notes = "teams this user is in",name="teams",required=false)
+    @JsonIgnore
+    @ManyToMany(mappedBy = "teamPlayers")
+    private Set<Team> teams = new HashSet<>();
 
     public User (String username, String password){
         this.username = username;
@@ -166,11 +177,11 @@ public class User {
     }
 
     public void setLobby(Lobby lobby){
-        this.lobby = lobby;
+        this.hostedLobby= lobby;
     }
 
     public Lobby getLobby(){
-        return lobby;
+        return hostedLobby;
     }
 
     public String getRole() {
@@ -179,6 +190,22 @@ public class User {
 
     public void setRole(String role) {
         this.role = role;
+    }
+
+    public Set<Team> getTeams() {
+        return teams;
+    }
+
+    public void setTeams(Set<Team> teams) {
+        this.teams = teams;
+    }
+
+    public Team getOwnedTeam() {
+        return ownedTeam;
+    }
+
+    public void setOwnedTeam(Team ownedTeam) {
+        this.ownedTeam = ownedTeam;
     }
 
     //    public Lobby getJoinedLobby() {

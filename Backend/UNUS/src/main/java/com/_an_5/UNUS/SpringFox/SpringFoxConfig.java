@@ -3,6 +3,8 @@ package com._an_5.UNUS.SpringFox;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.data.util.Predicates;
+import org.springframework.web.servlet.config.annotation.ResourceHandlerRegistry;
+import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
 import springfox.documentation.builders.PathSelectors;
 import springfox.documentation.builders.RequestHandlerSelectors;
 import springfox.documentation.service.ApiInfo;
@@ -16,14 +18,13 @@ import java.util.Collections;
 
 @EnableSwagger2
 @Configuration
-public class SpringFoxConfig {
+public class SpringFoxConfig implements WebMvcConfigurer {
     @Bean
     public Docket api() {
         return new Docket(DocumentationType.SWAGGER_2)
                 .select()
-                //.apis(Predicates.(RequestHandlerSelectors.basePackage("org.springframework.boot")))
-                //.apis(RequestHandlerSelectors.any())
-                //.paths(PathSelectors.any())
+                .apis(RequestHandlerSelectors.any())
+                .paths(PathSelectors.any())
                 .build()
                 .apiInfo(apiInfo());
     }
@@ -32,8 +33,17 @@ public class SpringFoxConfig {
                 "UNUS REST API",
                 "All requests and models from the backend.",
                 "API TOS",
-                "Terms of service",
-                new Contact("Sachin Patel", " ", "sachpat@iastate.edu"),
-                "License of API", "API license URL", Collections.emptyList());
+                null,
+                new Contact("Sachin Patel", null, "sachpat@iastate.edu"),
+                null, null, Collections.emptyList());
     }
+
+    @Override
+    public void addResourceHandlers(ResourceHandlerRegistry registry)
+    {
+        //enabling swagger-ui part for visual documentation
+        registry.addResourceHandler("swagger-ui.html").addResourceLocations("classpath:/META-INF/resources/");
+        registry.addResourceHandler("/webjars/**").addResourceLocations("classpath:/META-INF/resources/webjars/");
+    }
+
 }
