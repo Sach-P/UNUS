@@ -24,13 +24,13 @@ public class TeamController {
     private String success = "{\"message\":\"success\"}";
     private String failure = "{\"message\":\"failed\"}";
 
-    @ApiOperation(value = "get all current teams", response = List.class, tags = "team-controller")
+    @ApiOperation(value = "get all current teams in the teams table in the database", response = List.class, tags = "team-controller")
     @GetMapping
     public List<Team> getTeams(){
         return teamRepository.findAll();
     }
 
-    @ApiOperation(value = "create a team", response = String.class, tags = "team-controller")
+    @ApiOperation(value = "create a team and store it in the teams and users table with a one to one relation", response = String.class, tags = "team-controller")
     @PostMapping(path = "/create-team")
     public String createTeam(@RequestParam(name = "userId") int userId, @RequestBody String json){
         JSONParser jp = new JSONParser(json);

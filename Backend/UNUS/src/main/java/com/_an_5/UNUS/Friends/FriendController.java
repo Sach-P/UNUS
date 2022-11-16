@@ -31,7 +31,7 @@ public class FriendController {
     private String success = "{\"message\":\"passed\"}";
     private String failure = "{\"message\":\"failed\"}";
 
-    @ApiOperation(value = "Send a friend request to another user", response = String.class, tags = "friend-controller")
+    @ApiOperation(value = "Send a friend request to another user this will also show as a received friend request from the user it was sent to", response = String.class, tags = "friend-controller")
     @PostMapping(path = "/user/{id}/send-friend-request")
     public String sendFriendRequest(@PathVariable int id, @RequestParam("friendId") int friendId){
         return friendService.sendFriendRequest(id, friendId);
@@ -58,14 +58,14 @@ public class FriendController {
         }
     }
 
-    @ApiOperation(value = "remove a friend", response = String.class, tags = "friend-controller")
+    @ApiOperation(value = "remove a friend the will also remove the friend for the users table because of the many to one relation", response = String.class, tags = "friend-controller")
     @DeleteMapping(path = "/user/{id}/friends/remove-friend")
     public String removeFriend(@PathVariable int id, @RequestParam("friendId") int friendId){
         friendService.removeFriend(id, friendId);
         return success;
     }
 
-    @ApiOperation(value = "geta a list of a user's friends", response = String.class, tags = "friend-controller")
+    @ApiOperation(value = "get a list of a user's friends", response = String.class, tags = "friend-controller")
     @GetMapping(path = "/user/{id}/friends")
     public Set<Friend> getFriends(@PathVariable int id){
         User currUser = userRepository.findById(id);

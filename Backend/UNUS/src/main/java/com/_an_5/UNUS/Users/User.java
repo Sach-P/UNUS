@@ -20,11 +20,11 @@ public class User {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int id;
 
-    @ApiModelProperty(notes = "username",name="username",required=true)
+    @ApiModelProperty(notes = "user's username",name="username",required=true)
     @NotNull
     private String username;
 
-    @ApiModelProperty(notes = "password",name="password",required=true)
+    @ApiModelProperty(notes = "user's password",name="password",required=true)
     @NotNull
     private String password;
 

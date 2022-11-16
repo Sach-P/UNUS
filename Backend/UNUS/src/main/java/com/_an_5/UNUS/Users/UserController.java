@@ -25,7 +25,7 @@ public class UserController {
     private String failure = "{\"message\":\"failed\"}";
 
 
-    @ApiOperation(value = "register a user", response = String.class, tags = "user-controller")
+    @ApiOperation(value = "register a user to the database", response = String.class, tags = "user-controller")
     @PostMapping(path = "/signup")
     public String addUser(@RequestBody User user){
         if (user == null)
@@ -34,7 +34,7 @@ public class UserController {
         return success;
     }
 
-    @ApiOperation(value = "login a user", response = Map.class, tags = "user-controller")
+    @ApiOperation(value = "login a user and send user's information when logged in", response = Map.class, tags = "user-controller")
     @PostMapping(path = "/login")
     public Map<String, Object> login(@RequestBody User user){//@ModelAttribute("user") User user){
         HashMap<String, Object> map = new HashMap<>();
@@ -49,7 +49,7 @@ public class UserController {
         return map;
     }
 
-    @ApiOperation(value = "Get a list of all users", response = List.class, tags = "user-controller")
+    @ApiOperation(value = "Get a list of all users currently in the database users table", response = List.class, tags = "user-controller")
     @GetMapping(path = "/user")
     public List<User> getAllUsers(){
         return userRepository.findAll();
@@ -68,7 +68,7 @@ public class UserController {
         return success;
     }
 
-    @ApiOperation(value = "Update a user", response = String.class, tags = "user-controller")
+    @ApiOperation(value = "Update a user in the users table in the database", response = String.class, tags = "user-controller")
     @PutMapping(path = "/user/{id}")
     public User updateUser(@PathVariable int id, @RequestBody User user) {
         User currUser = userRepository.findById(id);
