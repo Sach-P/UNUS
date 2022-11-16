@@ -112,3 +112,62 @@ You may wish to exclude one of them to ensure predictable runtime behavior
 2022-11-15 17:11:54.911  INFO 37392 --- [SpringApplicationShutdownHook] j.LocalContainerEntityManagerFactoryBean : Closing JPA EntityManagerFactory for persistence unit 'default'
 2022-11-15 17:11:54.914  INFO 37392 --- [SpringApplicationShutdownHook] com.zaxxer.hikari.HikariDataSource       : HikariPool-1 - Shutdown initiated...
 2022-11-15 17:11:54.937  INFO 37392 --- [SpringApplicationShutdownHook] com.zaxxer.hikari.HikariDataSource       : HikariPool-1 - Shutdown completed.
+2022-11-15 17:44:31.939  INFO 22028 --- [main] com._an_5.UNUS.UnusApplication           : Starting UnusApplication using Java 11.0.10 on Wintermancer with PID 22028 (C:\Users\sachp\Workspace\2_an_5\Backend\UNUS\target\classes started by sachp in C:\Users\sachp\Workspace\2_an_5\Backend\UNUS)
+2022-11-15 17:44:31.942  INFO 22028 --- [main] com._an_5.UNUS.UnusApplication           : No active profile set, falling back to 1 default profile: "default"
+2022-11-15 17:44:32.760  INFO 22028 --- [main] .s.d.r.c.RepositoryConfigurationDelegate : Bootstrapping Spring Data JPA repositories in DEFAULT mode.
+2022-11-15 17:44:32.838  INFO 22028 --- [main] .s.d.r.c.RepositoryConfigurationDelegate : Finished Spring Data repository scanning in 67 ms. Found 5 JPA repository interfaces.
+2022-11-15 17:44:33.609  INFO 22028 --- [main] o.s.b.w.embedded.tomcat.TomcatWebServer  : Tomcat initialized with port(s): 8080 (http)
+2022-11-15 17:44:33.619  INFO 22028 --- [main] o.apache.catalina.core.StandardService   : Starting service [Tomcat]
+2022-11-15 17:44:33.619  INFO 22028 --- [main] org.apache.catalina.core.StandardEngine  : Starting Servlet engine: [Apache Tomcat/9.0.68]
+2022-11-15 17:44:33.793  INFO 22028 --- [main] o.a.c.c.C.[Tomcat].[localhost].[/]       : Initializing Spring embedded WebApplicationContext
+2022-11-15 17:44:33.793  INFO 22028 --- [main] w.s.c.ServletWebServerApplicationContext : Root WebApplicationContext: initialization completed in 1794 ms
+2022-11-15 17:44:33.980  INFO 22028 --- [main] o.hibernate.jpa.internal.util.LogHelper  : HHH000204: Processing PersistenceUnitInfo [name: default]
+2022-11-15 17:44:34.054  INFO 22028 --- [main] org.hibernate.Version                    : HHH000412: Hibernate ORM core version 5.6.10.Final
+2022-11-15 17:44:34.219  INFO 22028 --- [main] o.hibernate.annotations.common.Version   : HCANN000001: Hibernate Commons Annotations {5.1.2.Final}
+2022-11-15 17:44:34.333  INFO 22028 --- [main] com.zaxxer.hikari.HikariDataSource       : HikariPool-1 - Starting...
+2022-11-15 17:47:08.618  INFO 13152 --- [main] com._an_5.UNUS.UnusApplication           : Starting UnusApplication using Java 11.0.10 on Wintermancer with PID 13152 (C:\Users\sachp\Workspace\2_an_5\Backend\UNUS\target\classes started by sachp in C:\Users\sachp\Workspace\2_an_5\Backend\UNUS)
+2022-11-15 17:47:08.622  INFO 13152 --- [main] com._an_5.UNUS.UnusApplication           : No active profile set, falling back to 1 default profile: "default"
+2022-11-15 17:47:09.357  INFO 13152 --- [main] .s.d.r.c.RepositoryConfigurationDelegate : Bootstrapping Spring Data JPA repositories in DEFAULT mode.
+2022-11-15 17:47:09.421  INFO 13152 --- [main] .s.d.r.c.RepositoryConfigurationDelegate : Finished Spring Data repository scanning in 54 ms. Found 5 JPA repository interfaces.
+2022-11-15 17:47:09.995  INFO 13152 --- [main] o.s.b.w.embedded.tomcat.TomcatWebServer  : Tomcat initialized with port(s): 8080 (http)
+2022-11-15 17:47:10.003  INFO 13152 --- [main] o.apache.catalina.core.StandardService   : Starting service [Tomcat]
+2022-11-15 17:47:10.003  INFO 13152 --- [main] org.apache.catalina.core.StandardEngine  : Starting Servlet engine: [Apache Tomcat/9.0.68]
+2022-11-15 17:47:10.174  INFO 13152 --- [main] o.a.c.c.C.[Tomcat].[localhost].[/]       : Initializing Spring embedded WebApplicationContext
+2022-11-15 17:47:10.175  INFO 13152 --- [main] w.s.c.ServletWebServerApplicationContext : Root WebApplicationContext: initialization completed in 1495 ms
+2022-11-15 17:47:10.324  INFO 13152 --- [main] o.hibernate.jpa.internal.util.LogHelper  : HHH000204: Processing PersistenceUnitInfo [name: default]
+2022-11-15 17:47:10.367  INFO 13152 --- [main] org.hibernate.Version                    : HHH000412: Hibernate ORM core version 5.6.10.Final
+2022-11-15 17:47:10.495  INFO 13152 --- [main] o.hibernate.annotations.common.Version   : HCANN000001: Hibernate Commons Annotations {5.1.2.Final}
+2022-11-15 17:47:10.584  INFO 13152 --- [main] com.zaxxer.hikari.HikariDataSource       : HikariPool-1 - Starting...
+2022-11-15 17:47:10.720  INFO 13152 --- [main] com.zaxxer.hikari.HikariDataSource       : HikariPool-1 - Start completed.
+2022-11-15 17:47:10.744  INFO 13152 --- [main] org.hibernate.dialect.Dialect            : HHH000400: Using dialect: org.hibernate.dialect.MySQL8Dialect
+2022-11-15 17:47:11.512  INFO 13152 --- [main] o.h.e.t.j.p.i.JtaPlatformInitiator       : HHH000490: Using JtaPlatform implementation: [org.hibernate.engine.transaction.jta.platform.internal.NoJtaPlatform]
+2022-11-15 17:47:11.520  INFO 13152 --- [main] j.LocalContainerEntityManagerFactoryBean : Initialized JPA EntityManagerFactory for persistence unit 'default'
+2022-11-15 17:47:12.206  WARN 13152 --- [main] JpaBaseConfiguration$JpaWebConfiguration : spring.jpa.open-in-view is enabled by default. Therefore, database queries may be performed during view rendering. Explicitly configure spring.jpa.open-in-view to disable this warning
+2022-11-15 17:47:12.626  INFO 13152 --- [main] o.s.b.w.embedded.tomcat.TomcatWebServer  : Tomcat started on port(s): 8080 (http) with context path ''
+2022-11-15 17:47:12.930  INFO 13152 --- [main] com._an_5.UNUS.UnusApplication           : Started UnusApplication in 4.685 seconds (JVM running for 5.537)
+2022-11-15 17:47:20.357  INFO 13152 --- [http-nio-8080-exec-1] o.a.c.c.C.[Tomcat].[localhost].[/]       : Initializing Spring DispatcherServlet 'dispatcherServlet'
+2022-11-15 17:47:20.358  INFO 13152 --- [http-nio-8080-exec-1] o.s.web.servlet.DispatcherServlet        : Initializing Servlet 'dispatcherServlet'
+2022-11-15 17:47:20.360  INFO 13152 --- [http-nio-8080-exec-1] o.s.web.servlet.DispatcherServlet        : Completed initialization in 2 ms
+2022-11-15 20:59:06.935  INFO 1816 --- [main] com._an_5.UNUS.UnusApplication           : Starting UnusApplication using Java 11.0.10 on Wintermancer with PID 1816 (C:\Users\sachp\Workspace\2_an_5\Backend\UNUS\target\classes started by sachp in C:\Users\sachp\Workspace\2_an_5\Backend\UNUS)
+2022-11-15 20:59:06.939  INFO 1816 --- [main] com._an_5.UNUS.UnusApplication           : No active profile set, falling back to 1 default profile: "default"
+2022-11-15 20:59:07.712  INFO 1816 --- [main] .s.d.r.c.RepositoryConfigurationDelegate : Bootstrapping Spring Data JPA repositories in DEFAULT mode.
+2022-11-15 20:59:07.780  INFO 1816 --- [main] .s.d.r.c.RepositoryConfigurationDelegate : Finished Spring Data repository scanning in 59 ms. Found 5 JPA repository interfaces.
+2022-11-15 20:59:08.466  INFO 1816 --- [main] o.s.b.w.embedded.tomcat.TomcatWebServer  : Tomcat initialized with port(s): 8080 (http)
+2022-11-15 20:59:08.480  INFO 1816 --- [main] o.apache.catalina.core.StandardService   : Starting service [Tomcat]
+2022-11-15 20:59:08.480  INFO 1816 --- [main] org.apache.catalina.core.StandardEngine  : Starting Servlet engine: [Apache Tomcat/9.0.68]
+2022-11-15 20:59:08.659  INFO 1816 --- [main] o.a.c.c.C.[Tomcat].[localhost].[/]       : Initializing Spring embedded WebApplicationContext
+2022-11-15 20:59:08.660  INFO 1816 --- [main] w.s.c.ServletWebServerApplicationContext : Root WebApplicationContext: initialization completed in 1672 ms
+2022-11-15 20:59:08.855  INFO 1816 --- [main] o.hibernate.jpa.internal.util.LogHelper  : HHH000204: Processing PersistenceUnitInfo [name: default]
+2022-11-15 20:59:08.928  INFO 1816 --- [main] org.hibernate.Version                    : HHH000412: Hibernate ORM core version 5.6.10.Final
+2022-11-15 20:59:09.101  INFO 1816 --- [main] o.hibernate.annotations.common.Version   : HCANN000001: Hibernate Commons Annotations {5.1.2.Final}
+2022-11-15 20:59:09.219  INFO 1816 --- [main] com.zaxxer.hikari.HikariDataSource       : HikariPool-1 - Starting...
+2022-11-15 20:59:09.372  INFO 1816 --- [main] com.zaxxer.hikari.HikariDataSource       : HikariPool-1 - Start completed.
+2022-11-15 20:59:09.397  INFO 1816 --- [main] org.hibernate.dialect.Dialect            : HHH000400: Using dialect: org.hibernate.dialect.MySQL8Dialect
+2022-11-15 20:59:10.185  INFO 1816 --- [main] o.h.e.t.j.p.i.JtaPlatformInitiator       : HHH000490: Using JtaPlatform implementation: [org.hibernate.engine.transaction.jta.platform.internal.NoJtaPlatform]
+2022-11-15 20:59:10.194  INFO 1816 --- [main] j.LocalContainerEntityManagerFactoryBean : Initialized JPA EntityManagerFactory for persistence unit 'default'
+2022-11-15 20:59:10.845  WARN 1816 --- [main] JpaBaseConfiguration$JpaWebConfiguration : spring.jpa.open-in-view is enabled by default. Therefore, database queries may be performed during view rendering. Explicitly configure spring.jpa.open-in-view to disable this warning
+2022-11-15 20:59:11.259  INFO 1816 --- [main] o.s.b.w.embedded.tomcat.TomcatWebServer  : Tomcat started on port(s): 8080 (http) with context path ''
+2022-11-15 20:59:11.585  INFO 1816 --- [main] com._an_5.UNUS.UnusApplication           : Started UnusApplication in 5.073 seconds (JVM running for 6.086)
+2022-11-15 20:59:23.402  INFO 1816 --- [http-nio-8080-exec-1] o.a.c.c.C.[Tomcat].[localhost].[/]       : Initializing Spring DispatcherServlet 'dispatcherServlet'
+2022-11-15 20:59:23.403  INFO 1816 --- [http-nio-8080-exec-1] o.s.web.servlet.DispatcherServlet        : Initializing Servlet 'dispatcherServlet'
+2022-11-15 20:59:23.405  INFO 1816 --- [http-nio-8080-exec-1] o.s.web.servlet.DispatcherServlet        : Completed initialization in 2 ms
