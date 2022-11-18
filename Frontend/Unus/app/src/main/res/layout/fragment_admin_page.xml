@@ -1,0 +1,75 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    android:background="?attr/backgroundColor"
+    >
+
+    <Button
+        android:id="@+id/backbutton"
+        android:layout_width="100dp"
+        android:layout_height="50dp"
+        android:text="@string/back"
+        android:backgroundTint="?attr/colorPrimary"
+        android:textColor="?attr/colorSecondary"
+        />
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_marginHorizontal="50dp"
+        android:layout_marginTop="30dp"
+        android:orientation="vertical"
+        >
+
+        <TextView
+            android:layout_height="50dp"
+            android:layout_width="match_parent"
+            android:text="@string/admin_screen"
+            android:textAlignment="center"
+            android:textSize="30sp"
+            android:textColor="?attr/colorPrimary"
+            android:id="@+id/friend_reqs"
+            />
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="50dp"
+            android:orientation="horizontal"
+            >
+            <Button
+                android:layout_width="145dp"
+                android:layout_height="match_parent"
+                android:layout_marginLeft="5dp"
+                android:layout_marginRight="5dp"
+                android:text="@string/admin_users"
+                android:backgroundTint="?attr/buttonTint"
+                android:textColor="?attr/colorSecondary"
+                />
+            <Button
+                android:layout_width="145dp"
+                android:layout_height="match_parent"
+                android:layout_marginLeft="5dp"
+                android:layout_marginRight="5dp"
+                android:text="@string/admin_lobbies"
+                android:backgroundTint="?attr/colorSecondary"
+                android:textColor="?attr/buttonTint"
+                />
+        </LinearLayout>
+        <ScrollView
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            >
+            <LinearLayout
+                android:id="@+id/results"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:orientation="vertical"
+                >
+
+            </LinearLayout>
+        </ScrollView>
+    </LinearLayout>
+
+</LinearLayout>
