@@ -19,7 +19,10 @@
         <entry key="..\:/Users/geoff/Documents/GitHub/2_an_5/Frontend/Unus/app/src/main/res/drawable/ic_blank_avatar.xml" value="0.365" />
         <entry key="..\:/Users/geoff/Documents/GitHub/2_an_5/Frontend/Unus/app/src/main/res/drawable/ic_uno_logo.xml" value="0.13" />
         <entry key="..\:/Users/geoff/Documents/GitHub/2_an_5/Frontend/Unus/app/src/main/res/layout/activity_main.xml" value="0.1111111111111111" />
+        <entry key="..\:/Users/geoff/Documents/GitHub/2_an_5/Frontend/Unus/app/src/main/res/layout/booted_popup.xml" value="0.4041666666666667" />
         <entry key="..\:/Users/geoff/Documents/GitHub/2_an_5/Frontend/Unus/app/src/main/res/layout/fragment_friend_request.xml" value="0.4041666666666667" />
+        <entry key="..\:/Users/geoff/Documents/GitHub/2_an_5/Frontend/Unus/app/src/main/res/layout/fragment_game_lobby.xml" value="0.4041666666666667" />
+        <entry key="..\:/Users/geoff/Documents/GitHub/2_an_5/Frontend/Unus/app/src/main/res/layout/fragment_game_two_player.xml" value="0.4041666666666667" />
         <entry key="..\:/Users/geoff/Documents/GitHub/2_an_5/Frontend/Unus/app/src/main/res/layout/fragment_log_in_screen.xml" value="0.264" />
         <entry key="..\:/Users/geoff/Documents/GitHub/2_an_5/Frontend/Unus/app/src/main/res/layout/fragment_main_menu.xml" value="0.264" />
         <entry key="..\:/Users/geoff/Documents/GitHub/2_an_5/Frontend/Unus/app/src/main/res/layout/fragment_sign_up_screen.xml" value="0.4041666666666667" />
@@ -32,7 +35,7 @@
     </option>
   </component>
   <component name="JavadocGenerationManager">
-    <option name="OUTPUT_DIRECTORY" value="$USER_HOME$/Documents" />
+    <option name="OUTPUT_DIRECTORY" value="$PROJECT_DIR$/../../../.." />
     <option name="OPTION_DOCUMENT_TAG_AUTHOR" value="true" />
   </component>
   <component name="ProjectRootManager" version="2" languageLevel="JDK_1_8" default="true" project-jdk-name="1.8" project-jdk-type="JavaSDK">
