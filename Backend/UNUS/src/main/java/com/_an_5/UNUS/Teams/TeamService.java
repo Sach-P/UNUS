@@ -18,12 +18,12 @@ public class TeamService {
     private String success = "{\"message\":\"success\"}";
     private String failure = "{\"message\":\"failed\"}";
 
-    public String createTeam(int userId, boolean isPrivate){
+    public String createTeam(int userId, String teamName, boolean isPrivate){
         User leader = userRepo.findById(userId);
         if(leader == null || leader.getOwnedTeam() != null){
             return failure;
         }
-        Team team = new Team(leader, isPrivate);
+        Team team = new Team(leader, teamName, isPrivate);
         leader.setOwnedTeam(team);
         teamRepo.save(team);
         userRepo.save(leader);

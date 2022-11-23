@@ -15,6 +15,9 @@ public class Team {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int id;
 
+    @ApiModelProperty(notes = "the team's name",name="teamName",required=true)
+    private String teamName;
+
     @ApiModelProperty(notes = "whether the team is private or not",name="isPrivate",required=true)
     private boolean isPrivate;
 
@@ -35,9 +38,15 @@ public class Team {
     @ApiModelProperty(notes = "cumulative wins in the team",name="isPrivate",required=true)
     private int wins;
 
-    public Team(User leader, boolean isPrivate){
+    public Team(User leader, String teamName, boolean isPrivate){
         this.leader = leader;
         this.isPrivate = isPrivate;
+        this.teamName = teamName;
+    }
+
+    public Team(String teamName, boolean isPrivate){
+        this.isPrivate = isPrivate;
+        this.teamName = teamName;
     }
 
     public Team(){
@@ -82,6 +91,22 @@ public class Team {
 
     public void setPrivate(boolean aPrivate) {
         isPrivate = aPrivate;
+    }
+
+    public void setTeamName(String teamName) {
+        this.teamName = teamName;
+    }
+
+    public String getTeamName() {
+        return teamName;
+    }
+
+    public void addMember(User member){
+        teamPlayers.add(member);
+    }
+
+    public void removeMember(User member){
+        teamPlayers.remove(member);
     }
 }
 

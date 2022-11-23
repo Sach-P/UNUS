@@ -46,7 +46,7 @@ public class User {
     @ApiModelProperty(notes = "Lobby this user is a host of",name="hostedLobby",required=false)
     @JsonIgnore
     @OneToOne(mappedBy = "host")
-    private Lobby hostedLobby;
+    private Lobby lobby;
 
     @ApiModelProperty(notes = "Team this user is a owner of",name="ownedTeam",required=false)
     @JsonIgnore
@@ -177,11 +177,12 @@ public class User {
     }
 
     public void setLobby(Lobby lobby){
-        this.hostedLobby= lobby;
+        this.lobby= lobby;
     }
 
+
     public Lobby getLobby(){
-        return hostedLobby;
+        return lobby;
     }
 
     public String getRole() {
