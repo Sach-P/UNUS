@@ -114,7 +114,7 @@ public class GameLobbyFragment extends Fragment {
         startButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                getActivity().getSupportFragmentManager().beginTransaction().replace(R.id.fragmentContainerView, new GameTwoPlayerFragment()).commit();
+                getActivity().getSupportFragmentManager().beginTransaction().replace(R.id.fragmentContainerView, new GameTwoPlayerFragment(), "gameScreen").commit();
             }
         });
 
@@ -137,13 +137,13 @@ public class GameLobbyFragment extends Fragment {
         plate.setOrientation(LinearLayout.HORIZONTAL);
         //create grey box behind plate
         plate.setPadding(30,10,30,10);
-        plate.setBackgroundColor(getResources().getColor(R.color.dark_gray));
+        plate.setBackgroundColor(view.getContext().getResources().getColor(R.color.dark_gray));
 
         //add username display to plate
         TextView usernameText = new TextView(view.getContext());
         usernameText.setLayoutParams(new ViewGroup.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.MATCH_PARENT));
         usernameText.setText(username);
-        usernameText.setTextColor(getResources().getColor(R.color.white));
+        usernameText.setTextColor(view.getContext().getResources().getColor(R.color.white));
         usernameText.setTextSize(20);
         usernameText.setGravity(Gravity.CENTER_VERTICAL);
         plate.addView(usernameText);
@@ -156,8 +156,8 @@ public class GameLobbyFragment extends Fragment {
         //add view profile button to the plate
         Button viewUser = new Button(view.getContext());
         viewUser.setLayoutParams(new ViewGroup.LayoutParams(200, ViewGroup.LayoutParams.MATCH_PARENT));
-        viewUser.setTextColor(getResources().getColor(R.color.yellow ));
-        viewUser.setBackgroundTintList(ColorStateList.valueOf(getResources().getColor(R.color.purple_500)));
+        viewUser.setTextColor(view.getContext().getResources().getColor(R.color.yellow ));
+        viewUser.setBackgroundTintList(ColorStateList.valueOf(view.getContext().getResources().getColor(R.color.purple_500)));
         viewUser.setText("view");
         viewUser.setTextSize(12);
         viewUser.setOnClickListener(new View.OnClickListener() {
@@ -177,8 +177,8 @@ public class GameLobbyFragment extends Fragment {
             //add kick player button to the plate
             Button kickUser = new Button(view.getContext());
             kickUser.setLayoutParams(new ViewGroup.LayoutParams(200, ViewGroup.LayoutParams.MATCH_PARENT));
-            kickUser.setTextColor(getResources().getColor(R.color.yellow ));
-            kickUser.setBackgroundTintList(ColorStateList.valueOf(getResources().getColor(R.color.purple_500)));
+            kickUser.setTextColor(view.getContext().getResources().getColor(R.color.yellow ));
+            kickUser.setBackgroundTintList(ColorStateList.valueOf(view.getContext().getResources().getColor(R.color.purple_500)));
             kickUser.setText("kick");
             kickUser.setTextSize(12);
             kickUser.setOnClickListener(new View.OnClickListener() {
@@ -327,35 +327,38 @@ public class GameLobbyFragment extends Fragment {
      */
     public void onMessage(String s) throws JSONException {
 
-        JSONObject json = new JSONObject(s);
+        if (!s.isEmpty()) {
 
-        if (json.has("joined") && json.getInt("joined") != UserData.getInstance().getUserID()){
-            addPlayer(json.getInt("joined"));
-            playerIds.add(json.getInt("joined"));
+            JSONObject json = new JSONObject(s);
 
-            if (isHost) {
-                mainActivity.updateLobby(playerIds);
-            }
-        } else if (json.has("left")){
-            LinearLayout playerDisp = view.findViewById(R.id.player_display);
-            deletePlayerArray(json.getInt("left"));
-            playerDisp.removeView(view.findViewWithTag("plate"+json.getInt("left")));
-            playerDisp.removeView(view.findViewWithTag("space"+json.getInt("left")));
-        } else if (json.has("ids") && !isHost && !prefill){
-            JSONArray array = json.getJSONArray("ids");
-            for (int i = 0; i < array.length(); i++){
-                if((int)array.get(i) != UserData.getInstance().getUserID()) {
-                    addPlayer((int) array.get(i));
-                    playerIds.add((int)array.get(i));
+            if (json.has("joined") && json.getInt("joined") != UserData.getInstance().getUserID()) {
+                addPlayer(json.getInt("joined"));
+                playerIds.add(json.getInt("joined"));
+
+                if (isHost) {
+                    mainActivity.updateLobby(playerIds);
                 }
+            } else if (json.has("left")) {
+                LinearLayout playerDisp = view.findViewById(R.id.player_display);
+                deletePlayerArray(json.getInt("left"));
+                playerDisp.removeView(view.findViewWithTag("plate" + json.getInt("left")));
+                playerDisp.removeView(view.findViewWithTag("space" + json.getInt("left")));
+            } else if (json.has("ids") && !isHost && !prefill) {
+
+                JSONArray array = json.getJSONArray("ids");
+                for (int i = 0; i < array.length(); i++) {
+                    if ((int) array.get(i) != UserData.getInstance().getUserID()) {
+                        addPlayer((int) array.get(i));
+                        playerIds.add((int) array.get(i));
+                    }
+                }
+                prefill = true;
+            } else if (json.has("kicked") && json.getInt("kicked") == UserData.getInstance().getUserID()) {
+                kicked();
             }
-            prefill = true;
-        } else if (json.has("kicked") && json.getInt("kicked") == UserData.getInstance().getUserID()){
-            kicked();
+
+            playerCountDisp.setText(getString(R.string.player_count, playerIds.size()));
         }
-
-        playerCountDisp.setText(getString(R.string.player_count, playerIds.size()));
-
     }
 
     /**
