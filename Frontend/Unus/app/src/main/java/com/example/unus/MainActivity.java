@@ -68,14 +68,22 @@ public class MainActivity extends AppCompatActivity {
                     @Override
                     public void run() {
                         GameLobbyFragment gameLobbyFrag = (GameLobbyFragment) getSupportFragmentManager().findFragmentByTag("gameLobby");
+                        GameTwoPlayerFragment gameFrag = (GameTwoPlayerFragment) getSupportFragmentManager().findFragmentByTag("gameScreen");
 
+                        if (gameLobbyFrag != null) {
                             try {
                                 gameLobbyFrag.onMessage(s);
                             } catch (JSONException e) {
                                 e.printStackTrace();
                             }
-
-
+                        }
+                        else if (gameFrag != null && gameFrag.isVisible()){
+                            try {
+                                gameFrag.onMessage(s);
+                            } catch (JSONException e) {
+                                e.printStackTrace();
+                            }
+                        }
                     }
                 });
             }
