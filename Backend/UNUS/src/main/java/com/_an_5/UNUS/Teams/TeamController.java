@@ -53,7 +53,7 @@ public class TeamController {
 
         User user = userRepository.findById(userId);
 
-        if(user == null || user.getOwnedTeam() != null)
+        if(user == null || user.getOwnedTeam() != null || user.getRole().equals("guest"))
             return failure;
 
         team.setLeader(user);
@@ -66,7 +66,7 @@ public class TeamController {
     @PutMapping(path = "/join-team/{teamId}")
     public String joinTeam(@RequestParam(name = "userId") int userId, @PathVariable int teamId){
         User user = userRepository.findById(userId);
-        if(user == null || user.getTeams().size() >= 3){
+        if(user == null || user.getTeams().size() >= 3 || user.getRole().equals("guest")){
             return failure;
         }
 
