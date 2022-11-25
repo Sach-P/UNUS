@@ -16,22 +16,15 @@ import java.util.Map;
 public class UserSocket {
     private static UserRepository userRepository;
 
-    private static MessageRepository messageRepository;
-
     @Autowired
     public void setUserRepository(UserRepository repo) {
         userRepository = repo;
     }
 
-    @Autowired
-    public void setMessageRepository(MessageRepository repo) {
-        messageRepository = repo;
-    }
-
     private static Map<Session, User> sessionUserMap = new Hashtable<>();
     private static Map<User, Session> userSessionMap = new Hashtable<>();
 
-    private final Logger logger = LoggerFactory.getLogger(GlobalSocket.class);
+    private final Logger logger = LoggerFactory.getLogger(UserSocket.class);
 
 
     @OnOpen
