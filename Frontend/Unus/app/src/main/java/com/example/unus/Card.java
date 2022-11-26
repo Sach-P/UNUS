@@ -34,6 +34,12 @@ public class Card {
         this.context = context;
     }
 
+    public Card (JSONObject jsonObject, Context context) throws JSONException {
+        this.rank = CardRank.valueOf(jsonObject.getString("rank"));
+        this.color = CardColor.valueOf(jsonObject.getString("color"));
+        this.context = context;
+    }
+
     /**
      * constructor to create a random card based on weights
      */
