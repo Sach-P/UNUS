@@ -81,8 +81,16 @@ public class GamePlayFragment extends Fragment {
 
         //draw first card if you are the host
         if (isHost) {
-            Card firstCard = new Card(getContext());
-            discard(firstCard);
+            Card firstCard;
+            do {
+                firstCard = new Card(getContext());
+            } while (firstCard.getColor() == CardColor.WILD);
+
+            try {
+                discard(firstCard, true);
+            } catch (JSONException e) {
+                e.printStackTrace();
+            }
             topDiscard = firstCard;
         }
 
@@ -130,7 +138,11 @@ public class GamePlayFragment extends Fragment {
             public void onClick(View view) {
                 if (card.cardPlayable(topDiscard)) {
                     plate.setVisibility(View.GONE);
-                    discard(cards.get(index));
+                    try {
+                        discard(card, true);
+                    } catch (JSONException e) {
+                        e.printStackTrace();
+                    }
                 }
             }
         });
@@ -144,7 +156,7 @@ public class GamePlayFragment extends Fragment {
      *
      * @param card card object to be discarded
      */
-    public void discard(Card card){
+    private void discard(Card card, boolean send) throws JSONException {
 
         //create new image view using the card's drawable
         ImageView plate = new ImageView(getContext());
@@ -155,6 +167,10 @@ public class GamePlayFragment extends Fragment {
         //create a popup to choose the new color if a wild card is played
         if (card.getColor() == CardColor.WILD){
             createColorPopup(card.getRank());
+        } else {
+            if (send){
+                sendCard(card);
+            }
         }
 
         //replace the card on the discard pile
@@ -189,7 +205,11 @@ public class GamePlayFragment extends Fragment {
         yellow.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                setWild(rank,CardColor.YELLOW);
+                try {
+                    setWild(rank,CardColor.YELLOW);
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                }
                 popupWindow.dismiss();
             }
         });
@@ -198,7 +218,11 @@ public class GamePlayFragment extends Fragment {
         red.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                setWild(rank,CardColor.RED);
+                try {
+                    setWild(rank,CardColor.RED);
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                }
                 popupWindow.dismiss();
             }
         });
@@ -207,7 +231,11 @@ public class GamePlayFragment extends Fragment {
         purple.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                setWild(rank,CardColor.PURPLE);
+                try {
+                    setWild(rank,CardColor.PURPLE);
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                }
                 popupWindow.dismiss();
             }
         });
@@ -216,7 +244,11 @@ public class GamePlayFragment extends Fragment {
         green.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                setWild(rank,CardColor.GREEN);
+                try {
+                    setWild(rank,CardColor.GREEN);
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                }
                 popupWindow.dismiss();
             }
         });
@@ -228,8 +260,24 @@ public class GamePlayFragment extends Fragment {
      * @param rank which wild card is being played
      * @param color color that is selected
      */
-    private void setWild(CardRank rank, CardColor color){
-        discard(new Card(rank, color, getContext()));
+    private void setWild(CardRank rank, CardColor color) throws JSONException {
+        Card card = new Card(rank, color, getContext());
+        sendCard(card);
+        discard(card, true);
+    }
+
+    /**
+     * sends a jsonObject message to the websocket with a card object
+     *
+     * @param card
+     * @throws JSONException
+     */
+    private void sendCard(Card card) throws JSONException {
+        JSONObject message = new JSONObject();
+        message.put("id", UserData.getInstance().getUserID());
+        message.put("card", card.toJsonObject());
+
+        mainActivity.sendMessage(message);
     }
 
     /**
@@ -241,8 +289,10 @@ public class GamePlayFragment extends Fragment {
     public void onMessage(String s) throws JSONException {
         JSONObject obj = new JSONObject(s);
         if (obj.getInt("id") != UserData.getInstance().getUserID() && obj.has("id")){
-            CardColor color;
-            CardRank rank;
+            if (obj.has("card")){
+                Card card = new Card(obj.getJSONObject("card"), getContext());
+                discard(card, false);
+            }
         }
     }
 

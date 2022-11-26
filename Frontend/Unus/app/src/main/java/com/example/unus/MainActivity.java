@@ -89,7 +89,11 @@ public class MainActivity extends AppCompatActivity {
             @Override
             public void onClose(int i, String s, boolean b) {
                 GameLobbyFragment gameLobbyFrag = (GameLobbyFragment) getSupportFragmentManager().findFragmentByTag("gameLobby");
-                gameLobbyFrag.leaveGame();
+                try {
+                    gameLobbyFrag.leaveGame();
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                }
             }
 
             @Override

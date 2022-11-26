@@ -40,9 +40,14 @@ public class GameLobbyFragment extends Fragment {
     int gameLobbyId;
 
     TextView playerCountDisp;
+    Button startButton;
 
     boolean isHost;
     boolean prefill = false;
+
+    boolean isReady;
+    int numReady = 0;
+    boolean canStart;
 
     MainActivity mainActivity;
 
@@ -96,7 +101,11 @@ public class GameLobbyFragment extends Fragment {
         leaveButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                leaveGame();
+                try {
+                    leaveGame();
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                }
             }
         });
 
@@ -110,14 +119,46 @@ public class GameLobbyFragment extends Fragment {
         });
 
         //add listener to start game button
-        Button startButton = view.findViewById(R.id.start_ready_game_button);
+        startButton = view.findViewById(R.id.start_ready_game_button);
         startButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                getActivity().getSupportFragmentManager().beginTransaction().replace(R.id.fragmentContainerView, new GamePlayFragment(), "gameScreen").commit();
+                if (isHost) {
+                    if (canStart) {
+                        JSONObject startMessage = new JSONObject();
+                        try {
+                            startMessage.put("start", true);
+                        } catch (JSONException e) {
+                            e.printStackTrace();
+                        }
+                        mainActivity.sendMessage(startMessage);
+
+                        startGame(true);
+                    }
+                } else {
+                    JSONObject readyJson = new JSONObject();
+                    try {
+                        if (isReady){
+                            startButton.setText(R.string.ready);
+                            readyJson.put("ready", false);
+                        } else {
+                            startButton.setText(R.string.unready);
+                            readyJson.put("ready", true);
+                        }
+                    } catch (JSONException e){
+                        e.printStackTrace();
+                    }
+                    isReady = !isReady;
+                    mainActivity.sendMessage(readyJson);
+                }
             }
         });
 
+        if (!isHost){
+            startButton.setText(R.string.ready);
+        } else {
+            startButton.setText(R.string.waiting_for_players);
+        }
 
         return view;
     }
@@ -284,7 +325,15 @@ public class GameLobbyFragment extends Fragment {
     /**
      * disconnects the user from the websocket and sends back to the main menu
      */
-    public void leaveGame(){
+    public void leaveGame() throws JSONException {
+
+        //send unready message if leaving and had readied already
+        if (isReady && !isHost){
+            JSONObject jsonObject = new JSONObject();
+            jsonObject.put("ready", false);
+            mainActivity.sendMessage(jsonObject);
+        }
+
         mainActivity.disconnectWebSocket();
         getActivity().getSupportFragmentManager().beginTransaction().replace(R.id.fragmentContainerView, new MainMenuFragment()).commit();
     }
@@ -304,6 +353,16 @@ public class GameLobbyFragment extends Fragment {
 
         getActivity().getSupportFragmentManager().beginTransaction().replace(R.id.fragmentContainerView, frag).commit();
 
+    }
+
+    private void startGame(boolean host){
+        GamePlayFragment frag = new GamePlayFragment();
+
+        Bundle bundle = new Bundle();
+        bundle.putBoolean("isHost", host);
+        frag.setArguments(bundle);
+
+        getActivity().getSupportFragmentManager().beginTransaction().replace(R.id.fragmentContainerView, frag, "gameScreen").commit();
     }
 
     /**
@@ -355,6 +414,22 @@ public class GameLobbyFragment extends Fragment {
                 prefill = true;
             } else if (json.has("kicked") && json.getInt("kicked") == UserData.getInstance().getUserID()) {
                 kicked();
+            } else if (json.has("ready") && isHost){
+                if (json.getBoolean("ready")){
+                    numReady++;
+                } else {
+                    numReady--;
+                }
+
+                if (numReady == playerIds.size() - 1 && playerIds.size() > 1){
+                    startButton.setText(R.string.start_game);
+                    canStart = true;
+                } else {
+                    startButton.setText(R.string.waiting_for_players);
+                    canStart = false;
+                }
+            } else if (json.has("start") && !isHost){
+                startGame(false);
             }
 
             playerCountDisp.setText(getString(R.string.player_count, playerIds.size()));
