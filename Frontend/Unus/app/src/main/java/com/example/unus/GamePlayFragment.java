@@ -1,6 +1,5 @@
 package com.example.unus;
 
-import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 
 import androidx.fragment.app.Fragment;
@@ -24,7 +23,11 @@ import java.util.ArrayList;
  *
  * @author Isaac Blandin
  */
-public class GameTwoPlayerFragment extends Fragment {
+public class GamePlayFragment extends Fragment {
+
+    final int NUM_PLAYERS = 2;
+
+    int readyPlayers = 0;
 
     //number of cards given to user at the beginning of the game
     final int INITIAL_CARDS = 5;
@@ -42,7 +45,11 @@ public class GameTwoPlayerFragment extends Fragment {
 
     boolean isHost = true;
 
-    public GameTwoPlayerFragment() {
+    boolean yourTurn;
+
+
+
+    public GamePlayFragment() {
         // Required empty public constructor
     }
 
@@ -56,7 +63,7 @@ public class GameTwoPlayerFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
-        view = inflater.inflate(R.layout.fragment_game_two_player, container, false);
+        view = inflater.inflate(R.layout.fragment_game_play, container, false);
 
         //get factor needed to make UI sizing dynamic
         dpConversionFactor = getContext().getResources().getDisplayMetrics().density;

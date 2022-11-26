@@ -1,9 +1,7 @@
 package com.example.unus;
 
-import androidx.activity.OnBackPressedCallback;
 import androidx.appcompat.app.ActionBar;
 import androidx.appcompat.app.AppCompatActivity;
-import androidx.fragment.app.Fragment;
 
 import android.annotation.SuppressLint;
 import android.os.Bundle;
@@ -68,7 +66,7 @@ public class MainActivity extends AppCompatActivity {
                     @Override
                     public void run() {
                         GameLobbyFragment gameLobbyFrag = (GameLobbyFragment) getSupportFragmentManager().findFragmentByTag("gameLobby");
-                        GameTwoPlayerFragment gameFrag = (GameTwoPlayerFragment) getSupportFragmentManager().findFragmentByTag("gameScreen");
+                        GamePlayFragment gameFrag = (GamePlayFragment) getSupportFragmentManager().findFragmentByTag("gameScreen");
 
                         if (gameLobbyFrag != null) {
                             try {

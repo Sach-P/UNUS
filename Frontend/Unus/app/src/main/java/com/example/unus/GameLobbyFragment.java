@@ -114,7 +114,7 @@ public class GameLobbyFragment extends Fragment {
         startButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                getActivity().getSupportFragmentManager().beginTransaction().replace(R.id.fragmentContainerView, new GameTwoPlayerFragment(), "gameScreen").commit();
+                getActivity().getSupportFragmentManager().beginTransaction().replace(R.id.fragmentContainerView, new GamePlayFragment(), "gameScreen").commit();
             }
         });
 
