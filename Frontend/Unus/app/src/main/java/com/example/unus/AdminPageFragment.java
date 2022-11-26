@@ -1,10 +1,14 @@
 package com.example.unus;
 
 import android.os.Bundle;
+import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
+import android.widget.EditText;
 import android.widget.LinearLayout;
+import android.widget.PopupWindow;
 import android.widget.Space;
 import android.widget.TextView;
 
@@ -14,10 +18,12 @@ import com.android.volley.Request;
 import com.android.volley.Response;
 import com.android.volley.VolleyError;
 import com.android.volley.toolbox.JsonArrayRequest;
+import com.android.volley.toolbox.JsonObjectRequest;
 import com.android.volley.toolbox.Volley;
 
 import org.json.JSONArray;
 import org.json.JSONException;
+import org.json.JSONObject;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -32,6 +38,10 @@ public class AdminPageFragment extends Fragment {
     private View view;
     private List<Friend> userList;
     private LinearLayout displayList;
+    private Button back;
+    private Button search;
+    private Button clear;
+    private EditText id;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -44,8 +54,40 @@ public class AdminPageFragment extends Fragment {
         view = inflater.inflate(R.layout.fragment_admin_page, container, false);
         userList = new ArrayList<Friend>();
         displayList= (LinearLayout) view.findViewById(R.id.results);
+        back = (Button) view.findViewById(R.id.backbutton);
+        search = (Button) view.findViewById(R.id.search_button);
+        clear = (Button) view.findViewById(R.id.clear_button);
+        id = (EditText) view.findViewById(R.id.searchbar);
 
         getUsers();
+
+        search.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                displayList.removeAllViews();
+                if(id.getText().toString().length() != 0) {
+                    search(id.getText().toString());
+                } else {
+                    displayUsers(userList);
+                }
+            }
+        });
+
+        clear.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                displayList.removeAllViews();
+                displayUsers(userList);
+                id.setText("");
+            }
+        });
+
+        back.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                getActivity().getSupportFragmentManager().beginTransaction().replace(R.id.fragmentContainerView, new MainMenuFragment()).commit();
+            }
+        });
 
         return view;
     }
@@ -115,4 +157,49 @@ public class AdminPageFragment extends Fragment {
         }
     }
 
+
+    /**
+     * This function will take in the number that was put into the input field
+     * and search the database to see if the user exists
+     * If the user does exist it will display the user and a button that will show their stats
+     * and other that will send them friend requests
+     *
+     * @param id
+     */
+    private void search(String id) {
+        for(int i = 0; i < id.length(); i++) {
+            if (id.charAt(i) != '0' && id.charAt(i) != '1' && id.charAt(i) != '2' && id.charAt(i) != '3' && id.charAt(i) != '4' &&
+                    id.charAt(i) != '5' && id.charAt(i) != '6' && id.charAt(i) != '7' &&
+                    id.charAt(i) != '8' && id.charAt(i) != '8' && id.charAt(i) != '9') {
+                return;
+            }
+        }
+        JsonObjectRequest request = new JsonObjectRequest(
+        Request.Method.GET,
+        "http://coms-309-029.class.las.iastate.edu:8080/user/" + Integer.parseInt(id),
+        null,
+        new Response.Listener<JSONObject>() {
+            @Override
+            public void onResponse(JSONObject response) {
+                try {
+                    String username = response.getString("username");
+                    int id = response.getInt("id");
+                    int games_played = response.getInt("gamesPlayed");
+                    int games_won = response.getInt("gamesWon");
+                    Friend temp = new Friend(id, username, games_played, games_won);
+                    List<Friend> list = new ArrayList<>();
+                    list.add(temp);
+                    displayUsers(list);
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                }
+            }
+        },
+        new Response.ErrorListener() {
+            @Override
+            public void onErrorResponse(VolleyError error) {
+            }
+        });
+        Volley.newRequestQueue(requireContext()).add(request);
+    }
 }

@@ -57,6 +57,42 @@
                 android:textColor="?attr/buttonTint"
                 />
         </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="fill_parent"
+            android:layout_height="50dp"
+            >
+
+            <EditText
+                android:layout_width="150dp"
+                android:layout_height="50dp"
+                android:id="@+id/searchbar"
+                android:hint="@string/searchid"
+                android:textColor="@color/white"
+                android:backgroundTint="@color/white"
+                android:textColorHint="@color/white"
+
+                />
+            <Button
+                android:id="@+id/clear_button"
+                android:layout_width="40dp"
+                android:layout_height="50dp"
+                android:text="@string/clear"
+                android:backgroundTint="?attr/buttonTint"
+                android:textColor="?attr/colorSecondary"
+                android:layout_marginRight="10dp"
+                android:layout_marginLeft="5dp"
+                />
+            <Button
+                android:id="@+id/search_button"
+                android:layout_width="100dp"
+                android:layout_height="50dp"
+                android:text="@string/search"
+                android:backgroundTint="?attr/buttonTint"
+                android:textColor="?attr/colorSecondary"
+                />
+        </LinearLayout>
+
         <ScrollView
             android:layout_width="match_parent"
             android:layout_height="match_parent"

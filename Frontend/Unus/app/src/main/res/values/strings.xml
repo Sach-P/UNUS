@@ -74,6 +74,7 @@
     <string name="admin_screen">Admin Page</string>
     <string name="admin_users">Users</string>
     <string name="admin_lobbies">Lobbies</string>
+    <string name="clear">x</string>
 
 
     <!--chat strings-->

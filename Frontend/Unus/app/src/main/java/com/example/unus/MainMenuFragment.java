@@ -129,6 +129,13 @@ public class MainMenuFragment extends Fragment {
             }
         }
 
+        ((Button) view.findViewById(R.id.admin_button)).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                getActivity().getSupportFragmentManager().beginTransaction().replace(R.id.fragmentContainerView, new AdminPageFragment()).commit();
+            }
+        });
+
         return view;
     }
 

@@ -24,9 +24,19 @@
         />
 
         <Space
-            android:layout_width="0dp"
+            android:layout_width="70dp"
             android:layout_height="match_parent"
-            android:layout_weight="0.9"
+            />
+
+        <Button
+            android:layout_width="100dp"
+            android:layout_height="match_parent"
+            android:id="@+id/admin_button"
+            />
+
+        <Space
+            android:layout_width="70dp"
+            android:layout_height="match_parent"
             />
 
         <LinearLayout
