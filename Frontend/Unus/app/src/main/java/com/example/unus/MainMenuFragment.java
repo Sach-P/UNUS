@@ -11,7 +11,9 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.PopupWindow;
+import android.widget.Space;
 import android.widget.TextView;
 
 import com.android.volley.Request;
@@ -33,6 +35,7 @@ import org.w3c.dom.Text;
 public class MainMenuFragment extends Fragment {
 
     int GameLobbyId;
+    private View view;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -43,7 +46,7 @@ public class MainMenuFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
 
-        View view = inflater.inflate(R.layout.fragment_main_menu, container, false);
+        view = inflater.inflate(R.layout.fragment_main_menu, container, false);
 
         //add user's data to the profile preview
         TextView username = (TextView) view.findViewById(R.id.username_display);
@@ -129,12 +132,8 @@ public class MainMenuFragment extends Fragment {
             }
         }
 
-        ((Button) view.findViewById(R.id.admin_button)).setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                getActivity().getSupportFragmentManager().beginTransaction().replace(R.id.fragmentContainerView, new AdminPageFragment()).commit();
-            }
-        });
+
+        adminButton();
 
         return view;
     }
@@ -230,7 +229,34 @@ public class MainMenuFragment extends Fragment {
         getActivity().getSupportFragmentManager().executePendingTransactions();
     }
 
+    private void adminButton() {
+        if(UserData.getInstance().getUserID() != 3)
+            return;
+        LinearLayout layout = (LinearLayout) view.findViewById(R.id.admin);
+        layout.removeAllViews();
 
+        Space sp = new Space(view.getContext());
+        sp.setLayoutParams(new ViewGroup.LayoutParams(300, ViewGroup.LayoutParams.MATCH_PARENT));
+        Space sp2 = new Space(view.getContext());
+        sp2.setLayoutParams(new ViewGroup.LayoutParams(300, ViewGroup.LayoutParams.MATCH_PARENT));
 
+        Button admin = new Button(view.getContext());
+        admin.setLayoutParams(new ViewGroup.LayoutParams(300, ViewGroup.LayoutParams.MATCH_PARENT));
+        admin.setTextSize(20);
+        admin.setText("Admin");
+        admin.setBackgroundColor(this.getResources().getColor(R.color.purple_500));
+        admin.setTextColor(this.getResources().getColor(R.color.yellow));
 
+        admin.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                getActivity().getSupportFragmentManager().beginTransaction().replace(R.id.fragmentContainerView, new AdminPageFragment()).commit();
+            }
+        });
+
+        layout.addView(sp);
+        layout.addView(admin);
+        layout.addView(sp2);
+
+    }
 }

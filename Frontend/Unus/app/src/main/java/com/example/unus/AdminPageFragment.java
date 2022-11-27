@@ -143,16 +143,35 @@ public class AdminPageFragment extends Fragment {
 
             Space sp = new Space(view.getContext());
             sp.setLayoutParams( new ViewGroup.LayoutParams(100, 100));
+            Space sp2 = new Space(view.getContext());
+            sp2.setLayoutParams( new ViewGroup.LayoutParams(50, 100));
 
-            TextView stats = new TextView(view.getContext());
-            stats.setLayoutParams( new ViewGroup.LayoutParams(400, 100));
-            stats.setText(""+list.get(i).getGamesWon());
+            Button stats = new Button(view.getContext());
+            stats.setLayoutParams( new ViewGroup.LayoutParams(200, 100));
+            stats.setText("stats");
+            stats.setBackgroundColor(this.getResources().getColor(R.color.purple_500));
             stats.setTextColor(view.getResources().getColor(R.color.yellow));
-            stats.setTextSize(25);
+            stats.setTextSize(15);
+
+            Button del = new Button(view.getContext());
+            del.setLayoutParams( new ViewGroup.LayoutParams(100, 100));
+            del.setText("x");
+            del.setBackgroundColor(this.getResources().getColor(R.color.purple_500));
+            del.setTextColor(view.getResources().getColor(R.color.yellow));
+            del.setTextSize(15);
+            int finalI = i;
+            del.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    deleteUser(list.get(finalI).getUserID());
+                }
+            });
 
             layout.addView(tv);
             layout.addView(sp);
             layout.addView(stats);
+            layout.addView(sp2);
+            layout.addView(del);
             displayList.addView(layout);
         }
     }
@@ -200,6 +219,33 @@ public class AdminPageFragment extends Fragment {
             public void onErrorResponse(VolleyError error) {
             }
         });
+        Volley.newRequestQueue(requireContext()).add(request);
+    }
+
+    /**
+     * This function will delete the user logged in from the database entirely
+     * including removing them from anyone else's friends list
+     */
+    private void deleteUser(int id) {
+
+        JsonObjectRequest request = new JsonObjectRequest(
+                Request.Method.DELETE,
+                getString(R.string.remote_server_url, "user", Integer.toString(id)),
+                null,
+                new Response.Listener<JSONObject>() {
+                    @Override
+                    public void onResponse(JSONObject response) {
+                        getActivity().getSupportFragmentManager().beginTransaction().replace(R.id.fragmentContainerView, new AdminPageFragment()).commit();
+                    }
+                },
+                new Response.ErrorListener() {
+                    @Override
+                    public void onErrorResponse(VolleyError error) {
+                        getActivity().getSupportFragmentManager().beginTransaction().replace(R.id.fragmentContainerView, new MainMenuFragment()).commit();
+                    }
+                }
+        );
+
         Volley.newRequestQueue(requireContext()).add(request);
     }
 }
