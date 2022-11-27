@@ -1,0 +1,116 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="300dp"
+    android:layout_height="400dp"
+    android:gravity="center"
+    android:background="@color/dark_gray">
+
+
+    <LinearLayout
+        android:padding="10dp"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="vertical">
+
+        <TextView
+            android:id="@+id/username"
+            android:layout_gravity="center"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="name"
+            android:textSize="20sp"
+            android:textStyle="bold"
+            android:padding="10dp"
+            android:textColor="@color/purple_500"
+            />
+
+        <TextView
+            android:id="@+id/user_id"
+            android:layout_gravity="center"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="ID"
+            android:textSize="20sp"
+            android:textStyle="bold"
+            android:padding="10dp"
+            android:textColor="@color/purple_500"
+            />
+
+        <TextView
+            android:layout_gravity="center"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Stats:"
+            android:textSize="20sp"
+            android:textStyle="bold"
+            android:padding="10dp"
+            android:textColor="@color/purple_500"
+            />
+
+        <ScrollView
+            android:layout_width="match_parent"
+            android:layout_height="190dp"
+            >
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:orientation="vertical"
+                >
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    >
+                    <TextView
+                        android:id="@+id/games_played"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="Games Played:"
+                        android:textSize="20sp"
+                        android:padding="10dp"
+                        android:textColor="@color/purple_500"
+                        />
+                    <EditText
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:backgroundTint="@color/yellow"
+                        android:textColor="@color/yellow"
+                        android:id="@+id/played"
+                        />
+                </LinearLayout>
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    >
+                    <TextView
+                        android:id="@+id/games_won"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="Games Won:"
+                        android:textSize="20sp"
+                        android:padding="10dp"
+                        android:textColor="@color/purple_500"
+                        />
+                    <EditText
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:backgroundTint="@color/yellow"
+                        android:textColor="@color/yellow"
+                        android:id="@+id/won"
+                        />
+                </LinearLayout>
+            </LinearLayout>
+        </ScrollView>
+
+        <Button
+            android:layout_width="200dp"
+            android:layout_height="50dp"
+            android:layout_gravity="center"
+            android:text="@string/change"
+            android:id="@+id/change"
+            />
+
+
+    </LinearLayout>
+
+</LinearLayout>

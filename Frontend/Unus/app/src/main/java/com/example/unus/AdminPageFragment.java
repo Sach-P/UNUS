@@ -146,12 +146,20 @@ public class AdminPageFragment extends Fragment {
             Space sp2 = new Space(view.getContext());
             sp2.setLayoutParams( new ViewGroup.LayoutParams(50, 100));
 
+            int finalI = i;
+
             Button stats = new Button(view.getContext());
             stats.setLayoutParams( new ViewGroup.LayoutParams(200, 100));
             stats.setText("stats");
             stats.setBackgroundColor(this.getResources().getColor(R.color.purple_500));
             stats.setTextColor(view.getResources().getColor(R.color.yellow));
             stats.setTextSize(15);
+            stats.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    AdminUserPopup popup = new AdminUserPopup(view, list.get(finalI));
+                }
+            });
 
             Button del = new Button(view.getContext());
             del.setLayoutParams( new ViewGroup.LayoutParams(100, 100));
@@ -159,7 +167,6 @@ public class AdminPageFragment extends Fragment {
             del.setBackgroundColor(this.getResources().getColor(R.color.purple_500));
             del.setTextColor(view.getResources().getColor(R.color.yellow));
             del.setTextSize(15);
-            int finalI = i;
             del.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {

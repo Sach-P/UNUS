@@ -75,7 +75,7 @@
     <string name="admin_users">Users</string>
     <string name="admin_lobbies">Lobbies</string>
     <string name="clear">x</string>
-
+    <string name="change">Change</string>
 
     <!--chat strings-->
     <string name="message_error">Couldn\'t connect to messages</string>
