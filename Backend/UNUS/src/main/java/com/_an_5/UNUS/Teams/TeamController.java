@@ -40,20 +40,9 @@ public class TeamController {
     @ApiOperation(value = "create a team and store it in the teams and users table with a one to one relation", response = String.class, tags = "team-controller")
     @PostMapping(path = "/create-team")
     public String createTeam(@RequestParam(name = "userId") int userId, @RequestBody Team team){
-//       JSONParser jp = new JSONParser(json);
-//        try{
-//            String teamName = json.getString("team name");//(String)jp.parseObject().get("team name");
-//            boolean isPrivate = (boolean)json.get("private");//(boolean)jp.parseObject().get("private");
-//            return teamService.createTeam(userId, teamName, isPrivate);
-//        }
-//        catch (Exception e){//ParseException e){
-//            e.printStackTrace();
-//            return failure;
-//        }
-
         User user = userRepository.findById(userId);
 
-        if(user == null || user.getOwnedTeam() != null)
+        if(user == null || user.getOwnedTeam() != null || user.getRole().equals("guest"))
             return failure;
 
         team.setLeader(user);
@@ -66,7 +55,7 @@ public class TeamController {
     @PutMapping(path = "/join-team/{teamId}")
     public String joinTeam(@RequestParam(name = "userId") int userId, @PathVariable int teamId){
         User user = userRepository.findById(userId);
-        if(user == null || user.getTeams().size() >= 3){
+        if(user == null || user.getTeams().size() >= 3 || user.getRole().equals("guest")){
             return failure;
         }
 
@@ -96,6 +85,23 @@ public class TeamController {
         team.removeMember(user);
         teamRepository.save(team);
         return success;
+    }
+
+
+    @ApiOperation(value = "delete a team", response = String.class, tags = "team-controller")
+    @DeleteMapping(path = "/delete-team/{teamId}")
+    public String deleteTeam(@RequestParam(name = "userId") int userId, @PathVariable int teamId){
+        User user = userRepository.findById(userId);
+        Team team = teamRepository.findById(teamId);
+
+        if(user == null || team == null)
+            return failure;
+
+        if(user.getOwnedTeam().equals(team) || user.getRole().equals("admin")){
+            teamRepository.deleteById(teamId);
+            return success;
+        }
+        return failure;
     }
 
 

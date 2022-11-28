@@ -22,7 +22,7 @@ public class FriendService {
     public String sendFriendRequest(int id, int friendId){
         User requested = userRepository.findById(friendId);
         User requester = userRepository.findById(id);
-        if(requested != null && requester != null){
+        if(requested != null && requester != null && !requester.getRole().equals("guest") && !requested.getRole().equals("guest")){
             Friend friend1 = new Friend(id, "pending", requester.getUsername());
             friend1.setRequestedUser(requested);
 
