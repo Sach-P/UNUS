@@ -62,8 +62,8 @@ public class UserController {
     @ApiOperation(value = "delete a user", response = String.class, tags = "user-controller")
     @DeleteMapping(path = "/user/{id}")
     public String deleteUser(@PathVariable int id) {
-//        if(!userRepository.existsById(id))
-//            return failure;
+        if(!userRepository.existsById(id))
+            return failure;
         userRepository.deleteById(id);
         return success;
     }
