@@ -6,13 +6,17 @@ import org.json.JSONObject;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Controller;
 
 import javax.websocket.*;
 import javax.websocket.server.PathParam;
+import javax.websocket.server.ServerEndpoint;
 import java.io.IOException;
 import java.util.Hashtable;
 import java.util.Map;
 
+@Controller
+@ServerEndpoint(value = "/user/{userId}")
 public class UserSocket {
     private static UserRepository userRepository;
 
@@ -59,6 +63,9 @@ public class UserSocket {
         User user = sessionUserMap.get(session);
         sessionUserMap.remove(session);
         userSessionMap.remove(user);
+        if(user.getRole().equals("guest")){
+            userRepository.deleteById(user.getId());
+        }
     }
 
     @OnError

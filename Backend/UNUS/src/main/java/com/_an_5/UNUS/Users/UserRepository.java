@@ -14,8 +14,8 @@ public interface UserRepository extends JpaRepository<User, Long> {
     @Transactional
     void deleteById(int id);
 
-    @Transactional
-    boolean existsById(int id);
+//    @Transactional
+//    boolean existsById(int id);
 
 
     User findByUsernameAndPassword(String name, String password);
