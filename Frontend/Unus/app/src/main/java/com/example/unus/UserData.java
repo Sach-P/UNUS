@@ -17,6 +17,7 @@ public class UserData {
     private Friend[] sentRequests;
     private Friend[] receivedRequests;
 
+    private String role;
     private int gamesPlayed;
     private int gamesWon;
 
@@ -86,6 +87,8 @@ public class UserData {
         this.password = password;
     }
 
+    public void setRole(String role) {this.role = role;}
+    public String getRole() { return role;}
     /**
      * returns current user's games played stat
      * @return games played

@@ -249,6 +249,7 @@ public class UserSettingsFragment extends Fragment {
                 requestBody.put("password", s);
             }
             requestBody.put("friends", friendsList);
+            requestBody.put("role", UserData.getInstance().getRole());
             requestBody.put("gamesPlayed", UserData.getInstance().getGamesPlayed());
             requestBody.put("gamesWon", UserData.getInstance().getGamesWon());
 

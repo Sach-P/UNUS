@@ -105,8 +105,9 @@ public class AdminPageFragment extends Fragment {
                     public void onResponse(JSONArray response) {
                         try {
                             for( int i = 0; i < response.length(); i++) {
-                                userList.add(new Friend(response.getJSONObject(i).getInt("id"), response.getJSONObject(i).getString("username"),
-                                        response.getJSONObject(i).getInt("gamesPlayed"), response.getJSONObject(i).getInt("gamesWon")));
+                                if(!response.getJSONObject(i).getString("role").equals("admin"))
+                                    userList.add(new Friend(response.getJSONObject(i).getInt("id"), response.getJSONObject(i).getString("username"),
+                                            response.getJSONObject(i).getInt("gamesPlayed"), response.getJSONObject(i).getInt("gamesWon")));
                             }
                         } catch (JSONException e) {
                             e.printStackTrace();
@@ -157,7 +158,8 @@ public class AdminPageFragment extends Fragment {
             stats.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
-                    AdminUserPopup popup = new AdminUserPopup(view, list.get(finalI));
+                   //AdminUserPopup popup = new AdminUserPopup(view, list.get(finalI));
+                    userPopup(list.get(finalI));
                 }
             });
 
@@ -214,7 +216,8 @@ public class AdminPageFragment extends Fragment {
                     int games_won = response.getInt("gamesWon");
                     Friend temp = new Friend(id, username, games_played, games_won);
                     List<Friend> list = new ArrayList<>();
-                    list.add(temp);
+                    if(!response.getString("role").equals("admin"))
+                        list.add(temp);
                     displayUsers(list);
                 } catch (JSONException e) {
                     e.printStackTrace();
@@ -254,5 +257,69 @@ public class AdminPageFragment extends Fragment {
         );
 
         Volley.newRequestQueue(requireContext()).add(request);
+    }
+
+    public void userPopup(Friend user) {
+        LayoutInflater inflater = (LayoutInflater) view.getContext().getSystemService(view.getContext().LAYOUT_INFLATER_SERVICE);
+        View popupView = inflater.inflate(R.layout.admin_user_popup, null);
+
+        TextView username = (TextView) popupView.findViewById(R.id.username);
+        TextView userID = (TextView) popupView.findViewById(R.id.user_id);
+        EditText played = (EditText) popupView.findViewById(R.id.played);
+        EditText won = (EditText) popupView.findViewById(R.id.won);
+        Button change = (Button) popupView.findViewById(R.id.change);
+
+        username.setText(user.getUsername());
+        userID.setText(Integer.toString(user.getUserID()));
+        played.setText(Integer.toString(user.getGamesPlayed()));
+        won.setText(Integer.toString(user.getGamesWon()));
+
+        //Make Inactive Items Outside Of PopupWindow
+        boolean focusable = true;
+
+        //Create a window with our parameters
+        final PopupWindow popupWindow = new PopupWindow(popupView, 1000, 1500, focusable);
+
+        //Set the location of the window on the screen
+        popupWindow.showAtLocation(view, Gravity.CENTER, 0, 0);
+
+        change.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                changeUser(Integer.parseInt(played.getText().toString()), Integer.parseInt(won.getText().toString()), user);
+            }
+        });
+
+    }
+
+
+    public void changeUser(int played, int won, Friend user) {
+        try {
+            //add login credentials to the response body
+            JSONObject requestBody = new JSONObject();
+            requestBody.put("id", user.getUserID());
+            requestBody.put("username", user.getUsername());
+            //requestBody.put("password", user.getPassword());
+            //requestBody.put("friends", friendsList);
+            requestBody.put("role", "player");
+            requestBody.put("gamesPlayed", played);
+            requestBody.put("gamesWon", won);
+
+            JsonObjectRequest request = new JsonObjectRequest(
+                    Request.Method.PUT,
+                    "http://coms-309-029.class.las.iastate.edu:8080/user/"+user.getUserID(),
+                    requestBody,
+                    null,
+                    new Response.ErrorListener() {
+                        @Override
+                        public void onErrorResponse(VolleyError error) {
+                        }
+                    }
+            );
+
+            Volley.newRequestQueue(requireContext()).add(request);
+
+        } catch (JSONException ex) {
+        }
     }
 }

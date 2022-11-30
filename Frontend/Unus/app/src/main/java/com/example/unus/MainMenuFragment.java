@@ -230,7 +230,7 @@ public class MainMenuFragment extends Fragment {
     }
 
     private void adminButton() {
-        if(UserData.getInstance().getUserID() != 3)
+        if(!UserData.getInstance().getRole().equals("admin"))
             return;
         LinearLayout layout = (LinearLayout) view.findViewById(R.id.admin);
         layout.removeAllViews();
