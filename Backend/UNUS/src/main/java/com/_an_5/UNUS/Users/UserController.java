@@ -34,6 +34,14 @@ public class UserController {
         return success;
     }
 
+    @ApiOperation(value = "create a temporary guest user", response = String.class, tags = "user-controller")
+    @PostMapping(path = "/create-guest-user")
+    public int createGuestUser(){
+        User guest = new User();
+        userRepository.save(guest);
+        return guest.getId();
+    }
+
     @ApiOperation(value = "login a user and send user's information when logged in", response = Map.class, tags = "user-controller")
     @PostMapping(path = "/login")
     public Map<String, Object> login(@RequestBody User user){//@ModelAttribute("user") User user){

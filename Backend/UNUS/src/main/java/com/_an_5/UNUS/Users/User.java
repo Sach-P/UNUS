@@ -79,10 +79,15 @@ public class User {
     public User (String username, String password){
         this.username = username;
         this.password = password;
+        gamesPlayed = 0;
+        gamesWon = 0;
+        this.role = "player";
     }
 
-    public User() {
-        this.role = "player";
+    public User(){
+        this.username = "guest" + this.id;
+        this.password = "guest";
+        this.role = "guest";
         gamesPlayed = 0;
         gamesWon = 0;
     }
