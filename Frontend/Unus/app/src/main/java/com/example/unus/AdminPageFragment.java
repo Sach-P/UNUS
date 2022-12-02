@@ -37,8 +37,11 @@ public class AdminPageFragment extends Fragment {
 
     private View view;
     private List<Friend> userList;
+    private List<Integer> lobbyList;
     private LinearLayout displayList;
     private Button back;
+    private Button users;
+    private Button lobbies;
     private Button search;
     private Button clear;
     private EditText id;
@@ -53,13 +56,41 @@ public class AdminPageFragment extends Fragment {
                              Bundle savedInstanceState) {
         view = inflater.inflate(R.layout.fragment_admin_page, container, false);
         userList = new ArrayList<Friend>();
+        lobbyList = new ArrayList<Integer>();
         displayList= (LinearLayout) view.findViewById(R.id.results);
         back = (Button) view.findViewById(R.id.backbutton);
+        users = (Button) view.findViewById(R.id.users);
+        lobbies = (Button) view.findViewById(R.id.lobbies);
         search = (Button) view.findViewById(R.id.search_button);
         clear = (Button) view.findViewById(R.id.clear_button);
         id = (EditText) view.findViewById(R.id.searchbar);
 
         getUsers();
+        getLobbies();
+
+        users.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                users.setBackgroundColor(view.getResources().getColor(R.color.purple_500));
+                users.setTextColor(view.getResources().getColor(R.color.yellow));
+                lobbies.setBackgroundColor(view.getResources().getColor(R.color.yellow));
+                lobbies.setTextColor(view.getResources().getColor(R.color.purple_500));
+                id.setHint(R.string.searchid);
+                displayUsers(userList);
+            }
+        });
+
+        lobbies.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                lobbies.setBackgroundColor(view.getResources().getColor(R.color.purple_500));
+                lobbies.setTextColor(view.getResources().getColor(R.color.yellow));
+                users.setBackgroundColor(view.getResources().getColor(R.color.yellow));
+                users.setTextColor(view.getResources().getColor(R.color.purple_500));
+                id.setHint(R.string.searchlobbyid);
+                displayLobbies(lobbyList);
+            }
+        });
 
         search.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -113,6 +144,34 @@ public class AdminPageFragment extends Fragment {
                             e.printStackTrace();
                         }
                         displayUsers(userList);
+                    }
+                },
+                new Response.ErrorListener() {
+                    @Override
+                    public void onErrorResponse(VolleyError error) {
+                    }
+                }
+        );
+        Volley.newRequestQueue(requireContext()).add(request);
+    }
+    /**
+     * gets all of the lobbies in the database and puts them all into a list of ints
+     */
+    public void getLobbies() {
+        JsonArrayRequest request = new JsonArrayRequest(
+                Request.Method.GET,
+                "http://coms-309-029.class.las.iastate.edu:8080/lobbies",
+                null,
+                new Response.Listener<JSONArray>() {
+                    @Override
+                    public void onResponse(JSONArray response) {
+                        try {
+                            for( int i = 0; i < response.length(); i++) {
+                                lobbyList.add(response.getJSONObject(i).getInt("id"));
+                            }
+                        } catch (JSONException e) {
+                            e.printStackTrace();
+                        }
                     }
                 },
                 new Response.ErrorListener() {
@@ -184,6 +243,67 @@ public class AdminPageFragment extends Fragment {
             displayList.addView(layout);
         }
     }
+
+    /**
+     * displays the list of lobbies by id where the admin can then
+     * either delete the lobby or kick just one specific player in the lobby
+     *
+     * @param list
+     */
+    private void displayLobbies(List<Integer> list) {
+        displayList.removeViews(0, displayList.getChildCount());
+        for(int i = 0; i < list.size(); i++) {
+            LinearLayout layout = new LinearLayout(view.getContext());
+            TextView tv = new TextView(view.getContext());
+            tv.setLayoutParams( new ViewGroup.LayoutParams(500, 100));
+            tv.setText(list.get(i).toString());
+            tv.setTextColor(view.getResources().getColor(R.color.yellow));
+            tv.setTextSize(25);
+
+            Space sp = new Space(view.getContext());
+            sp.setLayoutParams( new ViewGroup.LayoutParams(100, 100));
+            Space sp2 = new Space(view.getContext());
+            sp2.setLayoutParams( new ViewGroup.LayoutParams(50, 100));
+
+            int finalI = i;
+
+            /*
+            Button stats = new Button(view.getContext());
+            stats.setLayoutParams( new ViewGroup.LayoutParams(200, 100));
+            stats.setText("stats");
+            stats.setBackgroundColor(this.getResources().getColor(R.color.purple_500));
+            stats.setTextColor(view.getResources().getColor(R.color.yellow));
+            stats.setTextSize(15);
+            stats.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    //AdminUserPopup popup = new AdminUserPopup(view, list.get(finalI));
+                }
+            });
+             */
+
+            Button del = new Button(view.getContext());
+            del.setLayoutParams( new ViewGroup.LayoutParams(100, 100));
+            del.setText("x");
+            del.setBackgroundColor(this.getResources().getColor(R.color.purple_500));
+            del.setTextColor(view.getResources().getColor(R.color.yellow));
+            del.setTextSize(15);
+            del.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    deleteLobby(list.get(finalI));
+                }
+            });
+
+            layout.addView(tv);
+            layout.addView(sp);
+            //layout.addView(stats);
+            layout.addView(sp2);
+            layout.addView(del);
+            displayList.addView(layout);
+        }
+    }
+
 
 
     /**
@@ -259,6 +379,32 @@ public class AdminPageFragment extends Fragment {
         Volley.newRequestQueue(requireContext()).add(request);
     }
 
+    /**
+     * This function will delete an existing lobby and kick all of the players in the lobby
+     */
+    private void deleteLobby(int id) {
+
+        JsonObjectRequest request = new JsonObjectRequest(
+                Request.Method.DELETE,
+                getString(R.string.remote_server_url, "lobbies/delete-lobby", id+"?userId="+UserData.getInstance().getUserID()),
+                null,
+                new Response.Listener<JSONObject>() {
+                    @Override
+                    public void onResponse(JSONObject response) {
+                      getActivity().getSupportFragmentManager().beginTransaction().replace(R.id.fragmentContainerView, new AdminPageFragment()).commit();
+                    }
+                },
+                new Response.ErrorListener() {
+                    @Override
+                    public void onErrorResponse(VolleyError error) {
+                      getActivity().getSupportFragmentManager().beginTransaction().replace(R.id.fragmentContainerView, new MainMenuFragment()).commit();
+                    }
+                }
+        );
+
+        Volley.newRequestQueue(requireContext()).add(request);
+    }
+
     public void userPopup(Friend user) {
         LayoutInflater inflater = (LayoutInflater) view.getContext().getSystemService(view.getContext().LAYOUT_INFLATER_SERVICE);
         View popupView = inflater.inflate(R.layout.admin_user_popup, null);
@@ -268,6 +414,7 @@ public class AdminPageFragment extends Fragment {
         EditText played = (EditText) popupView.findViewById(R.id.played);
         EditText won = (EditText) popupView.findViewById(R.id.won);
         Button change = (Button) popupView.findViewById(R.id.change);
+        Button promote = (Button) popupView.findViewById(R.id.promote);
 
         username.setText(user.getUsername());
         userID.setText(Integer.toString(user.getUserID()));
@@ -278,15 +425,44 @@ public class AdminPageFragment extends Fragment {
         boolean focusable = true;
 
         //Create a window with our parameters
-        final PopupWindow popupWindow = new PopupWindow(popupView, 1000, 1500, focusable);
+        final PopupWindow popupWindow = new PopupWindow(popupView, 1000, 1600, focusable);
 
         //Set the location of the window on the screen
         popupWindow.showAtLocation(view, Gravity.CENTER, 0, 0);
 
+        promote.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                promote(user);
+                popupWindow.dismiss();
+            }
+        });
+
         change.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
+                String id = played.getText().toString();
+                if(id.length() == 0)
+                    return;
+                for(int i = 0; i < id.length(); i++) {
+                    if (id.charAt(i) != '0' && id.charAt(i) != '1' && id.charAt(i) != '2' && id.charAt(i) != '3' && id.charAt(i) != '4' &&
+                            id.charAt(i) != '5' && id.charAt(i) != '6' && id.charAt(i) != '7' &&
+                            id.charAt(i) != '8' && id.charAt(i) != '8' && id.charAt(i) != '9') {
+                        return;
+                    }
+                }
+                id = won.getText().toString();
+                if(id.length() == 0)
+                    return;
+                for(int i = 0; i < id.length(); i++) {
+                    if (id.charAt(i) != '0' && id.charAt(i) != '1' && id.charAt(i) != '2' && id.charAt(i) != '3' && id.charAt(i) != '4' &&
+                            id.charAt(i) != '5' && id.charAt(i) != '6' && id.charAt(i) != '7' &&
+                            id.charAt(i) != '8' && id.charAt(i) != '8' && id.charAt(i) != '9') {
+                        return;
+                    }
+                }
                 changeUser(Integer.parseInt(played.getText().toString()), Integer.parseInt(won.getText().toString()), user);
+                popupWindow.dismiss();
             }
         });
 
@@ -304,6 +480,36 @@ public class AdminPageFragment extends Fragment {
             requestBody.put("role", "player");
             requestBody.put("gamesPlayed", played);
             requestBody.put("gamesWon", won);
+
+            JsonObjectRequest request = new JsonObjectRequest(
+                    Request.Method.PUT,
+                    "http://coms-309-029.class.las.iastate.edu:8080/user/"+user.getUserID(),
+                    requestBody,
+                    null,
+                    new Response.ErrorListener() {
+                        @Override
+                        public void onErrorResponse(VolleyError error) {
+                        }
+                    }
+            );
+
+            Volley.newRequestQueue(requireContext()).add(request);
+
+        } catch (JSONException ex) {
+        }
+    }
+
+    public void promote(Friend user) {
+        try {
+            //add login credentials to the response body
+            JSONObject requestBody = new JSONObject();
+            requestBody.put("id", user.getUserID());
+            requestBody.put("username", user.getUsername());
+            //requestBody.put("password", user.getPassword());
+            //requestBody.put("friends", friendsList);
+            requestBody.put("role", "admin");
+            requestBody.put("gamesPlayed", user.getGamesPlayed());
+            requestBody.put("gamesWon", user.getGamesWon());
 
             JsonObjectRequest request = new JsonObjectRequest(
                     Request.Method.PUT,

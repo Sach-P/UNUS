@@ -17,6 +17,7 @@
     <string name="back">Back</string>
     <string name="search">Search</string>
     <string name="searchid">Search by UserID</string>
+    <string name="searchlobbyid">Search by LobbyID</string>
 
     <string name="login_failed">Invalid login credentials. Try Again</string>
     <string name="login_error">Login Error</string>
@@ -76,6 +77,7 @@
     <string name="admin_lobbies">Lobbies</string>
     <string name="clear">x</string>
     <string name="change">Change</string>
+    <string name="promote">Promote to Admin</string>
 
     <!--chat strings-->
     <string name="message_error">Couldn\'t connect to messages</string>
