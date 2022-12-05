@@ -76,12 +76,12 @@ public class User {
     @ManyToMany(mappedBy = "teamPlayers")
     private Set<Team> teams = new HashSet<>();
 
-    public User (String username, String password){
+    public User (String username, String password, String role){
         this.username = username;
         this.password = password;
         gamesPlayed = 0;
         gamesWon = 0;
-        this.role = "player";
+        this.role = role;
     }
 
     public User(){
@@ -121,10 +121,8 @@ public class User {
         this.username = username;
     }
 
-    @JsonIgnore
     public String getPassword() { return password; }
 
-    @JsonSetter
     public void setPassword(String password) { this.password = password; }
 
 

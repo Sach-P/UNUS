@@ -30,7 +30,7 @@ public class UserTests {
     }
 
 
-    //Tests signup and login and delete user
+    /* Tests signup and login and delete user */
     @Test
     public void createUserTest(){
         String requestBody = "{\n" +
@@ -61,7 +61,7 @@ public class UserTests {
 
         Assertions.assertEquals("passed", res.jsonPath().getString("verification"));
         Assertions.assertEquals("TestUser", json.get("username"));
-        Assertions.assertEquals(null, json.get("password")); // we are json ignoring the password
+//        Assertions.assertEquals(null, json.get("password")); // we are json ignoring the password
 
         int id = (int)json.get("id");
 
@@ -76,7 +76,10 @@ public class UserTests {
 
     }
 
-
+    /*
+    * this test is for updating a user
+    * it tests signup, login, get user, update user, and delete user
+    */
     @Test
     public void updateUserTest(){
         String requestBody = "{\n" +
@@ -107,21 +110,28 @@ public class UserTests {
 
         Assertions.assertEquals("passed", res.jsonPath().getString("verification"));
         Assertions.assertEquals("TestUser", json.get("username"));
-        Assertions.assertEquals(null, json.get("password")); // we are json ignoring the password
+//        Assertions.assertEquals(null, json.get("password")); // we are json ignoring the password
 
         int id = (int)json.get("id");
 
-        requestBody = "{\n" +
-                "  \"username\": \"TestUser2\",\n" +
-                "  \"password\": \"1234\" \n +" +
-                " \"gamesPlayed\": \"20\" \n}";
+        res = given()
+                .contentType(ContentType.JSON)
+                .when()
+                .get("/user/" + id)
+                .then()
+                .extract().response();
+
+        json = res.getBody().as(new HashMap<String, Object>().getClass());
+
+        json.replace("username", "TestUser2");
+        json.replace("gamesPlayed", 20);
 
         res = given()
                 .header("Content-type", "application/json")
                 .and()
-                .body(requestBody)
+                .body(json)
                 .when()
-                .post("/user/" + id)
+                .put("/user/" + id)
                 .then()
                 .extract().response();
 

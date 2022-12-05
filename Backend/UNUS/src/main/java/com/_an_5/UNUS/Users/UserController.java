@@ -30,16 +30,17 @@ public class UserController {
     public String addUser(@RequestBody User user){
         if (user == null)
             return failure;
-        userRepository.save(user);
+        User newUser = new User(user.getUsername(), user.getPassword(), "player");
+        userRepository.save(newUser);
         return success;
     }
 
     @ApiOperation(value = "create a temporary guest user", response = String.class, tags = "user-controller")
     @PostMapping(path = "/create-guest-user")
-    public int createGuestUser(){
+    public User createGuestUser(){
         User guest = new User();
         userRepository.save(guest);
-        return guest.getId();
+        return guest;
     }
 
     @ApiOperation(value = "login a user and send user's information when logged in", response = Map.class, tags = "user-controller")
@@ -79,7 +80,6 @@ public class UserController {
     @ApiOperation(value = "Update a user in the users table in the database", response = String.class, tags = "user-controller")
     @PutMapping(path = "/user/{id}")
     public User updateUser(@PathVariable int id, @RequestBody User user) {
-        User currUser = userRepository.findById(id);
         if(user == null)
             return null;
         userRepository.save(user);
