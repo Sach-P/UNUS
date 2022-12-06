@@ -127,6 +127,15 @@
 
             >
 
+            <Button
+                android:layout_width="100dp"
+                android:layout_height="50dp"
+                android:layout_gravity="center"
+                android:text="@string/teams_button"
+                android:id="@+id/teams"
+                android:backgroundTint="?attr/buttonTint"
+                android:textColor="?attr/colorSecondary"
+                />
 
             <TextView
                 android:layout_width="fill_parent"

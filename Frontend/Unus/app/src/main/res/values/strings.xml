@@ -49,6 +49,7 @@
     <string name="user_id_display">User Id: %d</string>
     <string name="games_played_display">Games Played: %d</string>
     <string name="games_won_display">Games Won: %d</string>
+    <string name="teams_button">Teams</string>
 
     <!--user settings strings-->
     <string name="invalid_credentials">Invalid Credentials</string>
@@ -78,6 +79,13 @@
     <string name="clear">x</string>
     <string name="change">Change</string>
     <string name="promote">Promote to Admin</string>
+
+    <!-- Teams Screen -->
+    <string name="teams_page">Teams Page</string>
+    <string name="join_team">Join Team</string>
+    <string name="view_teams">View Teams</string>
+    <string name="search_team">Search by TeamID</string>
+    <string name="leader">Leader</string>
 
     <!--chat strings-->
     <string name="message_error">Couldn\'t connect to messages</string>
