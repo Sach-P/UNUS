@@ -38,10 +38,12 @@ public class AdminPageFragment extends Fragment {
     private View view;
     private List<Friend> userList;
     private List<Integer> lobbyList;
+    private List<Team> teamList;
     private LinearLayout displayList;
     private Button back;
     private Button users;
     private Button lobbies;
+    private Button teams;
     private Button search;
     private Button clear;
     private EditText id;
@@ -57,16 +59,19 @@ public class AdminPageFragment extends Fragment {
         view = inflater.inflate(R.layout.fragment_admin_page, container, false);
         userList = new ArrayList<Friend>();
         lobbyList = new ArrayList<Integer>();
+        teamList = new ArrayList<Team>();
         displayList= (LinearLayout) view.findViewById(R.id.results);
         back = (Button) view.findViewById(R.id.backbutton);
         users = (Button) view.findViewById(R.id.users);
         lobbies = (Button) view.findViewById(R.id.lobbies);
+        teams = (Button) view.findViewById(R.id.teams);
         search = (Button) view.findViewById(R.id.search_button);
         clear = (Button) view.findViewById(R.id.clear_button);
         id = (EditText) view.findViewById(R.id.searchbar);
 
         getUsers();
         getLobbies();
+        getTeams();
 
         users.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -75,6 +80,8 @@ public class AdminPageFragment extends Fragment {
                 users.setTextColor(view.getResources().getColor(R.color.yellow));
                 lobbies.setBackgroundColor(view.getResources().getColor(R.color.yellow));
                 lobbies.setTextColor(view.getResources().getColor(R.color.purple_500));
+                teams.setBackgroundColor(view.getResources().getColor(R.color.yellow));
+                teams.setTextColor(view.getResources().getColor(R.color.purple_500));
                 id.setHint(R.string.searchid);
                 displayUsers(userList);
             }
@@ -87,8 +94,24 @@ public class AdminPageFragment extends Fragment {
                 lobbies.setTextColor(view.getResources().getColor(R.color.yellow));
                 users.setBackgroundColor(view.getResources().getColor(R.color.yellow));
                 users.setTextColor(view.getResources().getColor(R.color.purple_500));
+                teams.setBackgroundColor(view.getResources().getColor(R.color.yellow));
+                teams.setTextColor(view.getResources().getColor(R.color.purple_500));
                 id.setHint(R.string.searchlobbyid);
                 displayLobbies(lobbyList);
+            }
+        });
+
+        teams.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                lobbies.setBackgroundColor(view.getResources().getColor(R.color.yellow));
+                lobbies.setTextColor(view.getResources().getColor(R.color.purple_500));
+                users.setBackgroundColor(view.getResources().getColor(R.color.yellow));
+                users.setTextColor(view.getResources().getColor(R.color.purple_500));
+                teams.setBackgroundColor(view.getResources().getColor(R.color.purple_500));
+                teams.setTextColor(view.getResources().getColor(R.color.yellow));
+                id.setHint("Search by TeamID");
+                displayTeams();
             }
         });
 
@@ -527,5 +550,101 @@ public class AdminPageFragment extends Fragment {
 
         } catch (JSONException ex) {
         }
+    }
+
+    /**
+     * gets all of the users in the database and puts them all into a list of Users
+     */
+    private void getTeams() {
+        JsonArrayRequest request = new JsonArrayRequest(
+                Request.Method.GET,
+                "http://coms-309-029.class.las.iastate.edu:8080/teams",
+                null,
+                new Response.Listener<JSONArray>() {
+                    @Override
+                    public void onResponse(JSONArray response) {
+                        try {
+                            for (int i = 0; i < response.length(); i++) {
+                                teamList.add(new Team(response.getJSONObject(i).getString("teamName"),
+                                        response.getJSONObject(i).getInt("id"),
+                                        response.getJSONObject(i).getInt("wins")));
+                            }
+                        } catch (JSONException e) {
+                            e.printStackTrace();
+                        }
+                    }
+                },
+                new Response.ErrorListener() {
+                    @Override
+                    public void onErrorResponse(VolleyError error) {
+                    }
+                }
+        );
+        Volley.newRequestQueue(requireContext()).add(request);
+    }
+
+    /**
+     * displays the list of users by username and stat on the screen
+     * It will display The name followed by either games played or games won
+     * This function is called every time any button is hit in the leaderboard
+     * screen
+     *
+     */
+    private void displayTeams() {
+        displayList.removeViews(0, displayList.getChildCount());
+        for(int i = 0; i < teamList.size(); i++) {
+            LinearLayout layout = new LinearLayout(view.getContext());
+            TextView tv = new TextView(view.getContext());
+            tv.setLayoutParams( new ViewGroup.LayoutParams(500, 100));
+            tv.setText(teamList.get(i).getName());
+            tv.setTextColor(view.getResources().getColor(R.color.yellow));
+            tv.setTextSize(25);
+
+            Space sp = new Space(view.getContext());
+            sp.setLayoutParams( new ViewGroup.LayoutParams(100, 100));
+
+            Button del = new Button(getContext());
+            del.setLayoutParams( new ViewGroup.LayoutParams(100, 100));
+            del.setText("x");
+            del.setTextColor(view.getResources().getColor(R.color.yellow));
+            del.setBackgroundColor(view.getResources().getColor(R.color.purple_500));
+            del.setTextSize(25);
+
+            int finalI = i;
+            del.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    deleteTeam(teamList.get(finalI).getId());
+                }
+            });
+
+            layout.addView(tv);
+            layout.addView(sp);
+            layout.addView(del);
+            displayList.addView(layout);
+        }
+    }
+
+    public void deleteTeam(int id) {
+        JsonObjectRequest request = new JsonObjectRequest(
+                Request.Method.DELETE,
+                getString(R.string.remote_server_url, "teams/delete-team", id + "?userId=" + UserData.getInstance().getUserID()),
+                null,
+                new Response.Listener<JSONObject>() {
+                    @Override
+                    public void onResponse(JSONObject response) {
+                        getActivity().getSupportFragmentManager().beginTransaction().replace(R.id.fragmentContainerView, new AdminPageFragment()).commit();
+                    }
+                },
+                new Response.ErrorListener() {
+                    @Override
+                    public void onErrorResponse(VolleyError error) {
+                        getActivity().getSupportFragmentManager().beginTransaction().replace(R.id.fragmentContainerView, new AdminPageFragment()).commit();
+
+                    }
+                }
+        );
+
+        Volley.newRequestQueue(requireContext()).add(request);
     }
 }

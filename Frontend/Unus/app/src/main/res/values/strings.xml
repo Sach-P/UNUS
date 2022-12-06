@@ -71,6 +71,7 @@
     <string name="friends">Friends</string>
     <string name="games_played">Games Played</string>
     <string name="games_won">Games Won</string>
+    <string name="team_wins">Team wins</string>
 
     <!-- Admin Screen-->
     <string name="admin_screen">Admin Page</string>
@@ -82,8 +83,9 @@
 
     <!-- Teams Screen -->
     <string name="teams_page">Teams Page</string>
-    <string name="join_team">Join Team</string>
-    <string name="view_teams">View Teams</string>
+    <string name="join_team">Join</string>
+    <string name="view_teams">View</string>
+    <string name="create_teams">Create</string>
     <string name="search_team">Search by TeamID</string>
     <string name="leader">Leader</string>
 

@@ -39,7 +39,7 @@
             android:orientation="horizontal"
             >
             <Button
-                android:layout_width="145dp"
+                android:layout_width="95dp"
                 android:layout_height="match_parent"
                 android:layout_marginLeft="5dp"
                 android:layout_marginRight="5dp"
@@ -49,12 +49,22 @@
                 android:textColor="?attr/colorSecondary"
                 />
             <Button
-                android:layout_width="145dp"
+                android:layout_width="100dp"
                 android:layout_height="match_parent"
                 android:layout_marginLeft="5dp"
                 android:layout_marginRight="5dp"
                 android:text="@string/admin_lobbies"
                 android:id="@+id/lobbies"
+                android:backgroundTint="?attr/colorSecondary"
+                android:textColor="?attr/buttonTint"
+                />
+            <Button
+                android:layout_width="90dp"
+                android:layout_height="match_parent"
+                android:layout_marginLeft="5dp"
+                android:layout_marginRight="5dp"
+                android:text="@string/teams_button"
+                android:id="@+id/teams"
                 android:backgroundTint="?attr/colorSecondary"
                 android:textColor="?attr/buttonTint"
                 />
@@ -69,7 +79,7 @@
                 android:layout_width="160dp"
                 android:layout_height="50dp"
                 android:id="@+id/searchbar"
-                android:hint="@string/search_team"
+                android:hint="@string/searchid"
                 android:textColor="@color/white"
                 android:backgroundTint="@color/white"
                 android:textColorHint="@color/white"
