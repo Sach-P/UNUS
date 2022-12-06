@@ -79,7 +79,7 @@ public class FriendService {
             }
             else{
                 friend1.setRequestedUser(null);
-                friend2.setRequestedUser(null);
+                friend2.setUserRequest(null);
                 friendRepository.deleteById(friend1.getId());
                 friendRepository.deleteById(friend2.getId());
                 return "{\"message\":\"declined\"}";
