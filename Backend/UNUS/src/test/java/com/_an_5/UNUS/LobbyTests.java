@@ -1,18 +1,16 @@
 package com._an_5.UNUS;
 
 
-import com._an_5.UNUS.Users.User;
 import io.restassured.RestAssured;
+import io.restassured.http.ContentType;
 import io.restassured.response.Response;
 import org.junit.Before;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
-import org.junit.runner.RunWith;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.web.server.LocalServerPort;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
-import org.springframework.test.context.junit4.SpringRunner;
 
 import java.util.HashMap;
 
@@ -21,7 +19,7 @@ import static io.restassured.RestAssured.given;
 
 @ExtendWith(SpringExtension.class)
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
-public class FriendTests {
+public class LobbyTests {
 
 
     HashMap<String, Object> user1;
@@ -39,7 +37,7 @@ public class FriendTests {
 
     private void createUsers(){
         String requestBody = "{\n" +
-                "  \"username\": \"(FriendTests)user1\",\n" +
+                "  \"username\": \"(LobbyTests)user1\",\n" +
                 "  \"password\": \"1234\" \n}";
 
         Response res = given()
@@ -66,7 +64,7 @@ public class FriendTests {
         user1 = res.jsonPath().getJsonObject("user");
 
         requestBody = "{\n" +
-                "  \"username\": \"(FriendTests)user2\",\n" +
+                "  \"username\": \"(LobbyTests)user2\",\n" +
                 "  \"password\": \"1234\" \n}";
 
         res = given()
@@ -111,85 +109,63 @@ public class FriendTests {
         Assertions.assertEquals("passed", res.jsonPath().getString("message"));
     }
 
-    /*Test to send a friend request from user1 to user2; user2 will decline the friend requet*/
+    /*exhaustive test case to test creating a lobby, getting the lobbies id from a user, deleting a lobby, and checking if a lobby exists*/
     @Test
-    public void sendAndDeclineFriendRequest(){
+    public void createALobby(){
 
         createUsers();
+
+        String requestBody = "{\n" +
+                "  \"private\": \"false\" \n}";
 
         Response res = given()
                 .header("Content-type", "application/json")
                 .and()
+                .body(requestBody)
                 .when()
-                .post("/user/" + user1.get("id") + "/send-friend-request?friendId=" + user2.get("id"))
+                .post("/lobbies/create-lobby?userId=" + user1.get("id"))
                 .then()
                 .extract().response();
 
-        Assertions.assertEquals("passed", res.jsonPath().getString("message"));
+        Assertions.assertEquals("success", res.jsonPath().getString("message"));
 
+        res = given()
+                .contentType(ContentType.JSON)
+                .when()
+                .get("/user/get-lobby/" + user1.get("id"))
+                .then()
+                .extract().response();
 
+        int lobbyId = Integer.parseInt(res.jsonPath().getJsonObject("id"));
 
-        String requestBody = "{\n" +
-                "  \"status\": \"declined\" \n}";
-
+//        res = given()
+//                .contentType(ContentType.TEXT)
+//                .when()
+//                .get("/lobbies/player-count/" + lobbyId)
+//                .then()
+//                .extract().response();
+//
+//        Assertions.assertEquals(1, Integer.parseInt(res.getBody().asString()));
 
         res = given()
                 .header("Content-type", "application/json")
-                .and()
-                .body(requestBody)
                 .when()
-                .put("/user/" + user2.get("id") + "/pending-friend-requests?friendId=" + user1.get("id"))
+                .delete("/lobbies/delete-lobby/" + lobbyId + "?userId=" + user1.get("id"))
                 .then()
                 .extract().response();
 
-        Assertions.assertEquals("declined", res.jsonPath().getString("message"));
+        Assertions.assertEquals("success", res.jsonPath().getString("message"));
+
+        res = given()
+                .contentType(ContentType.TEXT)
+                .when()
+                .get("/lobbies/lobby-exits/" + lobbyId)
+                .then()
+                .extract().response();
+
+        Assertions.assertEquals(false, Boolean.parseBoolean(res.getBody().asString()));
+
         deleteUsers();
     }
-
-    /*Test to send a friend request from user1 to user2, this time user2 will accept the request. user2 will then remove
-     *user1 as a friend.
-     */
-    @Test
-    public void AcceptFriendRequestAndRemoveFriend(){
-
-        createUsers();
-
-        Response res = given()
-                .header("Content-type", "application/json")
-                .and()
-                .when()
-                .post("/user/" + user1.get("id") + "/send-friend-request?friendId=" + user2.get("id"))
-            .then()
-                .extract().response();
-
-        Assertions.assertEquals("passed", res.jsonPath().getString("message"));
-
-    String requestBody = "{\n" +
-            "  \"status\": \"accepted\" \n}";
-
-    res = given()
-                .header("Content-type", "application/json")
-                .and()
-                .body(requestBody)
-                .when()
-                .put("/user/" + user2.get("id") + "/pending-friend-requests?friendId=" + user1.get("id"))
-            .then()
-                .extract().response();
-
-        Assertions.assertEquals("accepted", res.jsonPath().getString("message"));
-
-    res = given()
-                .header("Content-type", "application/json")
-                .and()
-                .when()
-                .delete("/user/" + user2.get("id") + "/friends/remove-friend?friendId=" + user1.get("id"))
-            .then()
-                .extract().response();
-
-        Assertions.assertEquals("passed", res.jsonPath().getString("message"));
-
-    deleteUsers();
-
-}
 
 }

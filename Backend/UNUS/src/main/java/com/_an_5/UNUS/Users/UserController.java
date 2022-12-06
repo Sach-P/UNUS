@@ -39,6 +39,8 @@ public class UserController {
     @PostMapping(path = "/create-guest-user")
     public User createGuestUser(){
         User guest = new User();
+//        userRepository.save(guest).getId();
+        guest.setName("guest" + userRepository.save(guest).getId());
         userRepository.save(guest);
         return guest;
     }
@@ -86,7 +88,7 @@ public class UserController {
         return userRepository.findById(id);
     }
 
-    @ApiOperation(value = "get the lobby ID the user is a host of", response = int.class, tags = "user-controller")
+    @ApiOperation(value = "get the lobby ID the user is a host of", response = String.class, tags = "user-controller")
     @GetMapping(path = "/user/get-lobby/{id}")
     public String getLobbyId(@PathVariable int id){
         User currUser = userRepository.findById(id);
@@ -98,6 +100,18 @@ public class UserController {
         return failure;
     }
 
+
+    @ApiOperation(value = "get the team ID the user is a leader of", response = String.class, tags = "user-controller")
+    @GetMapping(path = "/user/get-team/{id}")
+    public String getTeamId(@PathVariable int id){
+        User currUser = userRepository.findById(id);
+        if(currUser != null){
+            if(currUser.getOwnedTeam() != null){
+                return "{\"id\":\""+ currUser.getOwnedTeam().getId() + "\"}";
+            }
+        }
+        return failure;
+    }
 
 
 

@@ -24,7 +24,6 @@ import static io.restassured.RestAssured.given;
 
 @ExtendWith(SpringExtension.class)
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
-//@SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.DEFINED_PORT)
 public class UserTests {
 
     @LocalServerPort
@@ -41,7 +40,7 @@ public class UserTests {
     @Test
     public void createUserTest(){
         String requestBody = "{\n" +
-                "  \"username\": \"TestUser\",\n" +
+                "  \"username\": \"(UserTests)user1\",\n" +
                 "  \"password\": \"1234\" \n}";
 
         Response res = given()
@@ -67,7 +66,7 @@ public class UserTests {
         HashMap<String, Object> json = res.jsonPath().getJsonObject("user");
 
         Assertions.assertEquals("passed", res.jsonPath().getString("verification"));
-        Assertions.assertEquals("TestUser", json.get("username"));
+        Assertions.assertEquals("(UserTests)user1", json.get("username"));
 //        Assertions.assertEquals(null, json.get("password")); // we are json ignoring the password
 
         int id = (int)json.get("id");
@@ -90,7 +89,7 @@ public class UserTests {
     @Test
     public void updateUserTest(){
         String requestBody = "{\n" +
-                "  \"username\": \"TestUser\",\n" +
+                "  \"username\": \"(UserTests)user1\",\n" +
                 "  \"password\": \"1234\" \n}";
 
         Response res = given()
@@ -116,7 +115,7 @@ public class UserTests {
         HashMap<String, Object> json = res.jsonPath().getJsonObject("user");
 
         Assertions.assertEquals("passed", res.jsonPath().getString("verification"));
-        Assertions.assertEquals("TestUser", json.get("username"));
+        Assertions.assertEquals("(UserTests)user1", json.get("username"));
 //        Assertions.assertEquals(null, json.get("password")); // we are json ignoring the password
 
         int id = (int)json.get("id");
@@ -130,7 +129,7 @@ public class UserTests {
 
         json = res.getBody().as(new HashMap<String, Object>().getClass());
 
-        json.replace("username", "TestUser2");
+        json.replace("username", "(UserTests)user2");
         json.replace("gamesPlayed", 20);
 
         res = given()
@@ -142,7 +141,7 @@ public class UserTests {
                 .then()
                 .extract().response();
 
-        Assertions.assertEquals("TestUser2", res.jsonPath().getString("username"));
+        Assertions.assertEquals("(UserTests)user2", res.jsonPath().getString("username"));
         Assertions.assertEquals(20, res.jsonPath().getInt("gamesPlayed"));
 
 

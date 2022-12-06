@@ -76,6 +76,7 @@ public class User {
     @ManyToMany(mappedBy = "teamPlayers")
     private Set<Team> teams = new HashSet<>();
 
+    //creates a standard user (player or admin)
     public User (String username, String password, String role){
         this.username = username;
         this.password = password;
@@ -84,6 +85,7 @@ public class User {
         this.role = role;
     }
 
+    //creates a guest user
     public User(){
         this.username = "guest" + this.id;
         this.password = "guest";
