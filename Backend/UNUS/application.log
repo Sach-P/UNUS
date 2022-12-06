@@ -1902,3 +1902,70 @@ You may wish to exclude one of them to ensure predictable runtime behavior
 2022-12-05 21:05:21.250  INFO 38576 --- [SpringApplicationShutdownHook] j.LocalContainerEntityManagerFactoryBean : Closing JPA EntityManagerFactory for persistence unit 'default'
 2022-12-05 21:05:21.253  INFO 38576 --- [SpringApplicationShutdownHook] com.zaxxer.hikari.HikariDataSource       : HikariPool-1 - Shutdown initiated...
 2022-12-05 21:05:21.263  INFO 38576 --- [SpringApplicationShutdownHook] com.zaxxer.hikari.HikariDataSource       : HikariPool-1 - Shutdown completed.
+2022-12-05 21:16:10.996  WARN 41392 --- [main] ory$DuplicateJsonObjectContextCustomizer : 
+
+Found multiple occurrences of org.json.JSONObject on the class path:
+
+	jar:file:/C:/Users/sachp/.m2/repository/com/vaadin/external/google/android-json/0.0.20131108.vaadin1/android-json-0.0.20131108.vaadin1.jar!/org/json/JSONObject.class
+	jar:file:/C:/Users/sachp/.m2/repository/org/json/json/20180130/json-20180130.jar!/org/json/JSONObject.class
+
+You may wish to exclude one of them to ensure predictable runtime behavior
+
+2022-12-05 21:16:11.014  INFO 41392 --- [main] com._an_5.UNUS.UserTests                 : Starting UserTests using Java 11.0.10 on Wintermancer with PID 41392 (started by sachp in C:\Users\sachp\Workspace\2_an_5\Backend\UNUS)
+2022-12-05 21:16:11.015  INFO 41392 --- [main] com._an_5.UNUS.UserTests                 : No active profile set, falling back to 1 default profile: "default"
+2022-12-05 21:16:12.101  INFO 41392 --- [main] .s.d.r.c.RepositoryConfigurationDelegate : Bootstrapping Spring Data JPA repositories in DEFAULT mode.
+2022-12-05 21:16:12.181  INFO 41392 --- [main] .s.d.r.c.RepositoryConfigurationDelegate : Finished Spring Data repository scanning in 70 ms. Found 5 JPA repository interfaces.
+2022-12-05 21:16:13.432  INFO 41392 --- [main] o.s.b.w.embedded.tomcat.TomcatWebServer  : Tomcat initialized with port(s): 0 (http)
+2022-12-05 21:16:13.444  INFO 41392 --- [main] o.apache.catalina.core.StandardService   : Starting service [Tomcat]
+2022-12-05 21:16:13.445  INFO 41392 --- [main] org.apache.catalina.core.StandardEngine  : Starting Servlet engine: [Apache Tomcat/9.0.68]
+2022-12-05 21:16:13.639  INFO 41392 --- [main] o.a.c.c.C.[Tomcat].[localhost].[/]       : Initializing Spring embedded WebApplicationContext
+2022-12-05 21:16:13.639  INFO 41392 --- [main] w.s.c.ServletWebServerApplicationContext : Root WebApplicationContext: initialization completed in 2300 ms
+2022-12-05 21:16:13.964  INFO 41392 --- [main] o.hibernate.jpa.internal.util.LogHelper  : HHH000204: Processing PersistenceUnitInfo [name: default]
+2022-12-05 21:16:14.032  INFO 41392 --- [main] org.hibernate.Version                    : HHH000412: Hibernate ORM core version 5.6.10.Final
+2022-12-05 21:16:14.249  INFO 41392 --- [main] o.hibernate.annotations.common.Version   : HCANN000001: Hibernate Commons Annotations {5.1.2.Final}
+2022-12-05 21:16:14.386  INFO 41392 --- [main] com.zaxxer.hikari.HikariDataSource       : HikariPool-1 - Starting...
+2022-12-05 21:16:14.611  INFO 41392 --- [main] com.zaxxer.hikari.HikariDataSource       : HikariPool-1 - Start completed.
+2022-12-05 21:16:14.653  INFO 41392 --- [main] org.hibernate.dialect.Dialect            : HHH000400: Using dialect: org.hibernate.dialect.MySQL8Dialect
+2022-12-05 21:16:15.634  INFO 41392 --- [main] o.h.e.t.j.p.i.JtaPlatformInitiator       : HHH000490: Using JtaPlatform implementation: [org.hibernate.engine.transaction.jta.platform.internal.NoJtaPlatform]
+2022-12-05 21:16:15.645  INFO 41392 --- [main] j.LocalContainerEntityManagerFactoryBean : Initialized JPA EntityManagerFactory for persistence unit 'default'
+2022-12-05 21:16:16.642  WARN 41392 --- [main] JpaBaseConfiguration$JpaWebConfiguration : spring.jpa.open-in-view is enabled by default. Therefore, database queries may be performed during view rendering. Explicitly configure spring.jpa.open-in-view to disable this warning
+2022-12-05 21:16:17.636  INFO 41392 --- [main] o.s.b.w.embedded.tomcat.TomcatWebServer  : Tomcat started on port(s): 64964 (http) with context path ''
+2022-12-05 21:16:18.052  INFO 41392 --- [main] com._an_5.UNUS.UserTests                 : Started UserTests in 7.493 seconds (JVM running for 8.785)
+2022-12-05 21:16:27.558  INFO 41392 --- [SpringApplicationShutdownHook] j.LocalContainerEntityManagerFactoryBean : Closing JPA EntityManagerFactory for persistence unit 'default'
+2022-12-05 21:16:27.562  INFO 41392 --- [SpringApplicationShutdownHook] com.zaxxer.hikari.HikariDataSource       : HikariPool-1 - Shutdown initiated...
+2022-12-05 21:16:27.572  INFO 41392 --- [SpringApplicationShutdownHook] com.zaxxer.hikari.HikariDataSource       : HikariPool-1 - Shutdown completed.
+2022-12-05 21:16:58.590  WARN 22760 --- [main] ory$DuplicateJsonObjectContextCustomizer : 
+
+Found multiple occurrences of org.json.JSONObject on the class path:
+
+	jar:file:/C:/Users/sachp/.m2/repository/com/vaadin/external/google/android-json/0.0.20131108.vaadin1/android-json-0.0.20131108.vaadin1.jar!/org/json/JSONObject.class
+	jar:file:/C:/Users/sachp/.m2/repository/org/json/json/20180130/json-20180130.jar!/org/json/JSONObject.class
+
+You may wish to exclude one of them to ensure predictable runtime behavior
+
+2022-12-05 21:16:58.610  INFO 22760 --- [main] com._an_5.UNUS.FriendTests               : Starting FriendTests using Java 11.0.10 on Wintermancer with PID 22760 (started by sachp in C:\Users\sachp\Workspace\2_an_5\Backend\UNUS)
+2022-12-05 21:16:58.611  INFO 22760 --- [main] com._an_5.UNUS.FriendTests               : No active profile set, falling back to 1 default profile: "default"
+2022-12-05 21:16:59.694  INFO 22760 --- [main] .s.d.r.c.RepositoryConfigurationDelegate : Bootstrapping Spring Data JPA repositories in DEFAULT mode.
+2022-12-05 21:16:59.788  INFO 22760 --- [main] .s.d.r.c.RepositoryConfigurationDelegate : Finished Spring Data repository scanning in 84 ms. Found 5 JPA repository interfaces.
+2022-12-05 21:17:01.041  INFO 22760 --- [main] o.s.b.w.embedded.tomcat.TomcatWebServer  : Tomcat initialized with port(s): 8080 (http)
+2022-12-05 21:17:01.054  INFO 22760 --- [main] o.apache.catalina.core.StandardService   : Starting service [Tomcat]
+2022-12-05 21:17:01.055  INFO 22760 --- [main] org.apache.catalina.core.StandardEngine  : Starting Servlet engine: [Apache Tomcat/9.0.68]
+2022-12-05 21:17:01.236  INFO 22760 --- [main] o.a.c.c.C.[Tomcat].[localhost].[/]       : Initializing Spring embedded WebApplicationContext
+2022-12-05 21:17:01.236  INFO 22760 --- [main] w.s.c.ServletWebServerApplicationContext : Root WebApplicationContext: initialization completed in 2316 ms
+2022-12-05 21:17:01.561  INFO 22760 --- [main] o.hibernate.jpa.internal.util.LogHelper  : HHH000204: Processing PersistenceUnitInfo [name: default]
+2022-12-05 21:17:01.637  INFO 22760 --- [main] org.hibernate.Version                    : HHH000412: Hibernate ORM core version 5.6.10.Final
+2022-12-05 21:17:01.855  INFO 22760 --- [main] o.hibernate.annotations.common.Version   : HCANN000001: Hibernate Commons Annotations {5.1.2.Final}
+2022-12-05 21:17:01.986  INFO 22760 --- [main] com.zaxxer.hikari.HikariDataSource       : HikariPool-1 - Starting...
+2022-12-05 21:17:02.208  INFO 22760 --- [main] com.zaxxer.hikari.HikariDataSource       : HikariPool-1 - Start completed.
+2022-12-05 21:17:02.246  INFO 22760 --- [main] org.hibernate.dialect.Dialect            : HHH000400: Using dialect: org.hibernate.dialect.MySQL8Dialect
+2022-12-05 21:17:03.157  INFO 22760 --- [main] o.h.e.t.j.p.i.JtaPlatformInitiator       : HHH000490: Using JtaPlatform implementation: [org.hibernate.engine.transaction.jta.platform.internal.NoJtaPlatform]
+2022-12-05 21:17:03.168  INFO 22760 --- [main] j.LocalContainerEntityManagerFactoryBean : Initialized JPA EntityManagerFactory for persistence unit 'default'
+2022-12-05 21:17:04.201  WARN 22760 --- [main] JpaBaseConfiguration$JpaWebConfiguration : spring.jpa.open-in-view is enabled by default. Therefore, database queries may be performed during view rendering. Explicitly configure spring.jpa.open-in-view to disable this warning
+2022-12-05 21:17:05.206  INFO 22760 --- [main] o.s.b.w.embedded.tomcat.TomcatWebServer  : Tomcat started on port(s): 8080 (http) with context path ''
+2022-12-05 21:17:05.633  INFO 22760 --- [main] com._an_5.UNUS.FriendTests               : Started FriendTests in 7.474 seconds (JVM running for 8.832)
+2022-12-05 21:17:06.759  INFO 22760 --- [http-nio-8080-exec-1] o.a.c.c.C.[Tomcat].[localhost].[/]       : Initializing Spring DispatcherServlet 'dispatcherServlet'
+2022-12-05 21:17:06.760  INFO 22760 --- [http-nio-8080-exec-1] o.s.web.servlet.DispatcherServlet        : Initializing Servlet 'dispatcherServlet'
+2022-12-05 21:17:06.762  INFO 22760 --- [http-nio-8080-exec-1] o.s.web.servlet.DispatcherServlet        : Completed initialization in 1 ms
+2022-12-05 21:17:08.636  INFO 22760 --- [SpringApplicationShutdownHook] j.LocalContainerEntityManagerFactoryBean : Closing JPA EntityManagerFactory for persistence unit 'default'
+2022-12-05 21:17:08.638  INFO 22760 --- [SpringApplicationShutdownHook] com.zaxxer.hikari.HikariDataSource       : HikariPool-1 - Shutdown initiated...
+2022-12-05 21:17:08.649  INFO 22760 --- [SpringApplicationShutdownHook] com.zaxxer.hikari.HikariDataSource       : HikariPool-1 - Shutdown completed.

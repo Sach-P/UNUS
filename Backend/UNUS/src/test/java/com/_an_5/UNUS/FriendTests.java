@@ -39,7 +39,7 @@ public class FriendTests {
 
     private void createUsers(){
         String requestBody = "{\n" +
-                "  \"username\": \"user1\",\n" +
+                "  \"username\": \"(FriendTests)user1\",\n" +
                 "  \"password\": \"1234\" \n}";
 
         Response res = given()
@@ -66,7 +66,7 @@ public class FriendTests {
         user1 = res.jsonPath().getJsonObject("user");
 
         requestBody = "{\n" +
-                "  \"username\": \"user2\",\n" +
+                "  \"username\": \"(FriendTests)user2\",\n" +
                 "  \"password\": \"1234\" \n}";
 
         res = given()
