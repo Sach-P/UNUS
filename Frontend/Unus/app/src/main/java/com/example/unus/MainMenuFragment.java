@@ -113,19 +113,24 @@ public class MainMenuFragment extends Fragment {
         //create kicked popup if the user was kicked from a lobby
         if (getArguments() != null){
             Bundle bundle = getArguments();
-            if (bundle.getBoolean("kicked")){
-                View popupView = inflater.inflate(R.layout.booted_popup, null);
 
-                //Make Inactive Items Outside Of PopupWindow
-                boolean focusable = true;
-
-                //Create a window with our parameters
-                final PopupWindow popupWindow = new PopupWindow(popupView, 1000, 1000, focusable);
-
-                //Set the location of the window on the screen
-                popupWindow.showAtLocation(view, Gravity.CENTER, 0, 0);
-
+            View popupView;
+            if (bundle.containsKey("kicked")){
+                popupView = inflater.inflate(R.layout.booted_popup, null);
+            } else if (bundle.containsKey("playerLeft")){
+                popupView = inflater.inflate(R.layout.player_left_popup, null);
+            } else {
+                popupView = inflater.inflate(R.layout.player_left_popup, null);
             }
+
+            //Make Inactive Items Outside Of PopupWindow
+            boolean focusable = true;
+
+            //Create a window with our parameters
+            final PopupWindow popupWindow = new PopupWindow(popupView, 1000, 1000, focusable);
+
+            //Set the location of the window on the screen
+            popupWindow.showAtLocation(view, Gravity.CENTER, 0, 0);
         }
 
         return view;

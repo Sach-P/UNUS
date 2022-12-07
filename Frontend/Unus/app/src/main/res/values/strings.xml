@@ -81,4 +81,11 @@
     <!--booted popup-->
     <string name="booted">GET BOOTED \n LMAO</string>
 
+    <!--player left popup-->
+    <string name="player_left">PLAYER LEFT \n THE GAME</string>
+
+    <!--game strings-->
+    <string name="your_turn">Your Turn!</string>
+    <string name="players_turn">%s\'s Turn</string>
+
 </resources>

@@ -80,14 +80,9 @@ public class GameLobbyFragment extends Fragment {
         mainActivity.connectWebSocket(gameLobbyId);
 
         playerIds = new ArrayList<Integer>();
-        playerIds.add(UserData.getInstance().getUserID());
-
-        addPlayer(UserData.getInstance().getUserID());
-
-        for (int i = 0; i < playerIds.size(); i++){
-            if (playerIds.get(i) != UserData.getInstance().getUserID()){
-                addPlayer(playerIds.get(i));
-            }
+        if (isHost) {
+            playerIds.add(UserData.getInstance().getUserID());
+            addPlayer(UserData.getInstance().getUserID());
         }
 
         playerCountDisp = view.findViewById(R.id.player_count);
@@ -360,6 +355,7 @@ public class GameLobbyFragment extends Fragment {
 
         Bundle bundle = new Bundle();
         bundle.putBoolean("isHost", host);
+        bundle.putIntegerArrayList("ids", playerIds);
         frag.setArguments(bundle);
 
         getActivity().getSupportFragmentManager().beginTransaction().replace(R.id.fragmentContainerView, frag, "gameScreen").commit();
@@ -406,10 +402,8 @@ public class GameLobbyFragment extends Fragment {
 
                 JSONArray array = json.getJSONArray("ids");
                 for (int i = 0; i < array.length(); i++) {
-                    if ((int) array.get(i) != UserData.getInstance().getUserID()) {
-                        addPlayer((int) array.get(i));
-                        playerIds.add((int) array.get(i));
-                    }
+                    addPlayer((int) array.get(i));
+                    playerIds.add((int) array.get(i));
                 }
                 prefill = true;
             } else if (json.has("kicked") && json.getInt("kicked") == UserData.getInstance().getUserID()) {

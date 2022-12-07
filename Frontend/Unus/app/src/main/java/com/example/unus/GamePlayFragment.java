@@ -12,11 +12,20 @@ import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.PopupWindow;
+import android.widget.TextView;
+
+import com.android.volley.Request;
+import com.android.volley.Response;
+import com.android.volley.VolleyError;
+import com.android.volley.toolbox.JsonObjectRequest;
+import com.android.volley.toolbox.Volley;
 
 import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.Map;
 
 /**
  * Fragment used for gameplay when a game has two players
@@ -24,10 +33,6 @@ import java.util.ArrayList;
  * @author Isaac Blandin
  */
 public class GamePlayFragment extends Fragment {
-
-    final int NUM_PLAYERS = 2;
-
-    int readyPlayers = 0;
 
     //number of cards given to user at the beginning of the game
     final int INITIAL_CARDS = 5;
@@ -45,7 +50,11 @@ public class GamePlayFragment extends Fragment {
 
     boolean isHost = true;
 
-    boolean yourTurn;
+    ArrayList<Integer> playerIds;
+    HashMap<Integer, String> playerUsernames;
+    int turnIndex = 0;
+
+    TextView turnIndicator;
 
 
 
@@ -74,9 +83,17 @@ public class GamePlayFragment extends Fragment {
         if (getArguments() != null){
             Bundle bundle = getArguments();
             isHost = bundle.getBoolean("isHost");
+            playerIds = bundle.getIntegerArrayList("ids");
+        } else {
+            getActivity().getSupportFragmentManager().beginTransaction().replace(R.id.fragmentContainerView, new MainMenuFragment()).commit();
         }
 
+        playerUsernames = new HashMap<Integer, String>();
+        for (int id:playerIds){
+            getUsername(id);
+        }
 
+        turnIndicator = view.findViewById(R.id.turn_indicator);
         discardPile = view.findViewById(R.id.discard_pile);
 
         //draw first card if you are the host
@@ -107,12 +124,13 @@ public class GamePlayFragment extends Fragment {
         drawPile.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Card draw = new Card(getContext());
-                addCard(draw, cards.size());
-                cards.add(draw);
+                if (playerIds.get(turnIndex) == UserData.getInstance().getUserID()) {
+                    Card draw = new Card(getContext());
+                    addCard(draw, cards.size());
+                    cards.add(draw);
+                }
             }
         });
-
 
         return view;
     }
@@ -136,7 +154,7 @@ public class GamePlayFragment extends Fragment {
         plate.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                if (card.cardPlayable(topDiscard)) {
+                if (card.cardPlayable(topDiscard) && playerIds.get(turnIndex) == UserData.getInstance().getUserID()) {
                     plate.setVisibility(View.GONE);
                     try {
                         discard(card, true);
@@ -262,7 +280,6 @@ public class GamePlayFragment extends Fragment {
      */
     private void setWild(CardRank rank, CardColor color) throws JSONException {
         Card card = new Card(rank, color, getContext());
-        sendCard(card);
         discard(card, true);
     }
 
@@ -278,6 +295,7 @@ public class GamePlayFragment extends Fragment {
         message.put("card", card.toJsonObject());
 
         mainActivity.sendMessage(message);
+        nextTurn();
     }
 
     /**
@@ -288,12 +306,84 @@ public class GamePlayFragment extends Fragment {
      */
     public void onMessage(String s) throws JSONException {
         JSONObject obj = new JSONObject(s);
-        if (obj.getInt("id") != UserData.getInstance().getUserID() && obj.has("id")){
-            if (obj.has("card")){
-                Card card = new Card(obj.getJSONObject("card"), getContext());
+
+        if (obj.has("card")){
+            Card card = new Card(obj.getJSONObject("card"), getContext());
+
+            if (obj.getInt("id") != UserData.getInstance().getUserID()){
                 discard(card, false);
+                nextTurn();
+            }
+
+            CardRank rank = card.getRank();
+            if (rank == CardRank.SKIP){
+                nextTurn();
+            } else if (rank == CardRank.REVERSE){
+
+            } else if (playerIds.get(turnIndex) == UserData.getInstance().getUserID() && (rank == CardRank.DRAW_FOUR || rank == CardRank.DRAW_TWO)){
+                int draws = 0;
+                if (rank == CardRank.DRAW_FOUR){
+                    draws = 4;
+                } else if (rank == CardRank.DRAW_TWO){
+                    draws = 2;
+                }
+                for (int i = 0; i < draws; i++){
+                    Card draw = new Card(getContext());
+                    addCard(draw, cards.size());
+                    cards.add(draw);
+                }
             }
         }
+
+       if (obj.has("left")){
+            mainActivity.disconnectWebSocket();
+
+            MainMenuFragment frag = new MainMenuFragment();
+
+            Bundle bundle = new Bundle();
+            bundle.putBoolean("playerLeft", true);
+
+            frag.setArguments(bundle);
+
+            getActivity().getSupportFragmentManager().beginTransaction().replace(R.id.fragmentContainerView, frag).commit();
+        }
     }
+
+    private void nextTurn(){
+        turnIndex = (turnIndex + 1)%playerIds.size();
+        if (playerIds.get(turnIndex) == UserData.getInstance().getUserID()){
+            turnIndicator.setText(getString(R.string.your_turn));
+        } else {
+            turnIndicator.setText(getString(R.string.players_turn, playerUsernames.get(playerIds.get(turnIndex))));
+        }
+    }
+
+    private void getUsername(int id){
+        JsonObjectRequest request = new JsonObjectRequest(
+                Request.Method.GET,
+                getString(R.string.remote_server_url, "user", Integer.toString(id)),
+                null,
+                new Response.Listener<JSONObject>() {
+                    @Override
+                    public void onResponse(JSONObject response) {
+                        try {
+                            playerUsernames.put(id, response.getString("username"));
+                        } catch (JSONException e) {
+                            e.printStackTrace();
+                        }
+                    }
+                },
+                new Response.ErrorListener() {
+                    @Override
+                    public void onErrorResponse(VolleyError error) {
+
+                    }
+                }
+        );
+
+        Volley.newRequestQueue(requireContext()).add(request);
+    }
+
+
 
 }
