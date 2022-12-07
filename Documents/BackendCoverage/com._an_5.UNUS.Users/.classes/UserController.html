@@ -1,0 +1,197 @@
+
+
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html id="htmlId">
+<head>
+  <title>Coverage Report :: UserController</title>
+  <style type="text/css">
+    @import "../../.css/coverage.css";
+  </style>
+</head>
+
+<body>
+<div class="header"></div>
+
+<div class="content">
+<div class="breadCrumbs">
+    [ <a href="../../index.html">all classes</a> ]
+    [ <a href="../index.html">com._an_5.UNUS.Users</a> ]
+</div>
+
+<h1>Coverage Summary for Class: UserController (com._an_5.UNUS.Users)</h1>
+
+<table class="coverageStats">
+<tr>
+  <th class="name">Class</th>
+<th class="coverageStat 
+">
+  Class, %
+</th>
+<th class="coverageStat 
+">
+  Method, %
+</th>
+<th class="coverageStat 
+">
+  Line, %
+</th>
+</tr>
+<tr>
+  <td class="name">UserController</td>
+<td class="coverageStat">
+  <span class="percent">
+    100%
+  </span>
+  <span class="absValue">
+    (1/ 1)
+  </span>
+</td>
+<td class="coverageStat">
+  <span class="percent">
+    10%
+  </span>
+  <span class="absValue">
+    (1/ 10)
+  </span>
+</td>
+<td class="coverageStat">
+  <span class="percent">
+    7.3%
+  </span>
+  <span class="absValue">
+    (3/ 41)
+  </span>
+</td>
+</tr>
+
+</table>
+
+<br/>
+<br/>
+
+
+<div class="sourceCode"><i>1</i>&nbsp;package com._an_5.UNUS.Users;
+<i>2</i>&nbsp;
+<i>3</i>&nbsp;import io.swagger.annotations.ApiOperation;
+<i>4</i>&nbsp;import org.springframework.beans.factory.annotation.Autowired;
+<i>5</i>&nbsp;import org.springframework.web.bind.annotation.*;
+<i>6</i>&nbsp;
+<i>7</i>&nbsp;import java.util.HashMap;
+<i>8</i>&nbsp;import java.util.List;
+<i>9</i>&nbsp;import java.util.Map;
+<i>10</i>&nbsp;
+<i>11</i>&nbsp;@RestController
+<b class="fc"><i>12</i>&nbsp;public class UserController {</b>
+<i>13</i>&nbsp;
+<i>14</i>&nbsp;    @Autowired
+<i>15</i>&nbsp;    private UserRepository userRepository;
+<i>16</i>&nbsp;
+<i>17</i>&nbsp;    @Autowired
+<i>18</i>&nbsp;    private UserService userService;
+<i>19</i>&nbsp;
+<b class="fc"><i>20</i>&nbsp;    private String success = &quot;{\&quot;message\&quot;:\&quot;passed\&quot;}&quot;;</b>
+<b class="fc"><i>21</i>&nbsp;    private String failure = &quot;{\&quot;message\&quot;:\&quot;failed\&quot;}&quot;;</b>
+<i>22</i>&nbsp;
+<i>23</i>&nbsp;
+<i>24</i>&nbsp;    @ApiOperation(value = &quot;register a user to the database&quot;, response = String.class, tags = &quot;user-controller&quot;)
+<i>25</i>&nbsp;    @PostMapping(path = &quot;/signup&quot;)
+<i>26</i>&nbsp;    public String addUser(@RequestBody User user){
+<b class="nc"><i>27</i>&nbsp;        if (user == null)</b>
+<b class="nc"><i>28</i>&nbsp;            return failure;</b>
+<b class="nc"><i>29</i>&nbsp;        User newUser = new User(user.getUsername(), user.getPassword(), &quot;player&quot;);</b>
+<b class="nc"><i>30</i>&nbsp;        userRepository.save(newUser);</b>
+<b class="nc"><i>31</i>&nbsp;        return success;</b>
+<i>32</i>&nbsp;    }
+<i>33</i>&nbsp;
+<i>34</i>&nbsp;    @ApiOperation(value = &quot;create a temporary guest user&quot;, response = String.class, tags = &quot;user-controller&quot;)
+<i>35</i>&nbsp;    @PostMapping(path = &quot;/create-guest-user&quot;)
+<i>36</i>&nbsp;    public User createGuestUser(){
+<b class="nc"><i>37</i>&nbsp;        User guest = new User();</b>
+<i>38</i>&nbsp;//        userRepository.save(guest).getId();
+<b class="nc"><i>39</i>&nbsp;        guest.setName(&quot;guest&quot; + userRepository.save(guest).getId());</b>
+<b class="nc"><i>40</i>&nbsp;        userRepository.save(guest);</b>
+<b class="nc"><i>41</i>&nbsp;        return guest;</b>
+<i>42</i>&nbsp;    }
+<i>43</i>&nbsp;
+<i>44</i>&nbsp;    @ApiOperation(value = &quot;login a user and send user&#39;s information when logged in&quot;, response = Map.class, tags = &quot;user-controller&quot;)
+<i>45</i>&nbsp;    @PostMapping(path = &quot;/login&quot;)
+<i>46</i>&nbsp;    public Map&lt;String, Object&gt; login(@RequestBody User user){//@ModelAttribute(&quot;user&quot;) User user){
+<b class="nc"><i>47</i>&nbsp;        HashMap&lt;String, Object&gt; map = new HashMap&lt;&gt;();</b>
+<b class="nc"><i>48</i>&nbsp;        User oauthUser = userService.login(user.getUsername(), user.getPassword());</b>
+<b class="nc"><i>49</i>&nbsp;        if(oauthUser != null){</b>
+<b class="nc"><i>50</i>&nbsp;            map.put(&quot;verification&quot;, &quot;passed&quot;);</b>
+<b class="nc"><i>51</i>&nbsp;            map.put(&quot;user&quot;, oauthUser);</b>
+<b class="nc"><i>52</i>&nbsp;            return map;</b>
+<i>53</i>&nbsp;        }
+<b class="nc"><i>54</i>&nbsp;        map.put(&quot;verification&quot;, &quot;failed&quot;);</b>
+<b class="nc"><i>55</i>&nbsp;        map.put(&quot;user&quot;, null);</b>
+<b class="nc"><i>56</i>&nbsp;        return map;</b>
+<i>57</i>&nbsp;    }
+<i>58</i>&nbsp;
+<i>59</i>&nbsp;    @ApiOperation(value = &quot;Get a list of all users currently in the database users table&quot;, response = List.class, tags = &quot;user-controller&quot;)
+<i>60</i>&nbsp;    @GetMapping(path = &quot;/user&quot;)
+<i>61</i>&nbsp;    public List&lt;User&gt; getAllUsers(){
+<b class="nc"><i>62</i>&nbsp;        return userRepository.findAll();</b>
+<i>63</i>&nbsp;    }
+<i>64</i>&nbsp;
+<i>65</i>&nbsp;    @ApiOperation(value = &quot;get a specific user&quot;, response = User.class, tags = &quot;user-controller&quot;)
+<i>66</i>&nbsp;    @GetMapping(path = &quot;/user/{id}&quot;)
+<b class="nc"><i>67</i>&nbsp;    public User getUser(@PathVariable int id){ return userRepository.findById(id); }</b>
+<i>68</i>&nbsp;
+<i>69</i>&nbsp;    @ApiOperation(value = &quot;delete a user&quot;, response = String.class, tags = &quot;user-controller&quot;)
+<i>70</i>&nbsp;    @DeleteMapping(path = &quot;/user/{id}&quot;)
+<i>71</i>&nbsp;    public String deleteUser(@PathVariable int id) {
+<b class="nc"><i>72</i>&nbsp;        if(!userRepository.existsById(id))</b>
+<b class="nc"><i>73</i>&nbsp;            return failure;</b>
+<b class="nc"><i>74</i>&nbsp;        userRepository.deleteById(id);</b>
+<b class="nc"><i>75</i>&nbsp;        return success;</b>
+<i>76</i>&nbsp;    }
+<i>77</i>&nbsp;
+<i>78</i>&nbsp;    @ApiOperation(value = &quot;Update a user in the users table in the database&quot;, response = String.class, tags = &quot;user-controller&quot;)
+<i>79</i>&nbsp;    @PutMapping(path = &quot;/user/{id}&quot;)
+<i>80</i>&nbsp;    public User updateUser(@PathVariable int id, @RequestBody User user) {
+<b class="nc"><i>81</i>&nbsp;        if(user == null)</b>
+<b class="nc"><i>82</i>&nbsp;            return null;</b>
+<b class="nc"><i>83</i>&nbsp;        userRepository.save(user);</b>
+<b class="nc"><i>84</i>&nbsp;        return userRepository.findById(id);</b>
+<i>85</i>&nbsp;    }
+<i>86</i>&nbsp;
+<i>87</i>&nbsp;    @ApiOperation(value = &quot;get the lobby ID the user is a host of&quot;, response = String.class, tags = &quot;user-controller&quot;)
+<i>88</i>&nbsp;    @GetMapping(path = &quot;/user/get-lobby/{id}&quot;)
+<i>89</i>&nbsp;    public String getLobbyId(@PathVariable int id){
+<b class="nc"><i>90</i>&nbsp;        User currUser = userRepository.findById(id);</b>
+<b class="nc"><i>91</i>&nbsp;        if(currUser != null){</b>
+<b class="nc"><i>92</i>&nbsp;            if(currUser.getLobby() != null){</b>
+<b class="nc"><i>93</i>&nbsp;                return &quot;{\&quot;id\&quot;:\&quot;&quot;+ currUser.getLobby().getId() + &quot;\&quot;}&quot;;</b>
+<i>94</i>&nbsp;            }
+<i>95</i>&nbsp;        }
+<b class="nc"><i>96</i>&nbsp;        return failure;</b>
+<i>97</i>&nbsp;    }
+<i>98</i>&nbsp;
+<i>99</i>&nbsp;
+<i>100</i>&nbsp;    @ApiOperation(value = &quot;get the team ID the user is a leader of&quot;, response = String.class, tags = &quot;user-controller&quot;)
+<i>101</i>&nbsp;    @GetMapping(path = &quot;/user/get-team/{id}&quot;)
+<i>102</i>&nbsp;    public String getTeamId(@PathVariable int id){
+<b class="nc"><i>103</i>&nbsp;        User currUser = userRepository.findById(id);</b>
+<b class="nc"><i>104</i>&nbsp;        if(currUser != null){</b>
+<b class="nc"><i>105</i>&nbsp;            if(currUser.getOwnedTeam() != null){</b>
+<b class="nc"><i>106</i>&nbsp;                return &quot;{\&quot;id\&quot;:\&quot;&quot;+ currUser.getOwnedTeam().getId() + &quot;\&quot;}&quot;;</b>
+<i>107</i>&nbsp;            }
+<i>108</i>&nbsp;        }
+<b class="nc"><i>109</i>&nbsp;        return failure;</b>
+<i>110</i>&nbsp;    }
+<i>111</i>&nbsp;
+<i>112</i>&nbsp;
+<i>113</i>&nbsp;
+<i>114</i>&nbsp;}
+</div>
+</div>
+
+<div class="footer">
+    
+    <div style="float:right;">generated on 2022-12-06 22:27</div>
+</div>
+</body>
+</html>

@@ -2,25 +2,15 @@ package com._an_5.UNUS.Friends;
 
 import com._an_5.UNUS.Users.User;
 import com._an_5.UNUS.Users.UserRepository;
-import com.fasterxml.jackson.databind.util.JSONPObject;
-import com.mysql.cj.xdevapi.JsonParser;
-import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import org.apache.tomcat.util.json.JSONParser;
 import org.apache.tomcat.util.json.ParseException;
-import org.json.JSONObject;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
-
-import java.util.List;
 import java.util.Set;
 
-//@Api(value = "friend-controller")
 @RestController
 public class FriendController {
-
-    @Autowired
-    private FriendRepository friendRepository;
 
     @Autowired
     private UserRepository userRepository;
@@ -61,8 +51,7 @@ public class FriendController {
     @ApiOperation(value = "remove a friend the will also remove the friend for the users table because of the many to one relation", response = String.class, tags = "friend-controller")
     @DeleteMapping(path = "/user/{id}/friends/remove-friend")
     public String removeFriend(@PathVariable int id, @RequestParam("friendId") int friendId){
-        friendService.removeFriend(id, friendId);
-        return success;
+        return friendService.removeFriend(id, friendId);
     }
 
     @ApiOperation(value = "get a list of a user's friends", response = String.class, tags = "friend-controller")

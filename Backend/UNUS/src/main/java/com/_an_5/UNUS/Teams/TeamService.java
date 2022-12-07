@@ -1,6 +1,5 @@
 package com._an_5.UNUS.Teams;
 
-import com._an_5.UNUS.Lobbies.Lobby;
 import com._an_5.UNUS.Users.User;
 import com._an_5.UNUS.Users.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;

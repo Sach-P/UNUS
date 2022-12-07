@@ -1,0 +1,215 @@
+
+
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html id="htmlId">
+<head>
+  <title>Coverage Report :: FriendService</title>
+  <style type="text/css">
+    @import "../../.css/coverage.css";
+  </style>
+</head>
+
+<body>
+<div class="header"></div>
+
+<div class="content">
+<div class="breadCrumbs">
+    [ <a href="../../index.html">all classes</a> ]
+    [ <a href="../index.html">com._an_5.UNUS.Friends</a> ]
+</div>
+
+<h1>Coverage Summary for Class: FriendService (com._an_5.UNUS.Friends)</h1>
+
+<table class="coverageStats">
+<tr>
+  <th class="name">Class</th>
+<th class="coverageStat 
+">
+  Class, %
+</th>
+<th class="coverageStat 
+">
+  Method, %
+</th>
+<th class="coverageStat 
+">
+  Line, %
+</th>
+</tr>
+<tr>
+  <td class="name">FriendService</td>
+<td class="coverageStat">
+  <span class="percent">
+    100%
+  </span>
+  <span class="absValue">
+    (1/ 1)
+  </span>
+</td>
+<td class="coverageStat">
+  <span class="percent">
+    25%
+  </span>
+  <span class="absValue">
+    (1/ 4)
+  </span>
+</td>
+<td class="coverageStat">
+  <span class="percent">
+    3.8%
+  </span>
+  <span class="absValue">
+    (3/ 78)
+  </span>
+</td>
+</tr>
+
+</table>
+
+<br/>
+<br/>
+
+
+<div class="sourceCode"><i>1</i>&nbsp;package com._an_5.UNUS.Friends;
+<i>2</i>&nbsp;
+<i>3</i>&nbsp;import com._an_5.UNUS.Users.User;
+<i>4</i>&nbsp;import com._an_5.UNUS.Users.UserRepository;
+<i>5</i>&nbsp;import org.springframework.beans.factory.annotation.Autowired;
+<i>6</i>&nbsp;import org.springframework.stereotype.Service;
+<i>7</i>&nbsp;import java.util.Iterator;
+<i>8</i>&nbsp;
+<i>9</i>&nbsp;@Service
+<b class="fc"><i>10</i>&nbsp;public class FriendService {</b>
+<i>11</i>&nbsp;
+<i>12</i>&nbsp;    @Autowired
+<i>13</i>&nbsp;    private UserRepository userRepository;
+<i>14</i>&nbsp;
+<i>15</i>&nbsp;    @Autowired
+<i>16</i>&nbsp;    private FriendRepository friendRepository;
+<i>17</i>&nbsp;
+<b class="fc"><i>18</i>&nbsp;    private String success = &quot;{\&quot;message\&quot;:\&quot;passed\&quot;}&quot;;</b>
+<b class="fc"><i>19</i>&nbsp;    private String failure = &quot;{\&quot;message\&quot;:\&quot;failed\&quot;}&quot;;</b>
+<i>20</i>&nbsp;
+<i>21</i>&nbsp;    public String sendFriendRequest(int id, int friendId){
+<b class="nc"><i>22</i>&nbsp;        User requested = userRepository.findById(friendId);</b>
+<b class="nc"><i>23</i>&nbsp;        User requester = userRepository.findById(id);</b>
+<b class="nc"><i>24</i>&nbsp;        if(requested != null &amp;&amp; requester != null &amp;&amp; !requester.getRole().equals(&quot;guest&quot;) &amp;&amp; !requested.getRole().equals(&quot;guest&quot;)){</b>
+<b class="nc"><i>25</i>&nbsp;            Friend friend1 = new Friend(id, &quot;pending&quot;, requester.getUsername());</b>
+<b class="nc"><i>26</i>&nbsp;            friend1.setRequestedUser(requested);</b>
+<i>27</i>&nbsp;
+<b class="nc"><i>28</i>&nbsp;            Friend friend2 = new Friend(friendId, &quot;pending&quot;, requested.getUsername());</b>
+<b class="nc"><i>29</i>&nbsp;            friend2.setUserRequest(requester);</b>
+<i>30</i>&nbsp;
+<b class="nc"><i>31</i>&nbsp;            friendRepository.save(friend1);</b>
+<b class="nc"><i>32</i>&nbsp;            friendRepository.save(friend2);</b>
+<b class="nc"><i>33</i>&nbsp;            return success;</b>
+<i>34</i>&nbsp;        }
+<b class="nc"><i>35</i>&nbsp;        return failure;</b>
+<i>36</i>&nbsp;
+<i>37</i>&nbsp;    }
+<i>38</i>&nbsp;
+<i>39</i>&nbsp;    public String acceptOrDeclineFriendRequest(int id, int friendId, String status){
+<b class="nc"><i>40</i>&nbsp;        User requested = userRepository.findById(id);</b>
+<b class="nc"><i>41</i>&nbsp;        User requester = userRepository.findById(friendId);</b>
+<b class="nc"><i>42</i>&nbsp;        Friend friend1 = null;</b>
+<b class="nc"><i>43</i>&nbsp;        Friend friend2 = null;</b>
+<i>44</i>&nbsp;
+<b class="nc"><i>45</i>&nbsp;        Iterator&lt;Friend&gt; it = requested.getReceivedFriendRequests().iterator();</b>
+<b class="nc"><i>46</i>&nbsp;        while(it.hasNext()){</b>
+<b class="nc"><i>47</i>&nbsp;            Friend friendRequest = it.next();</b>
+<b class="nc"><i>48</i>&nbsp;            if(friendRequest.getFriendId() == friendId){</b>
+<b class="nc"><i>49</i>&nbsp;                friend1 = friendRequest;</b>
+<b class="nc"><i>50</i>&nbsp;                break;</b>
+<i>51</i>&nbsp;            }
+<b class="nc"><i>52</i>&nbsp;        }</b>
+<i>53</i>&nbsp;
+<b class="nc"><i>54</i>&nbsp;        it = requester.getSentFriendRequests().iterator();</b>
+<b class="nc"><i>55</i>&nbsp;        while(it.hasNext()){</b>
+<b class="nc"><i>56</i>&nbsp;            Friend friendRequest = it.next();</b>
+<b class="nc"><i>57</i>&nbsp;            if(friendRequest.getFriendId() == id){</b>
+<b class="nc"><i>58</i>&nbsp;                friend2 = friendRequest;</b>
+<b class="nc"><i>59</i>&nbsp;                break;</b>
+<i>60</i>&nbsp;            }
+<b class="nc"><i>61</i>&nbsp;        }</b>
+<i>62</i>&nbsp;
+<b class="nc"><i>63</i>&nbsp;        if(friend1 != null &amp;&amp; friend2 != null){</b>
+<b class="nc"><i>64</i>&nbsp;            if(status.equals(&quot;accepted&quot;)){</b>
+<b class="nc"><i>65</i>&nbsp;                friend1.setFriend(requested);</b>
+<b class="nc"><i>66</i>&nbsp;                friend1.setStatus(&quot;friend&quot;);</b>
+<b class="nc"><i>67</i>&nbsp;                friend1.setRequestedUser(null);</b>
+<i>68</i>&nbsp;
+<b class="nc"><i>69</i>&nbsp;                friend2.setFriend(requester);</b>
+<b class="nc"><i>70</i>&nbsp;                friend2.setStatus(&quot;friend&quot;);</b>
+<b class="nc"><i>71</i>&nbsp;                friend2.setUserRequest(null);</b>
+<i>72</i>&nbsp;
+<b class="nc"><i>73</i>&nbsp;                friendRepository.save(friend1);</b>
+<b class="nc"><i>74</i>&nbsp;                friendRepository.save(friend2);</b>
+<i>75</i>&nbsp;
+<b class="nc"><i>76</i>&nbsp;                return &quot;{\&quot;message\&quot;:\&quot;accepted\&quot;}&quot;;</b>
+<i>77</i>&nbsp;
+<i>78</i>&nbsp;            }
+<i>79</i>&nbsp;            else{
+<b class="nc"><i>80</i>&nbsp;                friend1.setRequestedUser(null);</b>
+<b class="nc"><i>81</i>&nbsp;                friend1.setUserRequest(null);</b>
+<b class="nc"><i>82</i>&nbsp;                friend2.setUserRequest(null);</b>
+<b class="nc"><i>83</i>&nbsp;                friend2.setRequestedUser(null);</b>
+<b class="nc"><i>84</i>&nbsp;                friendRepository.deleteById(friend1.getId());</b>
+<b class="nc"><i>85</i>&nbsp;                friendRepository.deleteById(friend2.getId());</b>
+<b class="nc"><i>86</i>&nbsp;                return &quot;{\&quot;message\&quot;:\&quot;declined\&quot;}&quot;;</b>
+<i>87</i>&nbsp;            }
+<i>88</i>&nbsp;        }
+<i>89</i>&nbsp;
+<b class="nc"><i>90</i>&nbsp;        return failure;</b>
+<i>91</i>&nbsp;    }
+<i>92</i>&nbsp;
+<i>93</i>&nbsp;
+<i>94</i>&nbsp;    public String removeFriend(int id, int friendId){
+<b class="nc"><i>95</i>&nbsp;        User user1 = userRepository.findById(id);</b>
+<b class="nc"><i>96</i>&nbsp;        User user2 = userRepository.findById(friendId);</b>
+<b class="nc"><i>97</i>&nbsp;        Friend friend1 = null;</b>
+<b class="nc"><i>98</i>&nbsp;        Friend friend2 = null;</b>
+<i>99</i>&nbsp;
+<b class="nc"><i>100</i>&nbsp;        Iterator&lt;Friend&gt; it = user1.getFriends().iterator();</b>
+<b class="nc"><i>101</i>&nbsp;        while(it.hasNext()){</b>
+<b class="nc"><i>102</i>&nbsp;            Friend friend = it.next();</b>
+<b class="nc"><i>103</i>&nbsp;            if(friend.getFriendId() == friendId){</b>
+<b class="nc"><i>104</i>&nbsp;                friend1 = friend;</b>
+<b class="nc"><i>105</i>&nbsp;                it.remove();</b>
+<b class="nc"><i>106</i>&nbsp;                break;</b>
+<i>107</i>&nbsp;            }
+<b class="nc"><i>108</i>&nbsp;        }</b>
+<i>109</i>&nbsp;
+<b class="nc"><i>110</i>&nbsp;        it = user2.getFriends().iterator();</b>
+<b class="nc"><i>111</i>&nbsp;        while(it.hasNext()){</b>
+<b class="nc"><i>112</i>&nbsp;            Friend friend = it.next();</b>
+<b class="nc"><i>113</i>&nbsp;            if(friend.getFriendId() == id){</b>
+<b class="nc"><i>114</i>&nbsp;                friend2 = friend;</b>
+<b class="nc"><i>115</i>&nbsp;                it.remove();</b>
+<b class="nc"><i>116</i>&nbsp;                break;</b>
+<i>117</i>&nbsp;            }
+<b class="nc"><i>118</i>&nbsp;        }</b>
+<i>119</i>&nbsp;
+<b class="nc"><i>120</i>&nbsp;        if(friend1 != null &amp;&amp; friend2 != null){</b>
+<b class="nc"><i>121</i>&nbsp;            friend1.setFriend(null);</b>
+<b class="nc"><i>122</i>&nbsp;            friend2.setFriend(null);</b>
+<b class="nc"><i>123</i>&nbsp;            friendRepository.deleteById(friend1.getId());</b>
+<b class="nc"><i>124</i>&nbsp;            friendRepository.deleteById(friend2.getId());</b>
+<b class="nc"><i>125</i>&nbsp;            return success;</b>
+<i>126</i>&nbsp;        }
+<i>127</i>&nbsp;
+<b class="nc"><i>128</i>&nbsp;        return failure;</b>
+<i>129</i>&nbsp;
+<i>130</i>&nbsp;    }
+<i>131</i>&nbsp;
+<i>132</i>&nbsp;}
+</div>
+</div>
+
+<div class="footer">
+    
+    <div style="float:right;">generated on 2022-12-06 22:27</div>
+</div>
+</body>
+</html>

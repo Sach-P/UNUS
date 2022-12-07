@@ -80,6 +80,15 @@
                 />
         </LinearLayout>
 
+        <Button
+            android:id="@+id/team_stats"
+            android:layout_width="150dp"
+            android:layout_height="50dp"
+            android:text="@string/team_wins"
+            android:backgroundTint="?attr/colorSecondary"
+            android:textColor="?attr/buttonTint"
+            />
+
         <TextView
             android:id="@+id/stat_name"
             android:layout_width="match_parent"

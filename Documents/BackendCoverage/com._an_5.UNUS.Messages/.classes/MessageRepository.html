@@ -1,0 +1,63 @@
+
+
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html id="htmlId">
+<head>
+  <title>Coverage Report :: MessageRepository</title>
+  <style type="text/css">
+    @import "../../.css/coverage.css";
+  </style>
+</head>
+
+<body>
+<div class="header"></div>
+
+<div class="content">
+<div class="breadCrumbs">
+    [ <a href="../../index.html">all classes</a> ]
+    [ <a href="../index.html">com._an_5.UNUS.Messages</a> ]
+</div>
+
+<h1>Coverage Summary for Class: MessageRepository (com._an_5.UNUS.Messages)</h1>
+
+<table class="coverageStats">
+<tr>
+  <th class="name">Class</th>
+</tr>
+<tr>
+  <td class="name">MessageRepository</td>
+</tr>
+
+</table>
+
+<br/>
+<br/>
+
+
+<div class="sourceCode"><i>1</i>&nbsp;package com._an_5.UNUS.Messages;
+<i>2</i>&nbsp;
+<i>3</i>&nbsp;import com._an_5.UNUS.Lobbies.Lobby;
+<i>4</i>&nbsp;import org.springframework.data.jpa.repository.JpaRepository;
+<i>5</i>&nbsp;
+<i>6</i>&nbsp;import javax.transaction.Transactional;
+<i>7</i>&nbsp;import java.util.List;
+<i>8</i>&nbsp;
+<i>9</i>&nbsp;public interface MessageRepository extends JpaRepository&lt;Message, Long&gt;{
+<i>10</i>&nbsp;
+<i>11</i>&nbsp;    List&lt;Message&gt; findAllByLobby(Lobby lobby);
+<i>12</i>&nbsp;
+<i>13</i>&nbsp;    @Transactional
+<i>14</i>&nbsp;    void deleteAllByLobby(Lobby lobby);
+<i>15</i>&nbsp;
+<i>16</i>&nbsp;}
+</div>
+</div>
+
+<div class="footer">
+    
+    <div style="float:right;">generated on 2022-12-06 22:27</div>
+</div>
+</body>
+</html>

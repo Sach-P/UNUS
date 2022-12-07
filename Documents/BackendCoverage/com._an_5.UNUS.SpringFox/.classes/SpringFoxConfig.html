@@ -1,0 +1,148 @@
+
+
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html id="htmlId">
+<head>
+  <title>Coverage Report :: SpringFoxConfig</title>
+  <style type="text/css">
+    @import "../../.css/coverage.css";
+  </style>
+</head>
+
+<body>
+<div class="header"></div>
+
+<div class="content">
+<div class="breadCrumbs">
+    [ <a href="../../index.html">all classes</a> ]
+    [ <a href="../index.html">com._an_5.UNUS.SpringFox</a> ]
+</div>
+
+<h1>Coverage Summary for Class: SpringFoxConfig (com._an_5.UNUS.SpringFox)</h1>
+
+<table class="coverageStats">
+
+<tr>
+  <th class="name">Class</th>
+<th class="coverageStat 
+">
+  Method, %
+</th>
+<th class="coverageStat 
+">
+  Line, %
+</th>
+</tr>
+<tr>
+  <td class="name">SpringFoxConfig</td>
+<td class="coverageStat">
+  <span class="percent">
+    100%
+  </span>
+  <span class="absValue">
+    (4/ 4)
+  </span>
+</td>
+<td class="coverageStat">
+  <span class="percent">
+    100%
+  </span>
+  <span class="absValue">
+    (12/ 12)
+  </span>
+</td>
+</tr>
+  <tr>
+    <td class="name">SpringFoxConfig$$EnhancerBySpringCGLIB$$db9d23ae</td>
+  </tr>
+  <tr>
+    <td class="name">SpringFoxConfig$$EnhancerBySpringCGLIB$$db9d23ae$$FastClassBySpringCGLIB$$9e57cad</td>
+  </tr>
+  <tr>
+    <td class="name">SpringFoxConfig$$FastClassBySpringCGLIB$$b3c1b8ba</td>
+  </tr>
+<tr>
+  <td class="name"><strong>total</strong></td>
+<td class="coverageStat">
+  <span class="percent">
+    100%
+  </span>
+  <span class="absValue">
+    (4/ 4)
+  </span>
+</td>
+<td class="coverageStat">
+  <span class="percent">
+    100%
+  </span>
+  <span class="absValue">
+    (12/ 12)
+  </span>
+</td>
+</tr>
+</table>
+
+<br/>
+<br/>
+
+
+<div class="sourceCode"><i>1</i>&nbsp;package com._an_5.UNUS.SpringFox;
+<i>2</i>&nbsp;
+<i>3</i>&nbsp;import org.springframework.context.annotation.Bean;
+<i>4</i>&nbsp;import org.springframework.context.annotation.Configuration;
+<i>5</i>&nbsp;import org.springframework.data.util.Predicates;
+<i>6</i>&nbsp;import org.springframework.web.servlet.config.annotation.ResourceHandlerRegistry;
+<i>7</i>&nbsp;import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
+<i>8</i>&nbsp;import springfox.documentation.builders.PathSelectors;
+<i>9</i>&nbsp;import springfox.documentation.builders.RequestHandlerSelectors;
+<i>10</i>&nbsp;import springfox.documentation.service.ApiInfo;
+<i>11</i>&nbsp;import springfox.documentation.service.Contact;
+<i>12</i>&nbsp;import springfox.documentation.spi.DocumentationType;
+<i>13</i>&nbsp;import springfox.documentation.spring.web.plugins.Docket;
+<i>14</i>&nbsp;import springfox.documentation.swagger2.annotations.EnableSwagger2;
+<i>15</i>&nbsp;import springfox.documentation.swagger2.annotations.EnableSwagger2WebMvc;
+<i>16</i>&nbsp;
+<i>17</i>&nbsp;import java.util.Collections;
+<i>18</i>&nbsp;
+<i>19</i>&nbsp;@EnableSwagger2
+<i>20</i>&nbsp;@Configuration
+<b class="fc"><i>21</i>&nbsp;public class SpringFoxConfig implements WebMvcConfigurer {</b>
+<i>22</i>&nbsp;    @Bean
+<i>23</i>&nbsp;    public Docket api() {
+<b class="fc"><i>24</i>&nbsp;        return new Docket(DocumentationType.SWAGGER_2)</b>
+<b class="fc"><i>25</i>&nbsp;                .select()</b>
+<b class="fc"><i>26</i>&nbsp;                .apis(RequestHandlerSelectors.any())</b>
+<b class="fc"><i>27</i>&nbsp;                .paths(PathSelectors.any())</b>
+<b class="fc"><i>28</i>&nbsp;                .build()</b>
+<b class="fc"><i>29</i>&nbsp;                .apiInfo(apiInfo());</b>
+<i>30</i>&nbsp;    }
+<i>31</i>&nbsp;    private ApiInfo apiInfo() {
+<b class="fc"><i>32</i>&nbsp;        return new ApiInfo(</b>
+<i>33</i>&nbsp;                &quot;UNUS REST API&quot;,
+<i>34</i>&nbsp;                &quot;All requests and models from the backend.&quot;,
+<i>35</i>&nbsp;                &quot;API TOS&quot;,
+<i>36</i>&nbsp;                null,
+<i>37</i>&nbsp;                new Contact(&quot;Sachin Patel&quot;, null, &quot;sachpat@iastate.edu&quot;),
+<b class="fc"><i>38</i>&nbsp;                null, null, Collections.emptyList());</b>
+<i>39</i>&nbsp;    }
+<i>40</i>&nbsp;
+<i>41</i>&nbsp;    @Override
+<i>42</i>&nbsp;    public void addResourceHandlers(ResourceHandlerRegistry registry)
+<i>43</i>&nbsp;    {
+<i>44</i>&nbsp;        //enabling swagger-ui part for visual documentation
+<b class="fc"><i>45</i>&nbsp;        registry.addResourceHandler(&quot;swagger-ui.html&quot;).addResourceLocations(&quot;classpath:/META-INF/resources/&quot;);</b>
+<b class="fc"><i>46</i>&nbsp;        registry.addResourceHandler(&quot;/webjars/**&quot;).addResourceLocations(&quot;classpath:/META-INF/resources/webjars/&quot;);</b>
+<b class="fc"><i>47</i>&nbsp;    }</b>
+<i>48</i>&nbsp;
+<i>49</i>&nbsp;}
+</div>
+</div>
+
+<div class="footer">
+    
+    <div style="float:right;">generated on 2022-12-06 22:27</div>
+</div>
+</body>
+</html>

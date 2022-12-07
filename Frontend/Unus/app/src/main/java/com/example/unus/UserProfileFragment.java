@@ -41,6 +41,7 @@ public class UserProfileFragment extends Fragment {
     private TextView wins;
     private Button settings;
     private Button back;
+    private Button teams;
     private Button addFriends;
 
     public UserProfileFragment() {
@@ -62,6 +63,7 @@ public class UserProfileFragment extends Fragment {
         wins = (TextView) view.findViewById(R.id.wins);
         settings = (Button) view.findViewById(R.id.user_settings);
         back = (Button) view.findViewById(R.id.back);
+        teams = (Button) view.findViewById(R.id.teams);
         username.setText(UserData.getInstance().getUsername());
         userID.setText(getString(R.string.user_id_display, UserData.getInstance().getUserID()));
         games.setText(getString(R.string.games_played_display, UserData.getInstance().getGamesPlayed()));
@@ -79,6 +81,13 @@ public class UserProfileFragment extends Fragment {
             @Override
             public void onClick(View view) {
                 getActivity().getSupportFragmentManager().beginTransaction().replace(R.id.fragmentContainerView, new MainMenuFragment()).commit();
+            }
+        });
+
+        teams.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                getActivity().getSupportFragmentManager().beginTransaction().replace(R.id.fragmentContainerView, new TeamsFragment()).commit();
             }
         });
 

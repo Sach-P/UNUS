@@ -1,37 +1,31 @@
 package com._an_5.UNUS.Users;
-
-import com._an_5.UNUS.GlobalChat.GlobalSocket;
-import com._an_5.UNUS.Messages.MessageRepository;
 import org.json.JSONObject;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Controller;
 
 import javax.websocket.*;
 import javax.websocket.server.PathParam;
+import javax.websocket.server.ServerEndpoint;
 import java.io.IOException;
 import java.util.Hashtable;
 import java.util.Map;
 
+@Controller
+@ServerEndpoint(value = "/user/{userId}")
 public class UserSocket {
     private static UserRepository userRepository;
-
-    private static MessageRepository messageRepository;
 
     @Autowired
     public void setUserRepository(UserRepository repo) {
         userRepository = repo;
     }
 
-    @Autowired
-    public void setMessageRepository(MessageRepository repo) {
-        messageRepository = repo;
-    }
-
     private static Map<Session, User> sessionUserMap = new Hashtable<>();
     private static Map<User, Session> userSessionMap = new Hashtable<>();
 
-    private final Logger logger = LoggerFactory.getLogger(GlobalSocket.class);
+    private final Logger logger = LoggerFactory.getLogger(UserSocket.class);
 
 
     @OnOpen
@@ -66,6 +60,9 @@ public class UserSocket {
         User user = sessionUserMap.get(session);
         sessionUserMap.remove(session);
         userSessionMap.remove(user);
+        if(user.getRole().equals("guest")){
+            userRepository.deleteById(user.getId());
+        }
     }
 
     @OnError

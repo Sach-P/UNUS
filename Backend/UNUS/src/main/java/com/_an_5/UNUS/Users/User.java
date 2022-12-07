@@ -32,10 +32,6 @@ public class User {
     @NotNull
     private String role;
 
-//    @ApiModelProperty(notes = "checks if user is online")
-//    @NotNull
-//    private boolean online;
-
     @ApiModelProperty(notes = "number of games this user played",name="gamesPlayed",required=false)
     private int gamesPlayed;
 
@@ -53,11 +49,6 @@ public class User {
     @OneToOne(mappedBy = "leader")
     private Team ownedTeam;
 
-//    @ApiModelProperty(notes = "Lobby thi",name="fId",required=true)
-//    @JsonIgnore
-//    @ManyToOne(cascade = CascadeType.ALL)
-//    @JoinColumn(name = "user_id", referencedColumnName = "id")
-//    private Lobby joinedLobby;
 
     @ApiModelProperty(notes = "list of friends",name="friends",required=false)
     @OneToMany(mappedBy = "friend")
@@ -76,13 +67,20 @@ public class User {
     @ManyToMany(mappedBy = "teamPlayers")
     private Set<Team> teams = new HashSet<>();
 
-    public User (String username, String password){
+    //creates a standard user (player or admin)
+    public User (String username, String password, String role){
         this.username = username;
         this.password = password;
+        gamesPlayed = 0;
+        gamesWon = 0;
+        this.role = role;
     }
 
-    public User() {
-        this.role = "player";
+    //creates a guest user
+    public User(){
+        this.username = "guest" + this.id;
+        this.password = "guest";
+        this.role = "guest";
         gamesPlayed = 0;
         gamesWon = 0;
     }
@@ -116,10 +114,8 @@ public class User {
         this.username = username;
     }
 
-    @JsonIgnore
     public String getPassword() { return password; }
 
-    @JsonSetter
     public void setPassword(String password) { this.password = password; }
 
 
@@ -209,11 +205,4 @@ public class User {
         this.ownedTeam = ownedTeam;
     }
 
-    //    public Lobby getJoinedLobby() {
-//        return joinedLobby;
-//    }
-//
-//    public void setJoinedLobby(Lobby joinedLobby) {
-//        this.joinedLobby = joinedLobby;
-//    }
 }

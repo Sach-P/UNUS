@@ -2,10 +2,7 @@ package com._an_5.UNUS.Lobbies;
 
 import com._an_5.UNUS.Users.User;
 import com._an_5.UNUS.Users.UserRepository;
-import lombok.AllArgsConstructor;
-import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.messaging.simp.SimpMessagingTemplate;
 import org.springframework.stereotype.Service;
 
 import java.util.Iterator;
@@ -24,7 +21,7 @@ public class LobbyService {
 
     public String createLobby(int userId, boolean isPrivate){
         User host = userRepo.findById(userId);
-        if(host == null || host.getLobby() != null){
+        if(host == null || host.getLobby() != null || host.getRole().equals("guest")){
             return failure;
         }
         Lobby lobby = new Lobby(host, isPrivate);
@@ -37,7 +34,7 @@ public class LobbyService {
     public String deleteLobby(int lobbyId, int userId){
         User host = userRepo.findById(userId);
         Lobby lobby = lobbyRepo.findById(lobbyId);
-        if(host.equals(lobby.getHost())){
+        if(host.equals(lobby.getHost()) || host.getRole().equals("admin")){
             lobby.setHost(null);
             lobbyRepo.save(lobby);
             lobbyRepo.deleteById(lobbyId);

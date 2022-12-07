@@ -4,7 +4,6 @@ import com._an_5.UNUS.Users.User;
 import com._an_5.UNUS.Users.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-
 import java.util.Iterator;
 
 @Service
@@ -22,7 +21,7 @@ public class FriendService {
     public String sendFriendRequest(int id, int friendId){
         User requested = userRepository.findById(friendId);
         User requester = userRepository.findById(id);
-        if(requested != null && requester != null){
+        if(requested != null && requester != null && !requester.getRole().equals("guest") && !requested.getRole().equals("guest")){
             Friend friend1 = new Friend(id, "pending", requester.getUsername());
             friend1.setRequestedUser(requested);
 
@@ -79,6 +78,8 @@ public class FriendService {
             }
             else{
                 friend1.setRequestedUser(null);
+                friend1.setUserRequest(null);
+                friend2.setUserRequest(null);
                 friend2.setRequestedUser(null);
                 friendRepository.deleteById(friend1.getId());
                 friendRepository.deleteById(friend2.getId());
