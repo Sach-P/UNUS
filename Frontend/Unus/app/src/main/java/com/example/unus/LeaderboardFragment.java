@@ -102,6 +102,10 @@ public class LeaderboardFragment extends Fragment {
                     won.setTextColor(view.getResources().getColor(R.color.yellow));
                     played.setBackgroundColor(view.getResources().getColor(R.color.yellow));
                     played.setTextColor(view.getResources().getColor(R.color.purple_500));
+                    global.setBackgroundColor((isGlobal)?view.getResources().getColor(R.color.purple_500):view.getResources().getColor(R.color.yellow));
+                    global.setTextColor((!isGlobal)?view.getResources().getColor(R.color.purple_500):view.getResources().getColor(R.color.yellow));
+                    friends.setBackgroundColor((!isGlobal)?view.getResources().getColor(R.color.purple_500):view.getResources().getColor(R.color.yellow));
+                    friends.setTextColor((isGlobal)?view.getResources().getColor(R.color.purple_500):view.getResources().getColor(R.color.yellow));
                     isPlayed = false;
                     stat_name.setText("Games Won: ");
                     sortGamesWon();
@@ -120,6 +124,10 @@ public class LeaderboardFragment extends Fragment {
                     played.setTextColor(view.getResources().getColor(R.color.yellow));
                     won.setBackgroundColor(view.getResources().getColor(R.color.yellow));
                     won.setTextColor(view.getResources().getColor(R.color.purple_500));
+                    global.setBackgroundColor((isGlobal)?view.getResources().getColor(R.color.purple_500):view.getResources().getColor(R.color.yellow));
+                    global.setTextColor((!isGlobal)?view.getResources().getColor(R.color.purple_500):view.getResources().getColor(R.color.yellow));
+                    friends.setBackgroundColor((!isGlobal)?view.getResources().getColor(R.color.purple_500):view.getResources().getColor(R.color.yellow));
+                    friends.setTextColor((isGlobal)?view.getResources().getColor(R.color.purple_500):view.getResources().getColor(R.color.yellow));
                     isPlayed = true;
                     stat_name.setText("Games Played: ");
                     sortGamesPlayed();
@@ -138,6 +146,10 @@ public class LeaderboardFragment extends Fragment {
                     global.setTextColor(view.getResources().getColor(R.color.yellow));
                     friends.setBackgroundColor(view.getResources().getColor(R.color.yellow));
                     friends.setTextColor(view.getResources().getColor(R.color.purple_500));
+                    won.setBackgroundColor((!isPlayed)?view.getResources().getColor(R.color.purple_500):view.getResources().getColor(R.color.yellow));
+                    won.setTextColor((isPlayed)?view.getResources().getColor(R.color.purple_500):view.getResources().getColor(R.color.yellow));
+                    played.setBackgroundColor((isPlayed)?view.getResources().getColor(R.color.purple_500):view.getResources().getColor(R.color.yellow));
+                    played.setTextColor((!isPlayed)?view.getResources().getColor(R.color.purple_500):view.getResources().getColor(R.color.yellow));
                     isGlobal = true;
                     stat_name.setText((isPlayed) ? "Games Played: " : "Games Won: ");
                     displayUsers(userList, isPlayed);
@@ -155,6 +167,10 @@ public class LeaderboardFragment extends Fragment {
                     friends.setTextColor(view.getResources().getColor(R.color.yellow));
                     global.setBackgroundColor(view.getResources().getColor(R.color.yellow));
                     global.setTextColor(view.getResources().getColor(R.color.purple_500));
+                    won.setBackgroundColor((!isPlayed)?view.getResources().getColor(R.color.purple_500):view.getResources().getColor(R.color.yellow));
+                    won.setTextColor((isPlayed)?view.getResources().getColor(R.color.purple_500):view.getResources().getColor(R.color.yellow));
+                    played.setBackgroundColor((isPlayed)?view.getResources().getColor(R.color.purple_500):view.getResources().getColor(R.color.yellow));
+                    played.setTextColor((!isPlayed)?view.getResources().getColor(R.color.purple_500):view.getResources().getColor(R.color.yellow));
                     isGlobal = false;
                     stat_name.setText((isPlayed) ? "Games Played: " : "Games Won: ");
                     displayUsers(friendList, isPlayed);
@@ -330,7 +346,7 @@ public class LeaderboardFragment extends Fragment {
 
             TextView stats = new TextView(view.getContext());
             stats.setLayoutParams( new ViewGroup.LayoutParams(400, 100));
-            stats.setText(teamList.get(i).getWins());
+            stats.setText(teamList.get(i).getWins()+"");
             stats.setTextColor(view.getResources().getColor(R.color.yellow));
             stats.setTextSize(25);
 

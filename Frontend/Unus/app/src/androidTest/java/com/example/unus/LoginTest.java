@@ -72,10 +72,10 @@ public class LoginTest {
         materialButton.perform(click());
         Thread.sleep(1000);
         ViewInteraction textView = onView(
-                allOf(withId(R.id.id_display), withText("ID: 7"),
+                allOf(withId(R.id.id_display), withText("ID: 31"),
                         withParent(withParent(IsInstanceOf.<View>instanceOf(android.widget.LinearLayout.class))),
                         isDisplayed()));
-        textView.check(matches(withText("ID: 7")));
+        textView.check(matches(withText("ID: 31")));
     }
 
     private static Matcher<View> childAtPosition(

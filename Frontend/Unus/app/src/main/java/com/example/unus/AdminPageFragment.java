@@ -232,11 +232,11 @@ public class AdminPageFragment extends Fragment {
             int finalI = i;
 
             Button stats = new Button(view.getContext());
-            stats.setLayoutParams( new ViewGroup.LayoutParams(200, 100));
+            stats.setLayoutParams( new ViewGroup.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT));
             stats.setText("stats");
             stats.setBackgroundColor(this.getResources().getColor(R.color.purple_500));
             stats.setTextColor(view.getResources().getColor(R.color.yellow));
-            stats.setTextSize(15);
+            stats.setTextSize(10);
             stats.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
@@ -246,11 +246,11 @@ public class AdminPageFragment extends Fragment {
             });
 
             Button del = new Button(view.getContext());
-            del.setLayoutParams( new ViewGroup.LayoutParams(100, 100));
+            del.setLayoutParams( new ViewGroup.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT));
             del.setText("x");
             del.setBackgroundColor(this.getResources().getColor(R.color.purple_500));
             del.setTextColor(view.getResources().getColor(R.color.yellow));
-            del.setTextSize(15);
+            del.setTextSize(10);
             del.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
@@ -290,27 +290,13 @@ public class AdminPageFragment extends Fragment {
 
             int finalI = i;
 
-            /*
-            Button stats = new Button(view.getContext());
-            stats.setLayoutParams( new ViewGroup.LayoutParams(200, 100));
-            stats.setText("stats");
-            stats.setBackgroundColor(this.getResources().getColor(R.color.purple_500));
-            stats.setTextColor(view.getResources().getColor(R.color.yellow));
-            stats.setTextSize(15);
-            stats.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View view) {
-                    //AdminUserPopup popup = new AdminUserPopup(view, list.get(finalI));
-                }
-            });
-             */
 
             Button del = new Button(view.getContext());
-            del.setLayoutParams( new ViewGroup.LayoutParams(100, 100));
+            del.setLayoutParams( new ViewGroup.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT));
             del.setText("x");
             del.setBackgroundColor(this.getResources().getColor(R.color.purple_500));
             del.setTextColor(view.getResources().getColor(R.color.yellow));
-            del.setTextSize(15);
+            del.setTextSize(10);
             del.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
@@ -604,11 +590,11 @@ public class AdminPageFragment extends Fragment {
             sp.setLayoutParams( new ViewGroup.LayoutParams(100, 100));
 
             Button del = new Button(getContext());
-            del.setLayoutParams( new ViewGroup.LayoutParams(100, 100));
+            del.setLayoutParams( new ViewGroup.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT));
             del.setText("x");
             del.setTextColor(view.getResources().getColor(R.color.yellow));
             del.setBackgroundColor(view.getResources().getColor(R.color.purple_500));
-            del.setTextSize(25);
+            del.setTextSize(10);
 
             int finalI = i;
             del.setOnClickListener(new View.OnClickListener() {

@@ -359,8 +359,7 @@ public class TeamsFragment extends Fragment {
                 if (team.getLeader().getUserID() == UserData.getInstance().getUserID()) {
                     deleteTeam(team.getId());
                     getActivity().getSupportFragmentManager().beginTransaction().replace(R.id.fragmentContainerView, new TeamsFragment()).commit();
-                }
-                if (finalInTeam) {
+                } else if (finalInTeam) {
                     leaveTeam(team.getId());
                 } else {
                     joinTeam(team.getId());

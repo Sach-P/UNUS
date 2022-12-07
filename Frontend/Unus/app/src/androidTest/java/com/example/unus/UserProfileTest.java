@@ -88,10 +88,10 @@ public class UserProfileTest {
         textView.check(matches(withText("Games Played: 0")));
 
         ViewInteraction textView2 = onView(
-                allOf(withId(R.id.userID), withText("User Id: 7"),
+                allOf(withId(R.id.userID), withText("User Id: 31"),
                         withParent(withParent(withId(R.id.fragmentContainerView))),
                         isDisplayed()));
-        textView2.check(matches(withText("User Id: 7")));
+        textView2.check(matches(withText("User Id: 31")));
 
         ViewInteraction textView3 = onView(
                 allOf(withId(R.id.wins), withText("Games Won: 0"),
