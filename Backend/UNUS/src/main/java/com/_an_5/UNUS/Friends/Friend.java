@@ -81,9 +81,9 @@ public class Friend {
         return fId;
     }
 
-    public void setFriendId(int friendId) {
-        this.fId = friendId;
-    }
+//    public void setFriendId(int friendId) {
+//        this.fId = friendId;
+//    }
 
     public void setUsername(String username) {
         this.username = username;
@@ -93,25 +93,25 @@ public class Friend {
         return username;
     }
 
-    public String getStatus() {
-        return status;
-    }
+//    public String getStatus() {
+//        return status;
+//    }
 
     public void setStatus(String status) {
         this.status = status;
     }
 
-    public User getUserRequest() {
-        return userRequest;
-    }
+//    public User getUserRequest() {
+//        return userRequest;
+//    }
 
     public void setUserRequest(User userRequest) {
         this.userRequest = userRequest;
     }
 
-    public User getRequestedUser() {
-        return requestedUser;
-    }
+//    public User getRequestedUser() {
+//        return requestedUser;
+//    }
 
     public void setRequestedUser(User requestedUser) {
         this.requestedUser = requestedUser;

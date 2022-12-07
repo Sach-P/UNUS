@@ -157,6 +157,32 @@ public class UserTests {
 
     }
 
+    /*
+     * Test for creating and deleting a guest user
+     */
+    @Test
+    public void createGuestUsersTest(){
+
+        Response res = given()
+                .header("Content-type", "application/json")
+                .when()
+                .post("/create-guest-user")
+                .then()
+                .extract().response();
+
+        Assertions.assertEquals("guest", res.jsonPath().getString("role"));
+        int id = res.jsonPath().getInt("id");
+
+        res = given()
+                .header("Content-type", "application/json")
+                .when()
+                .delete("/user/" + id)
+                .then()
+                .extract().response();
+
+        Assertions.assertEquals("passed", res.jsonPath().getString("message"));
+
+    }
 
 
 

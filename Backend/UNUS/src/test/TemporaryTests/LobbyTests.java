@@ -130,6 +130,7 @@ public class LobbyTests {
 
         Assertions.assertEquals("success", res.jsonPath().getString("message"));
 
+
         res = given()
                 .contentType(ContentType.JSON)
                 .when()
@@ -142,11 +143,12 @@ public class LobbyTests {
 //        res = given()
 //                .contentType(ContentType.TEXT)
 //                .when()
-//                .get("/lobbies/player-count/" + lobbyId)
+//                .get("/lobbies/lobby-exits/" + lobbyId)
 //                .then()
 //                .extract().response();
 //
-//        Assertions.assertEquals(1, Integer.parseInt(res.getBody().asString()));
+//        Assertions.assertEquals(true, Boolean.parseBoolean(res.getBody().asString()));
+
 
         res = given()
                 .header("Content-type", "application/json")
