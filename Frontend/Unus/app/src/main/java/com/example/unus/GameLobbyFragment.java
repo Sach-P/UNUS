@@ -27,6 +27,8 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.util.ArrayList;
+import java.util.Collections;
+import java.util.HashMap;
 
 /**
  * Fragment used to handle the pre-game lobby
@@ -37,12 +39,18 @@ public class GameLobbyFragment extends Fragment {
 
     View view;
     ArrayList<Integer> playerIds;
+    HashMap<Integer, String> usernames;
     int gameLobbyId;
 
     TextView playerCountDisp;
+    Button startButton;
 
     boolean isHost;
     boolean prefill = false;
+
+    boolean userIsReady;
+    int numPlayersReady = 0;
+    boolean canStart;
 
     MainActivity mainActivity;
 
@@ -74,15 +82,12 @@ public class GameLobbyFragment extends Fragment {
         mainActivity = (MainActivity)getActivity();
         mainActivity.connectWebSocket(gameLobbyId);
 
+        usernames = new HashMap<Integer, String>();
+
         playerIds = new ArrayList<Integer>();
-        playerIds.add(UserData.getInstance().getUserID());
-
-        addPlayer(UserData.getInstance().getUserID());
-
-        for (int i = 0; i < playerIds.size(); i++){
-            if (playerIds.get(i) != UserData.getInstance().getUserID()){
-                addPlayer(playerIds.get(i));
-            }
+        if (isHost) {
+            playerIds.add(UserData.getInstance().getUserID());
+            addPlayer(UserData.getInstance().getUserID());
         }
 
         playerCountDisp = view.findViewById(R.id.player_count);
@@ -96,7 +101,11 @@ public class GameLobbyFragment extends Fragment {
         leaveButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                leaveGame();
+                try {
+                    leaveGame();
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                }
             }
         });
 
@@ -110,14 +119,47 @@ public class GameLobbyFragment extends Fragment {
         });
 
         //add listener to start game button
-        Button startButton = view.findViewById(R.id.start_ready_game_button);
+        startButton = view.findViewById(R.id.start_ready_game_button);
         startButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                getActivity().getSupportFragmentManager().beginTransaction().replace(R.id.fragmentContainerView, new GameTwoPlayerFragment()).commit();
+                if (isHost) {
+                    if (canStart) {
+                        JSONObject startMessage = new JSONObject();
+                        try {
+                            startMessage.put("start", true);
+                        } catch (JSONException e) {
+                            e.printStackTrace();
+                        }
+                        mainActivity.sendMessage(startMessage);
+
+                        startGame(true);
+                    }
+                } else {
+                    JSONObject readyJson = new JSONObject();
+                    userIsReady = !userIsReady;
+                    try {
+                        if (!userIsReady){
+                            startButton.setText(R.string.ready);
+                            readyJson.put("ready", false);
+                        } else {
+                            startButton.setText(R.string.unready);
+                            readyJson.put("ready", true);
+                        }
+                    } catch (JSONException e){
+                        e.printStackTrace();
+                    }
+
+                    mainActivity.sendMessage(readyJson);
+                }
             }
         });
 
+        if (!isHost){
+            startButton.setText(R.string.ready);
+        } else {
+            startButton.setText(R.string.waiting_for_players);
+        }
 
         return view;
     }
@@ -137,13 +179,13 @@ public class GameLobbyFragment extends Fragment {
         plate.setOrientation(LinearLayout.HORIZONTAL);
         //create grey box behind plate
         plate.setPadding(30,10,30,10);
-        plate.setBackgroundColor(getResources().getColor(R.color.dark_gray));
+        plate.setBackgroundColor(view.getContext().getResources().getColor(R.color.dark_gray));
 
         //add username display to plate
         TextView usernameText = new TextView(view.getContext());
         usernameText.setLayoutParams(new ViewGroup.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.MATCH_PARENT));
         usernameText.setText(username);
-        usernameText.setTextColor(getResources().getColor(R.color.white));
+        usernameText.setTextColor(view.getContext().getResources().getColor(R.color.white));
         usernameText.setTextSize(20);
         usernameText.setGravity(Gravity.CENTER_VERTICAL);
         plate.addView(usernameText);
@@ -156,8 +198,8 @@ public class GameLobbyFragment extends Fragment {
         //add view profile button to the plate
         Button viewUser = new Button(view.getContext());
         viewUser.setLayoutParams(new ViewGroup.LayoutParams(200, ViewGroup.LayoutParams.MATCH_PARENT));
-        viewUser.setTextColor(getResources().getColor(R.color.yellow ));
-        viewUser.setBackgroundTintList(ColorStateList.valueOf(getResources().getColor(R.color.purple_500)));
+        viewUser.setTextColor(view.getContext().getResources().getColor(R.color.yellow ));
+        viewUser.setBackgroundTintList(ColorStateList.valueOf(view.getContext().getResources().getColor(R.color.purple_500)));
         viewUser.setText("view");
         viewUser.setTextSize(12);
         viewUser.setOnClickListener(new View.OnClickListener() {
@@ -177,8 +219,8 @@ public class GameLobbyFragment extends Fragment {
             //add kick player button to the plate
             Button kickUser = new Button(view.getContext());
             kickUser.setLayoutParams(new ViewGroup.LayoutParams(200, ViewGroup.LayoutParams.MATCH_PARENT));
-            kickUser.setTextColor(getResources().getColor(R.color.yellow ));
-            kickUser.setBackgroundTintList(ColorStateList.valueOf(getResources().getColor(R.color.purple_500)));
+            kickUser.setTextColor(view.getContext().getResources().getColor(R.color.yellow ));
+            kickUser.setBackgroundTintList(ColorStateList.valueOf(view.getContext().getResources().getColor(R.color.purple_500)));
             kickUser.setText("kick");
             kickUser.setTextSize(12);
             kickUser.setOnClickListener(new View.OnClickListener() {
@@ -219,6 +261,8 @@ public class GameLobbyFragment extends Fragment {
 
                         try {
                             addPlayerPlate(response.getInt("id"), response.getString("username"));
+                            usernames.put(id, response.getString("username"));
+
                         } catch (JSONException e) {
                             e.printStackTrace();
                         }
@@ -284,7 +328,15 @@ public class GameLobbyFragment extends Fragment {
     /**
      * disconnects the user from the websocket and sends back to the main menu
      */
-    public void leaveGame(){
+    public void leaveGame() throws JSONException {
+
+        //send unready message if leaving and had readied already
+        if (userIsReady && !isHost){
+            JSONObject jsonObject = new JSONObject();
+            jsonObject.put("ready", false);
+            mainActivity.sendMessage(jsonObject);
+        }
+
         mainActivity.disconnectWebSocket();
         getActivity().getSupportFragmentManager().beginTransaction().replace(R.id.fragmentContainerView, new MainMenuFragment()).commit();
     }
@@ -304,6 +356,20 @@ public class GameLobbyFragment extends Fragment {
 
         getActivity().getSupportFragmentManager().beginTransaction().replace(R.id.fragmentContainerView, frag).commit();
 
+    }
+
+    private void startGame(boolean host){
+        GamePlayFragment frag = new GamePlayFragment();
+
+        Collections.sort(playerIds);
+
+        Bundle bundle = new Bundle();
+        bundle.putBoolean("isHost", host);
+        bundle.putIntegerArrayList("ids", playerIds);
+        bundle.putSerializable("usernames", usernames);
+        frag.setArguments(bundle);
+
+        getActivity().getSupportFragmentManager().beginTransaction().replace(R.id.fragmentContainerView, frag, "gameScreen").commit();
     }
 
     /**
@@ -327,35 +393,52 @@ public class GameLobbyFragment extends Fragment {
      */
     public void onMessage(String s) throws JSONException {
 
-        JSONObject json = new JSONObject(s);
+        if (!s.isEmpty()) {
 
-        if (json.has("joined") && json.getInt("joined") != UserData.getInstance().getUserID()){
-            addPlayer(json.getInt("joined"));
-            playerIds.add(json.getInt("joined"));
+            JSONObject json = new JSONObject(s);
 
-            if (isHost) {
-                mainActivity.updateLobby(playerIds);
-            }
-        } else if (json.has("left")){
-            LinearLayout playerDisp = view.findViewById(R.id.player_display);
-            deletePlayerArray(json.getInt("left"));
-            playerDisp.removeView(view.findViewWithTag("plate"+json.getInt("left")));
-            playerDisp.removeView(view.findViewWithTag("space"+json.getInt("left")));
-        } else if (json.has("ids") && !isHost && !prefill){
-            JSONArray array = json.getJSONArray("ids");
-            for (int i = 0; i < array.length(); i++){
-                if((int)array.get(i) != UserData.getInstance().getUserID()) {
-                    addPlayer((int) array.get(i));
-                    playerIds.add((int)array.get(i));
+            if (json.has("joined") && json.getInt("joined") != UserData.getInstance().getUserID()) {
+                addPlayer(json.getInt("joined"));
+                playerIds.add(json.getInt("joined"));
+
+                if (isHost) {
+                    mainActivity.updateLobby(playerIds);
                 }
+            } else if (json.has("left")) {
+                LinearLayout playerDisp = view.findViewById(R.id.player_display);
+                deletePlayerArray(json.getInt("left"));
+                playerDisp.removeView(view.findViewWithTag("plate" + json.getInt("left")));
+                playerDisp.removeView(view.findViewWithTag("space" + json.getInt("left")));
+            } else if (json.has("ids") && !isHost && !prefill) {
+
+                JSONArray array = json.getJSONArray("ids");
+                for (int i = 0; i < array.length(); i++) {
+                    addPlayer((int) array.get(i));
+                    playerIds.add((int) array.get(i));
+                }
+                prefill = true;
+            } else if (json.has("kicked") && json.getInt("kicked") == UserData.getInstance().getUserID()) {
+                kicked();
+            } else if (json.has("ready") && isHost){
+                if (json.getBoolean("ready")){
+                    numPlayersReady++;
+                } else {
+                    numPlayersReady--;
+                }
+
+                if (numPlayersReady == playerIds.size() - 1 && playerIds.size() > 1){
+                    startButton.setText(R.string.start_game);
+                    canStart = true;
+                } else {
+                    startButton.setText(R.string.waiting_for_players);
+                    canStart = false;
+                }
+            } else if (json.has("start") && !isHost){
+                startGame(false);
             }
-            prefill = true;
-        } else if (json.has("kicked") && json.getInt("kicked") == UserData.getInstance().getUserID()){
-            kicked();
+
+            playerCountDisp.setText(getString(R.string.player_count, playerIds.size()));
         }
-
-        playerCountDisp.setText(getString(R.string.player_count, playerIds.size()));
-
     }
 
     /**

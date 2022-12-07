@@ -5,6 +5,9 @@ import android.graphics.drawable.Drawable;
 
 import androidx.core.content.ContextCompat;
 
+import org.json.JSONException;
+import org.json.JSONObject;
+
 /**
  * Object used to represent a playing card for this game. Stores rank and color along with providing methods used for gameplay
  *
@@ -28,6 +31,12 @@ public class Card {
     public Card(CardRank rank, CardColor color, Context context) {
         this.rank = rank;
         this.color = color;
+        this.context = context;
+    }
+
+    public Card (JSONObject jsonObject, Context context) throws JSONException {
+        this.rank = CardRank.valueOf(jsonObject.getString("rank"));
+        this.color = CardColor.valueOf(jsonObject.getString("color"));
         this.context = context;
     }
 
@@ -143,6 +152,17 @@ public class Card {
         }
         throw new RuntimeException("code is broke");
     }
+
+    public JSONObject toJsonObject() throws JSONException {
+        JSONObject json = new JSONObject();
+
+        json.put("rank", rank.toString());
+        json.put("color", color.toString());
+
+        return json;
+    }
+
+
 
     /**
      * returns the drawable associated with the current card object based on its color and rank

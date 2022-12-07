@@ -64,7 +64,9 @@
     <string name="player_count">%d (min 2)</string>
     <string name="start_game">Start Game</string>
     <string name="ready">Ready</string>
+    <string name="unready">Unready</string>
     <string name="game_code">Code: %1$s</string>
+    <string name="waiting_for_players">Waiting for Players</string>
 
     <!-- Leaderboard screen-->
     <string name="global">Global</string>
@@ -96,5 +98,12 @@
 
     <!--booted popup-->
     <string name="booted">GET BOOTED \n LMAO</string>
+
+    <!--player left popup-->
+    <string name="player_left">PLAYER LEFT \n THE GAME</string>
+
+    <!--game strings-->
+    <string name="your_turn">Your Turn!</string>
+    <string name="players_turn">%s\'s Turn</string>
 
 </resources>

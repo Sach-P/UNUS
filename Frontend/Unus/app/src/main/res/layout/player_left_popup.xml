@@ -18,7 +18,7 @@
         android:layout_gravity="center"
         android:gravity="center"
         android:padding="10dp"
-        android:text="@string/booted"
+        android:text="@string/player_left"
         android:textAlignment="center"
         android:textColor="@color/purple_500"
         android:textSize="40sp"

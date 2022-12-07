@@ -2,10 +2,10 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
-    android:layout_width="300dp"
-    android:layout_height="300dp"
-    android:paddingLeft="10dp"
-    android:paddingRight="10dp"
+    android:layout_width="400dp"
+    android:layout_height="400dp"
+    android:paddingLeft="20dp"
+    android:paddingRight="20dp"
     android:gravity="center"
     android:background="@color/dark_gray"
     android:orientation="vertical"
@@ -13,17 +13,29 @@
     >
 
     <TextView
+        android:id="@+id/winner"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
+        android:layout_height="200dp"
         android:layout_gravity="center"
         android:gravity="center"
         android:padding="10dp"
-        android:text="@string/booted"
+        android:text="Username \n Won!"
         android:textAlignment="center"
         android:textColor="@color/purple_500"
-        android:textSize="40sp"
+        android:textSize="50sp"
         android:textStyle="bold"
         tools:ignore="TextContrastCheck" />
+
+    <Button
+        android:id="@+id/back_to_menu"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="BACK TO MENU"
+        android:textSize="40sp"
+        android:padding="10dp"
+        android:textColor="@color/yellow"
+        android:textStyle="bold"
+        />
 
 
 </LinearLayout>
