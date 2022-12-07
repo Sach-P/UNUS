@@ -17,15 +17,18 @@ import android.widget.PopupWindow;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
+import com.android.volley.AuthFailureError;
 import com.android.volley.Request;
 import com.android.volley.Response;
 import com.android.volley.VolleyError;
 import com.android.volley.toolbox.JsonObjectRequest;
+import com.android.volley.toolbox.StringRequest;
 import com.android.volley.toolbox.Volley;
 
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.io.UnsupportedEncodingException;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
@@ -41,6 +44,8 @@ public class GamePlayFragment extends Fragment {
     final int INITIAL_CARDS = 5;
 
     int numCards;
+
+    boolean gameOver = false;
 
     View view;
 
@@ -379,7 +384,7 @@ public class GamePlayFragment extends Fragment {
         }
 
         //end game if a player leaves
-        if (obj.has("left")){
+        if (obj.has("left") && !gameOver){
             mainActivity.disconnectWebSocket();
 
             MainMenuFragment frag = new MainMenuFragment();
@@ -394,6 +399,45 @@ public class GamePlayFragment extends Fragment {
 
         //create pop up if someone won
         if(obj.has("win") && obj.getBoolean("win")){
+
+            gameOver = true;
+
+            JSONObject body = new JSONObject();
+            if (obj.getInt("id") == UserData.getInstance().getUserID()) {
+                body.put("win", "true");
+            } else {
+                body.put("win", "false");
+            }
+
+            final String mRequestBody = body.toString();
+
+            StringRequest sr = new StringRequest(Request.Method.PUT, getString(R.string.remote_server_url, "gameEnd", Integer.toString(UserData.getInstance().getUserID())), new Response.Listener<String>() {
+                @Override
+                public void onResponse(String response) {
+
+                }
+            }, new Response.ErrorListener() {
+                @Override
+                public void onErrorResponse(VolleyError error) {
+                }
+            }) {
+                @Override
+                public String getBodyContentType() {
+                    return "application/json; charset=utf-8";
+                }
+
+                @Override
+                public byte[] getBody() throws AuthFailureError {
+                    try {
+                        return mRequestBody == null ? null : mRequestBody.getBytes("utf-8");
+                    } catch (UnsupportedEncodingException uee) {
+                        return null;
+                    }
+                }
+
+            };
+            Volley.newRequestQueue(requireContext()).add(sr);
+
             createWinPopup(obj.getInt("id"));
         }
     }
