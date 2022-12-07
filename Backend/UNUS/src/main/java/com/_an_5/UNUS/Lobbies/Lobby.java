@@ -83,9 +83,9 @@ public class Lobby {
         isPrivate = aPrivate;
     }
 
-    public Set<Message> getMessages() {
-        return messages;
-    }
+//    public Set<Message> getMessages() {
+//        return messages;
+//    }
 
     public void setMessages(Set<Message> messages) {
         this.messages = messages;

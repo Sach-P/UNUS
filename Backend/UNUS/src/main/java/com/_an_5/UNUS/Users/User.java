@@ -122,39 +122,39 @@ public class User {
     public Set<Friend> getFriends(){
         return friends;
     }
-
-    public void addFriend(Friend friend){
-        friends.add(friend);
-    }
-
-    public void removeFriend(Friend friend){
-        friends.remove(friend);
-    }
+//
+//    public void addFriend(Friend friend){
+//        friends.add(friend);
+//    }
+//
+//    public void removeFriend(Friend friend){
+//        friends.remove(friend);
+//    }
 
 
     public Set<Friend> getSentFriendRequests(){
         return userRequests;
     }
 
-    public void addSentFriendRequests(Friend friend){
-        userRequests.add(friend);
-    }
-
-    public void removeSentFriendRequests(Friend friend){
-        userRequests.remove(friend);
-    }
+//    public void addSentFriendRequests(Friend friend){
+//        userRequests.add(friend);
+//    }
+//
+//    public void removeSentFriendRequests(Friend friend){
+//        userRequests.remove(friend);
+//    }
 
     public Set<Friend> getReceivedFriendRequests(){
         return requestedUsers;
     }
 
-    public void addReceivedFriendRequests(Friend friend){
-        requestedUsers.add(friend);
-    }
-
-    public void removeReceivedFriendRequests(Friend friend){
-        requestedUsers.remove(friend);
-    }
+//    public void addReceivedFriendRequests(Friend friend){
+//        requestedUsers.add(friend);
+//    }
+//
+//    public void removeReceivedFriendRequests(Friend friend){
+//        requestedUsers.remove(friend);
+//    }
 
     public void setGamesPlayed(int gamesPlayed) {
         this.gamesPlayed = gamesPlayed;

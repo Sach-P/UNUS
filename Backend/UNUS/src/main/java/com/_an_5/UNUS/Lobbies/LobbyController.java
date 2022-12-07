@@ -60,7 +60,8 @@ public class LobbyController {
     @ApiOperation(value = "check if a lobby exists in the database", response = String.class, tags = "lobby-controller")
     @GetMapping("/lobby-exists/{lobbyId}")
     public boolean doesLobbyExist(@PathVariable int lobbyId){
-        return lobbyRepository.existsById((long)lobbyId);
+        Lobby lobby = lobbyRepository.findById(lobbyId);
+        return lobby != null;
     }
 
 }

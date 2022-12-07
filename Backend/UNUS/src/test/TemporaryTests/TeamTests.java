@@ -151,6 +151,41 @@ public class TeamTests {
 
         Assertions.assertEquals("success", res.jsonPath().getString("message"));
 
+
+        requestBody =  "{\n" +
+                "  \"win\": \"true\" \n}";
+
+        res = given()
+                .header("Content-type", "application/json")
+                .and()
+                .body(requestBody)
+                .when()
+                .put("/gameEnd/" + user2.get("id"))
+                .then()
+                .extract().response();
+
+        Assertions.assertEquals("success", res.jsonPath().getString("message"));
+
+        res = given()
+                .contentType(ContentType.JSON)
+                .when()
+                .get("/user/" + user2.get("id"))
+                .then()
+                .extract().response();
+
+        Assertions.assertEquals(1, res.jsonPath().getInt("gamesPlayed"));
+        Assertions.assertEquals(1, res.jsonPath().getInt("gamesWon"));
+
+        res = given()
+                .contentType(ContentType.JSON)
+                .when()
+                .get("/teams/" + teamId)
+                .then()
+                .extract().response();
+
+        Assertions.assertEquals(1, res.jsonPath().getInt("wins"));
+
+
         res = given()
                 .header("Content-type", "application/json")
                 .when()
@@ -159,7 +194,6 @@ public class TeamTests {
                 .extract().response();
 
         Assertions.assertEquals("success", res.jsonPath().getString("message"));
-
         res = given()
                 .header("Content-type", "application/json")
                 .when()
@@ -168,6 +202,7 @@ public class TeamTests {
                 .extract().response();
 
         Assertions.assertEquals("success", res.jsonPath().getString("message"));
+
 
         deleteUsers();
     }
