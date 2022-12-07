@@ -131,7 +131,7 @@ public class GamePlayFragment extends Fragment {
             public void onClick(View view) {
                 if (playerIds.get(turnIndex) == UserData.getInstance().getUserID()) {
                     Card draw = new Card(getContext());
-                    addCard(draw);
+                        addCard(draw);
                     JSONObject message = new JSONObject();
                     try {
                         message.put("id", UserData.getInstance().getUserID());
@@ -146,7 +146,7 @@ public class GamePlayFragment extends Fragment {
 
         //create listener for leaving the game
         ImageView leaveGame = view.findViewById(R.id.game_menu);
-        drawPile.setOnClickListener(new View.OnClickListener() {
+        leaveGame.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 mainActivity.disconnectWebSocket();
@@ -320,6 +320,8 @@ public class GamePlayFragment extends Fragment {
 
         if (numCards == 0){
             message.put("win", true);
+        } else {
+            message.put("win", false);
         }
 
         mainActivity.sendMessage(message);
@@ -361,10 +363,13 @@ public class GamePlayFragment extends Fragment {
                 }
 
                 JSONObject message = new JSONObject();
-                message.put("id", UserData.getInstance().getUserID());
-                message.put("numCards", numCards);
+                try {
+                    message.put("id", UserData.getInstance().getUserID());
+                    message.put("numCards", numCards);
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                }
                 mainActivity.sendMessage(message);
-
             }
         }
 
@@ -388,7 +393,7 @@ public class GamePlayFragment extends Fragment {
         }
 
         //create pop up if someone won
-        if(obj.has("win")){
+        if(obj.has("win") && obj.getBoolean("win")){
             createWinPopup(obj.getInt("id"));
         }
     }
@@ -423,17 +428,38 @@ public class GamePlayFragment extends Fragment {
     private void createWinPopup(int id){
         LayoutInflater inflater = (LayoutInflater) view.getContext().getSystemService(view.getContext().LAYOUT_INFLATER_SERVICE);
 
-        View popupView = inflater.inflate(R.layout.color_popup, null);
+        View popupView = inflater.inflate(R.layout.win_popup, null);
 
         //Make Inactive Items Outside Of PopupWindow
         boolean focusable = true;
 
+
         //Create a window with our parameters
-        PopupWindow popupWindow = new PopupWindow(popupView, 1000, 1000, focusable);
+        PopupWindow popupWindow = new PopupWindow(popupView, (int)(dpConversionFactor * 400), (int)(dpConversionFactor * 400), focusable);
         popupWindow.setOutsideTouchable(false);
 
-        //Set the location of the window on the screen
         popupWindow.showAtLocation(view, Gravity.CENTER, 0, 0);
+
+        String winner;
+        if (id == UserData.getInstance().getUserID()){
+            winner = "You Won!";
+        } else {
+            winner = usernames.get(id) + "\n Won";
+        }
+
+        TextView winnerDisp = popupView.findViewById(R.id.winner);
+        winnerDisp.setText(winner);
+
+        //set listener for menu button
+        Button menu = popupView.findViewById(R.id.back_to_menu);
+        menu.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                mainActivity.disconnectWebSocket();
+                getActivity().getSupportFragmentManager().beginTransaction().replace(R.id.fragmentContainerView, new MainMenuFragment()).commit();
+                popupWindow.dismiss();
+            }
+        });
     }
 
     /**
