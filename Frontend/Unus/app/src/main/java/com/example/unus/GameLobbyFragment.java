@@ -48,8 +48,8 @@ public class GameLobbyFragment extends Fragment {
     boolean isHost;
     boolean prefill = false;
 
-    boolean isReady;
-    int numReady = 0;
+    boolean userIsReady;
+    int numPlayersReady = 0;
     boolean canStart;
 
     MainActivity mainActivity;
@@ -137,8 +137,9 @@ public class GameLobbyFragment extends Fragment {
                     }
                 } else {
                     JSONObject readyJson = new JSONObject();
+                    userIsReady = !userIsReady;
                     try {
-                        if (isReady){
+                        if (!userIsReady){
                             startButton.setText(R.string.ready);
                             readyJson.put("ready", false);
                         } else {
@@ -148,7 +149,7 @@ public class GameLobbyFragment extends Fragment {
                     } catch (JSONException e){
                         e.printStackTrace();
                     }
-                    isReady = !isReady;
+
                     mainActivity.sendMessage(readyJson);
                 }
             }
@@ -330,7 +331,7 @@ public class GameLobbyFragment extends Fragment {
     public void leaveGame() throws JSONException {
 
         //send unready message if leaving and had readied already
-        if (isReady && !isHost){
+        if (userIsReady && !isHost){
             JSONObject jsonObject = new JSONObject();
             jsonObject.put("ready", false);
             mainActivity.sendMessage(jsonObject);
@@ -420,12 +421,12 @@ public class GameLobbyFragment extends Fragment {
                 kicked();
             } else if (json.has("ready") && isHost){
                 if (json.getBoolean("ready")){
-                    numReady++;
+                    numPlayersReady++;
                 } else {
-                    numReady--;
+                    numPlayersReady--;
                 }
 
-                if (numReady == playerIds.size() - 1 && playerIds.size() > 1){
+                if (numPlayersReady == playerIds.size() - 1 && playerIds.size() > 1){
                     startButton.setText(R.string.start_game);
                     canStart = true;
                 } else {

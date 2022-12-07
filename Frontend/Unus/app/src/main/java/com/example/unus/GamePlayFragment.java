@@ -61,7 +61,7 @@ public class GamePlayFragment extends Fragment {
     ArrayList<Integer> playerIds;
     HashMap<Integer, String> usernames;
     int turnIndex = 0;
-    boolean reverse = false;
+    boolean directionReversed = false;
 
     TextView turnIndicator;
     LinearLayout hand;
@@ -352,7 +352,7 @@ public class GamePlayFragment extends Fragment {
             if (rank == CardRank.SKIP){
                 nextTurn();
             } else if (rank == CardRank.REVERSE){
-                reverse = !reverse;
+                directionReversed = !directionReversed;
                 nextTurn();
                 nextTurn();
             } else if (playerIds.get(turnIndex) == UserData.getInstance().getUserID() && (rank == CardRank.DRAW_FOUR || rank == CardRank.DRAW_TWO)){
@@ -402,14 +402,14 @@ public class GamePlayFragment extends Fragment {
 
             gameOver = true;
 
-            JSONObject body = new JSONObject();
+            String body;
             if (obj.getInt("id") == UserData.getInstance().getUserID()) {
-                body.put("win", "true");
+                body = "{\"win\":\"true\"}";
             } else {
-                body.put("win", "false");
+                body = "{\"win\":\"true\"}";
             }
 
-            final String mRequestBody = body.toString();
+            String mRequestBody = body.toString();
 
             StringRequest sr = new StringRequest(Request.Method.PUT, getString(R.string.remote_server_url, "gameEnd", Integer.toString(UserData.getInstance().getUserID())), new Response.Listener<String>() {
                 @Override
@@ -429,7 +429,7 @@ public class GamePlayFragment extends Fragment {
                 @Override
                 public byte[] getBody() throws AuthFailureError {
                     try {
-                        return mRequestBody == null ? null : mRequestBody.getBytes("utf-8");
+                        return body.getBytes("utf-8");
                     } catch (UnsupportedEncodingException uee) {
                         return null;
                     }
@@ -447,7 +447,7 @@ public class GamePlayFragment extends Fragment {
      */
     private void nextTurn(){
         //increment or decrement turnIndex
-        if (reverse){
+        if (directionReversed){
             turnIndex--;
             if (turnIndex < 0){
                 turnIndex = playerIds.size() - 1;
