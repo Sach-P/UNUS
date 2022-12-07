@@ -48,7 +48,7 @@ public class LobbyController {
     public String createLobby(@RequestParam(name = "userId") int userId, @RequestBody String json){
         JSONParser jp = new JSONParser(json);
         try{
-            boolean isPrivate = (boolean)jp.parseObject().get("private");
+            boolean isPrivate = Boolean.parseBoolean((String)jp.parseObject().get("private"));
             return lobbyService.createLobby(userId, isPrivate);
         }
         catch (ParseException e){

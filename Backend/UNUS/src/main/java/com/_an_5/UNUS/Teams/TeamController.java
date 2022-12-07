@@ -98,6 +98,8 @@ public class TeamController {
             return failure;
 
         if(user.getOwnedTeam().equals(team) || user.getRole().equals("admin")){
+            team.setLeader(null);
+            team.setPlayers(null);
             teamRepository.deleteById(teamId);
             return success;
         }

@@ -61,8 +61,7 @@ public class FriendController {
     @ApiOperation(value = "remove a friend the will also remove the friend for the users table because of the many to one relation", response = String.class, tags = "friend-controller")
     @DeleteMapping(path = "/user/{id}/friends/remove-friend")
     public String removeFriend(@PathVariable int id, @RequestParam("friendId") int friendId){
-        friendService.removeFriend(id, friendId);
-        return success;
+        return friendService.removeFriend(id, friendId);
     }
 
     @ApiOperation(value = "get a list of a user's friends", response = String.class, tags = "friend-controller")

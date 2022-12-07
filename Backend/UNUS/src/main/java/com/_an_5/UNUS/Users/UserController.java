@@ -30,8 +30,19 @@ public class UserController {
     public String addUser(@RequestBody User user){
         if (user == null)
             return failure;
-        userRepository.save(user);
+        User newUser = new User(user.getUsername(), user.getPassword(), "player");
+        userRepository.save(newUser);
         return success;
+    }
+
+    @ApiOperation(value = "create a temporary guest user", response = String.class, tags = "user-controller")
+    @PostMapping(path = "/create-guest-user")
+    public User createGuestUser(){
+        User guest = new User();
+//        userRepository.save(guest).getId();
+        guest.setName("guest" + userRepository.save(guest).getId());
+        userRepository.save(guest);
+        return guest;
     }
 
     @ApiOperation(value = "login a user and send user's information when logged in", response = Map.class, tags = "user-controller")
@@ -71,14 +82,13 @@ public class UserController {
     @ApiOperation(value = "Update a user in the users table in the database", response = String.class, tags = "user-controller")
     @PutMapping(path = "/user/{id}")
     public User updateUser(@PathVariable int id, @RequestBody User user) {
-        User currUser = userRepository.findById(id);
         if(user == null)
             return null;
         userRepository.save(user);
         return userRepository.findById(id);
     }
 
-    @ApiOperation(value = "get the lobby ID the user is a host of", response = int.class, tags = "user-controller")
+    @ApiOperation(value = "get the lobby ID the user is a host of", response = String.class, tags = "user-controller")
     @GetMapping(path = "/user/get-lobby/{id}")
     public String getLobbyId(@PathVariable int id){
         User currUser = userRepository.findById(id);
@@ -90,6 +100,18 @@ public class UserController {
         return failure;
     }
 
+
+    @ApiOperation(value = "get the team ID the user is a leader of", response = String.class, tags = "user-controller")
+    @GetMapping(path = "/user/get-team/{id}")
+    public String getTeamId(@PathVariable int id){
+        User currUser = userRepository.findById(id);
+        if(currUser != null){
+            if(currUser.getOwnedTeam() != null){
+                return "{\"id\":\""+ currUser.getOwnedTeam().getId() + "\"}";
+            }
+        }
+        return failure;
+    }
 
 
 

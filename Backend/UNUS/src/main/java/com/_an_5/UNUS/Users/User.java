@@ -76,13 +76,20 @@ public class User {
     @ManyToMany(mappedBy = "teamPlayers")
     private Set<Team> teams = new HashSet<>();
 
-    public User (String username, String password){
+    //creates a standard user (player or admin)
+    public User (String username, String password, String role){
         this.username = username;
         this.password = password;
+        gamesPlayed = 0;
+        gamesWon = 0;
+        this.role = role;
     }
 
-    public User() {
-        this.role = "player";
+    //creates a guest user
+    public User(){
+        this.username = "guest" + this.id;
+        this.password = "guest";
+        this.role = "guest";
         gamesPlayed = 0;
         gamesWon = 0;
     }
@@ -116,10 +123,8 @@ public class User {
         this.username = username;
     }
 
-    @JsonIgnore
     public String getPassword() { return password; }
 
-    @JsonSetter
     public void setPassword(String password) { this.password = password; }
 
 
