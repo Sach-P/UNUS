@@ -302,6 +302,7 @@ public class LeaderboardFragment extends Fragment {
         board.removeViews(0, board.getChildCount());
         for(int i = 0; i < list.size(); i++) {
             LinearLayout layout = new LinearLayout(view.getContext());
+            layout.setId(R.id.users);
             TextView tv = new TextView(view.getContext());
             tv.setLayoutParams( new ViewGroup.LayoutParams(500, 100));
             tv.setText(list.get(i).getUsername());
