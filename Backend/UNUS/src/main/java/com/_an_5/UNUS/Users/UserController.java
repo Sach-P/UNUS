@@ -1,17 +1,15 @@
 package com._an_5.UNUS.Users;
 
-import com._an_5.UNUS.Friends.Friend;
-import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
+import org.apache.tomcat.util.json.JSONParser;
+import org.apache.tomcat.util.json.ParseException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.HashMap;
-import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 
-//@Api(value = "user-controller")
 @RestController
 public class UserController {
 
@@ -112,7 +110,4 @@ public class UserController {
         }
         return failure;
     }
-
-
-
 }

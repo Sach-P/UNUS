@@ -1,6 +1,5 @@
 package com._an_5.UNUS.Teams;
 
-import com._an_5.UNUS.Users.User;
 import org.springframework.data.jpa.repository.JpaRepository;
 
 import javax.transaction.Transactional;
