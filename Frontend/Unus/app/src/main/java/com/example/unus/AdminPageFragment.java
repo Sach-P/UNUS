@@ -288,7 +288,7 @@ public class AdminPageFragment extends Fragment {
      * This function will delete the user logged in from the database entirely
      * including removing them from anyone else's friends list
      */
-    private void deleteUser(int id) {
+        private void deleteUser(int id) {
 
         JsonObjectRequest request = new JsonObjectRequest(
                 Request.Method.DELETE,

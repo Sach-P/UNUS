@@ -28,6 +28,9 @@ import org.junit.Rule;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 
+/**
+ * @author Abe Demo
+ */
 @LargeTest
 @RunWith(AndroidJUnit4.class)
 public class ASignupTest {
