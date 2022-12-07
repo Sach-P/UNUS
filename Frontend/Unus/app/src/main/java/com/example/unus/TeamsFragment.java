@@ -44,9 +44,8 @@ public class TeamsFragment extends Fragment {
     private Button currTeams;
     private Button newTeams;
     private Button create;
-    private Button search;
-    private Button clear;
-    private EditText id;
+
+    private boolean isNew;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -65,9 +64,6 @@ public class TeamsFragment extends Fragment {
         currTeams = (Button) view.findViewById(R.id.users);
         newTeams = (Button) view.findViewById(R.id.lobbies);
         create = (Button) view.findViewById(R.id.create);
-        search = (Button) view.findViewById(R.id.search_button);
-        clear = (Button) view.findViewById(R.id.clear_button);
-        id = (EditText) view.findViewById(R.id.searchbar);
 
         getTeams();
 
@@ -79,6 +75,7 @@ public class TeamsFragment extends Fragment {
                 newTeams.setBackgroundColor(view.getResources().getColor(R.color.yellow));
                 newTeams.setTextColor(view.getResources().getColor(R.color.purple_500));
                 displayTeams(currTeamList);
+                isNew = false;
             }
         });
 
@@ -90,6 +87,7 @@ public class TeamsFragment extends Fragment {
                 currTeams.setBackgroundColor(view.getResources().getColor(R.color.yellow));
                 currTeams.setTextColor(view.getResources().getColor(R.color.purple_500));
                 displayTeams(newTeamList);
+                isNew = true;
             }
         });
 
@@ -100,26 +98,6 @@ public class TeamsFragment extends Fragment {
             }
         });
 
-        search.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                displayList.removeAllViews();
-                if (id.getText().toString().length() != 0) {
-                    search(id.getText().toString());
-                } else {
-                    displayTeams(newTeamList);
-                }
-            }
-        });
-
-        clear.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                displayList.removeAllViews();
-                displayTeams(newTeamList);
-                id.setText("");
-            }
-        });
 
         back.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -220,53 +198,6 @@ public class TeamsFragment extends Fragment {
             layout.addView(stats);
             displayList.addView(layout);
         }
-    }
-
-
-    /**
-     * This function will take in the number that was put into the input field
-     * and search the database to see if the user exists
-     * If the user does exist it will display the user and a button that will show their stats
-     * and other that will send them friend requests
-     *
-     * @param id
-     */
-    private void search(String id) {
-        for (int i = 0; i < id.length(); i++) {
-            if (id.charAt(i) != '0' && id.charAt(i) != '1' && id.charAt(i) != '2' && id.charAt(i) != '3' && id.charAt(i) != '4' &&
-                    id.charAt(i) != '5' && id.charAt(i) != '6' && id.charAt(i) != '7' &&
-                    id.charAt(i) != '8' && id.charAt(i) != '8' && id.charAt(i) != '9') {
-                return;
-            }
-        }
-        JsonObjectRequest request = new JsonObjectRequest(
-                Request.Method.GET,
-                "http://coms-309-029.class.las.iastate.edu:8080/user/" + Integer.parseInt(id),
-                null,
-                new Response.Listener<JSONObject>() {
-                    @Override
-                    public void onResponse(JSONObject response) {
-                        try {
-                            String username = response.getString("username");
-                            int id = response.getInt("id");
-                            int games_played = response.getInt("gamesPlayed");
-                            int games_won = response.getInt("gamesWon");
-                            Friend temp = new Friend(id, username, games_played, games_won);
-                            List<Friend> list = new ArrayList<>();
-                            if (!response.getString("role").equals("admin"))
-                                list.add(temp);
-                            //displayTeams(list);
-                        } catch (JSONException e) {
-                            e.printStackTrace();
-                        }
-                    }
-                },
-                new Response.ErrorListener() {
-                    @Override
-                    public void onErrorResponse(VolleyError error) {
-                    }
-                });
-        Volley.newRequestQueue(requireContext()).add(request);
     }
 
     /**
