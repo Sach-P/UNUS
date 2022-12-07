@@ -51,8 +51,9 @@ public class GamePlayFragment extends Fragment {
     boolean isHost = true;
 
     ArrayList<Integer> playerIds;
-    HashMap<Integer, String> playerUsernames;
+    ArrayList<String> usernames;
     int turnIndex = 0;
+    boolean reverse = false;
 
     TextView turnIndicator;
 
@@ -84,17 +85,19 @@ public class GamePlayFragment extends Fragment {
             Bundle bundle = getArguments();
             isHost = bundle.getBoolean("isHost");
             playerIds = bundle.getIntegerArrayList("ids");
+            usernames = bundle.getStringArrayList("usernames");
         } else {
             getActivity().getSupportFragmentManager().beginTransaction().replace(R.id.fragmentContainerView, new MainMenuFragment()).commit();
         }
 
-        playerUsernames = new HashMap<Integer, String>();
-        for (int id:playerIds){
-            getUsername(id);
-        }
-
         turnIndicator = view.findViewById(R.id.turn_indicator);
         discardPile = view.findViewById(R.id.discard_pile);
+
+        try {
+            Thread.sleep(1000);
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
 
         //draw first card if you are the host
         if (isHost) {
@@ -354,36 +357,7 @@ public class GamePlayFragment extends Fragment {
         if (playerIds.get(turnIndex) == UserData.getInstance().getUserID()){
             turnIndicator.setText(getString(R.string.your_turn));
         } else {
-            turnIndicator.setText(getString(R.string.players_turn, playerUsernames.get(playerIds.get(turnIndex))));
+            turnIndicator.setText(getString(R.string.players_turn, usernames.get(turnIndex)));
         }
     }
-
-    private void getUsername(int id){
-        JsonObjectRequest request = new JsonObjectRequest(
-                Request.Method.GET,
-                getString(R.string.remote_server_url, "user", Integer.toString(id)),
-                null,
-                new Response.Listener<JSONObject>() {
-                    @Override
-                    public void onResponse(JSONObject response) {
-                        try {
-                            playerUsernames.put(id, response.getString("username"));
-                        } catch (JSONException e) {
-                            e.printStackTrace();
-                        }
-                    }
-                },
-                new Response.ErrorListener() {
-                    @Override
-                    public void onErrorResponse(VolleyError error) {
-
-                    }
-                }
-        );
-
-        Volley.newRequestQueue(requireContext()).add(request);
-    }
-
-
-
 }

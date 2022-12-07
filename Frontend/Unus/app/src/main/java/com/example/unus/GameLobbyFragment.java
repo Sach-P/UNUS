@@ -37,6 +37,7 @@ public class GameLobbyFragment extends Fragment {
 
     View view;
     ArrayList<Integer> playerIds;
+    ArrayList<String> usernames;
     int gameLobbyId;
 
     TextView playerCountDisp;
@@ -78,6 +79,8 @@ public class GameLobbyFragment extends Fragment {
         //declare a main activity to call the web socket
         mainActivity = (MainActivity)getActivity();
         mainActivity.connectWebSocket(gameLobbyId);
+
+        usernames = new ArrayList<String>();
 
         playerIds = new ArrayList<Integer>();
         if (isHost) {
@@ -255,6 +258,8 @@ public class GameLobbyFragment extends Fragment {
 
                         try {
                             addPlayerPlate(response.getInt("id"), response.getString("username"));
+                            usernames.add(response.getString("username"));
+
                         } catch (JSONException e) {
                             e.printStackTrace();
                         }
@@ -356,6 +361,7 @@ public class GameLobbyFragment extends Fragment {
         Bundle bundle = new Bundle();
         bundle.putBoolean("isHost", host);
         bundle.putIntegerArrayList("ids", playerIds);
+        bundle.putStringArrayList("usernames", usernames);
         frag.setArguments(bundle);
 
         getActivity().getSupportFragmentManager().beginTransaction().replace(R.id.fragmentContainerView, frag, "gameScreen").commit();
