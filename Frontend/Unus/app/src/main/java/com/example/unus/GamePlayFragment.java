@@ -2,8 +2,10 @@ package com.example.unus;
 
 import android.os.Bundle;
 
+import androidx.appcompat.content.res.AppCompatResources;
 import androidx.fragment.app.Fragment;
 
+import android.util.TypedValue;
 import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -12,6 +14,7 @@ import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.PopupWindow;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import com.android.volley.Request;
@@ -37,9 +40,9 @@ public class GamePlayFragment extends Fragment {
     //number of cards given to user at the beginning of the game
     final int INITIAL_CARDS = 5;
 
-    View view;
+    int numCards;
 
-    ArrayList<Card> cards;
+    View view;
 
     double dpConversionFactor;
 
@@ -51,13 +54,12 @@ public class GamePlayFragment extends Fragment {
     boolean isHost = true;
 
     ArrayList<Integer> playerIds;
-    ArrayList<String> usernames;
+    HashMap<Integer, String> usernames;
     int turnIndex = 0;
     boolean reverse = false;
 
     TextView turnIndicator;
-
-
+    LinearLayout hand;
 
     public GamePlayFragment() {
         // Required empty public constructor
@@ -85,18 +87,26 @@ public class GamePlayFragment extends Fragment {
             Bundle bundle = getArguments();
             isHost = bundle.getBoolean("isHost");
             playerIds = bundle.getIntegerArrayList("ids");
-            usernames = bundle.getStringArrayList("usernames");
+            usernames = (HashMap<Integer, String>) bundle.getSerializable("usernames");
         } else {
             getActivity().getSupportFragmentManager().beginTransaction().replace(R.id.fragmentContainerView, new MainMenuFragment()).commit();
         }
 
         turnIndicator = view.findViewById(R.id.turn_indicator);
         discardPile = view.findViewById(R.id.discard_pile);
+        hand = view.findViewById(R.id.hand_two);
 
-        try {
-            Thread.sleep(1000);
-        } catch (InterruptedException e) {
-            e.printStackTrace();
+        //create player display for other players
+        for (int i: playerIds){
+            if (i != UserData.getInstance().getUserID()){
+                createPlayerDisp(i);
+            }
+        }
+
+        //add all initial cards to user's hand
+        for (int i = 0; i < INITIAL_CARDS; i++){
+            Card draw = new Card(getContext());
+            addCard(draw);
         }
 
         //draw first card if you are the host
@@ -114,14 +124,6 @@ public class GamePlayFragment extends Fragment {
             topDiscard = firstCard;
         }
 
-        //add all initial cards to user's hand
-        cards = new ArrayList<Card>();
-        for (int i = 0; i < INITIAL_CARDS; i++){
-            Card draw = new Card(getContext());
-            addCard(draw, cards.size());
-            cards.add(draw);
-        }
-
         //create listener for drawing a card
         ImageView drawPile = view.findViewById(R.id.draw_pile);
         drawPile.setOnClickListener(new View.OnClickListener() {
@@ -129,11 +131,29 @@ public class GamePlayFragment extends Fragment {
             public void onClick(View view) {
                 if (playerIds.get(turnIndex) == UserData.getInstance().getUserID()) {
                     Card draw = new Card(getContext());
-                    addCard(draw, cards.size());
-                    cards.add(draw);
+                    addCard(draw);
+                    JSONObject message = new JSONObject();
+                    try {
+                        message.put("id", UserData.getInstance().getUserID());
+                        message.put("numCards", numCards);
+                    } catch (JSONException e) {
+                        e.printStackTrace();
+                    }
+                    mainActivity.sendMessage(message);
                 }
             }
         });
+
+        //create listener for leaving the game
+        ImageView leaveGame = view.findViewById(R.id.game_menu);
+        drawPile.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                mainActivity.disconnectWebSocket();
+                getActivity().getSupportFragmentManager().beginTransaction().replace(R.id.fragmentContainerView, new MainMenuFragment()).commit();
+            }
+        });
+
 
         return view;
     }
@@ -142,11 +162,10 @@ public class GamePlayFragment extends Fragment {
      * adds a card image into the players hand in the game UI
      *
      * @param card card object to be added to the UI
-     * @param index index of the card in the ArrayList
      */
-    public void addCard(Card card, int index){
+    public void addCard(Card card){
 
-        LinearLayout hand = view.findViewById(R.id.hand_two);
+        numCards++;
 
         //create the frame for the UI display
         ImageView plate = new ImageView(getContext());
@@ -160,6 +179,7 @@ public class GamePlayFragment extends Fragment {
                 if (card.cardPlayable(topDiscard) && playerIds.get(turnIndex) == UserData.getInstance().getUserID()) {
                     plate.setVisibility(View.GONE);
                     try {
+                        numCards--;
                         discard(card, true);
                     } catch (JSONException e) {
                         e.printStackTrace();
@@ -296,6 +316,11 @@ public class GamePlayFragment extends Fragment {
         JSONObject message = new JSONObject();
         message.put("id", UserData.getInstance().getUserID());
         message.put("card", card.toJsonObject());
+        message.put("numCards", numCards);
+
+        if (numCards == 0){
+            message.put("win", true);
+        }
 
         mainActivity.sendMessage(message);
     }
@@ -332,13 +357,24 @@ public class GamePlayFragment extends Fragment {
                 }
                 for (int i = 0; i < draws; i++){
                     Card draw = new Card(getContext());
-                    addCard(draw, cards.size());
-                    cards.add(draw);
+                    addCard(draw);
                 }
+
+                JSONObject message = new JSONObject();
+                message.put("id", UserData.getInstance().getUserID());
+                message.put("numCards", numCards);
+                mainActivity.sendMessage(message);
+
             }
         }
 
-       if (obj.has("left")){
+        if (obj.has("numCards") && obj.getInt("id") != UserData.getInstance().getUserID()){
+            TextView numCardDisp = view.findViewWithTag("numCards"+obj.getInt("id"));
+            numCardDisp.setText(String.valueOf(obj.getInt("numCards")));
+        }
+
+        //end game if a player leaves
+        if (obj.has("left")){
             mainActivity.disconnectWebSocket();
 
             MainMenuFragment frag = new MainMenuFragment();
@@ -350,9 +386,18 @@ public class GamePlayFragment extends Fragment {
 
             getActivity().getSupportFragmentManager().beginTransaction().replace(R.id.fragmentContainerView, frag).commit();
         }
+
+        //create pop up if someone won
+        if(obj.has("win")){
+            createWinPopup(obj.getInt("id"));
+        }
     }
 
+    /**
+     * Changes the turn index to the next player in line
+     */
     private void nextTurn(){
+        //increment or decrement turnIndex
         if (reverse){
             turnIndex--;
             if (turnIndex < 0){
@@ -361,10 +406,75 @@ public class GamePlayFragment extends Fragment {
         } else {
             turnIndex = (turnIndex + 1) % playerIds.size();
         }
+
+        //update turn display text
         if (playerIds.get(turnIndex) == UserData.getInstance().getUserID()){
             turnIndicator.setText(getString(R.string.your_turn));
         } else {
-            turnIndicator.setText(getString(R.string.players_turn, usernames.get(turnIndex)));
+            turnIndicator.setText(getString(R.string.players_turn, usernames.get(playerIds.get(turnIndex))));
         }
     }
+
+    /**
+     * inflates popup for win
+     *
+     * @param id id of winner
+     */
+    private void createWinPopup(int id){
+        LayoutInflater inflater = (LayoutInflater) view.getContext().getSystemService(view.getContext().LAYOUT_INFLATER_SERVICE);
+
+        View popupView = inflater.inflate(R.layout.color_popup, null);
+
+        //Make Inactive Items Outside Of PopupWindow
+        boolean focusable = true;
+
+        //Create a window with our parameters
+        PopupWindow popupWindow = new PopupWindow(popupView, 1000, 1000, focusable);
+        popupWindow.setOutsideTouchable(false);
+
+        //Set the location of the window on the screen
+        popupWindow.showAtLocation(view, Gravity.CENTER, 0, 0);
+    }
+
+    /**
+     * creates a display for the numeber of a users cards
+     *
+     * @param id player's id to create the display for
+     */
+    private void createPlayerDisp (int id){
+        //create a relative layout so the text can be overlaid on the image
+        RelativeLayout plate = new RelativeLayout(view.getContext());
+        plate.setLayoutParams(new ViewGroup.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT));
+
+        //create image of a blank card
+        ImageView background = new ImageView(view.getContext());
+        background.setLayoutParams(new ViewGroup.LayoutParams((int)(dpConversionFactor * 120), (int)(dpConversionFactor * 150)));
+        background.setImageDrawable(AppCompatResources.getDrawable(view.getContext(), R.drawable.ic_blank));
+        plate.addView(background);
+
+        //add textView for the number of cards
+        TextView numberCards = new TextView(view.getContext());
+        numberCards.setLayoutParams(new ViewGroup.LayoutParams((int)(dpConversionFactor * 120), (int)(dpConversionFactor * 150)));
+        numberCards.setText("5");
+        numberCards.setTextSize(TypedValue.COMPLEX_UNIT_SP, 80);
+        numberCards.setTextAlignment(View.TEXT_ALIGNMENT_CENTER);
+        numberCards.setTextColor(view.getContext().getResources().getColor(R.color.yellow));
+        numberCards.setTag("numCards"+id);
+        plate.addView(numberCards);
+
+        //add textView for the username
+        TextView username = new TextView(view.getContext());
+        username.setLayoutParams(new ViewGroup.LayoutParams((int)(dpConversionFactor * 120), (int)(dpConversionFactor * 150)));
+        username.setText(usernames.get(id));
+        username.setTextSize(TypedValue.COMPLEX_UNIT_SP, 20);
+        username.setTextAlignment(View.TEXT_ALIGNMENT_CENTER);
+        username.setTextColor(view.getContext().getResources().getColor(R.color.yellow));
+        username.setPadding(0, (int)(dpConversionFactor * 100), 0, 0);
+        plate.addView(username);
+
+        //add display to the layout
+        LinearLayout workspace = view.findViewById(R.id.player_view);
+        workspace.addView(plate);
+    }
+
 }

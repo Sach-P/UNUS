@@ -3,6 +3,7 @@
   <component name="DesignSurface">
     <option name="filePathToZoomLevelMap">
       <map>
+        <entry key="..\:/Git/2_an_5/Frontend/Unus/app/src/main/res/drawable/ic_blank.xml" value="0.1385" />
         <entry key="..\:/Git/2_an_5/Frontend/Unus/app/src/main/res/drawable/ic_g6.xml" value="0.1" />
         <entry key="..\:/Git/2_an_5/Frontend/Unus/app/src/main/res/drawable/ic_g8.xml" value="0.1385" />
         <entry key="..\:/Git/2_an_5/Frontend/Unus/app/src/main/res/drawable/ic_p2.xml" value="0.1385" />
@@ -19,7 +20,9 @@
         <entry key="..\:/Git/2_an_5/Frontend/Unus/app/src/main/res/layout/fragment_log_in_screen.xml" value="0.17504118616144976" />
         <entry key="..\:/Git/2_an_5/Frontend/Unus/app/src/main/res/layout/fragment_main_menu.xml" value="0.18162393162393162" />
         <entry key="..\:/Git/2_an_5/Frontend/Unus/app/src/main/res/layout/fragment_sign_up_screen.xml" value="0.18162393162393162" />
+        <entry key="..\:/Git/2_an_5/Frontend/Unus/app/src/main/res/layout/game_player_display.xml" value="0.4466666666666667" />
         <entry key="..\:/Git/2_an_5/Frontend/Unus/app/src/main/res/layout/player_left_popup.xml" value="0.18162393162393162" />
+        <entry key="..\:/Git/2_an_5/Frontend/Unus/app/src/main/res/layout/win_popup.xml" value="0.18162393162393162" />
         <entry key="..\:/Users/geoff/Documents/GitHub/2_an_5/Frontend/Unus/app/src/main/res/drawable/ic_blank_avatar.xml" value="0.365" />
         <entry key="..\:/Users/geoff/Documents/GitHub/2_an_5/Frontend/Unus/app/src/main/res/drawable/ic_uno_logo.xml" value="0.13" />
         <entry key="..\:/Users/geoff/Documents/GitHub/2_an_5/Frontend/Unus/app/src/main/res/layout/activity_main.xml" value="0.1111111111111111" />

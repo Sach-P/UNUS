@@ -144,7 +144,7 @@ public class MainMenuFragment extends Fragment {
     private void createLobby() throws JSONException {
         //add login credentials to the response body
         JSONObject requestBody = new JSONObject();
-        requestBody.put("private",true);
+        requestBody.put("private","true");
 
         JsonObjectRequest request = new JsonObjectRequest(
                 Request.Method.POST,

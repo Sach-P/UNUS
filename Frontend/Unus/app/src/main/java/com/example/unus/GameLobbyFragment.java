@@ -27,6 +27,8 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.util.ArrayList;
+import java.util.Collections;
+import java.util.HashMap;
 
 /**
  * Fragment used to handle the pre-game lobby
@@ -37,7 +39,7 @@ public class GameLobbyFragment extends Fragment {
 
     View view;
     ArrayList<Integer> playerIds;
-    ArrayList<String> usernames;
+    HashMap<Integer, String> usernames;
     int gameLobbyId;
 
     TextView playerCountDisp;
@@ -80,7 +82,7 @@ public class GameLobbyFragment extends Fragment {
         mainActivity = (MainActivity)getActivity();
         mainActivity.connectWebSocket(gameLobbyId);
 
-        usernames = new ArrayList<String>();
+        usernames = new HashMap<Integer, String>();
 
         playerIds = new ArrayList<Integer>();
         if (isHost) {
@@ -258,7 +260,7 @@ public class GameLobbyFragment extends Fragment {
 
                         try {
                             addPlayerPlate(response.getInt("id"), response.getString("username"));
-                            usernames.add(response.getString("username"));
+                            usernames.put(id, response.getString("username"));
 
                         } catch (JSONException e) {
                             e.printStackTrace();
@@ -358,10 +360,12 @@ public class GameLobbyFragment extends Fragment {
     private void startGame(boolean host){
         GamePlayFragment frag = new GamePlayFragment();
 
+        Collections.sort(playerIds);
+
         Bundle bundle = new Bundle();
         bundle.putBoolean("isHost", host);
         bundle.putIntegerArrayList("ids", playerIds);
-        bundle.putStringArrayList("usernames", usernames);
+        bundle.putSerializable("usernames", usernames);
         frag.setArguments(bundle);
 
         getActivity().getSupportFragmentManager().beginTransaction().replace(R.id.fragmentContainerView, frag, "gameScreen").commit();

@@ -15,7 +15,7 @@
             android:id="@+id/game_menu"
             android:layout_width="50dp"
             android:layout_height="50dp"
-            android:src="@drawable/ic_pause_button"
+            android:src="@drawable/ic_back_button"
             android:clickable="true"
             android:focusable="true"
             />
@@ -39,7 +39,22 @@
 
     <Space
         android:layout_width="match_parent"
-        android:layout_height="200dp"
+        android:layout_height="20dp"
+        />
+
+    <LinearLayout
+        android:id="@+id/player_view"
+        android:layout_width="match_parent"
+        android:layout_height="150dp"
+        android:orientation="horizontal"
+        android:gravity="center"
+        >
+
+    </LinearLayout>
+
+    <Space
+        android:layout_width="match_parent"
+        android:layout_height="20dp"
         />
 
     <LinearLayout
@@ -70,7 +85,7 @@
 
     <Space
         android:layout_width="match_parent"
-        android:layout_height="80dp"
+        android:layout_height="60dp"
         android:layout_weight="1"
         />
 
