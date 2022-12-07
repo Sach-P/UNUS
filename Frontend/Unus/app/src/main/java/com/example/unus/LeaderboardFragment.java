@@ -47,12 +47,14 @@ public class LeaderboardFragment extends Fragment {
     private Button friends;
     private Button played;
     private Button won;
+    private Button team;
     private TextView stat_name;
     public boolean isGlobal = true;
-    public boolean isPlayed = true; //I know this is terrible for scaling but I'll fix it later
+    public boolean isPlayed = true;
     private LinearLayout board;
     private List<Friend> userList;
     private List<Friend> friendList;
+    private List<Team> teamList;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -64,7 +66,9 @@ public class LeaderboardFragment extends Fragment {
                              Bundle savedInstanceState) {
         userList = new ArrayList<Friend>();
         friendList = new ArrayList<Friend>();
+        teamList = new ArrayList<Team>();
         getUsers();
+        getTeams();
         /*
         Something in here is so bugged but I can't for the life of me find it, it works and that;s all that matters for now
          */
@@ -76,6 +80,7 @@ public class LeaderboardFragment extends Fragment {
         friends = (Button) view.findViewById(R.id.friends_list);
         played = (Button) view.findViewById(R.id.games_played);
         won = (Button) view.findViewById(R.id.games_won);
+        team = (Button) view.findViewById(R.id.team_stats);
         board = (LinearLayout) view.findViewById(R.id.users);
         stat_name = (TextView) view.findViewById(R.id.stat_name);
 
@@ -90,11 +95,17 @@ public class LeaderboardFragment extends Fragment {
         won.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
+                team.setTextColor(view.getResources().getColor(R.color.purple_500));
+                team.setBackgroundColor(view.getResources().getColor(R.color.yellow));
                 if(isPlayed) {
                     won.setBackgroundColor(view.getResources().getColor(R.color.purple_500));
                     won.setTextColor(view.getResources().getColor(R.color.yellow));
                     played.setBackgroundColor(view.getResources().getColor(R.color.yellow));
                     played.setTextColor(view.getResources().getColor(R.color.purple_500));
+                    global.setBackgroundColor((isGlobal)?view.getResources().getColor(R.color.purple_500):view.getResources().getColor(R.color.yellow));
+                    global.setTextColor((!isGlobal)?view.getResources().getColor(R.color.purple_500):view.getResources().getColor(R.color.yellow));
+                    friends.setBackgroundColor((!isGlobal)?view.getResources().getColor(R.color.purple_500):view.getResources().getColor(R.color.yellow));
+                    friends.setTextColor((isGlobal)?view.getResources().getColor(R.color.purple_500):view.getResources().getColor(R.color.yellow));
                     isPlayed = false;
                     stat_name.setText("Games Won: ");
                     sortGamesWon();
@@ -106,11 +117,17 @@ public class LeaderboardFragment extends Fragment {
         played.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
+                team.setTextColor(view.getResources().getColor(R.color.purple_500));
+                team.setBackgroundColor(view.getResources().getColor(R.color.yellow));
                 if(!isPlayed) {
                     played.setBackgroundColor(view.getResources().getColor(R.color.purple_500));
                     played.setTextColor(view.getResources().getColor(R.color.yellow));
                     won.setBackgroundColor(view.getResources().getColor(R.color.yellow));
                     won.setTextColor(view.getResources().getColor(R.color.purple_500));
+                    global.setBackgroundColor((isGlobal)?view.getResources().getColor(R.color.purple_500):view.getResources().getColor(R.color.yellow));
+                    global.setTextColor((!isGlobal)?view.getResources().getColor(R.color.purple_500):view.getResources().getColor(R.color.yellow));
+                    friends.setBackgroundColor((!isGlobal)?view.getResources().getColor(R.color.purple_500):view.getResources().getColor(R.color.yellow));
+                    friends.setTextColor((isGlobal)?view.getResources().getColor(R.color.purple_500):view.getResources().getColor(R.color.yellow));
                     isPlayed = true;
                     stat_name.setText("Games Played: ");
                     sortGamesPlayed();
@@ -122,11 +139,17 @@ public class LeaderboardFragment extends Fragment {
         global.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
+                team.setTextColor(view.getResources().getColor(R.color.purple_500));
+                team.setBackgroundColor(view.getResources().getColor(R.color.yellow));
                 if(!isGlobal) {
                     global.setBackgroundColor(view.getResources().getColor(R.color.purple_500));
                     global.setTextColor(view.getResources().getColor(R.color.yellow));
                     friends.setBackgroundColor(view.getResources().getColor(R.color.yellow));
                     friends.setTextColor(view.getResources().getColor(R.color.purple_500));
+                    won.setBackgroundColor((!isPlayed)?view.getResources().getColor(R.color.purple_500):view.getResources().getColor(R.color.yellow));
+                    won.setTextColor((isPlayed)?view.getResources().getColor(R.color.purple_500):view.getResources().getColor(R.color.yellow));
+                    played.setBackgroundColor((isPlayed)?view.getResources().getColor(R.color.purple_500):view.getResources().getColor(R.color.yellow));
+                    played.setTextColor((!isPlayed)?view.getResources().getColor(R.color.purple_500):view.getResources().getColor(R.color.yellow));
                     isGlobal = true;
                     stat_name.setText((isPlayed) ? "Games Played: " : "Games Won: ");
                     displayUsers(userList, isPlayed);
@@ -137,15 +160,38 @@ public class LeaderboardFragment extends Fragment {
         friends.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
+                team.setTextColor(view.getResources().getColor(R.color.purple_500));
+                team.setBackgroundColor(view.getResources().getColor(R.color.yellow));
                 if(isGlobal) {
                     friends.setBackgroundColor(view.getResources().getColor(R.color.purple_500));
                     friends.setTextColor(view.getResources().getColor(R.color.yellow));
                     global.setBackgroundColor(view.getResources().getColor(R.color.yellow));
                     global.setTextColor(view.getResources().getColor(R.color.purple_500));
+                    won.setBackgroundColor((!isPlayed)?view.getResources().getColor(R.color.purple_500):view.getResources().getColor(R.color.yellow));
+                    won.setTextColor((isPlayed)?view.getResources().getColor(R.color.purple_500):view.getResources().getColor(R.color.yellow));
+                    played.setBackgroundColor((isPlayed)?view.getResources().getColor(R.color.purple_500):view.getResources().getColor(R.color.yellow));
+                    played.setTextColor((!isPlayed)?view.getResources().getColor(R.color.purple_500):view.getResources().getColor(R.color.yellow));
                     isGlobal = false;
                     stat_name.setText((isPlayed) ? "Games Played: " : "Games Won: ");
                     displayUsers(friendList, isPlayed);
                 }
+            }
+        });
+
+        team.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                friends.setBackgroundColor(view.getResources().getColor(R.color.yellow));
+                friends.setTextColor(view.getResources().getColor(R.color.purple_500));
+                global.setBackgroundColor(view.getResources().getColor(R.color.yellow));
+                global.setTextColor(view.getResources().getColor(R.color.purple_500));
+                played.setBackgroundColor(view.getResources().getColor(R.color.yellow));
+                played.setTextColor(view.getResources().getColor(R.color.purple_500));
+                won.setBackgroundColor(view.getResources().getColor(R.color.yellow));
+                won.setTextColor(view.getResources().getColor(R.color.purple_500));
+                team.setTextColor(view.getResources().getColor(R.color.yellow));
+                team.setBackgroundColor(view.getResources().getColor(R.color.purple_500));
+                displayTeams();
             }
         });
 
@@ -277,4 +323,70 @@ public class LeaderboardFragment extends Fragment {
             board.addView(layout);
         }
     }
+
+    /**
+     * displays the list of users by username and stat on the screen
+     * It will display The name followed by either games played or games won
+     * This function is called every time any button is hit in the leaderboard
+     * screen
+     *
+     */
+    private void displayTeams() {
+        board.removeViews(0, board.getChildCount());
+        for(int i = 0; i < teamList.size(); i++) {
+            LinearLayout layout = new LinearLayout(view.getContext());
+            TextView tv = new TextView(view.getContext());
+            tv.setLayoutParams( new ViewGroup.LayoutParams(500, 100));
+            tv.setText(teamList.get(i).getName());
+            tv.setTextColor(view.getResources().getColor(R.color.yellow));
+            tv.setTextSize(25);
+
+            Space sp = new Space(view.getContext());
+            sp.setLayoutParams( new ViewGroup.LayoutParams(100, 100));
+
+            TextView stats = new TextView(view.getContext());
+            stats.setLayoutParams( new ViewGroup.LayoutParams(400, 100));
+            stats.setText(teamList.get(i).getWins()+"");
+            stats.setTextColor(view.getResources().getColor(R.color.yellow));
+            stats.setTextSize(25);
+
+            layout.addView(tv);
+            layout.addView(sp);
+            layout.addView(stats);
+            board.addView(layout);
+        }
+    }
+
+
+    /**
+     * gets all of the users in the database and puts them all into a list of Users
+     */
+    private void getTeams() {
+        JsonArrayRequest request = new JsonArrayRequest(
+                Request.Method.GET,
+                "http://coms-309-029.class.las.iastate.edu:8080/teams",
+                null,
+                new Response.Listener<JSONArray>() {
+                    @Override
+                    public void onResponse(JSONArray response) {
+                        try {
+                            for (int i = 0; i < response.length(); i++) {
+                                teamList.add(new Team(response.getJSONObject(i).getString("teamName"),
+                                        response.getJSONObject(i).getInt("id"),
+                                        response.getJSONObject(i).getInt("wins")));
+                            }
+                        } catch (JSONException e) {
+                            e.printStackTrace();
+                        }
+                    }
+                },
+                new Response.ErrorListener() {
+                    @Override
+                    public void onErrorResponse(VolleyError error) {
+                    }
+                }
+        );
+        Volley.newRequestQueue(requireContext()).add(request);
+    }
+
 }
