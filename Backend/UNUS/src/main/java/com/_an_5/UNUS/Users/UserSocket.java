@@ -1,7 +1,4 @@
 package com._an_5.UNUS.Users;
-
-import com._an_5.UNUS.GlobalChat.GlobalSocket;
-import com._an_5.UNUS.Messages.MessageRepository;
 import org.json.JSONObject;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;

@@ -1,0 +1,59 @@
+
+
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html id="htmlId">
+<head>
+  <title>Coverage Report :: TeamRepository</title>
+  <style type="text/css">
+    @import "../../.css/coverage.css";
+  </style>
+</head>
+
+<body>
+<div class="header"></div>
+
+<div class="content">
+<div class="breadCrumbs">
+    [ <a href="../../index.html">all classes</a> ]
+    [ <a href="../index.html">com._an_5.UNUS.Teams</a> ]
+</div>
+
+<h1>Coverage Summary for Class: TeamRepository (com._an_5.UNUS.Teams)</h1>
+
+<table class="coverageStats">
+<tr>
+  <th class="name">Class</th>
+</tr>
+<tr>
+  <td class="name">TeamRepository</td>
+</tr>
+
+</table>
+
+<br/>
+<br/>
+
+
+<div class="sourceCode"><i>1</i>&nbsp;package com._an_5.UNUS.Teams;
+<i>2</i>&nbsp;
+<i>3</i>&nbsp;import org.springframework.data.jpa.repository.JpaRepository;
+<i>4</i>&nbsp;
+<i>5</i>&nbsp;import javax.transaction.Transactional;
+<i>6</i>&nbsp;
+<i>7</i>&nbsp;public interface TeamRepository extends JpaRepository&lt;Team, Long&gt; {
+<i>8</i>&nbsp;    Team findById(int id);
+<i>9</i>&nbsp;
+<i>10</i>&nbsp;    @Transactional
+<i>11</i>&nbsp;    void deleteById(int id);
+<i>12</i>&nbsp;}
+</div>
+</div>
+
+<div class="footer">
+    
+    <div style="float:right;">generated on 2022-12-06 22:27</div>
+</div>
+</body>
+</html>

@@ -2,14 +2,10 @@ package com._an_5.UNUS.Friends;
 
 import com._an_5.UNUS.Users.User;
 import com.fasterxml.jackson.annotation.JsonIgnore;
-import com.fasterxml.jackson.annotation.JsonSetter;
 import com.sun.istack.NotNull;
 import io.swagger.annotations.ApiModelProperty;
-
 import javax.persistence.*;
-import java.util.HashSet;
 import java.util.Objects;
-import java.util.Set;
 
 @Entity
 @Table(name = "friends")

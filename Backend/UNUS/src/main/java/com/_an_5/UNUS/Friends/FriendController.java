@@ -2,25 +2,15 @@ package com._an_5.UNUS.Friends;
 
 import com._an_5.UNUS.Users.User;
 import com._an_5.UNUS.Users.UserRepository;
-import com.fasterxml.jackson.databind.util.JSONPObject;
-import com.mysql.cj.xdevapi.JsonParser;
-import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import org.apache.tomcat.util.json.JSONParser;
 import org.apache.tomcat.util.json.ParseException;
-import org.json.JSONObject;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
-
-import java.util.List;
 import java.util.Set;
 
-//@Api(value = "friend-controller")
 @RestController
 public class FriendController {
-
-    @Autowired
-    private FriendRepository friendRepository;
 
     @Autowired
     private UserRepository userRepository;

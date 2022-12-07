@@ -1,0 +1,221 @@
+
+
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html id="htmlId">
+<head>
+  <title>Coverage Report :: Friend</title>
+  <style type="text/css">
+    @import "../../.css/coverage.css";
+  </style>
+</head>
+
+<body>
+<div class="header"></div>
+
+<div class="content">
+<div class="breadCrumbs">
+    [ <a href="../../index.html">all classes</a> ]
+    [ <a href="../index.html">com._an_5.UNUS.Friends</a> ]
+</div>
+
+<h1>Coverage Summary for Class: Friend (com._an_5.UNUS.Friends)</h1>
+
+<table class="coverageStats">
+
+<tr>
+  <th class="name">Class</th>
+<th class="coverageStat 
+">
+  Method, %
+</th>
+<th class="coverageStat 
+">
+  Line, %
+</th>
+</tr>
+<tr>
+  <td class="name">Friend</td>
+<td class="coverageStat">
+  <span class="percent">
+    5.6%
+  </span>
+  <span class="absValue">
+    (1/ 18)
+  </span>
+</td>
+<td class="coverageStat">
+  <span class="percent">
+    8.8%
+  </span>
+  <span class="absValue">
+    (3/ 34)
+  </span>
+</td>
+</tr>
+  <tr>
+    <td class="name">Friend$HibernateProxy$EnCEuy9e</td>
+  </tr>
+<tr>
+  <td class="name"><strong>total</strong></td>
+<td class="coverageStat">
+  <span class="percent">
+    5.6%
+  </span>
+  <span class="absValue">
+    (1/ 18)
+  </span>
+</td>
+<td class="coverageStat">
+  <span class="percent">
+    8.8%
+  </span>
+  <span class="absValue">
+    (3/ 34)
+  </span>
+</td>
+</tr>
+</table>
+
+<br/>
+<br/>
+
+
+<div class="sourceCode"><i>1</i>&nbsp;package com._an_5.UNUS.Friends;
+<i>2</i>&nbsp;
+<i>3</i>&nbsp;import com._an_5.UNUS.Users.User;
+<i>4</i>&nbsp;import com.fasterxml.jackson.annotation.JsonIgnore;
+<i>5</i>&nbsp;import com.sun.istack.NotNull;
+<i>6</i>&nbsp;import io.swagger.annotations.ApiModelProperty;
+<i>7</i>&nbsp;import javax.persistence.*;
+<i>8</i>&nbsp;import java.util.Objects;
+<i>9</i>&nbsp;
+<i>10</i>&nbsp;@Entity
+<i>11</i>&nbsp;@Table(name = &quot;friends&quot;)
+<i>12</i>&nbsp;public class Friend {
+<i>13</i>&nbsp;
+<i>14</i>&nbsp;    @Id
+<i>15</i>&nbsp;    @GeneratedValue(strategy = GenerationType.IDENTITY)
+<i>16</i>&nbsp;    private int id;
+<i>17</i>&nbsp;
+<i>18</i>&nbsp;    @ApiModelProperty(notes = &quot;ID of friend&quot;,name=&quot;fId&quot;,required=true)
+<i>19</i>&nbsp;    @NotNull
+<i>20</i>&nbsp;    private int fId;
+<i>21</i>&nbsp;
+<i>22</i>&nbsp;    @ApiModelProperty(notes = &quot;username of friend&quot;,name=&quot;username&quot;,required=true)
+<i>23</i>&nbsp;    @NotNull
+<i>24</i>&nbsp;    private String username;
+<i>25</i>&nbsp;
+<i>26</i>&nbsp;    @ApiModelProperty(notes = &quot;friendship status&quot;,name=&quot;status&quot;,required=true)
+<i>27</i>&nbsp;    @NotNull
+<i>28</i>&nbsp;    private String status;
+<i>29</i>&nbsp;
+<i>30</i>&nbsp;    @ApiModelProperty(notes = &quot;user that is the friend&quot;,name=&quot;friend&quot;,required=false)
+<i>31</i>&nbsp;    @JsonIgnore
+<i>32</i>&nbsp;    @ManyToOne(cascade = CascadeType.ALL)
+<i>33</i>&nbsp;    @JoinColumn(name = &quot;friend_id&quot;, referencedColumnName = &quot;id&quot;)
+<i>34</i>&nbsp;    private User friend;
+<i>35</i>&nbsp;
+<i>36</i>&nbsp;    @ApiModelProperty(notes = &quot;user who requested friend request&quot;,name=&quot;userRequest&quot;,required=false)
+<i>37</i>&nbsp;    @JsonIgnore
+<i>38</i>&nbsp;    @ManyToOne(cascade = CascadeType.ALL)
+<i>39</i>&nbsp;    @JoinColumn(name = &quot;userRequest_id&quot;, referencedColumnName = &quot;id&quot;)
+<i>40</i>&nbsp;    private User userRequest;
+<i>41</i>&nbsp;
+<i>42</i>&nbsp;    @ApiModelProperty(notes = &quot;user who received the friend request&quot;,name=&quot;requestedUser&quot;,required=false)
+<i>43</i>&nbsp;    @JsonIgnore
+<i>44</i>&nbsp;    @ManyToOne(cascade = CascadeType.ALL)
+<i>45</i>&nbsp;    @JoinColumn(name = &quot;requestedUser_id&quot;, referencedColumnName = &quot;id&quot;)
+<i>46</i>&nbsp;    private User requestedUser;
+<i>47</i>&nbsp;
+<i>48</i>&nbsp;
+<b class="nc"><i>49</i>&nbsp;    public Friend(int id, String status, String username){</b>
+<b class="nc"><i>50</i>&nbsp;        this.fId = id;</b>
+<b class="nc"><i>51</i>&nbsp;        this.username = username;</b>
+<b class="nc"><i>52</i>&nbsp;        this.status = status;</b>
+<b class="nc"><i>53</i>&nbsp;    }</b>
+<i>54</i>&nbsp;
+<b class="fc"><i>55</i>&nbsp;    public Friend (){</b>
+<b class="fc"><i>56</i>&nbsp;        this.status = &quot;pending&quot;;</b>
+<b class="fc"><i>57</i>&nbsp;    }</b>
+<i>58</i>&nbsp;
+<i>59</i>&nbsp;    @Override
+<i>60</i>&nbsp;    public boolean equals(Object o) {
+<b class="nc"><i>61</i>&nbsp;        if (this == o) return true;</b>
+<b class="nc"><i>62</i>&nbsp;        if (o == null || getClass() != o.getClass()) return false;</b>
+<b class="nc"><i>63</i>&nbsp;        Friend friend = (Friend) o;</b>
+<b class="nc"><i>64</i>&nbsp;        return id == friend.getId();</b>
+<i>65</i>&nbsp;    }
+<i>66</i>&nbsp;
+<i>67</i>&nbsp;    @Override
+<i>68</i>&nbsp;    public int hashCode() {
+<b class="nc"><i>69</i>&nbsp;        return Objects.hash(id);</b>
+<i>70</i>&nbsp;    }
+<i>71</i>&nbsp;
+<i>72</i>&nbsp;    public int getId() {
+<b class="nc"><i>73</i>&nbsp;        return id;</b>
+<i>74</i>&nbsp;    }
+<i>75</i>&nbsp;
+<i>76</i>&nbsp;    public void setId(int id){
+<b class="nc"><i>77</i>&nbsp;        this.id = id;</b>
+<b class="nc"><i>78</i>&nbsp;    }</b>
+<i>79</i>&nbsp;
+<i>80</i>&nbsp;    public int getFriendId() {
+<b class="nc"><i>81</i>&nbsp;        return fId;</b>
+<i>82</i>&nbsp;    }
+<i>83</i>&nbsp;
+<i>84</i>&nbsp;    public void setFriendId(int friendId) {
+<b class="nc"><i>85</i>&nbsp;        this.fId = friendId;</b>
+<b class="nc"><i>86</i>&nbsp;    }</b>
+<i>87</i>&nbsp;
+<i>88</i>&nbsp;    public void setUsername(String username) {
+<b class="nc"><i>89</i>&nbsp;        this.username = username;</b>
+<b class="nc"><i>90</i>&nbsp;    }</b>
+<i>91</i>&nbsp;
+<i>92</i>&nbsp;    public String getUsername() {
+<b class="nc"><i>93</i>&nbsp;        return username;</b>
+<i>94</i>&nbsp;    }
+<i>95</i>&nbsp;
+<i>96</i>&nbsp;    public String getStatus() {
+<b class="nc"><i>97</i>&nbsp;        return status;</b>
+<i>98</i>&nbsp;    }
+<i>99</i>&nbsp;
+<i>100</i>&nbsp;    public void setStatus(String status) {
+<b class="nc"><i>101</i>&nbsp;        this.status = status;</b>
+<b class="nc"><i>102</i>&nbsp;    }</b>
+<i>103</i>&nbsp;
+<i>104</i>&nbsp;    public User getUserRequest() {
+<b class="nc"><i>105</i>&nbsp;        return userRequest;</b>
+<i>106</i>&nbsp;    }
+<i>107</i>&nbsp;
+<i>108</i>&nbsp;    public void setUserRequest(User userRequest) {
+<b class="nc"><i>109</i>&nbsp;        this.userRequest = userRequest;</b>
+<b class="nc"><i>110</i>&nbsp;    }</b>
+<i>111</i>&nbsp;
+<i>112</i>&nbsp;    public User getRequestedUser() {
+<b class="nc"><i>113</i>&nbsp;        return requestedUser;</b>
+<i>114</i>&nbsp;    }
+<i>115</i>&nbsp;
+<i>116</i>&nbsp;    public void setRequestedUser(User requestedUser) {
+<b class="nc"><i>117</i>&nbsp;        this.requestedUser = requestedUser;</b>
+<b class="nc"><i>118</i>&nbsp;    }</b>
+<i>119</i>&nbsp;
+<i>120</i>&nbsp;    public void setFriend(User friend){
+<b class="nc"><i>121</i>&nbsp;        this.friend = friend;</b>
+<b class="nc"><i>122</i>&nbsp;    }</b>
+<i>123</i>&nbsp;
+<i>124</i>&nbsp;
+<i>125</i>&nbsp;    public User getFriend() {
+<b class="nc"><i>126</i>&nbsp;        return friend;</b>
+<i>127</i>&nbsp;    }
+<i>128</i>&nbsp;}
+</div>
+</div>
+
+<div class="footer">
+    
+    <div style="float:right;">generated on 2022-12-06 22:27</div>
+</div>
+</body>
+</html>

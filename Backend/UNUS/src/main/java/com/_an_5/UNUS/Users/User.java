@@ -32,10 +32,6 @@ public class User {
     @NotNull
     private String role;
 
-//    @ApiModelProperty(notes = "checks if user is online")
-//    @NotNull
-//    private boolean online;
-
     @ApiModelProperty(notes = "number of games this user played",name="gamesPlayed",required=false)
     private int gamesPlayed;
 
@@ -53,11 +49,6 @@ public class User {
     @OneToOne(mappedBy = "leader")
     private Team ownedTeam;
 
-//    @ApiModelProperty(notes = "Lobby thi",name="fId",required=true)
-//    @JsonIgnore
-//    @ManyToOne(cascade = CascadeType.ALL)
-//    @JoinColumn(name = "user_id", referencedColumnName = "id")
-//    private Lobby joinedLobby;
 
     @ApiModelProperty(notes = "list of friends",name="friends",required=false)
     @OneToMany(mappedBy = "friend")
@@ -214,11 +205,4 @@ public class User {
         this.ownedTeam = ownedTeam;
     }
 
-    //    public Lobby getJoinedLobby() {
-//        return joinedLobby;
-//    }
-//
-//    public void setJoinedLobby(Lobby joinedLobby) {
-//        this.joinedLobby = joinedLobby;
-//    }
 }
