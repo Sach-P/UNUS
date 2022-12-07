@@ -298,7 +298,6 @@ public class GamePlayFragment extends Fragment {
         message.put("card", card.toJsonObject());
 
         mainActivity.sendMessage(message);
-        nextTurn();
     }
 
     /**
@@ -315,14 +314,15 @@ public class GamePlayFragment extends Fragment {
 
             if (obj.getInt("id") != UserData.getInstance().getUserID()){
                 discard(card, false);
-                nextTurn();
             }
-
+            nextTurn();
             CardRank rank = card.getRank();
             if (rank == CardRank.SKIP){
                 nextTurn();
             } else if (rank == CardRank.REVERSE){
-
+                reverse = !reverse;
+                nextTurn();
+                nextTurn();
             } else if (playerIds.get(turnIndex) == UserData.getInstance().getUserID() && (rank == CardRank.DRAW_FOUR || rank == CardRank.DRAW_TWO)){
                 int draws = 0;
                 if (rank == CardRank.DRAW_FOUR){
@@ -353,7 +353,14 @@ public class GamePlayFragment extends Fragment {
     }
 
     private void nextTurn(){
-        turnIndex = (turnIndex + 1)%playerIds.size();
+        if (reverse){
+            turnIndex--;
+            if (turnIndex < 0){
+                turnIndex = playerIds.size() - 1;
+            }
+        } else {
+            turnIndex = (turnIndex + 1) % playerIds.size();
+        }
         if (playerIds.get(turnIndex) == UserData.getInstance().getUserID()){
             turnIndicator.setText(getString(R.string.your_turn));
         } else {
