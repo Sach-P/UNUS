@@ -24,7 +24,9 @@
         <entry key="..\:/Git/2_an_5/Frontend/Unus/app/src/main/res/layout/player_left_popup.xml" value="0.18162393162393162" />
         <entry key="..\:/Git/2_an_5/Frontend/Unus/app/src/main/res/layout/win_popup.xml" value="0.18162393162393162" />
         <entry key="..\:/Users/geoff/Documents/GitHub/2_an_5/Frontend/Unus/app/src/main/res/drawable/ic_blank_avatar.xml" value="0.365" />
+        <entry key="..\:/Users/geoff/Documents/GitHub/2_an_5/Frontend/Unus/app/src/main/res/drawable/ic_ub.xml" value="0.157" />
         <entry key="..\:/Users/geoff/Documents/GitHub/2_an_5/Frontend/Unus/app/src/main/res/drawable/ic_uno_logo.xml" value="0.13" />
+        <entry key="..\:/Users/geoff/Documents/GitHub/2_an_5/Frontend/Unus/app/src/main/res/drawable/ic_unus.xml" value="0.264" />
         <entry key="..\:/Users/geoff/Documents/GitHub/2_an_5/Frontend/Unus/app/src/main/res/layout/activity_main.xml" value="0.1111111111111111" />
         <entry key="..\:/Users/geoff/Documents/GitHub/2_an_5/Frontend/Unus/app/src/main/res/layout/booted_popup.xml" value="0.4041666666666667" />
         <entry key="..\:/Users/geoff/Documents/GitHub/2_an_5/Frontend/Unus/app/src/main/res/layout/fragment_friend_request.xml" value="0.4041666666666667" />
@@ -32,7 +34,7 @@
         <entry key="..\:/Users/geoff/Documents/GitHub/2_an_5/Frontend/Unus/app/src/main/res/layout/fragment_game_play.xml" value="0.32037037037037036" />
         <entry key="..\:/Users/geoff/Documents/GitHub/2_an_5/Frontend/Unus/app/src/main/res/layout/fragment_game_two_player.xml" value="0.4041666666666667" />
         <entry key="..\:/Users/geoff/Documents/GitHub/2_an_5/Frontend/Unus/app/src/main/res/layout/fragment_log_in_screen.xml" value="0.264" />
-        <entry key="..\:/Users/geoff/Documents/GitHub/2_an_5/Frontend/Unus/app/src/main/res/layout/fragment_main_menu.xml" value="0.264" />
+        <entry key="..\:/Users/geoff/Documents/GitHub/2_an_5/Frontend/Unus/app/src/main/res/layout/fragment_main_menu.xml" value="0.176" />
         <entry key="..\:/Users/geoff/Documents/GitHub/2_an_5/Frontend/Unus/app/src/main/res/layout/fragment_sign_up_screen.xml" value="0.4041666666666667" />
         <entry key="..\:/Users/geoff/Documents/GitHub/2_an_5/Frontend/Unus/app/src/main/res/layout/fragment_user_profile.xml" value="0.4041666666666667" />
         <entry key="..\:/Users/geoff/Documents/GitHub/2_an_5/Frontend/Unus/app/src/main/res/layout/fragment_user_settings.xml" value="0.4041666666666667" />
