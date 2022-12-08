@@ -1,5 +1,7 @@
 package com._an_5.UNUS.Users;
 
+import com._an_5.UNUS.Teams.Team;
+import com._an_5.UNUS.Teams.TeamRepository;
 import io.swagger.annotations.ApiOperation;
 import org.apache.tomcat.util.json.JSONParser;
 import org.apache.tomcat.util.json.ParseException;
@@ -9,12 +11,16 @@ import org.springframework.web.bind.annotation.*;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 
 @RestController
 public class UserController {
 
     @Autowired
     private UserRepository userRepository;
+
+    @Autowired
+    private TeamRepository teamRepository;
 
     @Autowired
     private UserService userService;
@@ -75,8 +81,21 @@ public class UserController {
             return failure;
         User user = userRepository.findById(id);
         user.setLobby(null);
-        user.setTeams(null);
-        user.setOwnedTeam(null);
+        Set<Team> teams = user.getTeams();
+        for (Team team : teams){
+            team.removeMember(user);
+        }
+        teamRepository.saveAll(teams);
+        Team ownedTeam = user.getOwnedTeam();
+        if(ownedTeam != null) {
+            if (ownedTeam.getPlayers().size() > 0) {
+                ownedTeam.setLeader((User) ownedTeam.getPlayers().toArray()[0]);
+                ownedTeam.removeMember((User) ownedTeam.getPlayers().toArray()[0]);
+                teamRepository.save(ownedTeam);
+            } else {
+                teamRepository.deleteById(ownedTeam.getId());
+            }
+        }
         userRepository.save(user);
         userRepository.deleteById(id);
         return success;
