@@ -212,7 +212,7 @@ public class UserSettingsFragment extends Fragment {
                 new Response.ErrorListener() {
                     @Override
                     public void onErrorResponse(VolleyError error) {
-                        navigateToLogin();
+                        top_text.setText(Integer.toString(id));
                     }
                 }
         );

@@ -69,9 +69,6 @@ public class LeaderboardFragment extends Fragment {
         teamList = new ArrayList<Team>();
         getUsers();
         getTeams();
-        /*
-        Something in here is so bugged but I can't for the life of me find it, it works and that;s all that matters for now
-         */
 
         view = inflater.inflate(R.layout.fragment_leaderboard, container, false);
 
@@ -191,6 +188,7 @@ public class LeaderboardFragment extends Fragment {
                 won.setTextColor(view.getResources().getColor(R.color.purple_500));
                 team.setTextColor(view.getResources().getColor(R.color.yellow));
                 team.setBackgroundColor(view.getResources().getColor(R.color.purple_500));
+                sortTeams();
                 displayTeams();
             }
         });
@@ -287,6 +285,20 @@ public class LeaderboardFragment extends Fragment {
             temp2.add(j, friendList.get(i));
         }
         friendList = temp2;
+    }
+
+    /**
+     * sorts the list of users by how many games they have played
+     */
+    private void sortTeams() {
+        List<Team> temp = new ArrayList<Team>();
+        temp.add(teamList.get(0));
+        for(int i = 1; i < teamList.size(); i++) {
+            int j;
+            for (j = 0; j < temp.size() && teamList.get(i).getWins() < temp.get(j).getWins(); j++);
+            temp.add(j, teamList.get(i));
+        }
+        teamList = temp;
     }
 
     /**
