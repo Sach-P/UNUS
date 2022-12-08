@@ -87,8 +87,18 @@ public class UserData {
         this.password = password;
     }
 
+    /**
+     * sets the current user's role to a given role
+     * @param role string describing the user's role
+     */
     public void setRole(String role) {this.role = role;}
+
+    /**
+     * returns the current user's role
+     * @return String describing the user's role
+     */
     public String getRole() { return role;}
+
     /**
      * returns current user's games played stat
      * @return games played
@@ -168,24 +178,24 @@ public class UserData {
     public Friend[] getReceivedRequests() { return receivedRequests; }
 
     /**
-     * copys over a given list of Friend objects into the friendsList array
-     * @param friendsList list of Friends
+     * copys over a given list of Friend objects into the sentRequests array
+     * @param requestsList list of sent requests
      */
-    public void setSentRequestsList(Friend[] friendsList){
-        this.sentRequests = new Friend[friendsList.length];
-        for (int i = 0; i < friendsList.length; i++){
-            this.sentRequests[i] = friendsList[i];
+    public void setSentRequestsList(Friend[] requestsList){
+        this.sentRequests = new Friend[requestsList.length];
+        for (int i = 0; i < requestsList.length; i++){
+            this.sentRequests[i] = requestsList[i];
         }
     }
 
     /**
-     * copys over a given list of Friend objects into the friendsList array
-     * @param friendsList list of Friends
+     * copys over a given list of Friend objects into the recievedRequests array
+     * @param requestsList list of received requests
      */
-    public void setReceivedRequestsList(Friend[] friendsList){
-        this.receivedRequests = new Friend[friendsList.length];
-        for (int i = 0; i < friendsList.length; i++){
-            this.receivedRequests[i] = friendsList[i];
+    public void setReceivedRequestsList(Friend[] requestsList){
+        this.receivedRequests = new Friend[requestsList.length];
+        for (int i = 0; i < requestsList.length; i++){
+            this.receivedRequests[i] = requestsList[i];
         }
     }
 }
