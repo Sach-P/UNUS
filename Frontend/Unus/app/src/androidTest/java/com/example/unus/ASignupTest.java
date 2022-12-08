@@ -40,7 +40,7 @@ public class ASignupTest {
             new ActivityScenarioRule<>(MainActivity.class);
 
     @Test
-    public void signupTest() {
+    public void signupTest() throws InterruptedException {
         ViewInteraction materialButton = onView(
                 allOf(withId(R.id.create_account_button), withText("create account"),
                         childAtPosition(
@@ -90,6 +90,8 @@ public class ASignupTest {
                                 9),
                         isDisplayed()));
         materialButton2.perform(click());
+
+        Thread.sleep(1000);
 
         ViewInteraction editText = onView(
                 allOf(withId(R.id.username_field), withText("newuser"),
