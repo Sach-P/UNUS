@@ -73,6 +73,11 @@ public class UserController {
     public String deleteUser(@PathVariable int id) {
         if(!userRepository.existsById(id))
             return failure;
+        User user = userRepository.findById(id);
+        user.setLobby(null);
+        user.setTeams(null);
+        user.setOwnedTeam(null);
+        userRepository.save(user);
         userRepository.deleteById(id);
         return success;
     }
