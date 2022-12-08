@@ -5,6 +5,7 @@ import android.os.Bundle;
 import androidx.appcompat.content.res.AppCompatResources;
 import androidx.fragment.app.Fragment;
 
+import android.util.Log;
 import android.util.TypedValue;
 import android.view.Gravity;
 import android.view.LayoutInflater;
@@ -402,41 +403,36 @@ public class GamePlayFragment extends Fragment {
 
             gameOver = true;
 
-            String body;
-            if (obj.getInt("id") == UserData.getInstance().getUserID()) {
-                body = "{\"win\":\"true\"}";
+            //add login credentials to the response body
+            JSONObject requestBody = new JSONObject();
+
+            UserData.getInstance().incrementGamesPlayed();
+            if (obj.getInt("id") == UserData.getInstance().getUserID()){
+                requestBody.put("win", "true");
+                UserData.getInstance().incrementGamesWon();
             } else {
-                body = "{\"win\":\"true\"}";
+                requestBody.put("win", "false");
             }
 
-            String mRequestBody = body.toString();
-
-            StringRequest sr = new StringRequest(Request.Method.PUT, getString(R.string.remote_server_url, "gameEnd", Integer.toString(UserData.getInstance().getUserID())), new Response.Listener<String>() {
-                @Override
-                public void onResponse(String response) {
-
-                }
-            }, new Response.ErrorListener() {
-                @Override
-                public void onErrorResponse(VolleyError error) {
-                }
-            }) {
-                @Override
-                public String getBodyContentType() {
-                    return "application/json; charset=utf-8";
-                }
-
-                @Override
-                public byte[] getBody() throws AuthFailureError {
-                    try {
-                        return body.getBytes("utf-8");
-                    } catch (UnsupportedEncodingException uee) {
-                        return null;
+            JsonObjectRequest request = new JsonObjectRequest(
+                    Request.Method.PUT,
+                    getString(R.string.remote_server_url, "gameEnd", "")+UserData.getInstance().getUserID(),
+                    requestBody,
+                    new Response.Listener<JSONObject>() {
+                        @Override
+                        public void onResponse(JSONObject response) {
+                            Log.i("response", response.toString());
+                        }
+                    },
+                    new Response.ErrorListener() {
+                        @Override
+                        public void onErrorResponse(VolleyError error) {
+                            Log.e("error", error.toString());
+                        }
                     }
-                }
+            );
 
-            };
-            Volley.newRequestQueue(requireContext()).add(sr);
+            Volley.newRequestQueue(requireContext()).add(request);
 
             createWinPopup(obj.getInt("id"));
         }
