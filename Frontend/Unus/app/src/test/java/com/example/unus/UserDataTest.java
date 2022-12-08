@@ -5,6 +5,8 @@ import static org.junit.Assert.*;
 
 
 /**
+ * junit class to test each method of
+ *
  * @author Isaac Blandin
  */
 public class UserDataTest {
@@ -72,8 +74,8 @@ public class UserDataTest {
     public void testRole(){
         String[] testRoles = {"guest", "user", "admin"};
         for (String role: testRoles){
-            UserData.getInstance().setPassword(role);
-            assertEquals(UserData.getInstance().getPassword(), role);
+            UserData.getInstance().setRole(role);
+            assertEquals(UserData.getInstance().getRole(), role);
         }
     }
 
@@ -136,7 +138,7 @@ public class UserDataTest {
     }
 
     /**
-     * test the set and get methods for receivedRequests
+     * test the set and get methods for sentRequestList
      */
     @Test
     public void testSentRequests(){
@@ -145,9 +147,9 @@ public class UserDataTest {
         Friend f3 = new Friend(3, "Sachin");
 
         Friend[] sentRequests = {f1, f2, f3};
-        UserData.getInstance().setReceivedRequestsList(sentRequests);
+        UserData.getInstance().setSentRequestsList(sentRequests);
 
-        Friend[] sentRequestsCopy = UserData.getInstance().getReceivedRequests();
+        Friend[] sentRequestsCopy = UserData.getInstance().getSentRequests();
         for(int i = 0; i < sentRequestsCopy.length; i++){
             assertEquals(sentRequestsCopy[i], sentRequests[i]);
         }
