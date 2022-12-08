@@ -13,6 +13,8 @@ import static org.junit.Assert.*;
 
 /**
  * junit class used to test all of the methods of Card Object
+ *
+ * @author Isaac Blandin
  */
 @RunWith(AndroidJUnit4.class)
 public class CardTest {
