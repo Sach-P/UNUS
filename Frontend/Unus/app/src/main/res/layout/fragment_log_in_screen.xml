@@ -14,7 +14,7 @@
         android:layout_weight="0.9"
         android:layout_margin="30dp"
         android:contentDescription="@string/logo_content_description"
-        android:src="@drawable/ic_uno_logo"
+        android:src="@drawable/ic_unus"
         />
 
     <TextView

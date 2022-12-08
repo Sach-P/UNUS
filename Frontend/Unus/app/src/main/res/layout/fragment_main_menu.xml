@@ -84,14 +84,8 @@
     <ImageView
         android:layout_width="match_parent"
         android:layout_height="0dp"
-        android:layout_weight="0.5"
-        android:src="@drawable/ic_uno_logo"
-        />
-
-    <Space
-        android:layout_width="match_parent"
-        android:layout_height="0dp"
-        android:layout_weight="0.2"
+        android:layout_weight="0.65"
+        android:src="@drawable/ic_unus"
         />
 
     <Button
