@@ -1,0 +1,202 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>UserData.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=0;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">debug</a> &gt; <a href="index.source.html" class="el_package">com.example.unus</a> &gt; <span class="el_source">UserData.java</span></div><h1>UserData.java</h1><pre class="source lang-java linenums">package com.example.unus;
+
+/**
+ * Singleton class designed to store user data which is accessible to all activities and fragments
+ *
+ * @author Isaac Blandin
+ */
+public class UserData {
+
+    private static UserData singleInstance;
+
+    private int userID;
+    private String username;
+    private String password;
+
+    private Friend[] friendsList;
+    private Friend[] sentRequests;
+    private Friend[] receivedRequests;
+
+    private String role;
+    private int gamesPlayed;
+    private int gamesWon;
+
+    /**
+     * empty constructor called by getInstance() internally
+     */
+    private UserData(){
+
+    }
+
+    /**
+     * allows user to access the instance storing the user data. creates an instance if not called before
+     * @return instance containing user data
+     */
+    public static UserData getInstance(){
+<span class="fc bfc" id="L36" title="All 2 branches covered.">        if (singleInstance == null){</span>
+<span class="fc" id="L37">            singleInstance = new UserData();</span>
+        }
+<span class="fc" id="L39">        return singleInstance;</span>
+    }
+
+    /**
+     * returns the current user's id number
+     * @return user's id number
+     */
+    public int getUserID(){
+<span class="fc" id="L47">        return userID;</span>
+    }
+
+    /**
+     * sets the current user's id number to a given int value
+     * @param userID user's id number
+     */
+    public void setUserID(int userID){
+<span class="fc" id="L55">        this.userID = userID;</span>
+<span class="fc" id="L56">    }</span>
+
+    /**
+     * returns the current user's username
+     * @return user's username
+     */
+    public String getUsername (){
+<span class="fc" id="L63">        return username;</span>
+    }
+
+    /**
+     * sets the current user's username to given String value
+     * @param username user's username
+     */
+    public void setUsername(String username){
+<span class="fc" id="L71">        this.username = username;</span>
+<span class="fc" id="L72">    }</span>
+
+    /**
+     * returns the current user's password
+     * @return user's password
+     */
+    public String getPassword(){
+<span class="fc" id="L79">        return password;</span>
+    }
+
+    /**
+     * sets the current user's password to a given String value
+     * @param password user's password
+     */
+    public void setPassword(String password){
+<span class="fc" id="L87">        this.password = password;</span>
+<span class="fc" id="L88">    }</span>
+
+    /**
+     * sets the current user's role to a given role
+     * @param role string describing the user's role
+     */
+<span class="fc" id="L94">    public void setRole(String role) {this.role = role;}</span>
+
+    /**
+     * returns the current user's role
+     * @return String describing the user's role
+     */
+<span class="fc" id="L100">    public String getRole() { return role;}</span>
+
+    /**
+     * returns current user's games played stat
+     * @return games played
+     */
+    public int getGamesPlayed(){
+<span class="fc" id="L107">        return gamesPlayed;</span>
+    }
+
+    /**
+     * sets the current user's games played stat to a given int value
+     * @param gamesPlayed games played by user
+     */
+    public void setGamesPlayed(int gamesPlayed){
+<span class="fc" id="L115">        this.gamesPlayed = gamesPlayed;</span>
+<span class="fc" id="L116">    }</span>
+
+    /**
+     * adds a game played to the current user's games played stat
+     */
+    public void incrementGamesPlayed(){
+<span class="fc" id="L122">        gamesPlayed++;</span>
+<span class="fc" id="L123">    }</span>
+
+    /**
+     * returns the current user's games won stat
+     * @return games won
+     */
+    public int getGamesWon(){
+<span class="fc" id="L130">        return gamesWon;</span>
+    }
+
+    /**
+     * sets the current user's games won stat to a given int value
+     * @param gamesWon games won by user
+     */
+    public void setGamesWon(int gamesWon){
+<span class="fc" id="L138">        this.gamesWon = gamesWon;</span>
+<span class="fc" id="L139">    }</span>
+
+    /**
+     * adds a game won to the current user's games won stat
+     */
+    public void incrementGamesWon(){
+<span class="fc" id="L145">        gamesWon++;</span>
+<span class="fc" id="L146">    }</span>
+
+    /**
+     * copys over a given list of Friend objects into the friendsList array
+     * @param friendsList list of Friends
+     */
+    public void setFriendsList(Friend[] friendsList){
+<span class="fc" id="L153">        this.friendsList = new Friend[friendsList.length];</span>
+<span class="fc bfc" id="L154" title="All 2 branches covered.">        for (int i = 0; i &lt; friendsList.length; i++){</span>
+<span class="fc" id="L155">            this.friendsList[i] = friendsList[i];</span>
+        }
+<span class="fc" id="L157">    }</span>
+
+    /**
+     * returns the friendsList array of Friend objects
+     * @return friends list
+     */
+    public Friend[] getFriendsList(){
+<span class="fc" id="L164">        return friendsList;</span>
+    }
+
+    /**
+     * Returns the sent friend requests arraylist
+     * @return sentFriends list
+     */
+<span class="fc" id="L171">    public Friend[] getSentRequests() { return sentRequests; }</span>
+
+
+    /**
+     * Returns the received friend requests arraylist
+     * @return receivedFriends list
+     */
+<span class="fc" id="L178">    public Friend[] getReceivedRequests() { return receivedRequests; }</span>
+
+    /**
+     * copys over a given list of Friend objects into the sentRequests array
+     * @param requestsList list of sent requests
+     */
+    public void setSentRequestsList(Friend[] requestsList){
+<span class="fc" id="L185">        this.sentRequests = new Friend[requestsList.length];</span>
+<span class="fc bfc" id="L186" title="All 2 branches covered.">        for (int i = 0; i &lt; requestsList.length; i++){</span>
+<span class="fc" id="L187">            this.sentRequests[i] = requestsList[i];</span>
+        }
+<span class="fc" id="L189">    }</span>
+
+    /**
+     * copys over a given list of Friend objects into the recievedRequests array
+     * @param requestsList list of received requests
+     */
+    public void setReceivedRequestsList(Friend[] requestsList){
+<span class="fc" id="L196">        this.receivedRequests = new Friend[requestsList.length];</span>
+<span class="fc bfc" id="L197" title="All 2 branches covered.">        for (int i = 0; i &lt; requestsList.length; i++){</span>
+<span class="fc" id="L198">            this.receivedRequests[i] = requestsList[i];</span>
+        }
+<span class="fc" id="L200">    }</span>
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.7.202105040129</span>Generated by the Android Gradle plugin 7.2.2</div></body></html>

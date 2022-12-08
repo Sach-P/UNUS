@@ -1,0 +1,394 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>LeaderboardFragment.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=0;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">debug</a> &gt; <a href="index.source.html" class="el_package">com.example.unus</a> &gt; <span class="el_source">LeaderboardFragment.java</span></div><h1>LeaderboardFragment.java</h1><pre class="source lang-java linenums">package com.example.unus;
+
+import android.os.Bundle;
+import android.view.LayoutInflater;
+import android.view.View;
+import android.view.ViewGroup;
+import android.widget.Button;
+import android.widget.LinearLayout;
+import android.widget.Space;
+import android.widget.TextView;
+
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
+import androidx.fragment.app.Fragment;
+
+import com.android.volley.Request;
+import com.android.volley.Response;
+import com.android.volley.VolleyError;
+import com.android.volley.toolbox.JsonArrayRequest;
+import com.android.volley.toolbox.JsonObjectRequest;
+import com.android.volley.toolbox.Volley;
+
+import org.json.JSONArray;
+import org.json.JSONException;
+import org.json.JSONObject;
+
+import java.util.ArrayList;
+import java.util.Collection;
+import java.util.Iterator;
+import java.util.List;
+import java.util.ListIterator;
+
+/**
+ * This fragment displays the leaderboard
+ * leaderboards include both friend sections and global sections
+ * it displays stats based on what you selected, that can be either
+ * friend or global and games played or games won
+ *
+ * @author Abe Demo
+ */
+
+<span class="fc" id="L42">public class LeaderboardFragment extends Fragment {</span>
+
+    private View view;
+    private Button back;
+    private Button global;
+    private Button friends;
+    private Button played;
+    private Button won;
+    private Button team;
+    private TextView stat_name;
+<span class="fc" id="L52">    public boolean isGlobal = true;</span>
+<span class="fc" id="L53">    public boolean isPlayed = true;</span>
+    private LinearLayout board;
+    private List&lt;Friend&gt; userList;
+    private List&lt;Friend&gt; friendList;
+    private List&lt;Team&gt; teamList;
+
+    @Override
+    public void onCreate(Bundle savedInstanceState) {
+<span class="fc" id="L61">        super.onCreate(savedInstanceState);</span>
+<span class="fc" id="L62">    }</span>
+
+    @Override
+    public View onCreateView(LayoutInflater inflater, ViewGroup container,
+                             Bundle savedInstanceState) {
+<span class="fc" id="L67">        userList = new ArrayList&lt;Friend&gt;();</span>
+<span class="fc" id="L68">        friendList = new ArrayList&lt;Friend&gt;();</span>
+<span class="fc" id="L69">        teamList = new ArrayList&lt;Team&gt;();</span>
+<span class="fc" id="L70">        getUsers();</span>
+<span class="fc" id="L71">        getTeams();</span>
+        /*
+        Something in here is so bugged but I can't for the life of me find it, it works and that;s all that matters for now
+         */
+
+<span class="fc" id="L76">        view = inflater.inflate(R.layout.fragment_leaderboard, container, false);</span>
+
+<span class="fc" id="L78">        back = (Button) view.findViewById(R.id.back);</span>
+<span class="fc" id="L79">        global = (Button) view.findViewById(R.id.global_list);</span>
+<span class="fc" id="L80">        friends = (Button) view.findViewById(R.id.friends_list);</span>
+<span class="fc" id="L81">        played = (Button) view.findViewById(R.id.games_played);</span>
+<span class="fc" id="L82">        won = (Button) view.findViewById(R.id.games_won);</span>
+<span class="fc" id="L83">        team = (Button) view.findViewById(R.id.team_stats);</span>
+<span class="fc" id="L84">        board = (LinearLayout) view.findViewById(R.id.users);</span>
+<span class="fc" id="L85">        stat_name = (TextView) view.findViewById(R.id.stat_name);</span>
+
+
+<span class="fc" id="L88">        back.setOnClickListener(new View.OnClickListener() {</span>
+            @Override
+            public void onClick(View view) {
+<span class="nc" id="L91">                getActivity().getSupportFragmentManager().beginTransaction().replace(R.id.fragmentContainerView, new MainMenuFragment()).commit();</span>
+<span class="nc" id="L92">            }</span>
+        });
+
+<span class="fc" id="L95">        won.setOnClickListener(new View.OnClickListener() {</span>
+            @Override
+            public void onClick(View view) {
+<span class="nc" id="L98">                team.setTextColor(view.getResources().getColor(R.color.purple_500));</span>
+<span class="nc" id="L99">                team.setBackgroundColor(view.getResources().getColor(R.color.yellow));</span>
+<span class="nc bnc" id="L100" title="All 2 branches missed.">                if(isPlayed) {</span>
+<span class="nc" id="L101">                    won.setBackgroundColor(view.getResources().getColor(R.color.purple_500));</span>
+<span class="nc" id="L102">                    won.setTextColor(view.getResources().getColor(R.color.yellow));</span>
+<span class="nc" id="L103">                    played.setBackgroundColor(view.getResources().getColor(R.color.yellow));</span>
+<span class="nc" id="L104">                    played.setTextColor(view.getResources().getColor(R.color.purple_500));</span>
+<span class="nc bnc" id="L105" title="All 2 branches missed.">                    global.setBackgroundColor((isGlobal)?view.getResources().getColor(R.color.purple_500):view.getResources().getColor(R.color.yellow));</span>
+<span class="nc bnc" id="L106" title="All 2 branches missed.">                    global.setTextColor((!isGlobal)?view.getResources().getColor(R.color.purple_500):view.getResources().getColor(R.color.yellow));</span>
+<span class="nc bnc" id="L107" title="All 2 branches missed.">                    friends.setBackgroundColor((!isGlobal)?view.getResources().getColor(R.color.purple_500):view.getResources().getColor(R.color.yellow));</span>
+<span class="nc bnc" id="L108" title="All 2 branches missed.">                    friends.setTextColor((isGlobal)?view.getResources().getColor(R.color.purple_500):view.getResources().getColor(R.color.yellow));</span>
+<span class="nc" id="L109">                    isPlayed = false;</span>
+<span class="nc" id="L110">                    stat_name.setText(&quot;Games Won: &quot;);</span>
+<span class="nc" id="L111">                    sortGamesWon();</span>
+<span class="nc bnc" id="L112" title="All 2 branches missed.">                    displayUsers((isGlobal) ? userList : friendList, false);</span>
+                }
+<span class="nc" id="L114">            }</span>
+        });
+
+<span class="fc" id="L117">        played.setOnClickListener(new View.OnClickListener() {</span>
+            @Override
+            public void onClick(View view) {
+<span class="nc" id="L120">                team.setTextColor(view.getResources().getColor(R.color.purple_500));</span>
+<span class="nc" id="L121">                team.setBackgroundColor(view.getResources().getColor(R.color.yellow));</span>
+<span class="nc bnc" id="L122" title="All 2 branches missed.">                if(!isPlayed) {</span>
+<span class="nc" id="L123">                    played.setBackgroundColor(view.getResources().getColor(R.color.purple_500));</span>
+<span class="nc" id="L124">                    played.setTextColor(view.getResources().getColor(R.color.yellow));</span>
+<span class="nc" id="L125">                    won.setBackgroundColor(view.getResources().getColor(R.color.yellow));</span>
+<span class="nc" id="L126">                    won.setTextColor(view.getResources().getColor(R.color.purple_500));</span>
+<span class="nc bnc" id="L127" title="All 2 branches missed.">                    global.setBackgroundColor((isGlobal)?view.getResources().getColor(R.color.purple_500):view.getResources().getColor(R.color.yellow));</span>
+<span class="nc bnc" id="L128" title="All 2 branches missed.">                    global.setTextColor((!isGlobal)?view.getResources().getColor(R.color.purple_500):view.getResources().getColor(R.color.yellow));</span>
+<span class="nc bnc" id="L129" title="All 2 branches missed.">                    friends.setBackgroundColor((!isGlobal)?view.getResources().getColor(R.color.purple_500):view.getResources().getColor(R.color.yellow));</span>
+<span class="nc bnc" id="L130" title="All 2 branches missed.">                    friends.setTextColor((isGlobal)?view.getResources().getColor(R.color.purple_500):view.getResources().getColor(R.color.yellow));</span>
+<span class="nc" id="L131">                    isPlayed = true;</span>
+<span class="nc" id="L132">                    stat_name.setText(&quot;Games Played: &quot;);</span>
+<span class="nc" id="L133">                    sortGamesPlayed();</span>
+<span class="nc bnc" id="L134" title="All 2 branches missed.">                    displayUsers((isGlobal) ? userList : friendList, true);</span>
+                }
+<span class="nc" id="L136">            }</span>
+        });
+
+<span class="fc" id="L139">        global.setOnClickListener(new View.OnClickListener() {</span>
+            @Override
+            public void onClick(View view) {
+<span class="nc" id="L142">                team.setTextColor(view.getResources().getColor(R.color.purple_500));</span>
+<span class="nc" id="L143">                team.setBackgroundColor(view.getResources().getColor(R.color.yellow));</span>
+<span class="nc bnc" id="L144" title="All 2 branches missed.">                if(!isGlobal) {</span>
+<span class="nc" id="L145">                    global.setBackgroundColor(view.getResources().getColor(R.color.purple_500));</span>
+<span class="nc" id="L146">                    global.setTextColor(view.getResources().getColor(R.color.yellow));</span>
+<span class="nc" id="L147">                    friends.setBackgroundColor(view.getResources().getColor(R.color.yellow));</span>
+<span class="nc" id="L148">                    friends.setTextColor(view.getResources().getColor(R.color.purple_500));</span>
+<span class="nc bnc" id="L149" title="All 2 branches missed.">                    won.setBackgroundColor((!isPlayed)?view.getResources().getColor(R.color.purple_500):view.getResources().getColor(R.color.yellow));</span>
+<span class="nc bnc" id="L150" title="All 2 branches missed.">                    won.setTextColor((isPlayed)?view.getResources().getColor(R.color.purple_500):view.getResources().getColor(R.color.yellow));</span>
+<span class="nc bnc" id="L151" title="All 2 branches missed.">                    played.setBackgroundColor((isPlayed)?view.getResources().getColor(R.color.purple_500):view.getResources().getColor(R.color.yellow));</span>
+<span class="nc bnc" id="L152" title="All 2 branches missed.">                    played.setTextColor((!isPlayed)?view.getResources().getColor(R.color.purple_500):view.getResources().getColor(R.color.yellow));</span>
+<span class="nc" id="L153">                    isGlobal = true;</span>
+<span class="nc bnc" id="L154" title="All 2 branches missed.">                    stat_name.setText((isPlayed) ? &quot;Games Played: &quot; : &quot;Games Won: &quot;);</span>
+<span class="nc" id="L155">                    displayUsers(userList, isPlayed);</span>
+                }
+<span class="nc" id="L157">            }</span>
+        });
+
+<span class="fc" id="L160">        friends.setOnClickListener(new View.OnClickListener() {</span>
+            @Override
+            public void onClick(View view) {
+<span class="fc" id="L163">                team.setTextColor(view.getResources().getColor(R.color.purple_500));</span>
+<span class="fc" id="L164">                team.setBackgroundColor(view.getResources().getColor(R.color.yellow));</span>
+<span class="pc bpc" id="L165" title="1 of 2 branches missed.">                if(isGlobal) {</span>
+<span class="fc" id="L166">                    friends.setBackgroundColor(view.getResources().getColor(R.color.purple_500));</span>
+<span class="fc" id="L167">                    friends.setTextColor(view.getResources().getColor(R.color.yellow));</span>
+<span class="fc" id="L168">                    global.setBackgroundColor(view.getResources().getColor(R.color.yellow));</span>
+<span class="fc" id="L169">                    global.setTextColor(view.getResources().getColor(R.color.purple_500));</span>
+<span class="pc bpc" id="L170" title="1 of 2 branches missed.">                    won.setBackgroundColor((!isPlayed)?view.getResources().getColor(R.color.purple_500):view.getResources().getColor(R.color.yellow));</span>
+<span class="pc bpc" id="L171" title="1 of 2 branches missed.">                    won.setTextColor((isPlayed)?view.getResources().getColor(R.color.purple_500):view.getResources().getColor(R.color.yellow));</span>
+<span class="pc bpc" id="L172" title="1 of 2 branches missed.">                    played.setBackgroundColor((isPlayed)?view.getResources().getColor(R.color.purple_500):view.getResources().getColor(R.color.yellow));</span>
+<span class="pc bpc" id="L173" title="1 of 2 branches missed.">                    played.setTextColor((!isPlayed)?view.getResources().getColor(R.color.purple_500):view.getResources().getColor(R.color.yellow));</span>
+<span class="fc" id="L174">                    isGlobal = false;</span>
+<span class="pc bpc" id="L175" title="1 of 2 branches missed.">                    stat_name.setText((isPlayed) ? &quot;Games Played: &quot; : &quot;Games Won: &quot;);</span>
+<span class="fc" id="L176">                    displayUsers(friendList, isPlayed);</span>
+                }
+<span class="fc" id="L178">            }</span>
+        });
+
+<span class="fc" id="L181">        team.setOnClickListener(new View.OnClickListener() {</span>
+            @Override
+            public void onClick(View view) {
+<span class="nc" id="L184">                friends.setBackgroundColor(view.getResources().getColor(R.color.yellow));</span>
+<span class="nc" id="L185">                friends.setTextColor(view.getResources().getColor(R.color.purple_500));</span>
+<span class="nc" id="L186">                global.setBackgroundColor(view.getResources().getColor(R.color.yellow));</span>
+<span class="nc" id="L187">                global.setTextColor(view.getResources().getColor(R.color.purple_500));</span>
+<span class="nc" id="L188">                played.setBackgroundColor(view.getResources().getColor(R.color.yellow));</span>
+<span class="nc" id="L189">                played.setTextColor(view.getResources().getColor(R.color.purple_500));</span>
+<span class="nc" id="L190">                won.setBackgroundColor(view.getResources().getColor(R.color.yellow));</span>
+<span class="nc" id="L191">                won.setTextColor(view.getResources().getColor(R.color.purple_500));</span>
+<span class="nc" id="L192">                team.setTextColor(view.getResources().getColor(R.color.yellow));</span>
+<span class="nc" id="L193">                team.setBackgroundColor(view.getResources().getColor(R.color.purple_500));</span>
+<span class="nc" id="L194">                displayTeams();</span>
+<span class="nc" id="L195">            }</span>
+        });
+
+
+<span class="fc" id="L199">        return view;</span>
+    }
+
+    /**
+     * gets all of the users in the database and puts them all into a list of Users
+     */
+    private void getUsers() {
+
+<span class="fc" id="L207">        JsonArrayRequest request = new JsonArrayRequest(</span>
+                Request.Method.GET,
+                &quot;http://coms-309-029.class.las.iastate.edu:8080/user&quot;,
+                null,
+<span class="fc" id="L211">                new Response.Listener&lt;JSONArray&gt;() {</span>
+                    @Override
+                    public void onResponse(JSONArray response) {
+                        try {
+<span class="fc bfc" id="L215" title="All 2 branches covered.">                            for( int i = 0; i &lt; response.length(); i++) {</span>
+<span class="fc" id="L216">                                userList.add(new Friend(response.getJSONObject(i).getInt(&quot;id&quot;), response.getJSONObject(i).getString(&quot;username&quot;),</span>
+<span class="fc" id="L217">                                        response.getJSONObject(i).getInt(&quot;gamesPlayed&quot;), response.getJSONObject(i).getInt(&quot;gamesWon&quot;)));</span>
+<span class="pc bpc" id="L218" title="1 of 2 branches missed.">                                for(int j = 0; j &lt; UserData.getInstance().getFriendsList().length; j++) {</span>
+<span class="nc bnc" id="L219" title="All 2 branches missed.">                                    if(UserData.getInstance().getFriendsList()[j].getUserID() == response.getJSONObject(i).getInt(&quot;id&quot;))</span>
+<span class="nc" id="L220">                                        friendList.add(new Friend(response.getJSONObject(i).getInt(&quot;id&quot;), response.getJSONObject(i).getString(&quot;username&quot;),</span>
+<span class="nc" id="L221">                                                response.getJSONObject(i).getInt(&quot;gamesPlayed&quot;), response.getJSONObject(i).getInt(&quot;gamesWon&quot;)));</span>
+                                }
+<span class="fc bfc" id="L223" title="All 2 branches covered.">                                if(UserData.getInstance().getUserID() == response.getJSONObject(i).getInt(&quot;id&quot;))</span>
+<span class="fc" id="L224">                                    friendList.add(new Friend(response.getJSONObject(i).getInt(&quot;id&quot;), response.getJSONObject(i).getString(&quot;username&quot;),</span>
+<span class="fc" id="L225">                                            response.getJSONObject(i).getInt(&quot;gamesPlayed&quot;), response.getJSONObject(i).getInt(&quot;gamesWon&quot;)));</span>
+                            }
+<span class="nc" id="L227">                        } catch (JSONException e) {</span>
+<span class="nc" id="L228">                            e.printStackTrace();</span>
+<span class="fc" id="L229">                        }</span>
+
+<span class="fc" id="L231">                        sortGamesPlayed();</span>
+<span class="fc" id="L232">                        stat_name.setText(&quot;Games Played: &quot;);</span>
+<span class="fc" id="L233">                        displayUsers(userList, true);</span>
+<span class="fc" id="L234">                    }</span>
+                },
+<span class="fc" id="L236">                new Response.ErrorListener() {</span>
+                    @Override
+                    public void onErrorResponse(VolleyError error) {
+<span class="nc" id="L239">                    }</span>
+                }
+        );
+<span class="fc" id="L242">        Volley.newRequestQueue(requireContext()).add(request);</span>
+
+<span class="fc" id="L244">    }</span>
+
+    /**
+     * sorts the list of users by how many games they have played
+     */
+    private void sortGamesPlayed() {
+<span class="fc" id="L250">        List&lt;Friend&gt; temp = new ArrayList&lt;Friend&gt;();</span>
+<span class="fc" id="L251">        temp.add(userList.get(0));</span>
+<span class="fc bfc" id="L252" title="All 2 branches covered.">        for(int i = 1; i &lt; userList.size(); i++) {</span>
+            int j;
+<span class="fc bfc" id="L254" title="All 4 branches covered.">            for (j = 0; j &lt; temp.size() &amp;&amp; userList.get(i).getGamesPlayed() &lt; temp.get(j).getGamesPlayed(); j++);</span>
+<span class="fc" id="L255">            temp.add(j, userList.get(i));</span>
+        }
+<span class="fc" id="L257">        userList = temp;</span>
+
+<span class="fc" id="L259">        List&lt;Friend&gt; temp2 = new ArrayList&lt;Friend&gt;();</span>
+<span class="fc" id="L260">        temp2.add(friendList.get(0));</span>
+<span class="pc bpc" id="L261" title="1 of 2 branches missed.">        for(int i = 1; i &lt; friendList.size(); i++) {</span>
+            int j;
+<span class="nc bnc" id="L263" title="All 4 branches missed.">            for (j = 0; j &lt; temp2.size() &amp;&amp; friendList.get(i).getGamesPlayed() &lt; temp2.get(j).getGamesPlayed(); j++);</span>
+<span class="nc" id="L264">            temp2.add(j, friendList.get(i));</span>
+        }
+<span class="fc" id="L266">        friendList = temp2;</span>
+<span class="fc" id="L267">    }</span>
+
+    /**
+     * sorts the list of users by the amount of games they have won
+     */
+    private void sortGamesWon() {
+<span class="nc" id="L273">        List&lt;Friend&gt; temp = new ArrayList&lt;Friend&gt;();</span>
+<span class="nc" id="L274">        temp.add(userList.get(0));</span>
+<span class="nc bnc" id="L275" title="All 2 branches missed.">        for(int i = 1; i &lt; userList.size(); i++) {</span>
+            int j;
+<span class="nc bnc" id="L277" title="All 4 branches missed.">            for (j = 0; j &lt; temp.size() &amp;&amp; userList.get(i).getGamesWon() &lt; temp.get(j).getGamesWon(); j++);</span>
+<span class="nc" id="L278">            temp.add(j, userList.get(i));</span>
+        }
+<span class="nc" id="L280">        userList = temp;</span>
+
+<span class="nc" id="L282">        List&lt;Friend&gt; temp2 = new ArrayList&lt;Friend&gt;();</span>
+<span class="nc" id="L283">        temp2.add(friendList.get(0));</span>
+<span class="nc bnc" id="L284" title="All 2 branches missed.">        for(int i = 1; i &lt; friendList.size(); i++) {</span>
+            int j;
+<span class="nc bnc" id="L286" title="All 4 branches missed.">            for (j = 0; j &lt; temp2.size() &amp;&amp; friendList.get(i).getGamesWon() &lt; temp2.get(j).getGamesWon(); j++);</span>
+<span class="nc" id="L287">            temp2.add(j, friendList.get(i));</span>
+        }
+<span class="nc" id="L289">        friendList = temp2;</span>
+<span class="nc" id="L290">    }</span>
+
+    /**
+     * displays the list of users by username and stat on the screen
+     * It will display The name followed by either games played or games won
+     * This function is called every time any button is hit in the leaderboard
+     * screen
+     *
+     * @param list
+     * @param played
+     */
+    private void displayUsers(List&lt;Friend&gt; list, boolean played) {
+<span class="fc" id="L302">        board.removeViews(0, board.getChildCount());</span>
+<span class="fc bfc" id="L303" title="All 2 branches covered.">        for(int i = 0; i &lt; list.size(); i++) {</span>
+<span class="fc" id="L304">            LinearLayout layout = new LinearLayout(view.getContext());</span>
+<span class="fc" id="L305">            layout.setId(R.id.users);</span>
+<span class="fc" id="L306">            TextView tv = new TextView(view.getContext());</span>
+<span class="fc" id="L307">            tv.setLayoutParams( new ViewGroup.LayoutParams(500, 100));</span>
+<span class="fc" id="L308">            tv.setText(list.get(i).getUsername());</span>
+<span class="fc" id="L309">            tv.setTextColor(view.getResources().getColor(R.color.yellow));</span>
+<span class="fc" id="L310">            tv.setTextSize(25);</span>
+
+<span class="fc" id="L312">            Space sp = new Space(view.getContext());</span>
+<span class="fc" id="L313">            sp.setLayoutParams( new ViewGroup.LayoutParams(100, 100));</span>
+
+<span class="fc" id="L315">            TextView stats = new TextView(view.getContext());</span>
+<span class="fc" id="L316">            stats.setLayoutParams( new ViewGroup.LayoutParams(400, 100));</span>
+<span class="pc bpc" id="L317" title="1 of 2 branches missed.">            stats.setText(&quot;&quot;+((played)?list.get(i).getGamesPlayed():list.get(i).getGamesWon()));</span>
+<span class="fc" id="L318">            stats.setTextColor(view.getResources().getColor(R.color.yellow));</span>
+<span class="fc" id="L319">            stats.setTextSize(25);</span>
+
+<span class="fc" id="L321">            layout.addView(tv);</span>
+<span class="fc" id="L322">            layout.addView(sp);</span>
+<span class="fc" id="L323">            layout.addView(stats);</span>
+<span class="fc" id="L324">            board.addView(layout);</span>
+        }
+<span class="fc" id="L326">    }</span>
+
+    /**
+     * displays the list of users by username and stat on the screen
+     * It will display The name followed by either games played or games won
+     * This function is called every time any button is hit in the leaderboard
+     * screen
+     *
+     */
+    private void displayTeams() {
+<span class="nc" id="L336">        board.removeViews(0, board.getChildCount());</span>
+<span class="nc bnc" id="L337" title="All 2 branches missed.">        for(int i = 0; i &lt; teamList.size(); i++) {</span>
+<span class="nc" id="L338">            LinearLayout layout = new LinearLayout(view.getContext());</span>
+<span class="nc" id="L339">            TextView tv = new TextView(view.getContext());</span>
+<span class="nc" id="L340">            tv.setLayoutParams( new ViewGroup.LayoutParams(500, 100));</span>
+<span class="nc" id="L341">            tv.setText(teamList.get(i).getName());</span>
+<span class="nc" id="L342">            tv.setTextColor(view.getResources().getColor(R.color.yellow));</span>
+<span class="nc" id="L343">            tv.setTextSize(25);</span>
+
+<span class="nc" id="L345">            Space sp = new Space(view.getContext());</span>
+<span class="nc" id="L346">            sp.setLayoutParams( new ViewGroup.LayoutParams(100, 100));</span>
+
+<span class="nc" id="L348">            TextView stats = new TextView(view.getContext());</span>
+<span class="nc" id="L349">            stats.setLayoutParams( new ViewGroup.LayoutParams(400, 100));</span>
+<span class="nc" id="L350">            stats.setText(teamList.get(i).getWins()+&quot;&quot;);</span>
+<span class="nc" id="L351">            stats.setTextColor(view.getResources().getColor(R.color.yellow));</span>
+<span class="nc" id="L352">            stats.setTextSize(25);</span>
+
+<span class="nc" id="L354">            layout.addView(tv);</span>
+<span class="nc" id="L355">            layout.addView(sp);</span>
+<span class="nc" id="L356">            layout.addView(stats);</span>
+<span class="nc" id="L357">            board.addView(layout);</span>
+        }
+<span class="nc" id="L359">    }</span>
+
+
+    /**
+     * gets all of the users in the database and puts them all into a list of Users
+     */
+    private void getTeams() {
+<span class="fc" id="L366">        JsonArrayRequest request = new JsonArrayRequest(</span>
+                Request.Method.GET,
+                &quot;http://coms-309-029.class.las.iastate.edu:8080/teams&quot;,
+                null,
+<span class="fc" id="L370">                new Response.Listener&lt;JSONArray&gt;() {</span>
+                    @Override
+                    public void onResponse(JSONArray response) {
+                        try {
+<span class="fc bfc" id="L374" title="All 2 branches covered.">                            for (int i = 0; i &lt; response.length(); i++) {</span>
+<span class="fc" id="L375">                                teamList.add(new Team(response.getJSONObject(i).getString(&quot;teamName&quot;),</span>
+<span class="fc" id="L376">                                        response.getJSONObject(i).getInt(&quot;id&quot;),</span>
+<span class="fc" id="L377">                                        response.getJSONObject(i).getInt(&quot;wins&quot;)));</span>
+                            }
+<span class="nc" id="L379">                        } catch (JSONException e) {</span>
+<span class="nc" id="L380">                            e.printStackTrace();</span>
+<span class="fc" id="L381">                        }</span>
+<span class="fc" id="L382">                    }</span>
+                },
+<span class="fc" id="L384">                new Response.ErrorListener() {</span>
+                    @Override
+                    public void onErrorResponse(VolleyError error) {
+<span class="nc" id="L387">                    }</span>
+                }
+        );
+<span class="fc" id="L390">        Volley.newRequestQueue(requireContext()).add(request);</span>
+<span class="fc" id="L391">    }</span>
+
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.7.202105040129</span>Generated by the Android Gradle plugin 7.2.2</div></body></html>

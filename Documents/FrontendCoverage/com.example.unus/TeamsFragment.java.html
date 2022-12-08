@@ -1,0 +1,424 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>TeamsFragment.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=0;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">debug</a> &gt; <a href="index.source.html" class="el_package">com.example.unus</a> &gt; <span class="el_source">TeamsFragment.java</span></div><h1>TeamsFragment.java</h1><pre class="source lang-java linenums">package com.example.unus;
+
+import android.os.Bundle;
+import android.view.Gravity;
+import android.view.LayoutInflater;
+import android.view.View;
+import android.view.ViewGroup;
+import android.widget.Button;
+import android.widget.EditText;
+import android.widget.LinearLayout;
+import android.widget.PopupWindow;
+import android.widget.Space;
+import android.widget.TextView;
+
+import androidx.fragment.app.Fragment;
+
+import com.android.volley.Request;
+import com.android.volley.Response;
+import com.android.volley.VolleyError;
+import com.android.volley.toolbox.JsonArrayRequest;
+import com.android.volley.toolbox.JsonObjectRequest;
+import com.android.volley.toolbox.Volley;
+
+import org.json.JSONArray;
+import org.json.JSONException;
+import org.json.JSONObject;
+
+import java.util.ArrayList;
+import java.util.List;
+
+/**
+ * this class acts as the admin page for the app. you will have features such as deleting a user
+ * and lobby as well as changing their account information, including stats and friends
+ */
+
+<span class="fc" id="L36">public class TeamsFragment extends Fragment {</span>
+
+    private View view;
+    private List&lt;Team&gt; currTeamList;
+    private List&lt;Team&gt; newTeamList;
+    private LinearLayout displayList;
+    private TextView teamText;
+    private Button back;
+    private Button currTeams;
+    private Button newTeams;
+    private Button create;
+
+    private boolean isNew;
+
+    @Override
+    public void onCreate(Bundle savedInstanceState) {
+<span class="fc" id="L52">        super.onCreate(savedInstanceState);</span>
+<span class="fc" id="L53">    }</span>
+
+    @Override
+    public View onCreateView(LayoutInflater inflater, ViewGroup container,
+                             Bundle savedInstanceState) {
+<span class="fc" id="L58">        view = inflater.inflate(R.layout.fragment_teams, container, false);</span>
+<span class="fc" id="L59">        currTeamList = new ArrayList&lt;Team&gt;();</span>
+<span class="fc" id="L60">        newTeamList = new ArrayList&lt;Team&gt;();</span>
+<span class="fc" id="L61">        teamText = (TextView) view.findViewById(R.id.friend_reqs);</span>
+<span class="fc" id="L62">        displayList = (LinearLayout) view.findViewById(R.id.results);</span>
+<span class="fc" id="L63">        back = (Button) view.findViewById(R.id.backbutton);</span>
+<span class="fc" id="L64">        currTeams = (Button) view.findViewById(R.id.users);</span>
+<span class="fc" id="L65">        newTeams = (Button) view.findViewById(R.id.lobbies);</span>
+<span class="fc" id="L66">        create = (Button) view.findViewById(R.id.create);</span>
+
+<span class="fc" id="L68">        getTeams();</span>
+
+<span class="fc" id="L70">        currTeams.setOnClickListener(new View.OnClickListener() {</span>
+            @Override
+            public void onClick(View view) {
+<span class="nc" id="L73">                currTeams.setBackgroundColor(view.getResources().getColor(R.color.purple_500));</span>
+<span class="nc" id="L74">                currTeams.setTextColor(view.getResources().getColor(R.color.yellow));</span>
+<span class="nc" id="L75">                newTeams.setBackgroundColor(view.getResources().getColor(R.color.yellow));</span>
+<span class="nc" id="L76">                newTeams.setTextColor(view.getResources().getColor(R.color.purple_500));</span>
+<span class="nc" id="L77">                displayTeams(currTeamList);</span>
+<span class="nc" id="L78">                isNew = false;</span>
+<span class="nc" id="L79">            }</span>
+        });
+
+<span class="fc" id="L82">        newTeams.setOnClickListener(new View.OnClickListener() {</span>
+            @Override
+            public void onClick(View view) {
+<span class="fc" id="L85">                newTeams.setBackgroundColor(view.getResources().getColor(R.color.purple_500));</span>
+<span class="fc" id="L86">                newTeams.setTextColor(view.getResources().getColor(R.color.yellow));</span>
+<span class="fc" id="L87">                currTeams.setBackgroundColor(view.getResources().getColor(R.color.yellow));</span>
+<span class="fc" id="L88">                currTeams.setTextColor(view.getResources().getColor(R.color.purple_500));</span>
+<span class="fc" id="L89">                displayTeams(newTeamList);</span>
+<span class="fc" id="L90">                isNew = true;</span>
+<span class="fc" id="L91">            }</span>
+        });
+
+<span class="fc" id="L94">        create.setOnClickListener(new View.OnClickListener() {</span>
+            @Override
+            public void onClick(View view) {
+<span class="nc" id="L97">                createTeamPopup();</span>
+<span class="nc" id="L98">            }</span>
+        });
+
+
+<span class="fc" id="L102">        back.setOnClickListener(new View.OnClickListener() {</span>
+            @Override
+            public void onClick(View view) {
+<span class="fc" id="L105">                getActivity().getSupportFragmentManager().beginTransaction().replace(R.id.fragmentContainerView, new UserProfileFragment()).commit();</span>
+<span class="fc" id="L106">            }</span>
+        });
+
+<span class="fc" id="L109">        return view;</span>
+    }
+
+    /**
+     * gets all of the users in the database and puts them all into a list of Users
+     */
+    private void getTeams() {
+<span class="fc" id="L116">        JsonArrayRequest request = new JsonArrayRequest(</span>
+                Request.Method.GET,
+                &quot;http://coms-309-029.class.las.iastate.edu:8080/teams&quot;,
+                null,
+<span class="fc" id="L120">                new Response.Listener&lt;JSONArray&gt;() {</span>
+                    @Override
+                    public void onResponse(JSONArray response) {
+                        try {
+<span class="fc bfc" id="L124" title="All 2 branches covered.">                            for (int i = 0; i &lt; response.length(); i++) {</span>
+<span class="pc bpc" id="L125" title="1 of 2 branches missed.">                                if (!response.getJSONObject(i).getBoolean(&quot;privacy&quot;)) {</span>
+<span class="fc" id="L126">                                    List&lt;Friend&gt; temp = new ArrayList&lt;Friend&gt;();</span>
+<span class="fc bfc" id="L127" title="All 2 branches covered.">                                    for (int j = 0; j &lt; response.getJSONObject(i).getJSONArray(&quot;players&quot;).length(); j++) {</span>
+<span class="fc" id="L128">                                        temp.add(new Friend(response.getJSONObject(i).getJSONArray(&quot;players&quot;).getJSONObject(j).getInt(&quot;id&quot;),</span>
+<span class="fc" id="L129">                                                response.getJSONObject(i).getJSONArray(&quot;players&quot;).getJSONObject(j).getString(&quot;username&quot;)));</span>
+                                    }
+<span class="fc" id="L131">                                    Team team = new Team(response.getJSONObject(i).getInt(&quot;id&quot;), response.getJSONObject(i).getString(&quot;teamName&quot;),</span>
+<span class="fc" id="L132">                                            new Friend(response.getJSONObject(i).getJSONObject(&quot;leader&quot;).getInt(&quot;id&quot;),</span>
+<span class="fc" id="L133">                                                    response.getJSONObject(i).getJSONObject(&quot;leader&quot;).getString(&quot;username&quot;)), temp);</span>
+<span class="fc" id="L134">                                    newTeamList.add(team);</span>
+<span class="fc bfc" id="L135" title="All 2 branches covered.">                                    for(Friend player : team.getPlayers()) {</span>
+<span class="pc bpc" id="L136" title="1 of 2 branches missed.">                                        if(player.getUserID() == UserData.getInstance().getUserID())</span>
+<span class="nc" id="L137">                                            currTeamList.add(team);</span>
+<span class="fc" id="L138">                                    }</span>
+<span class="pc bpc" id="L139" title="1 of 2 branches missed.">                                    if(team.getLeader().getUserID() == UserData.getInstance().getUserID())</span>
+<span class="nc" id="L140">                                        currTeamList.add(team);</span>
+                                }
+                            }
+<span class="nc" id="L143">                        } catch (JSONException e) {</span>
+<span class="nc" id="L144">                            e.printStackTrace();</span>
+<span class="fc" id="L145">                        }</span>
+<span class="fc" id="L146">                        displayTeams(currTeamList);</span>
+<span class="fc" id="L147">                    }</span>
+                },
+<span class="fc" id="L149">                new Response.ErrorListener() {</span>
+                    @Override
+                    public void onErrorResponse(VolleyError error) {
+<span class="nc" id="L152">                    }</span>
+                }
+        );
+<span class="fc" id="L155">        Volley.newRequestQueue(requireContext()).add(request);</span>
+<span class="fc" id="L156">    }</span>
+
+    /**
+     * displays the list of users by username and stat on the screen
+     * It will display The name followed by either games played or games won
+     * This function is called every time any button is hit in the leaderboard
+     * screen
+     *
+     * @param list
+     */
+    private void displayTeams(List&lt;Team&gt; list) {
+<span class="fc" id="L167">        displayList.removeViews(0, displayList.getChildCount());</span>
+<span class="fc bfc" id="L168" title="All 2 branches covered.">        for (int i = 0; i &lt; list.size(); i++) {</span>
+<span class="fc" id="L169">            LinearLayout layout = new LinearLayout(view.getContext());</span>
+<span class="fc" id="L170">            TextView tv = new TextView(view.getContext());</span>
+<span class="fc" id="L171">            tv.setLayoutParams(new ViewGroup.LayoutParams(500, 100));</span>
+<span class="fc" id="L172">            tv.setText(list.get(i).getName());</span>
+<span class="fc" id="L173">            tv.setTextColor(view.getResources().getColor(R.color.yellow));</span>
+<span class="fc" id="L174">            tv.setTextSize(25);</span>
+
+<span class="fc" id="L176">            Space sp = new Space(view.getContext());</span>
+<span class="fc" id="L177">            sp.setLayoutParams(new ViewGroup.LayoutParams(125, 100));</span>
+
+<span class="fc" id="L179">            int finalI = i;</span>
+
+<span class="fc" id="L181">            Button stats = new Button(view.getContext());</span>
+<span class="fc" id="L182">            stats.setLayoutParams(new ViewGroup.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT));</span>
+<span class="fc" id="L183">            stats.setText(&quot;view&quot;);</span>
+<span class="fc" id="L184">            stats.setBackgroundColor(this.getResources().getColor(R.color.purple_500));</span>
+<span class="fc" id="L185">            stats.setTextColor(view.getResources().getColor(R.color.yellow));</span>
+<span class="fc" id="L186">            stats.setTextSize(15);</span>
+<span class="fc" id="L187">            stats.setOnClickListener(new View.OnClickListener() {</span>
+                @Override
+                public void onClick(View view) {
+                    //AdminUserPopup popup = new AdminUserPopup(view, list.get(finalI));
+<span class="nc" id="L191">                    teamPopup(list.get(finalI));</span>
+<span class="nc" id="L192">                }</span>
+            });
+
+
+<span class="fc" id="L196">            layout.addView(tv);</span>
+<span class="fc" id="L197">            layout.addView(sp);</span>
+<span class="fc" id="L198">            layout.addView(stats);</span>
+<span class="fc" id="L199">            displayList.addView(layout);</span>
+        }
+<span class="fc" id="L201">    }</span>
+
+    /**
+     * This function will delete the user logged in from the database entirely
+     * including removing them from anyone else's friends list
+     */
+    private void leaveTeam(int id) {
+
+<span class="nc" id="L209">        JsonObjectRequest request = new JsonObjectRequest(</span>
+                Request.Method.PUT,
+<span class="nc" id="L211">                getString(R.string.remote_server_url, &quot;teams/leave-team&quot;, id + &quot;?userId=&quot; + UserData.getInstance().getUserID()),</span>
+                null,
+<span class="nc" id="L213">                new Response.Listener&lt;JSONObject&gt;() {</span>
+                    @Override
+                    public void onResponse(JSONObject response) {
+<span class="nc" id="L216">                        getActivity().getSupportFragmentManager().beginTransaction().replace(R.id.fragmentContainerView, new TeamsFragment()).commit();</span>
+<span class="nc" id="L217">                    }</span>
+                },
+<span class="nc" id="L219">                new Response.ErrorListener() {</span>
+                    @Override
+                    public void onErrorResponse(VolleyError error) {
+<span class="nc" id="L222">                        getActivity().getSupportFragmentManager().beginTransaction().replace(R.id.fragmentContainerView, new TeamsFragment()).commit();</span>
+<span class="nc" id="L223">                    }</span>
+                }
+        );
+
+<span class="nc" id="L227">        Volley.newRequestQueue(requireContext()).add(request);</span>
+<span class="nc" id="L228">    }</span>
+
+
+    public void teamPopup(Team team) {
+<span class="nc" id="L232">        boolean inTeam = false;</span>
+<span class="nc" id="L233">        LayoutInflater inflater = (LayoutInflater) view.getContext().getSystemService(view.getContext().LAYOUT_INFLATER_SERVICE);</span>
+<span class="nc" id="L234">        View popupView = inflater.inflate(R.layout.team_popup, null);</span>
+
+<span class="nc" id="L236">        TextView username = (TextView) popupView.findViewById(R.id.username);</span>
+<span class="nc" id="L237">        TextView userID = (TextView) popupView.findViewById(R.id.user_id);</span>
+<span class="nc" id="L238">        Button join = (Button) popupView.findViewById(R.id.join);</span>
+
+<span class="nc" id="L240">        username.setText(team.getName());</span>
+<span class="nc" id="L241">        userID.setText(Integer.toString(team.getId()));</span>
+
+<span class="nc" id="L243">        LinearLayout layout = (LinearLayout) popupView.findViewById(R.id.playerList);</span>
+<span class="nc" id="L244">        TextView display_leader = new TextView(popupView.getContext());</span>
+<span class="nc" id="L245">        display_leader.setLayoutParams(new ViewGroup.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT));</span>
+<span class="nc" id="L246">        display_leader.setText(team.getLeader().getUsername() + &quot;: Leader&quot;);</span>
+<span class="nc" id="L247">        display_leader.setTextColor(this.getResources().getColor(R.color.yellow));</span>
+<span class="nc" id="L248">        display_leader.setBackgroundColor(this.getResources().getColor(R.color.purple_500));</span>
+<span class="nc" id="L249">        display_leader.setTextSize(20);</span>
+<span class="nc" id="L250">        layout.addView(display_leader);</span>
+<span class="nc bnc" id="L251" title="All 2 branches missed.">        if (team.getLeader().getUserID() == UserData.getInstance().getUserID()) {</span>
+<span class="nc" id="L252">            inTeam = true;</span>
+        }
+
+<span class="nc bnc" id="L255" title="All 2 branches missed.">        for (int i = 0; i &lt; team.getPlayers().size(); i++) {</span>
+
+<span class="nc" id="L257">            TextView display_player = new TextView(popupView.getContext());</span>
+<span class="nc" id="L258">            display_player.setLayoutParams(new ViewGroup.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT));</span>
+<span class="nc" id="L259">            display_player.setText(team.getPlayers().get(i).getUsername());</span>
+<span class="nc" id="L260">            display_player.setTextColor(this.getResources().getColor(R.color.yellow));</span>
+<span class="nc" id="L261">            display_player.setTextSize(20);</span>
+
+<span class="nc bnc" id="L263" title="All 2 branches missed.">            if (team.getPlayers().get(i).getUserID() == UserData.getInstance().getUserID()) {</span>
+<span class="nc" id="L264">                inTeam = true;</span>
+            }
+
+<span class="nc" id="L267">            layout.addView(display_player, 1);</span>
+        }
+
+        //Make Inactive Items Outside Of PopupWindow
+<span class="nc" id="L271">        boolean focusable = true;</span>
+
+        //Create a window with our parameters
+<span class="nc" id="L274">        final PopupWindow popupWindow = new PopupWindow(popupView, 1000, 1600, focusable);</span>
+
+        //Set the location of the window on the screen
+<span class="nc" id="L277">        popupWindow.showAtLocation(view, Gravity.CENTER, 0, 0);</span>
+
+<span class="nc bnc" id="L279" title="All 2 branches missed.">        if (inTeam) {</span>
+<span class="nc" id="L280">            join.setText(&quot;Leave Team&quot;);</span>
+        }
+<span class="nc bnc" id="L282" title="All 2 branches missed.">        if (team.getLeader().getUserID() == UserData.getInstance().getUserID()) {</span>
+<span class="nc" id="L283">            join.setText(&quot;Delete Team&quot;);</span>
+        }
+
+<span class="nc" id="L286">        boolean finalInTeam = inTeam;</span>
+<span class="nc" id="L287">        join.setOnClickListener(new View.OnClickListener() {</span>
+            @Override
+            public void onClick(View view) {
+<span class="nc bnc" id="L290" title="All 2 branches missed.">                if (team.getLeader().getUserID() == UserData.getInstance().getUserID()) {</span>
+<span class="nc" id="L291">                    deleteTeam(team.getId());</span>
+<span class="nc" id="L292">                    getActivity().getSupportFragmentManager().beginTransaction().replace(R.id.fragmentContainerView, new TeamsFragment()).commit();</span>
+<span class="nc bnc" id="L293" title="All 2 branches missed.">                } else if (finalInTeam) {</span>
+<span class="nc" id="L294">                    leaveTeam(team.getId());</span>
+                } else {
+<span class="nc" id="L296">                    joinTeam(team.getId());</span>
+                }
+<span class="nc" id="L298">                popupWindow.dismiss();</span>
+<span class="nc" id="L299">            }</span>
+        });
+
+<span class="nc" id="L302">    }</span>
+
+    public void joinTeam(int teamId) {
+<span class="nc" id="L305">        JsonObjectRequest request = new JsonObjectRequest(</span>
+                Request.Method.PUT,
+<span class="nc" id="L307">                getString(R.string.remote_server_url, &quot;teams/join-team/&quot;, teamId + &quot;?userId=&quot; + UserData.getInstance().getUserID()),</span>
+                null,
+<span class="nc" id="L309">                new Response.Listener&lt;JSONObject&gt;() {</span>
+                    @Override
+                    public void onResponse(JSONObject response) {
+<span class="nc" id="L312">                        getActivity().getSupportFragmentManager().beginTransaction().replace(R.id.fragmentContainerView, new TeamsFragment()).commit();</span>
+<span class="nc" id="L313">                    }</span>
+                },
+<span class="nc" id="L315">                new Response.ErrorListener() {</span>
+                    @Override
+                    public void onErrorResponse(VolleyError error) {
+<span class="nc" id="L318">                        getActivity().getSupportFragmentManager().beginTransaction().replace(R.id.fragmentContainerView, new TeamsFragment()).commit();</span>
+<span class="nc" id="L319">                    }</span>
+                }
+        );
+
+<span class="nc" id="L323">        Volley.newRequestQueue(requireContext()).add(request);</span>
+<span class="nc" id="L324">    }</span>
+
+    public void deleteTeam(int id) {
+<span class="nc" id="L327">        JsonObjectRequest request = new JsonObjectRequest(</span>
+                Request.Method.DELETE,
+<span class="nc" id="L329">                getString(R.string.remote_server_url, &quot;teams/delete-team&quot;, id+&quot;?userId=&quot;+UserData.getInstance().getUserID()),</span>
+                null,
+                null,
+                null
+        );
+
+<span class="nc" id="L335">        Volley.newRequestQueue(requireContext()).add(request);</span>
+<span class="nc" id="L336">    }</span>
+
+    public void createTeam(String name, boolean isPrivate) throws JSONException {
+<span class="nc" id="L339">        JSONObject object = new JSONObject();</span>
+<span class="nc" id="L340">        object.put(&quot;teamName&quot;, name);</span>
+<span class="nc" id="L341">        object.put(&quot;isPrivate&quot;, UserData.getInstance());</span>
+<span class="nc" id="L342">        object.put(&quot;isPrivate&quot;, isPrivate);</span>
+<span class="nc" id="L343">        JsonObjectRequest request = new JsonObjectRequest(</span>
+                Request.Method.POST,
+<span class="nc" id="L345">                getString(R.string.remote_server_url, &quot;teams&quot;, &quot;create-team?userId=&quot; + UserData.getInstance().getUserID()),</span>
+                object,
+<span class="nc" id="L347">                new Response.Listener&lt;JSONObject&gt;() {</span>
+                    @Override
+                    public void onResponse(JSONObject response) {
+                        try {
+<span class="nc bnc" id="L351" title="All 2 branches missed.">                            if(response.getString(&quot;message&quot;).equals(&quot;success&quot;)) {</span>
+<span class="nc" id="L352">                                getActivity().getSupportFragmentManager().beginTransaction().replace(R.id.fragmentContainerView, new TeamsFragment()).commit();</span>
+                            } else {
+<span class="nc" id="L354">                                teamText.setText(&quot;Already a Leader&quot;);</span>
+                            }
+<span class="nc" id="L356">                        } catch (JSONException e) {</span>
+<span class="nc" id="L357">                            e.printStackTrace();</span>
+<span class="nc" id="L358">                            teamText.setText(&quot;Error&quot;);</span>
+<span class="nc" id="L359">                        }</span>
+<span class="nc" id="L360">                    }</span>
+                },
+<span class="nc" id="L362">                new Response.ErrorListener() {</span>
+                    @Override
+                    public void onErrorResponse(VolleyError error) {
+<span class="nc" id="L365">                        getActivity().getSupportFragmentManager().beginTransaction().replace(R.id.fragmentContainerView, new TeamsFragment()).commit();</span>
+<span class="nc" id="L366">                    }</span>
+                }
+        );
+
+<span class="nc" id="L370">        Volley.newRequestQueue(requireContext()).add(request);</span>
+<span class="nc" id="L371">    }</span>
+
+    public void createTeamPopup() {
+<span class="nc" id="L374">        final boolean[] isPrivate = {false};</span>
+        //Create a View object yourself through inflater
+<span class="nc" id="L376">        LayoutInflater inflater = (LayoutInflater) view.getContext().getSystemService(view.getContext().LAYOUT_INFLATER_SERVICE);</span>
+<span class="nc" id="L377">        View popupView = inflater.inflate(R.layout.team_create_layout, null);</span>
+
+        //Make Inactive Items Outside Of PopupWindow
+<span class="nc" id="L380">        boolean focusable = true;</span>
+
+        //Create a window with our parameters
+<span class="nc" id="L383">        final PopupWindow popupWindow = new PopupWindow(popupView, 1000, 1000, focusable);</span>
+
+        //Set the location of the window on the screen
+<span class="nc" id="L386">        popupWindow.showAtLocation(view, Gravity.CENTER, 50, 30);</span>
+
+<span class="nc" id="L388">        EditText name = popupView.findViewById(R.id.name_prompt);</span>
+<span class="nc" id="L389">        Button privacy = popupView.findViewById(R.id.privateButton);</span>
+
+<span class="nc" id="L391">        privacy.setOnClickListener(new View.OnClickListener() {</span>
+            @Override
+            public void onClick(View view) {
+<span class="nc bnc" id="L394" title="All 2 branches missed.">                isPrivate[0] = !isPrivate[0];</span>
+<span class="nc bnc" id="L395" title="All 2 branches missed.">                if(isPrivate[0]) {</span>
+<span class="nc" id="L396">                    privacy.setBackgroundColor(view.getResources().getColor(R.color.purple_500));</span>
+<span class="nc" id="L397">                    privacy.setTextColor(view.getResources().getColor(R.color.yellow));</span>
+<span class="nc" id="L398">                    privacy.setText(&quot;Private(on)&quot;);</span>
+                } else {
+<span class="nc" id="L400">                    privacy.setBackgroundColor(view.getResources().getColor(R.color.yellow));</span>
+<span class="nc" id="L401">                    privacy.setTextColor(view.getResources().getColor(R.color.purple_500));</span>
+<span class="nc" id="L402">                    privacy.setText(&quot;Private(off)&quot;);</span>
+                }
+<span class="nc" id="L404">            }</span>
+        });
+
+<span class="nc" id="L407">        Button create = (Button) popupView.findViewById(R.id.create);</span>
+<span class="nc" id="L408">        create.setOnClickListener(new View.OnClickListener() {</span>
+            @Override
+            public void onClick(View view) {
+
+                try {
+<span class="nc bnc" id="L413" title="All 2 branches missed.">                    if(name.getText().toString() != null) {</span>
+<span class="nc" id="L414">                        createTeam(name.getText().toString(), isPrivate[0]);</span>
+<span class="nc" id="L415">                        popupWindow.dismiss();</span>
+                    }
+<span class="nc" id="L417">                } catch (JSONException e) {</span>
+<span class="nc" id="L418">                    e.printStackTrace();</span>
+<span class="nc" id="L419">                }</span>
+<span class="nc" id="L420">            }</span>
+        });
+<span class="nc" id="L422">    }</span>
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.7.202105040129</span>Generated by the Android Gradle plugin 7.2.2</div></body></html>

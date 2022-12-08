@@ -1,0 +1,458 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>GameLobbyFragment.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=0;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">debug</a> &gt; <a href="index.source.html" class="el_package">com.example.unus</a> &gt; <span class="el_source">GameLobbyFragment.java</span></div><h1>GameLobbyFragment.java</h1><pre class="source lang-java linenums">package com.example.unus;
+
+import android.content.res.ColorStateList;
+import android.os.Bundle;
+
+import androidx.fragment.app.Fragment;
+
+import android.view.Gravity;
+import android.view.LayoutInflater;
+import android.view.View;
+import android.view.ViewGroup;
+import android.widget.Button;
+import android.widget.ImageView;
+import android.widget.LinearLayout;
+import android.widget.PopupWindow;
+import android.widget.Space;
+import android.widget.TextView;
+
+import com.android.volley.Request;
+import com.android.volley.Response;
+import com.android.volley.VolleyError;
+import com.android.volley.toolbox.JsonObjectRequest;
+import com.android.volley.toolbox.Volley;
+
+import org.json.JSONArray;
+import org.json.JSONException;
+import org.json.JSONObject;
+
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.HashMap;
+
+/**
+ * Fragment used to handle the pre-game lobby
+ *
+ * @author Isaac Blandin
+ */
+public class GameLobbyFragment extends Fragment {
+
+    View view;
+    ArrayList&lt;Integer&gt; playerIds;
+    HashMap&lt;Integer, String&gt; usernames;
+    int gameLobbyId;
+
+    TextView playerCountDisp;
+    Button startButton;
+
+    boolean isHost;
+<span class="fc" id="L49">    boolean prefill = false;</span>
+
+    boolean userIsReady;
+<span class="fc" id="L52">    int numPlayersReady = 0;</span>
+    boolean canStart;
+
+    MainActivity mainActivity;
+
+<span class="fc" id="L57">    public GameLobbyFragment() {</span>
+        // Required empty public constructor
+<span class="fc" id="L59">    }</span>
+
+    @Override
+    public void onCreate(Bundle savedInstanceState) {
+<span class="fc" id="L63">        super.onCreate(savedInstanceState);</span>
+<span class="fc" id="L64">    }</span>
+
+    @Override
+    public View onCreateView(LayoutInflater inflater, ViewGroup container,
+                             Bundle savedInstanceState) {
+
+<span class="fc" id="L70">        view = inflater.inflate(R.layout.fragment_game_lobby, container, false);</span>
+
+<span class="pc bpc" id="L72" title="1 of 2 branches missed.">        if (this.getArguments() != null){</span>
+<span class="fc" id="L73">            Bundle bundle = this.getArguments();</span>
+<span class="fc" id="L74">            gameLobbyId = bundle.getInt(&quot;lobbyId&quot;);</span>
+<span class="fc" id="L75">            isHost = bundle.getBoolean(&quot;isHost&quot;);</span>
+<span class="fc" id="L76">        } else {</span>
+<span class="nc" id="L77">            gameLobbyId = -1;</span>
+<span class="nc" id="L78">            getActivity().getSupportFragmentManager().beginTransaction().replace(R.id.fragmentContainerView, new MainMenuFragment()).commit();</span>
+        }
+
+        //declare a main activity to call the web socket
+<span class="fc" id="L82">        mainActivity = (MainActivity)getActivity();</span>
+<span class="fc" id="L83">        mainActivity.connectWebSocket(gameLobbyId);</span>
+
+<span class="fc" id="L85">        usernames = new HashMap&lt;Integer, String&gt;();</span>
+
+<span class="fc" id="L87">        playerIds = new ArrayList&lt;Integer&gt;();</span>
+<span class="pc bpc" id="L88" title="1 of 2 branches missed.">        if (isHost) {</span>
+<span class="fc" id="L89">            playerIds.add(UserData.getInstance().getUserID());</span>
+<span class="fc" id="L90">            addPlayer(UserData.getInstance().getUserID());</span>
+        }
+
+<span class="fc" id="L93">        playerCountDisp = view.findViewById(R.id.player_count);</span>
+<span class="fc" id="L94">        playerCountDisp.setText(getString(R.string.player_count, playerIds.size()));</span>
+
+<span class="fc" id="L96">        TextView gameCodeDisp = view.findViewById(R.id.game_code);</span>
+<span class="fc" id="L97">        gameCodeDisp.setText(getString(R.string.game_code, Integer.toString(gameLobbyId)));</span>
+
+        //add listener to leave button
+<span class="fc" id="L100">        ImageView leaveButton = (ImageView) view.findViewById(R.id.leave_lobby);</span>
+<span class="fc" id="L101">        leaveButton.setOnClickListener(new View.OnClickListener() {</span>
+            @Override
+            public void onClick(View view) {
+                try {
+<span class="fc" id="L105">                    leaveGame();</span>
+<span class="nc" id="L106">                } catch (JSONException e) {</span>
+<span class="nc" id="L107">                    e.printStackTrace();</span>
+<span class="fc" id="L108">                }</span>
+<span class="fc" id="L109">            }</span>
+        });
+
+        //add listener to chat button
+<span class="fc" id="L113">        View chatButton = view.findViewById(R.id.lobby_chat);</span>
+<span class="fc" id="L114">        chatButton.setOnClickListener(new View.OnClickListener() {</span>
+            @Override
+            public void onClick(View view) {
+<span class="fc" id="L117">                ChatLayout cl = new ChatLayout(view);</span>
+<span class="fc" id="L118">            }</span>
+        });
+
+        //add listener to start game button
+<span class="fc" id="L122">        startButton = view.findViewById(R.id.start_ready_game_button);</span>
+<span class="fc" id="L123">        startButton.setOnClickListener(new View.OnClickListener() {</span>
+            @Override
+            public void onClick(View view) {
+<span class="pc bpc" id="L126" title="1 of 2 branches missed.">                if (isHost) {</span>
+<span class="pc bpc" id="L127" title="1 of 2 branches missed.">                    if (canStart) {</span>
+<span class="nc" id="L128">                        JSONObject startMessage = new JSONObject();</span>
+                        try {
+<span class="nc" id="L130">                            startMessage.put(&quot;start&quot;, true);</span>
+<span class="nc" id="L131">                        } catch (JSONException e) {</span>
+<span class="nc" id="L132">                            e.printStackTrace();</span>
+<span class="nc" id="L133">                        }</span>
+<span class="nc" id="L134">                        mainActivity.sendMessage(startMessage);</span>
+
+<span class="nc" id="L136">                        startGame(true);</span>
+<span class="nc" id="L137">                    }</span>
+                } else {
+<span class="nc" id="L139">                    JSONObject readyJson = new JSONObject();</span>
+<span class="nc bnc" id="L140" title="All 2 branches missed.">                    userIsReady = !userIsReady;</span>
+                    try {
+<span class="nc bnc" id="L142" title="All 2 branches missed.">                        if (!userIsReady){</span>
+<span class="nc" id="L143">                            startButton.setText(R.string.ready);</span>
+<span class="nc" id="L144">                            readyJson.put(&quot;ready&quot;, false);</span>
+                        } else {
+<span class="nc" id="L146">                            startButton.setText(R.string.unready);</span>
+<span class="nc" id="L147">                            readyJson.put(&quot;ready&quot;, true);</span>
+                        }
+<span class="nc" id="L149">                    } catch (JSONException e){</span>
+<span class="nc" id="L150">                        e.printStackTrace();</span>
+<span class="nc" id="L151">                    }</span>
+
+<span class="nc" id="L153">                    mainActivity.sendMessage(readyJson);</span>
+                }
+<span class="fc" id="L155">            }</span>
+        });
+
+<span class="pc bpc" id="L158" title="1 of 2 branches missed.">        if (!isHost){</span>
+<span class="nc" id="L159">            startButton.setText(R.string.ready);</span>
+        } else {
+<span class="fc" id="L161">            startButton.setText(R.string.waiting_for_players);</span>
+        }
+
+<span class="fc" id="L164">        return view;</span>
+    }
+
+    /**
+     * Helper method for addPlayer() that adds a display plate for a user into the game lobby UI which displays the username, a view profile button, and a kick button if you are the host.
+     *
+     * @param playerID id number of the player to be added to the UI
+     * @param username username of the player to be aded to the UI
+     */
+    private void addPlayerPlate(int playerID, String username){
+        //create horizontal linear layout
+<span class="fc" id="L175">        LinearLayout plate = new LinearLayout(view.getContext());</span>
+<span class="fc" id="L176">        plate.setTag(&quot;plate&quot;+playerID);</span>
+<span class="fc" id="L177">        plate.setLayoutParams(new ViewGroup.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT,</span>
+                ViewGroup.LayoutParams.WRAP_CONTENT));
+<span class="fc" id="L179">        plate.setOrientation(LinearLayout.HORIZONTAL);</span>
+        //create grey box behind plate
+<span class="fc" id="L181">        plate.setPadding(30,10,30,10);</span>
+<span class="fc" id="L182">        plate.setBackgroundColor(view.getContext().getResources().getColor(R.color.dark_gray));</span>
+
+        //add username display to plate
+<span class="fc" id="L185">        TextView usernameText = new TextView(view.getContext());</span>
+<span class="fc" id="L186">        usernameText.setLayoutParams(new ViewGroup.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.MATCH_PARENT));</span>
+<span class="fc" id="L187">        usernameText.setText(username);</span>
+<span class="fc" id="L188">        usernameText.setTextColor(view.getContext().getResources().getColor(R.color.white));</span>
+<span class="fc" id="L189">        usernameText.setTextSize(20);</span>
+<span class="fc" id="L190">        usernameText.setGravity(Gravity.CENTER_VERTICAL);</span>
+<span class="fc" id="L191">        plate.addView(usernameText);</span>
+
+        //add spacing
+<span class="fc" id="L194">        Space space = new Space(view.getContext());</span>
+<span class="fc" id="L195">        space.setLayoutParams(new LinearLayout.LayoutParams(0, ViewGroup.LayoutParams.MATCH_PARENT, 1));</span>
+<span class="fc" id="L196">        plate.addView(space);</span>
+
+        //add view profile button to the plate
+<span class="fc" id="L199">        Button viewUser = new Button(view.getContext());</span>
+<span class="fc" id="L200">        viewUser.setLayoutParams(new ViewGroup.LayoutParams(200, ViewGroup.LayoutParams.MATCH_PARENT));</span>
+<span class="fc" id="L201">        viewUser.setTextColor(view.getContext().getResources().getColor(R.color.yellow ));</span>
+<span class="fc" id="L202">        viewUser.setBackgroundTintList(ColorStateList.valueOf(view.getContext().getResources().getColor(R.color.purple_500)));</span>
+<span class="fc" id="L203">        viewUser.setText(&quot;view&quot;);</span>
+<span class="fc" id="L204">        viewUser.setTextSize(12);</span>
+<span class="fc" id="L205">        viewUser.setOnClickListener(new View.OnClickListener() {</span>
+            @Override
+            public void onClick(View view) {
+<span class="nc" id="L208">                userPopup(playerID);</span>
+<span class="nc" id="L209">            }</span>
+        });
+<span class="fc" id="L211">        plate.addView(viewUser);</span>
+
+        //add spacing
+<span class="fc" id="L214">        Space boxSpacing = new Space(view.getContext());</span>
+<span class="fc" id="L215">        boxSpacing.setTag(&quot;space&quot;+playerID);</span>
+
+        //add kick button if host
+<span class="pc bpc" id="L218" title="3 of 4 branches missed.">        if (playerID != UserData.getInstance().getUserID() &amp;&amp; isHost){</span>
+            //add kick player button to the plate
+<span class="nc" id="L220">            Button kickUser = new Button(view.getContext());</span>
+<span class="nc" id="L221">            kickUser.setLayoutParams(new ViewGroup.LayoutParams(200, ViewGroup.LayoutParams.MATCH_PARENT));</span>
+<span class="nc" id="L222">            kickUser.setTextColor(view.getContext().getResources().getColor(R.color.yellow ));</span>
+<span class="nc" id="L223">            kickUser.setBackgroundTintList(ColorStateList.valueOf(view.getContext().getResources().getColor(R.color.purple_500)));</span>
+<span class="nc" id="L224">            kickUser.setText(&quot;kick&quot;);</span>
+<span class="nc" id="L225">            kickUser.setTextSize(12);</span>
+<span class="nc" id="L226">            kickUser.setOnClickListener(new View.OnClickListener() {</span>
+                @Override
+                public void onClick(View view) {
+                    try {
+<span class="nc" id="L230">                        kickPlayer(plate, boxSpacing, playerID);</span>
+<span class="nc" id="L231">                    } catch (JSONException e) {</span>
+<span class="nc" id="L232">                        e.printStackTrace();</span>
+<span class="nc" id="L233">                    }</span>
+<span class="nc" id="L234">                }</span>
+            });
+<span class="nc" id="L236">            plate.addView(kickUser);</span>
+        }
+
+        //add plate to screen
+<span class="fc" id="L240">        LinearLayout playerDisp = view.findViewById(R.id.player_display);</span>
+<span class="fc" id="L241">        playerDisp.addView(plate);</span>
+        //add space between plates
+<span class="fc" id="L243">        boxSpacing.setLayoutParams(new ViewGroup.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, 20));</span>
+<span class="fc" id="L244">        playerDisp.addView(boxSpacing);</span>
+<span class="fc" id="L245">    }</span>
+
+    /**
+     * calls other helper methods for adding a player to the lobby based on user data retrieved from the server
+     *
+     * @param id id number for the player to be added
+     */
+    public void addPlayer(int id){
+
+<span class="fc" id="L254">        JsonObjectRequest request = new JsonObjectRequest(</span>
+                Request.Method.GET,
+<span class="fc" id="L256">                getString(R.string.remote_server_url, &quot;user&quot;, Integer.toString(id)),</span>
+                null,
+<span class="fc" id="L258">                new Response.Listener&lt;JSONObject&gt;() {</span>
+                    @Override
+                    public void onResponse(JSONObject response) {
+
+                        try {
+<span class="fc" id="L263">                            addPlayerPlate(response.getInt(&quot;id&quot;), response.getString(&quot;username&quot;));</span>
+<span class="fc" id="L264">                            usernames.put(id, response.getString(&quot;username&quot;));</span>
+
+<span class="nc" id="L266">                        } catch (JSONException e) {</span>
+<span class="nc" id="L267">                            e.printStackTrace();</span>
+<span class="fc" id="L268">                        }</span>
+<span class="fc" id="L269">                    }</span>
+                },
+<span class="fc" id="L271">                new Response.ErrorListener() {</span>
+                    @Override
+                    public void onErrorResponse(VolleyError error) {
+<span class="nc" id="L274">                    }</span>
+                }
+        );
+<span class="fc" id="L277">        Volley.newRequestQueue(requireContext()).add(request);</span>
+<span class="fc" id="L278">    }</span>
+
+    /**
+     * creates a popup with an account summary for a user based on their id
+     *
+     * @param id id number of account to be viewed
+     */
+    public void userPopup(int id) {
+<span class="nc" id="L286">        LayoutInflater inflater = (LayoutInflater) view.getContext().getSystemService(view.getContext().LAYOUT_INFLATER_SERVICE);</span>
+<span class="nc" id="L287">        View popupView = inflater.inflate(R.layout.profile_view_layout, null);</span>
+
+        //Make Inactive Items Outside Of PopupWindow
+<span class="nc" id="L290">        boolean focusable = true;</span>
+
+        //Create a window with our parameters
+<span class="nc" id="L293">        final PopupWindow popupWindow = new PopupWindow(popupView, 1000, 1000, focusable);</span>
+
+        //Set the location of the window on the screen
+<span class="nc" id="L296">        popupWindow.showAtLocation(view, Gravity.CENTER, 50, 30);</span>
+
+<span class="nc" id="L298">        JsonObjectRequest request = new JsonObjectRequest(</span>
+                Request.Method.GET,
+<span class="nc" id="L300">                getString(R.string.remote_server_url, &quot;user&quot;, Integer.toString(id)),</span>
+                null,
+<span class="nc" id="L302">                new Response.Listener&lt;JSONObject&gt;() {</span>
+                    @Override
+                    public void onResponse(JSONObject response) {
+
+                        try {
+<span class="nc" id="L307">                            ((TextView) popupView.findViewById(R.id.username)).setText(response.getString(&quot;username&quot;));</span>
+<span class="nc" id="L308">                            ((TextView) popupView.findViewById(R.id.user_id)).setText(getString(R.string.id_display, response.getInt(&quot;id&quot;)));</span>
+<span class="nc" id="L309">                            ((TextView) popupView.findViewById(R.id.games_played)).setText(getString(R.string.games_played_display, response.getInt(&quot;gamesPlayed&quot;)));</span>
+<span class="nc" id="L310">                            ((TextView) popupView.findViewById(R.id.games_won)).setText(getString(R.string.games_won_display, response.getInt(&quot;gamesWon&quot;)));</span>
+<span class="nc" id="L311">                        } catch (JSONException e) {</span>
+<span class="nc" id="L312">                            e.printStackTrace();</span>
+<span class="nc" id="L313">                        }</span>
+<span class="nc" id="L314">                    }</span>
+                },
+<span class="nc" id="L316">                new Response.ErrorListener() {</span>
+                    @Override
+                    public void onErrorResponse(VolleyError error) {
+
+<span class="nc" id="L320">                    }</span>
+                }
+        );
+
+<span class="nc" id="L324">        Volley.newRequestQueue(requireContext()).add(request);</span>
+
+<span class="nc" id="L326">    }</span>
+
+    /**
+     * disconnects the user from the websocket and sends back to the main menu
+     */
+    public void leaveGame() throws JSONException {
+
+        //send unready message if leaving and had readied already
+<span class="pc bpc" id="L334" title="3 of 4 branches missed.">        if (userIsReady &amp;&amp; !isHost){</span>
+<span class="nc" id="L335">            JSONObject jsonObject = new JSONObject();</span>
+<span class="nc" id="L336">            jsonObject.put(&quot;ready&quot;, false);</span>
+<span class="nc" id="L337">            mainActivity.sendMessage(jsonObject);</span>
+        }
+
+<span class="fc" id="L340">        mainActivity.disconnectWebSocket();</span>
+<span class="fc" id="L341">        getActivity().getSupportFragmentManager().beginTransaction().replace(R.id.fragmentContainerView, new MainMenuFragment()).commit();</span>
+<span class="fc" id="L342">    }</span>
+
+    /**
+     * disconnects the user from the websocket and sends them back to the main menu. Adds argument to create popup on the main menu
+     */
+    private void kicked(){
+<span class="nc" id="L348">        mainActivity.disconnectWebSocket();</span>
+
+<span class="nc" id="L350">        MainMenuFragment frag = new MainMenuFragment();</span>
+
+<span class="nc" id="L352">        Bundle bundle = new Bundle();</span>
+<span class="nc" id="L353">        bundle.putBoolean(&quot;kicked&quot;, true);</span>
+
+<span class="nc" id="L355">        frag.setArguments(bundle);</span>
+
+<span class="nc" id="L357">        getActivity().getSupportFragmentManager().beginTransaction().replace(R.id.fragmentContainerView, frag).commit();</span>
+
+<span class="nc" id="L359">    }</span>
+
+    private void startGame(boolean host){
+<span class="nc" id="L362">        GamePlayFragment frag = new GamePlayFragment();</span>
+
+<span class="nc" id="L364">        Collections.sort(playerIds);</span>
+
+<span class="nc" id="L366">        Bundle bundle = new Bundle();</span>
+<span class="nc" id="L367">        bundle.putBoolean(&quot;isHost&quot;, host);</span>
+<span class="nc" id="L368">        bundle.putIntegerArrayList(&quot;ids&quot;, playerIds);</span>
+<span class="nc" id="L369">        bundle.putSerializable(&quot;usernames&quot;, usernames);</span>
+<span class="nc" id="L370">        frag.setArguments(bundle);</span>
+
+<span class="nc" id="L372">        getActivity().getSupportFragmentManager().beginTransaction().replace(R.id.fragmentContainerView, frag, &quot;gameScreen&quot;).commit();</span>
+<span class="nc" id="L373">    }</span>
+
+    /**
+     * Removed the player from the lobby websocket and removes associated UI elements
+     *
+     * @param plate UI plate to be deleted
+     * @param space UI space to be deleted
+     * @param playerID id number of the user that is being kicked
+     * @throws JSONException
+     */
+    private void kickPlayer(View plate, Space space, int playerID) throws JSONException {
+<span class="nc" id="L384">        deletePlayerArray(playerID);</span>
+<span class="nc" id="L385">        mainActivity.kickUser(playerID);</span>
+<span class="nc" id="L386">    }</span>
+
+    /**
+     * public method called by the web socket controller in mainActivity. responds to recieved messages
+     *
+     * @param s String of message received from web socket
+     * @throws JSONException
+     */
+    public void onMessage(String s) throws JSONException {
+
+<span class="fc bfc" id="L396" title="All 2 branches covered.">        if (!s.isEmpty()) {</span>
+
+<span class="fc" id="L398">            JSONObject json = new JSONObject(s);</span>
+
+<span class="pc bpc" id="L400" title="2 of 4 branches missed.">            if (json.has(&quot;joined&quot;) &amp;&amp; json.getInt(&quot;joined&quot;) != UserData.getInstance().getUserID()) {</span>
+<span class="nc" id="L401">                addPlayer(json.getInt(&quot;joined&quot;));</span>
+<span class="nc" id="L402">                playerIds.add(json.getInt(&quot;joined&quot;));</span>
+
+<span class="nc bnc" id="L404" title="All 2 branches missed.">                if (isHost) {</span>
+<span class="nc" id="L405">                    mainActivity.updateLobby(playerIds);</span>
+                }
+<span class="pc bpc" id="L407" title="1 of 2 branches missed.">            } else if (json.has(&quot;left&quot;)) {</span>
+<span class="nc" id="L408">                LinearLayout playerDisp = view.findViewById(R.id.player_display);</span>
+<span class="nc" id="L409">                deletePlayerArray(json.getInt(&quot;left&quot;));</span>
+<span class="nc" id="L410">                playerDisp.removeView(view.findViewWithTag(&quot;plate&quot; + json.getInt(&quot;left&quot;)));</span>
+<span class="nc" id="L411">                playerDisp.removeView(view.findViewWithTag(&quot;space&quot; + json.getInt(&quot;left&quot;)));</span>
+<span class="pc bpc" id="L412" title="5 of 6 branches missed.">            } else if (json.has(&quot;ids&quot;) &amp;&amp; !isHost &amp;&amp; !prefill) {</span>
+
+<span class="nc" id="L414">                JSONArray array = json.getJSONArray(&quot;ids&quot;);</span>
+<span class="nc bnc" id="L415" title="All 2 branches missed.">                for (int i = 0; i &lt; array.length(); i++) {</span>
+<span class="nc" id="L416">                    addPlayer((int) array.get(i));</span>
+<span class="nc" id="L417">                    playerIds.add((int) array.get(i));</span>
+                }
+<span class="nc" id="L419">                prefill = true;</span>
+<span class="pc bpc" id="L420" title="3 of 4 branches missed.">            } else if (json.has(&quot;kicked&quot;) &amp;&amp; json.getInt(&quot;kicked&quot;) == UserData.getInstance().getUserID()) {</span>
+<span class="nc" id="L421">                kicked();</span>
+<span class="pc bpc" id="L422" title="3 of 4 branches missed.">            } else if (json.has(&quot;ready&quot;) &amp;&amp; isHost){</span>
+<span class="nc bnc" id="L423" title="All 2 branches missed.">                if (json.getBoolean(&quot;ready&quot;)){</span>
+<span class="nc" id="L424">                    numPlayersReady++;</span>
+                } else {
+<span class="nc" id="L426">                    numPlayersReady--;</span>
+                }
+
+<span class="nc bnc" id="L429" title="All 4 branches missed.">                if (numPlayersReady == playerIds.size() - 1 &amp;&amp; playerIds.size() &gt; 1){</span>
+<span class="nc" id="L430">                    startButton.setText(R.string.start_game);</span>
+<span class="nc" id="L431">                    canStart = true;</span>
+                } else {
+<span class="nc" id="L433">                    startButton.setText(R.string.waiting_for_players);</span>
+<span class="nc" id="L434">                    canStart = false;</span>
+                }
+<span class="pc bpc" id="L436" title="3 of 4 branches missed.">            } else if (json.has(&quot;start&quot;) &amp;&amp; !isHost){</span>
+<span class="nc" id="L437">                startGame(false);</span>
+            }
+
+<span class="fc" id="L440">            playerCountDisp.setText(getString(R.string.player_count, playerIds.size()));</span>
+        }
+<span class="fc" id="L442">    }</span>
+
+    /**
+     * Iterates through array of user ids and removes by the given id.
+     *
+     * @param id id number of user to be removed from the array
+     */
+    private void deletePlayerArray(int id){
+<span class="nc bnc" id="L450" title="All 2 branches missed.">        for (int i = 0; i &lt; playerIds.size(); i++){</span>
+<span class="nc bnc" id="L451" title="All 2 branches missed.">            if (playerIds.get(i).equals(id)){</span>
+<span class="nc" id="L452">                playerIds.remove(i);</span>
+            }
+        }
+<span class="nc" id="L455">    }</span>
+
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.7.202105040129</span>Generated by the Android Gradle plugin 7.2.2</div></body></html>

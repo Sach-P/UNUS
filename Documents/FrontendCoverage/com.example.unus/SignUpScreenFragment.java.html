@@ -1,0 +1,185 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>SignUpScreenFragment.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=0;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">debug</a> &gt; <a href="index.source.html" class="el_package">com.example.unus</a> &gt; <span class="el_source">SignUpScreenFragment.java</span></div><h1>SignUpScreenFragment.java</h1><pre class="source lang-java linenums">package com.example.unus;
+
+import android.os.Bundle;
+
+import androidx.fragment.app.Fragment;
+
+import android.view.LayoutInflater;
+import android.view.View;
+import android.view.ViewGroup;
+import android.widget.Button;
+import android.widget.EditText;
+import android.widget.TextView;
+
+import com.android.volley.Request;
+import com.android.volley.Response;
+import com.android.volley.VolleyError;
+import com.android.volley.toolbox.JsonObjectRequest;
+import com.android.volley.toolbox.Volley;
+
+import org.json.JSONException;
+import org.json.JSONObject;
+
+/**
+ * A fragment designed to allow the user to create a new account if they do not currently
+ * have an account for the app. It will require the user to pick a username along with a password.
+ * The password will have to be confirmed by the user. The credentials will be sent to the server
+ * to be checked whether it is already used.
+ *
+ * @author Isaac Blandin
+ */
+<span class="fc" id="L31">public class SignUpScreenFragment extends Fragment {</span>
+
+    TextView status;
+    EditText usernameField;
+    EditText passwordField;
+    EditText confirmPasswordField;
+
+    @Override
+    public void onCreate(Bundle savedInstanceState) {
+<span class="fc" id="L40">        super.onCreate(savedInstanceState);</span>
+<span class="fc" id="L41">    }</span>
+
+    @Override
+    public View onCreateView(LayoutInflater inflater, ViewGroup container,
+                             Bundle savedInstanceState) {
+
+<span class="fc" id="L47">        View view = inflater.inflate(R.layout.fragment_sign_up_screen, container, false);</span>
+
+        //initialize sign up screen's views
+<span class="fc" id="L50">        status = view.findViewById(R.id.signup_status);</span>
+<span class="fc" id="L51">        usernameField = view.findViewById(R.id.signup_username_field);</span>
+<span class="fc" id="L52">        passwordField = view.findViewById(R.id.signup_password_field);</span>
+<span class="fc" id="L53">        confirmPasswordField = view.findViewById(R.id.signup_confirm_password_field);</span>
+
+        //initialize signup button
+<span class="fc" id="L56">                Button signupButton = (Button)view.findViewById(R.id.signup_button);</span>
+<span class="fc" id="L57">                signupButton.setOnClickListener(new View.OnClickListener() {</span>
+                    @Override
+                    public void onClick(View view) {
+<span class="fc" id="L60">                        String username = usernameField.getText().toString();</span>
+<span class="fc" id="L61">                        String password = passwordField.getText().toString();</span>
+<span class="fc" id="L62">                        String confirmPassword = confirmPasswordField.getText().toString();</span>
+
+<span class="fc" id="L64">                status.setText(getString(R.string.validatingMessage));</span>
+
+<span class="pc bpc" id="L66" title="1 of 2 branches missed.">                if (username.isEmpty()){ //check for empty username field</span>
+<span class="nc" id="L67">                    status.setText(getString(R.string.no_username));</span>
+<span class="pc bpc" id="L68" title="1 of 2 branches missed.">                } else if (password.isEmpty()){ //check for empty password field</span>
+<span class="nc" id="L69">                    status.setText(getString(R.string.no_password));</span>
+<span class="pc bpc" id="L70" title="2 of 4 branches missed.">                } else if (password.length() &lt; 8 || !containsNumber(password)){ //check if password meets requirements</span>
+<span class="nc" id="L71">                    status.setText(getString(R.string.invalid_password));</span>
+<span class="pc bpc" id="L72" title="1 of 2 branches missed.">                } else if (!password.equals(confirmPassword)){ //check if confirm password field matches</span>
+<span class="nc" id="L73">                    status.setText(getString(R.string.password_mismatch));</span>
+                } else { //check with server if account can be created
+<span class="fc" id="L75">                    sendSignupPostRequest(username, password);</span>
+                }
+<span class="fc" id="L77">            }</span>
+        });
+
+        //initialize back button
+<span class="fc" id="L81">        Button backButton = (Button)view.findViewById(R.id.back_to_login);</span>
+<span class="fc" id="L82">        backButton.setOnClickListener(new View.OnClickListener() {</span>
+            @Override
+            public void onClick(View view) {
+<span class="nc" id="L85">                navigateToLogin();</span>
+<span class="nc" id="L86">            }</span>
+        });
+
+<span class="fc" id="L89">        return view;</span>
+    }
+
+    /**
+     * sends a post request with Strings for username and password to a
+     * url stored in the strings xml.
+     *
+     * @param username username to be sent to the server
+     * @param password password to be sent to the server
+     */
+    private void sendSignupPostRequest(String username, String password){
+        try{
+
+            //add login credentials to the response body
+<span class="fc" id="L103">            JSONObject requestBody = new JSONObject();</span>
+<span class="fc" id="L104">            requestBody.put(&quot;username&quot;, username);</span>
+<span class="fc" id="L105">            requestBody.put(&quot;password&quot;, password);</span>
+
+<span class="fc" id="L107">            JsonObjectRequest request = new JsonObjectRequest(</span>
+                    Request.Method.POST,
+<span class="fc" id="L109">                    getString(R.string.remote_server_url, &quot;signup&quot;, &quot;&quot;),</span>
+                    requestBody,
+<span class="fc" id="L111">                    new Response.Listener&lt;JSONObject&gt;() {</span>
+                        @Override
+                        public void onResponse(JSONObject response) {
+                            try {
+                                //check for passed or failed verification in the response
+<span class="pc bpc" id="L116" title="1 of 2 branches missed.">                                if (response.getString(&quot;message&quot;).equals(&quot;passed&quot;)){</span>
+                                    //change fragment to login
+<span class="fc" id="L118">                                    navigateToLogin(username);</span>
+                                } else {
+                                    //notify user of failed account creation or already taken username
+<span class="nc" id="L121">                                    status.setText(getString(R.string.username_unavailable));</span>
+                                }
+<span class="nc" id="L123">                            } catch (JSONException ex) {</span>
+<span class="nc" id="L124">                                status.setText(getString(R.string.signup_error));</span>
+<span class="fc" id="L125">                            }</span>
+<span class="fc" id="L126">                        }</span>
+                    },
+<span class="fc" id="L128">                    new Response.ErrorListener() {</span>
+                        @Override
+                        public void onErrorResponse(VolleyError error) {
+<span class="nc" id="L131">                            status.setText(getString(R.string.signup_error));</span>
+<span class="nc" id="L132">                        }</span>
+                    }
+            );
+
+<span class="fc" id="L136">            Volley.newRequestQueue(requireContext()).add(request);</span>
+
+<span class="nc" id="L138">        } catch(JSONException ex) {</span>
+<span class="nc" id="L139">            status.setText(getString(R.string.signup_error));</span>
+<span class="fc" id="L140">        }</span>
+<span class="fc" id="L141">    }</span>
+
+    /**
+     * changes screen back to the login screen with the username prefilled
+     *
+     * @param username username to be prefilled in the login screen
+     */
+    private void navigateToLogin(String username){
+
+<span class="fc" id="L150">        Bundle bundle = new Bundle();</span>
+<span class="fc" id="L151">        bundle.putString(&quot;username&quot;, username);</span>
+
+<span class="fc" id="L153">        LogInScreenFragment loginFrag = new LogInScreenFragment();</span>
+<span class="fc" id="L154">        loginFrag.setArguments(bundle);</span>
+
+<span class="fc" id="L156">        getActivity().getSupportFragmentManager().beginTransaction().replace(R.id.fragmentContainerView, loginFrag).commit();</span>
+<span class="fc" id="L157">    }</span>
+
+    /**
+     * changes screen back to unfilled login screen
+     */
+    private void navigateToLogin(){
+
+<span class="nc" id="L164">        LogInScreenFragment loginFrag = new LogInScreenFragment();</span>
+
+<span class="nc" id="L166">        getActivity().getSupportFragmentManager().beginTransaction().replace(R.id.fragmentContainerView, loginFrag).commit();</span>
+<span class="nc" id="L167">    }</span>
+
+    /**
+     * checks a string for a number, returns true if there is a number
+     *
+     * @param str string to be checked for numbers
+     *
+     * @return whether the string contains a number or not
+     */
+    private boolean containsNumber(String str){
+<span class="pc bpc" id="L177" title="1 of 2 branches missed.">        for (int i = 0; i &lt; str.length(); i++){</span>
+<span class="fc bfc" id="L178" title="All 2 branches covered.">            if (Character.isDigit(str.charAt(i))){</span>
+<span class="fc" id="L179">                return true;</span>
+            }
+        }
+<span class="nc" id="L182">        return false;</span>
+    }
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.7.202105040129</span>Generated by the Android Gradle plugin 7.2.2</div></body></html>

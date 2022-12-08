@@ -1,0 +1,277 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>FriendRequestFragment.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=0;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">debug</a> &gt; <a href="index.source.html" class="el_package">com.example.unus</a> &gt; <span class="el_source">FriendRequestFragment.java</span></div><h1>FriendRequestFragment.java</h1><pre class="source lang-java linenums">package com.example.unus;
+
+import android.os.Bundle;
+import android.view.Gravity;
+import android.view.LayoutInflater;
+import android.view.View;
+import android.view.ViewGroup;
+import android.widget.Button;
+import android.widget.LinearLayout;
+import android.widget.PopupWindow;
+import android.widget.Space;
+import android.widget.TextView;
+
+import androidx.fragment.app.Fragment;
+
+import com.android.volley.AuthFailureError;
+import com.android.volley.Request;
+import com.android.volley.Response;
+import com.android.volley.VolleyError;
+import com.android.volley.toolbox.JsonObjectRequest;
+import com.android.volley.toolbox.JsonRequest;
+import com.android.volley.toolbox.StringRequest;
+import com.android.volley.toolbox.Volley;
+
+import org.json.JSONException;
+import org.json.JSONObject;
+
+import java.io.UnsupportedEncodingException;
+
+
+/**
+ * This fragment will get all of the incoming friend requests and
+ * display them so that the user can decide to either accept or decline then
+ *
+ * @author Abe Demo
+ */
+
+public class FriendRequestFragment extends Fragment {
+
+    private View view;
+    private Button back;
+    private TextView friend_reqs;
+
+<span class="fc" id="L44">    public FriendRequestFragment() {</span>
+        // Required empty public constructor
+<span class="fc" id="L46">    }</span>
+
+    @Override
+    public void onCreate(Bundle savedInstanceState) {
+<span class="fc" id="L50">        super.onCreate(savedInstanceState);</span>
+<span class="fc" id="L51">    }</span>
+
+    @Override
+    public View onCreateView(LayoutInflater inflater, ViewGroup container,
+                             Bundle savedInstanceState) {
+<span class="fc" id="L56">        view = inflater.inflate(R.layout.fragment_friend_request, container, false);</span>
+<span class="fc" id="L57">        back = (Button) view.findViewById(R.id.backbutton);</span>
+<span class="fc" id="L58">        friend_reqs = (TextView) view.findViewById(R.id.friend_reqs);</span>
+<span class="fc" id="L59">        back.setOnClickListener(new View.OnClickListener() {</span>
+            @Override
+            public void onClick(View view) {
+<span class="nc" id="L62">                getActivity().getSupportFragmentManager().beginTransaction().replace(R.id.fragmentContainerView, new UserProfileFragment()).commit();</span>
+<span class="nc" id="L63">            }</span>
+        });
+        try {
+<span class="fc" id="L66">        JSONObject object = new JSONObject();</span>
+<span class="fc" id="L67">            object.put(&quot;username&quot;, UserData.getInstance().getUsername());</span>
+<span class="fc" id="L68">            object.put(&quot;password&quot;, UserData.getInstance().getPassword());</span>
+<span class="fc" id="L69">        JsonObjectRequest request = new JsonObjectRequest(</span>
+                Request.Method.POST,
+                &quot;http://coms-309-029.class.las.iastate.edu:8080/login&quot;,
+                object,
+<span class="fc" id="L73">                new Response.Listener&lt;JSONObject&gt;() {</span>
+                    @Override
+                    public void onResponse(JSONObject response) {
+                        try {
+<span class="fc" id="L77">                            friend_reqs.setText(&quot;Friend Requests (&quot;+response.getJSONObject(&quot;user&quot;).getJSONArray(&quot;receivedFriendRequests&quot;).length() +&quot;): &quot;);</span>
+<span class="pc bpc" id="L78" title="1 of 2 branches missed.">                            for(int i = 0; i &lt; response.getJSONObject(&quot;user&quot;).getJSONArray(&quot;receivedFriendRequests&quot;).length(); i++) {</span>
+<span class="nc" id="L79">                                createRequest(response.getJSONObject(&quot;user&quot;).getJSONArray(&quot;receivedFriendRequests&quot;).getJSONObject(i).getString(&quot;username&quot;), response.getJSONObject(&quot;user&quot;).getJSONArray(&quot;receivedFriendRequests&quot;).getJSONObject(i).getInt(&quot;friendId&quot;));</span>
+                            }
+
+<span class="nc" id="L82">                        } catch (JSONException e) {</span>
+<span class="nc" id="L83">                            e.printStackTrace();</span>
+<span class="fc" id="L84">                        }</span>
+<span class="fc" id="L85">                    }</span>
+                },
+<span class="fc" id="L87">                new Response.ErrorListener() {</span>
+                    @Override
+                    public void onErrorResponse(VolleyError error) {
+<span class="nc" id="L90">                        friend_reqs.setText(&quot;error&quot;);</span>
+<span class="nc" id="L91">                    }</span>
+                }
+        );
+
+<span class="fc" id="L95">        Volley.newRequestQueue(requireContext()).add(request);</span>
+
+<span class="nc" id="L97">        } catch (JSONException e) {</span>
+<span class="nc" id="L98">            e.printStackTrace();</span>
+<span class="fc" id="L99">        }</span>
+
+
+<span class="fc" id="L102">        return view;</span>
+    }
+
+    /**
+     * Takes a request that the user has and turns it into a popup
+     * that the user can either accept or decline using buttons
+     * @param username
+     * @param id
+     */
+    private void createRequest(String username, int id) {
+<span class="nc" id="L112">        LinearLayout newLayout = new LinearLayout(view.getContext());</span>
+<span class="nc" id="L113">        newLayout.setLayoutParams(new ViewGroup.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT,</span>
+                        ViewGroup.LayoutParams.WRAP_CONTENT));
+<span class="nc" id="L115">        newLayout.setGravity(Gravity.CENTER);</span>
+
+<span class="nc" id="L117">        LinearLayout fullBox = new LinearLayout(view.getContext());</span>
+<span class="nc" id="L118">        fullBox.setLayoutParams(new ViewGroup.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT,</span>
+                ViewGroup.LayoutParams.WRAP_CONTENT));
+<span class="nc" id="L120">        fullBox.setOrientation(LinearLayout.VERTICAL);</span>
+<span class="nc" id="L121">        fullBox.setPadding(30,10,30,30);</span>
+<span class="nc" id="L122">        fullBox.setBackgroundColor(getResources().getColor(R.color.dark_gray));</span>
+
+<span class="nc" id="L124">        TextView user = new TextView(view.getContext());</span>
+<span class="nc" id="L125">        Button viewProf = new Button(view.getContext());</span>
+<span class="nc" id="L126">        Button accept = new Button(view.getContext());</span>
+<span class="nc" id="L127">        Button decline = new Button(view.getContext());</span>
+
+<span class="nc" id="L129">        user.setTextSize(30);</span>
+<span class="nc" id="L130">        user.setText(username);</span>
+<span class="nc" id="L131">        user.setTextAlignment(View.TEXT_ALIGNMENT_CENTER);</span>
+<span class="nc" id="L132">        user.setTextColor(getResources().getColor(R.color.purple_500));</span>
+
+<span class="nc" id="L134">        viewProf.setTextSize(20);</span>
+<span class="nc" id="L135">        viewProf.setText(&quot;View&quot;);</span>
+<span class="nc" id="L136">        viewProf.setTextColor(getResources().getColor(R.color.yellow));</span>
+<span class="nc" id="L137">        viewProf.setBackgroundColor(getResources().getColor(R.color.purple_500));</span>
+
+<span class="nc" id="L139">        accept.setTextSize(20);</span>
+<span class="nc" id="L140">        accept.setText(&quot;Accept&quot;);</span>
+<span class="nc" id="L141">        accept.setTextColor(getResources().getColor(R.color.yellow));</span>
+<span class="nc" id="L142">        accept.setBackgroundColor(getResources().getColor(R.color.purple_500));</span>
+
+<span class="nc" id="L144">        decline.setTextSize(20);</span>
+<span class="nc" id="L145">        decline.setText(&quot;Decline&quot;);</span>
+<span class="nc" id="L146">        decline.setTextColor(getResources().getColor(R.color.yellow));</span>
+<span class="nc" id="L147">        decline.setBackgroundColor(getResources().getColor(R.color.purple_500));</span>
+
+<span class="nc" id="L149">        viewProf.setOnClickListener(new View.OnClickListener() {</span>
+            @Override
+            public void onClick(View view) {
+<span class="nc" id="L152">                getUser(id);</span>
+<span class="nc" id="L153">            }</span>
+        });
+<span class="nc" id="L155">        accept.setOnClickListener(new View.OnClickListener() {</span>
+            @Override
+            public void onClick(View view) {
+<span class="nc" id="L158">                fullBox.setVisibility(View.GONE);</span>
+<span class="nc" id="L159">                Friend newFriend = new Friend(id, username);</span>
+<span class="nc" id="L160">                Friend[] temp = new Friend[UserData.getInstance().getFriendsList().length+1];</span>
+<span class="nc bnc" id="L161" title="All 2 branches missed.">                for(int i = 0; i &lt; UserData.getInstance().getFriendsList().length; i++) {</span>
+<span class="nc" id="L162">                    temp[i]= UserData.getInstance().getFriendsList()[i];</span>
+                }
+<span class="nc" id="L164">                temp[UserData.getInstance().getFriendsList().length] = newFriend;</span>
+<span class="nc" id="L165">                UserData.getInstance().setFriendsList(temp);</span>
+<span class="nc" id="L166">                accept_decline(true, username, id); //true will equate to accepting the request</span>
+<span class="nc" id="L167">            }</span>
+        });
+<span class="nc" id="L169">        decline.setOnClickListener(new View.OnClickListener() {</span>
+            @Override
+            public void onClick(View view) {
+<span class="nc" id="L172">                fullBox.setVisibility(View.GONE);</span>
+<span class="nc" id="L173">                accept_decline(false, username, id); //false will equate to declining the request</span>
+<span class="nc" id="L174">            }</span>
+        });
+
+<span class="nc" id="L177">        Space space = new Space(view.getContext());</span>
+<span class="nc" id="L178">        space.setLayoutParams(new LinearLayout.LayoutParams(40,20));</span>
+
+<span class="nc" id="L180">        Space space2 = new Space(view.getContext());</span>
+<span class="nc" id="L181">        space2.setLayoutParams(new LinearLayout.LayoutParams(40,20));</span>
+
+<span class="nc" id="L183">        newLayout.addView(viewProf);</span>
+<span class="nc" id="L184">        newLayout.addView(space);</span>
+<span class="nc" id="L185">        newLayout.addView(accept);</span>
+<span class="nc" id="L186">        newLayout.addView(space2);</span>
+<span class="nc" id="L187">        newLayout.addView(decline);</span>
+
+<span class="nc" id="L189">        fullBox.addView(user);</span>
+<span class="nc" id="L190">        fullBox.addView(newLayout);</span>
+
+<span class="nc" id="L192">        Space space3 = new Space(view.getContext());</span>
+<span class="nc" id="L193">        space3.setLayoutParams(new LinearLayout.LayoutParams(0, 30));</span>
+
+<span class="nc" id="L195">        ((LinearLayout)view.findViewById(R.id.results)).addView(fullBox);</span>
+<span class="nc" id="L196">        ((LinearLayout)view.findViewById(R.id.results)).addView(space3);</span>
+
+<span class="nc" id="L198">    }</span>
+
+    /**
+     * Gets the stats of a user from the database and display their
+     * stats in a popup window
+     * @param id
+     */
+    public void getUser(int id) {
+<span class="nc" id="L206">        LayoutInflater inflater = (LayoutInflater) view.getContext().getSystemService(view.getContext().LAYOUT_INFLATER_SERVICE);</span>
+<span class="nc" id="L207">        View popupView = inflater.inflate(R.layout.profile_view_layout, null);</span>
+
+        //Make Inactive Items Outside Of PopupWindow
+<span class="nc" id="L210">        boolean focusable = true;</span>
+
+        //Create a window with our parameters
+<span class="nc" id="L213">        final PopupWindow popupWindow = new PopupWindow(popupView, 1000, 1000, focusable);</span>
+
+        //Set the location of the window on the screen
+<span class="nc" id="L216">        popupWindow.showAtLocation(view, Gravity.CENTER, 50, 30);</span>
+
+<span class="nc" id="L218">        JsonObjectRequest request = new JsonObjectRequest(</span>
+                Request.Method.GET,
+<span class="nc" id="L220">                &quot;http://coms-309-029.class.las.iastate.edu:8080/user/&quot;+Integer.toString(id),</span>
+                null,
+<span class="nc" id="L222">                new Response.Listener&lt;JSONObject&gt;() {</span>
+                    @Override
+                    public void onResponse(JSONObject response) {
+
+                        try {
+<span class="nc" id="L227">                            ((TextView) popupView.findViewById(R.id.username)).setText(response.getString(&quot;username&quot;));</span>
+<span class="nc" id="L228">                            ((TextView) popupView.findViewById(R.id.user_id)).setText(&quot;ID: &quot;+ response.getInt(&quot;id&quot;));</span>
+<span class="nc" id="L229">                            ((TextView) popupView.findViewById(R.id.games_played)).setText(&quot;Games Played: &quot;+ response.getInt(&quot;gamesPlayed&quot;));</span>
+<span class="nc" id="L230">                            ((TextView) popupView.findViewById(R.id.games_won)).setText(&quot;Games Won: &quot;+ response.getInt(&quot;gamesWon&quot;));</span>
+<span class="nc" id="L231">                        } catch (JSONException e) {</span>
+<span class="nc" id="L232">                            e.printStackTrace();</span>
+<span class="nc" id="L233">                        }</span>
+
+
+<span class="nc" id="L236">                    }</span>
+                },
+<span class="nc" id="L238">                new Response.ErrorListener() {</span>
+                    @Override
+                    public void onErrorResponse(VolleyError error) {
+                        //loginHeader.setText(getString(R.string.login_error));
+<span class="nc" id="L242">                    }</span>
+                }
+        );
+<span class="nc" id="L245">        Volley.newRequestQueue(requireContext()).add(request);</span>
+<span class="nc" id="L246">    }</span>
+
+    /**
+     * Sends a put request to the server that will either
+     * accept or decline the friend request and update the users friends
+     * accordingly
+     * @param b
+     * @param username
+     * @param id
+     */
+    private void accept_decline(boolean b, String username, int id) {
+
+        try {
+<span class="nc" id="L259">            JSONObject object = new JSONObject();</span>
+<span class="nc bnc" id="L260" title="All 2 branches missed.">            object.put(&quot;status&quot;, (b)? &quot;accepted&quot;:&quot;declined&quot;);</span>
+<span class="nc bnc" id="L261" title="All 2 branches missed.">            String put =((b)? &quot;accepted&quot;:&quot;declined&quot;);</span>
+
+<span class="nc" id="L263">            JsonObjectRequest request = new JsonObjectRequest(</span>
+                    Request.Method.PUT,
+<span class="nc" id="L265">                    &quot;http://coms-309-029.class.las.iastate.edu:8080/user/&quot; + UserData.getInstance().getUserID()+&quot;/pending-friend-requests?friendId=&quot;+id,</span>
+                    object,
+                    null, null
+            );
+<span class="nc" id="L269">            Volley.newRequestQueue(requireContext()).add(request);</span>
+<span class="nc" id="L270">        } catch (JSONException e) {</span>
+<span class="nc" id="L271">            e.printStackTrace();</span>
+<span class="nc" id="L272">        }</span>
+<span class="nc" id="L273">    }</span>
+}
+
+
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.7.202105040129</span>Generated by the Android Gradle plugin 7.2.2</div></body></html>

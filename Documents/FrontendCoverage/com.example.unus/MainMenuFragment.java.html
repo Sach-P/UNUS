@@ -1,0 +1,267 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>MainMenuFragment.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=0;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">debug</a> &gt; <a href="index.source.html" class="el_package">com.example.unus</a> &gt; <span class="el_source">MainMenuFragment.java</span></div><h1>MainMenuFragment.java</h1><pre class="source lang-java linenums">package com.example.unus;
+
+import android.media.Image;
+import android.os.Bundle;
+
+import androidx.fragment.app.Fragment;
+
+import android.view.Gravity;
+import android.view.LayoutInflater;
+import android.view.View;
+import android.view.ViewGroup;
+import android.widget.Button;
+import android.widget.ImageView;
+import android.widget.LinearLayout;
+import android.widget.PopupWindow;
+import android.widget.Space;
+import android.widget.TextView;
+
+import com.android.volley.AuthFailureError;
+import com.android.volley.Request;
+import com.android.volley.Response;
+import com.android.volley.VolleyError;
+import com.android.volley.toolbox.JsonObjectRequest;
+import com.android.volley.toolbox.StringRequest;
+import com.android.volley.toolbox.Volley;
+
+import org.json.JSONException;
+import org.json.JSONObject;
+import org.w3c.dom.Text;
+
+/**
+ * Fragment used for the primary navigation around the menu screens. Very graphical
+ *
+ * @author Isaac Blandin
+ */
+<span class="fc" id="L36">public class MainMenuFragment extends Fragment {</span>
+
+    int GameLobbyId;
+    private View view;
+
+    @Override
+    public void onCreate(Bundle savedInstanceState) {
+<span class="fc" id="L43">        super.onCreate(savedInstanceState);</span>
+<span class="fc" id="L44">    }</span>
+
+    @Override
+    public View onCreateView(LayoutInflater inflater, ViewGroup container,
+                             Bundle savedInstanceState) {
+
+<span class="fc" id="L50">        view = inflater.inflate(R.layout.fragment_main_menu, container, false);</span>
+
+        //add user's data to the profile preview
+<span class="fc" id="L53">        TextView username = (TextView) view.findViewById(R.id.username_display);</span>
+<span class="fc" id="L54">        username.setText(UserData.getInstance().getUsername());</span>
+<span class="fc" id="L55">        TextView id = (TextView) view.findViewById(R.id.id_display) ;</span>
+<span class="fc" id="L56">        id.setText(getString(R.string.id_display, UserData.getInstance().getUserID()));</span>
+
+        //add clickable interaction to the avatar image
+<span class="fc" id="L59">        ImageView avatar = (ImageView) view.findViewById(R.id.avatar_pic);</span>
+<span class="fc" id="L60">        avatar.setOnClickListener(new View.OnClickListener() {</span>
+            @Override
+            public void onClick(View view) {
+<span class="fc" id="L63">                getActivity().getSupportFragmentManager().beginTransaction().replace(R.id.fragmentContainerView, new UserProfileFragment()).commit();</span>
+<span class="fc" id="L64">            }</span>
+        });
+
+        //add clickable interaction to join game button
+<span class="fc" id="L68">        Button joinGame = (Button) view.findViewById(R.id.join_game_button);</span>
+<span class="fc" id="L69">        joinGame.setOnClickListener(new View.OnClickListener() {</span>
+            @Override
+            public void onClick(View view) {
+<span class="fc" id="L72">                getActivity().getSupportFragmentManager().beginTransaction().replace(R.id.fragmentContainerView, new JoinLobbyFragment()).commit();</span>
+<span class="fc" id="L73">            }</span>
+        });
+
+        //add clickable interaction to host game button
+<span class="fc" id="L77">        Button hostGame = (Button) view.findViewById(R.id.host_game_button);</span>
+<span class="fc" id="L78">        hostGame.setOnClickListener(new View.OnClickListener() {</span>
+            @Override
+            public void onClick(View view) {
+                try {
+<span class="fc" id="L82">                    createLobby();</span>
+<span class="nc" id="L83">                } catch (JSONException e) {</span>
+<span class="nc" id="L84">                    e.printStackTrace();</span>
+<span class="fc" id="L85">                }</span>
+<span class="fc" id="L86">            }</span>
+        });
+
+        //this is the global chat button and it takes you to global chat
+<span class="fc" id="L90">        ((ImageView) view.findViewById(R.id.global_chat)).setOnClickListener(new View.OnClickListener() {</span>
+            @Override
+            public void onClick(View view) {
+<span class="nc" id="L93">                ChatLayout cl = new ChatLayout(view);</span>
+
+<span class="nc" id="L95">            }</span>
+        });
+
+        //add clickable interaction to leaderboard button
+<span class="fc" id="L99">                Button leaderboard = (Button) view.findViewById(R.id.leaderboard_button);</span>
+<span class="fc" id="L100">                leaderboard.setOnClickListener(new View.OnClickListener() {</span>
+                    @Override
+                    public void onClick(View view) {
+<span class="fc" id="L103">                        getActivity().getSupportFragmentManager().beginTransaction().replace(R.id.fragmentContainerView, new LeaderboardFragment()).commit();</span>
+<span class="fc" id="L104">                    }</span>
+        });
+
+        //add clickable interaction to logout button
+<span class="fc" id="L108">        Button logout = (Button) view.findViewById(R.id.logout_button);</span>
+<span class="fc" id="L109">        logout.setOnClickListener(new View.OnClickListener() {</span>
+            @Override
+            public void onClick(View view) {
+<span class="nc" id="L112">                getActivity().getSupportFragmentManager().beginTransaction().replace(R.id.fragmentContainerView, new LogInScreenFragment()).commit();</span>
+<span class="nc" id="L113">            }</span>
+        });
+
+        //create kicked popup if the user was kicked from a lobby
+<span class="pc bpc" id="L117" title="1 of 2 branches missed.">        if (getArguments() != null){</span>
+<span class="nc" id="L118">            Bundle bundle = getArguments();</span>
+
+            View popupView;
+<span class="nc bnc" id="L121" title="All 2 branches missed.">            if (bundle.containsKey(&quot;kicked&quot;)){</span>
+<span class="nc" id="L122">                popupView = inflater.inflate(R.layout.booted_popup, null);</span>
+<span class="nc bnc" id="L123" title="All 2 branches missed.">            } else if (bundle.containsKey(&quot;playerLeft&quot;)){</span>
+<span class="nc" id="L124">                popupView = inflater.inflate(R.layout.player_left_popup, null);</span>
+            } else {
+<span class="nc" id="L126">                popupView = inflater.inflate(R.layout.player_left_popup, null);</span>
+            }
+
+            //Make Inactive Items Outside Of PopupWindow
+<span class="nc" id="L130">            boolean focusable = true;</span>
+
+            //Create a window with our parameters
+<span class="nc" id="L133">            final PopupWindow popupWindow = new PopupWindow(popupView, 1000, 1000, focusable);</span>
+
+            //Set the location of the window on the screen
+<span class="nc" id="L136">            popupWindow.showAtLocation(view, Gravity.CENTER, 0, 0);</span>
+        }
+
+
+<span class="fc" id="L140">        adminButton();</span>
+
+<span class="fc" id="L142">        return view;</span>
+    }
+
+    /**
+     * Sends http request to create a lobby on the server
+     *
+     * @throws JSONException
+     */
+    private void createLobby() throws JSONException {
+        //add login credentials to the response body
+<span class="fc" id="L152">        JSONObject requestBody = new JSONObject();</span>
+<span class="fc" id="L153">        requestBody.put(&quot;private&quot;,&quot;true&quot;);</span>
+
+<span class="fc" id="L155">        JsonObjectRequest request = new JsonObjectRequest(</span>
+                Request.Method.POST,
+<span class="fc" id="L157">                String.format(&quot;http://coms-309-029.class.las.iastate.edu:8080/lobbies/create-lobby?userId=%d&quot;, UserData.getInstance().getUserID()),</span>
+                requestBody,
+<span class="fc" id="L159">                new Response.Listener&lt;JSONObject&gt;() {</span>
+                    @Override
+                    public void onResponse(JSONObject response) {
+<span class="fc" id="L162">                        startHostedLobby();</span>
+<span class="fc" id="L163">                    }</span>
+                },
+<span class="fc" id="L165">                new Response.ErrorListener() {</span>
+                    @Override
+                    public void onErrorResponse(VolleyError error) {
+<span class="nc" id="L168">                    }</span>
+                }
+        );
+
+<span class="fc" id="L172">        Volley.newRequestQueue(requireContext()).add(request);</span>
+<span class="fc" id="L173">    }</span>
+
+    /**
+     * retrieve lobby that is being hosted by the user. Change screen to lobby
+     */
+    private void startHostedLobby(){
+
+<span class="fc" id="L180">        StringRequest stringRequest = new StringRequest(Request.Method.GET,</span>
+<span class="fc" id="L181">                String.format(&quot;http://coms-309-029.class.las.iastate.edu:8080/user/get-lobby/%d&quot;,UserData.getInstance().getUserID()),</span>
+<span class="fc" id="L182">                new Response.Listener&lt;String&gt;() {</span>
+                    @Override
+                    public void onResponse(String response) {
+
+                        try {
+<span class="fc" id="L187">                            JSONObject json = new JSONObject(response);</span>
+<span class="fc" id="L188">                            setGameLobbyId(json.getInt(&quot;id&quot;));</span>
+<span class="fc" id="L189">                            changeToLobby(json.getInt(&quot;id&quot;));</span>
+
+<span class="nc" id="L191">                        } catch (JSONException e) {</span>
+<span class="nc" id="L192">                            e.printStackTrace();</span>
+<span class="fc" id="L193">                        }</span>
+
+
+<span class="fc" id="L196">                    }</span>
+<span class="fc" id="L197">                }, new Response.ErrorListener() {</span>
+            @Override
+            public void onErrorResponse(VolleyError error) {
+
+<span class="nc" id="L201">            }</span>
+        });
+
+<span class="fc" id="L204">        Volley.newRequestQueue(requireContext()).add(stringRequest);</span>
+
+<span class="fc" id="L206">    }</span>
+
+    /**
+     * Sets the global variable of the game lobby
+     *
+     * @param id id number of game lobby that is being hosted
+     */
+    public void setGameLobbyId(int id){
+<span class="fc" id="L214">        GameLobbyId = id;</span>
+<span class="fc" id="L215">    }</span>
+
+    /**
+     * Change fragment to game lobby based on id number
+     *
+     * @param id game lobby's id number
+     */
+    public void changeToLobby(int id){
+<span class="fc" id="L223">        GameLobbyFragment frag = new GameLobbyFragment();</span>
+
+        //add arguments to game lobby fragment before committing
+<span class="fc" id="L226">        Bundle bundle = new Bundle();</span>
+<span class="fc" id="L227">        bundle.putInt(&quot;lobbyId&quot;, id);</span>
+<span class="fc" id="L228">        bundle.putBoolean(&quot;isHost&quot;, true);</span>
+<span class="fc" id="L229">        frag.setArguments(bundle);</span>
+
+        //change fragments
+<span class="fc" id="L232">        getActivity().getSupportFragmentManager().beginTransaction().replace(R.id.fragmentContainerView, frag, &quot;gameLobby&quot;).commit();</span>
+<span class="fc" id="L233">        getActivity().getSupportFragmentManager().executePendingTransactions();</span>
+<span class="fc" id="L234">    }</span>
+
+    private void adminButton() {
+<span class="fc bfc" id="L237" title="All 2 branches covered.">        if(!UserData.getInstance().getRole().equals(&quot;admin&quot;))</span>
+<span class="fc" id="L238">            return;</span>
+<span class="fc" id="L239">        LinearLayout layout = (LinearLayout) view.findViewById(R.id.admin);</span>
+<span class="fc" id="L240">        layout.removeAllViews();</span>
+
+<span class="fc" id="L242">        Space sp = new Space(view.getContext());</span>
+<span class="fc" id="L243">        sp.setLayoutParams(new ViewGroup.LayoutParams(300, ViewGroup.LayoutParams.MATCH_PARENT));</span>
+<span class="fc" id="L244">        Space sp2 = new Space(view.getContext());</span>
+<span class="fc" id="L245">        sp2.setLayoutParams(new ViewGroup.LayoutParams(300, ViewGroup.LayoutParams.MATCH_PARENT));</span>
+
+<span class="fc" id="L247">        Button admin = new Button(view.getContext());</span>
+<span class="fc" id="L248">        admin.setLayoutParams(new ViewGroup.LayoutParams(300, ViewGroup.LayoutParams.MATCH_PARENT));</span>
+<span class="fc" id="L249">        admin.setTextSize(20);</span>
+<span class="fc" id="L250">        admin.setText(&quot;Admin&quot;);</span>
+<span class="fc" id="L251">        admin.setBackgroundColor(this.getResources().getColor(R.color.purple_500));</span>
+<span class="fc" id="L252">        admin.setTextColor(this.getResources().getColor(R.color.yellow));</span>
+
+<span class="fc" id="L254">        admin.setOnClickListener(new View.OnClickListener() {</span>
+            @Override
+            public void onClick(View view) {
+<span class="fc" id="L257">                getActivity().getSupportFragmentManager().beginTransaction().replace(R.id.fragmentContainerView, new AdminPageFragment()).commit();</span>
+<span class="fc" id="L258">            }</span>
+        });
+
+<span class="fc" id="L261">        layout.addView(sp);</span>
+<span class="fc" id="L262">        layout.addView(admin);</span>
+<span class="fc" id="L263">        layout.addView(sp2);</span>
+
+<span class="fc" id="L265">    }</span>
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.7.202105040129</span>Generated by the Android Gradle plugin 7.2.2</div></body></html>

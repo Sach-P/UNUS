@@ -1,0 +1,294 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>UserSearchFragment.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=0;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">debug</a> &gt; <a href="index.source.html" class="el_package">com.example.unus</a> &gt; <span class="el_source">UserSearchFragment.java</span></div><h1>UserSearchFragment.java</h1><pre class="source lang-java linenums">package com.example.unus;
+
+import androidx.fragment.app.Fragment;
+
+import android.annotation.SuppressLint;
+import android.os.Bundle;
+import android.text.method.HideReturnsTransformationMethod;
+import android.text.method.PasswordTransformationMethod;
+import android.view.Gravity;
+import android.view.LayoutInflater;
+import android.view.View;
+import android.view.ViewGroup;
+import android.widget.Button;
+import android.widget.EditText;
+import android.widget.LinearLayout;
+import android.widget.PopupWindow;
+import android.widget.Space;
+import android.widget.TextView;
+
+import com.android.volley.Request;
+import com.android.volley.Response;
+import com.android.volley.VolleyError;
+import com.android.volley.toolbox.JsonObjectRequest;
+import com.android.volley.toolbox.Volley;
+
+import org.json.JSONException;
+import org.json.JSONObject;
+import org.w3c.dom.Text;
+
+/**
+ * This class handles searching for a user and either viewing their stats or
+ * sending them a friend request
+ * You can also accept friend requests here given that they have already sent
+ * you a request
+ *
+ * @author Abe Demo
+ */
+
+public class UserSearchFragment extends Fragment {
+
+    private View view;
+    private Button back;
+    private Button search;
+    private TextView username;
+    private EditText id;
+    private String name;
+    private LinearLayout resultLayout;
+
+<span class="fc" id="L49">    public UserSearchFragment() {</span>
+        // Required empty public constructor
+<span class="fc" id="L51">    }</span>
+
+    @Override
+    public void onCreate(Bundle savedInstanceState) {
+<span class="fc" id="L55">        super.onCreate(savedInstanceState);</span>
+<span class="fc" id="L56">    }</span>
+
+    @Override
+    public View onCreateView(LayoutInflater inflater, ViewGroup container,
+                             Bundle savedInstanceState) {
+<span class="fc" id="L61">        view = inflater.inflate(R.layout.user_search_fragment, container, false);</span>
+<span class="fc" id="L62">        back = (Button) view.findViewById(R.id.backbutton);</span>
+<span class="fc" id="L63">        search = (Button) view.findViewById(R.id.search_button);</span>
+<span class="fc" id="L64">        username = (TextView) view.findViewById(R.id.username);</span>
+<span class="fc" id="L65">        id = (EditText) view.findViewById(R.id.searchbar);</span>
+<span class="fc" id="L66">        resultLayout = (LinearLayout) view.findViewById(R.id.results);</span>
+<span class="fc" id="L67">        back.setOnClickListener(new View.OnClickListener() {</span>
+            @Override
+            public void onClick(View view) {
+<span class="fc" id="L70">                getActivity().getSupportFragmentManager().beginTransaction().replace(R.id.fragmentContainerView, new UserProfileFragment()).commit();</span>
+<span class="fc" id="L71">            }</span>
+        });
+<span class="fc" id="L73">        search.setOnClickListener(new View.OnClickListener() {</span>
+            @Override
+            public void onClick(View view) {
+<span class="fc" id="L76">                resultLayout.removeAllViews();</span>
+<span class="fc" id="L77">                username.setText(&quot;&quot;);</span>
+<span class="fc" id="L78">                search(id.getText().toString());</span>
+<span class="fc" id="L79">            }</span>
+        });
+<span class="fc" id="L81">        return view;</span>
+    }
+
+    /**
+     * This function will take in the number that was put into the input field
+     * and search the database to see if the user exists
+     * If the user does exist it will display the user and a button that will show their stats
+     * and other that will send them friend requests
+     *
+     * @param id
+     */
+    private void search(String id) {
+<span class="fc bfc" id="L93" title="All 2 branches covered.">        for(int i = 0; i &lt; id.length(); i++) {</span>
+<span class="pc bpc" id="L94" title="8 of 10 branches missed.">            if (id.charAt(i) != '0' &amp;&amp; id.charAt(i) != '1' &amp;&amp; id.charAt(i) != '2' &amp;&amp; id.charAt(i) != '3' &amp;&amp; id.charAt(i) != '4' &amp;&amp;</span>
+<span class="nc bnc" id="L95" title="All 6 branches missed.">                    id.charAt(i) != '5' &amp;&amp; id.charAt(i) != '6' &amp;&amp; id.charAt(i) != '7' &amp;&amp;</span>
+<span class="nc bnc" id="L96" title="All 6 branches missed.">                    id.charAt(i) != '8' &amp;&amp; id.charAt(i) != '8' &amp;&amp; id.charAt(i) != '9') {</span>
+<span class="nc" id="L97">                return;</span>
+            }
+        }
+<span class="pc bpc" id="L100" title="1 of 2 branches missed.">        if(Integer.parseInt(id) == UserData.getInstance().getUserID()) {</span>
+<span class="nc" id="L101">            username.setText(&quot;You cannot friend yourself&quot;);</span>
+<span class="nc" id="L102">            return;</span>
+        }
+<span class="fc" id="L104">        boolean friend = false;</span>
+<span class="fc" id="L105">        boolean sentReq = false;</span>
+<span class="fc" id="L106">        boolean receivedReq = false;</span>
+<span class="pc bpc" id="L107" title="2 of 4 branches missed.">        if(Integer.parseInt(id) != UserData.getInstance().getUserID() &amp;&amp; Integer.parseInt(id) &gt; 0) {</span>
+<span class="pc bpc" id="L108" title="1 of 2 branches missed.">            for(int i = 0; i &lt; UserData.getInstance().getFriendsList().length; i++) {</span>
+<span class="nc bnc" id="L109" title="All 2 branches missed.">                if (Integer.parseInt(id) == UserData.getInstance().getFriendsList()[i].getUserID())</span>
+<span class="nc" id="L110">                    friend = true;</span>
+            }
+<span class="pc bpc" id="L112" title="1 of 2 branches missed.">            for(int i = 0; i &lt; UserData.getInstance().getSentRequests().length; i++) {</span>
+<span class="nc bnc" id="L113" title="All 2 branches missed.">                if (Integer.parseInt(id) == UserData.getInstance().getSentRequests()[i].getUserID())</span>
+<span class="nc" id="L114">                    sentReq = true;</span>
+            }
+<span class="pc bpc" id="L116" title="1 of 2 branches missed.">            for(int i = 0; i &lt; UserData.getInstance().getReceivedRequests().length; i++) {</span>
+<span class="nc bnc" id="L117" title="All 2 branches missed.">                if (Integer.parseInt(id) == UserData.getInstance().getReceivedRequests()[i].getUserID())</span>
+<span class="nc" id="L118">                    receivedReq = true;</span>
+            }
+
+<span class="fc" id="L121">            boolean finalFriend = friend;</span>
+<span class="fc" id="L122">            boolean finalSentReq = sentReq;</span>
+<span class="fc" id="L123">            boolean finalReceivedReq = receivedReq;</span>
+<span class="fc" id="L124">            JsonObjectRequest request = new JsonObjectRequest(</span>
+                    Request.Method.GET,
+<span class="fc" id="L126">                    &quot;http://coms-309-029.class.las.iastate.edu:8080/user/&quot; + Integer.parseInt(id),</span>
+                    null,
+<span class="fc" id="L128">                    new Response.Listener&lt;JSONObject&gt;() {</span>
+                        @Override
+                        public void onResponse(JSONObject response) {
+<span class="fc" id="L131">                            Button viewProf = new Button(view.getContext());</span>
+<span class="fc" id="L132">                            Button sendReq = new Button(view.getContext());</span>
+<span class="fc" id="L133">                            viewProf.setLayoutParams(new ViewGroup.LayoutParams(400,</span>
+                                    200));
+<span class="fc" id="L135">                            sendReq.setLayoutParams(new ViewGroup.LayoutParams(700,</span>
+                                    200));
+<span class="fc" id="L137">                            viewProf.setTextSize(20);</span>
+<span class="fc" id="L138">                            viewProf.setText(&quot;View&quot;);</span>
+                            //viewProf.setBackgroundColor(view.getResources().getColor(R.color.red));
+<span class="fc" id="L140">                            sendReq.setTextSize(20);</span>
+<span class="pc bpc" id="L141" title="1 of 2 branches missed.">                            if(finalFriend) {</span>
+<span class="nc" id="L142">                                sendReq.setText(&quot;Already Friends&quot;);</span>
+<span class="pc bpc" id="L143" title="1 of 2 branches missed.">                            } else if (finalSentReq) {</span>
+<span class="nc" id="L144">                                sendReq.setText(&quot;Request Sent&quot;);</span>
+<span class="pc bpc" id="L145" title="1 of 2 branches missed.">                            } else if (finalReceivedReq) {</span>
+<span class="nc" id="L146">                                sendReq.setText(&quot;Accept Request&quot;);</span>
+                            } else {
+<span class="fc" id="L148">                                sendReq.setText(&quot;Send Request&quot;);</span>
+                            }
+                            try {
+<span class="fc" id="L151">                                username.setText(response.getString(&quot;username&quot;));</span>
+<span class="fc" id="L152">                                final boolean[] newFriend = {finalFriend};</span>
+
+<span class="fc" id="L154">                                viewProf.setBackgroundColor(getResources().getColor(R.color.purple_500));</span>
+<span class="fc" id="L155">                                viewProf.setTextColor(getResources().getColor(R.color.yellow));</span>
+<span class="fc" id="L156">                                viewProf.setOnClickListener(new View.OnClickListener() {</span>
+                                    @Override
+                                    public void onClick(View view) {
+<span class="nc" id="L159">                                        LayoutInflater inflater = (LayoutInflater) view.getContext().getSystemService(view.getContext().LAYOUT_INFLATER_SERVICE);</span>
+<span class="nc" id="L160">                                        View popupView = inflater.inflate(R.layout.profile_view_layout, null);</span>
+
+                                        //Make Inactive Items Outside Of PopupWindow
+<span class="nc" id="L163">                                        boolean focusable = true;</span>
+
+                                        //Create a window with our parameters
+<span class="nc" id="L166">                                        final PopupWindow popupWindow = new PopupWindow(popupView, 1000, 1000, focusable);</span>
+<span class="nc" id="L167">                                        popupWindow.showAtLocation(view, Gravity.CENTER, 50, 30);</span>
+
+                                        try {
+<span class="nc" id="L170">                                            ((TextView) popupView.findViewById(R.id.username)).setText(response.getString(&quot;username&quot;));</span>
+<span class="nc" id="L171">                                            ((TextView) popupView.findViewById(R.id.user_id)).setText(&quot;ID: &quot;+response.getString(&quot;id&quot;));</span>
+<span class="nc" id="L172">                                            ((TextView) popupView.findViewById(R.id.games_played)).setText(&quot;Games Played: &quot; + response.getString(&quot;gamesPlayed&quot;));</span>
+<span class="nc" id="L173">                                            ((TextView) popupView.findViewById(R.id.games_won)).setText(&quot;Games Won: &quot; + response.getString(&quot;gamesWon&quot;));</span>
+<span class="nc" id="L174">                                        } catch (JSONException e) {</span>
+<span class="nc" id="L175">                                            e.printStackTrace();</span>
+<span class="nc" id="L176">                                        }</span>
+<span class="nc" id="L177">                                    }</span>
+                                });
+
+<span class="fc" id="L180">                                sendReq.setBackgroundColor(getResources().getColor(R.color.purple_500));</span>
+<span class="fc" id="L181">                                sendReq.setTextColor(getResources().getColor(R.color.yellow));</span>
+<span class="fc" id="L182">                                sendReq.setOnClickListener(new View.OnClickListener() {</span>
+                                    @Override
+                                    public void onClick(View view) {
+<span class="nc bnc" id="L185" title="All 4 branches missed.">                                        if(newFriend[0] || finalSentReq) { return; }</span>
+<span class="nc" id="L186">                                        sendReq.setText(&quot;Request Sent&quot;);</span>
+                                        try {
+<span class="nc bnc" id="L188" title="All 2 branches missed.">                                            if(finalReceivedReq) {</span>
+<span class="nc" id="L189">                                                acceptFriend(response.getString(&quot;username&quot;), id);</span>
+<span class="nc" id="L190">                                                sendReq.setText(&quot;Accepted&quot;);</span>
+<span class="nc" id="L191">                                                newFriend[0] = true;</span>
+<span class="nc" id="L192">                                                return;</span>
+                                            }
+<span class="nc" id="L194">                                            sendFriendRequest(response.getString(&quot;username&quot;), id);</span>
+<span class="nc" id="L195">                                            newFriend[0] = true;</span>
+<span class="nc" id="L196">                                        } catch (JSONException e) {</span>
+<span class="nc" id="L197">                                            e.printStackTrace();</span>
+<span class="nc" id="L198">                                        }</span>
+<span class="nc" id="L199">                                    }</span>
+                                });
+<span class="nc" id="L201">                            } catch (JSONException e) {</span>
+<span class="nc" id="L202">                                username.setText(&quot;User Not Found&quot;);</span>
+<span class="nc" id="L203">                                e.printStackTrace();</span>
+<span class="fc" id="L204">                            }</span>
+
+<span class="fc" id="L206">                            Space space = new Space(view.getContext());</span>
+<span class="fc" id="L207">                            space.setLayoutParams(new LinearLayout.LayoutParams(30, 0));</span>
+
+<span class="fc" id="L209">                            ((LinearLayout) view.findViewById(R.id.results)).addView(viewProf);</span>
+<span class="fc" id="L210">                            ((LinearLayout) view.findViewById(R.id.results)).addView(space);</span>
+<span class="fc" id="L211">                            ((LinearLayout) view.findViewById(R.id.results)).addView(sendReq);</span>
+<span class="fc" id="L212">                        }</span>
+                    },
+<span class="fc" id="L214">                    new Response.ErrorListener() {</span>
+                        @Override
+                        public void onErrorResponse(VolleyError error) {
+<span class="nc" id="L217">                            username.setText(&quot;User Not Found&quot;);</span>
+<span class="nc" id="L218">                        }</span>
+                    }
+            );
+
+<span class="fc" id="L222">            Volley.newRequestQueue(requireContext()).add(request);</span>
+        }
+<span class="fc" id="L224">    }</span>
+
+    /**
+     * this function will send a friend requests to the user that was searched
+     * the backend will then save the request and send it to the other user
+     *
+     * @param username
+     * @param id
+     * @throws JSONException
+     */
+    private void sendFriendRequest(String username, String id) throws JSONException {
+
+<span class="nc" id="L236">        Friend newSent = new Friend(Integer.parseInt(id), username);</span>
+<span class="nc" id="L237">        Friend[] temp = new Friend[UserData.getInstance().getSentRequests().length+1];</span>
+<span class="nc bnc" id="L238" title="All 2 branches missed.">        for(int i = 0; i &lt; UserData.getInstance().getSentRequests().length; i++) {</span>
+<span class="nc" id="L239">            temp[i]= UserData.getInstance().getSentRequests()[i];</span>
+        }
+<span class="nc" id="L241">        temp[UserData.getInstance().getSentRequests().length] = newSent;</span>
+<span class="nc" id="L242">        UserData.getInstance().setSentRequestsList(temp);</span>
+
+        /*
+        JSONObject object = new JSONObject();
+        object.put(&quot;username&quot;, username);
+        object.put(&quot;friendId&quot;, Integer.parseInt(id));
+        */
+
+<span class="nc" id="L250">        JsonObjectRequest request = new JsonObjectRequest(</span>
+                Request.Method.POST,
+<span class="nc" id="L252">                &quot;http://coms-309-029.class.las.iastate.edu:8080/user/&quot;+UserData.getInstance().getUserID()+&quot;/send-friend-request?friendId=&quot;+id,</span>
+                null,
+                null, null);
+<span class="nc" id="L255">        Volley.newRequestQueue(requireContext()).add(request);</span>
+<span class="nc" id="L256">    }</span>
+
+    /**
+     * this function will only be able to be accessed if the user searched for
+     * a user that had already sent them a request, in this case, instead of sending a
+     * friend request, the user will instead accept the friend request and the backend
+     * will be update so that they are both each others friends
+     * @param username
+     * @param id
+     */
+    private void acceptFriend(String username, String id) {
+
+<span class="nc" id="L268">        Friend newFriend = new Friend(Integer.parseInt(id), username);</span>
+<span class="nc" id="L269">        Friend[] temp = new Friend[UserData.getInstance().getFriendsList().length+1];</span>
+<span class="nc bnc" id="L270" title="All 2 branches missed.">        for(int i = 0; i &lt; UserData.getInstance().getFriendsList().length; i++) {</span>
+<span class="nc" id="L271">            temp[i]= UserData.getInstance().getFriendsList()[i];</span>
+        }
+<span class="nc" id="L273">        temp[UserData.getInstance().getFriendsList().length] = newFriend;</span>
+<span class="nc" id="L274">        UserData.getInstance().setFriendsList(temp);</span>
+        try {
+<span class="nc" id="L276">            JSONObject object = new JSONObject();</span>
+<span class="nc" id="L277">            object.put(&quot;username&quot;, username);</span>
+<span class="nc" id="L278">            object.put(&quot;friendId&quot;, Integer.parseInt(id));</span>
+<span class="nc" id="L279">            object.put(&quot;status&quot;, &quot;accepted&quot;);</span>
+
+<span class="nc" id="L281">            JsonObjectRequest request = new JsonObjectRequest(</span>
+                    Request.Method.PUT,
+<span class="nc" id="L283">                    &quot;http://coms-309-029.class.las.iastate.edu:8080/user/&quot; + UserData.getInstance().getUserID()+&quot;/pending-friend-requests&quot;,</span>
+                    object,
+                    null, null
+            );
+<span class="nc" id="L287">            Volley.newRequestQueue(requireContext()).add(request);</span>
+<span class="nc" id="L288">        } catch (JSONException e) {</span>
+<span class="nc" id="L289">            e.printStackTrace();</span>
+<span class="nc" id="L290">        }</span>
+<span class="nc" id="L291">    }</span>
+
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.7.202105040129</span>Generated by the Android Gradle plugin 7.2.2</div></body></html>

@@ -1,0 +1,199 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>LogInScreenFragment.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=0;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">debug</a> &gt; <a href="index.source.html" class="el_package">com.example.unus</a> &gt; <span class="el_source">LogInScreenFragment.java</span></div><h1>LogInScreenFragment.java</h1><pre class="source lang-java linenums">package com.example.unus;
+
+import android.os.Bundle;
+
+import androidx.fragment.app.Fragment;
+
+import android.text.method.HideReturnsTransformationMethod;
+import android.text.method.PasswordTransformationMethod;
+import android.view.LayoutInflater;
+import android.view.View;
+import android.view.ViewGroup;
+import android.widget.Button;
+import android.widget.EditText;
+import android.widget.TextView;
+
+import com.android.volley.Request;
+import com.android.volley.Response;
+import com.android.volley.VolleyError;
+import com.android.volley.toolbox.JsonObjectRequest;
+import com.android.volley.toolbox.Volley;
+
+import org.json.JSONException;
+import org.json.JSONObject;
+
+/**
+ * First Fragment you see when opening a screen. Prompts a user for their username and password. Verifies credentials with the remote server
+ *
+ * @author Isaac Blandin
+ */
+public class LogInScreenFragment extends Fragment {
+
+    private TextView loginHeader;
+    private EditText usernameField;
+    private EditText passwordField;
+
+<span class="fc" id="L36">    public LogInScreenFragment() {</span>
+        // Required empty public constructor
+<span class="fc" id="L38">    }</span>
+
+    @Override
+    public void onCreate(Bundle savedInstanceState) {
+<span class="fc" id="L42">        super.onCreate(savedInstanceState);</span>
+<span class="fc" id="L43">    }</span>
+
+    @Override
+    public View onCreateView(LayoutInflater inflater, ViewGroup container,
+                             Bundle savedInstanceState) {
+<span class="fc" id="L48">        View view = inflater.inflate(R.layout.fragment_log_in_screen, container, false);</span>
+
+        //initialize login screen views
+<span class="fc" id="L51">        loginHeader = (TextView) view.findViewById(R.id.login_header);</span>
+<span class="fc" id="L52">        usernameField = (EditText) view.findViewById(R.id.username_field);</span>
+<span class="fc" id="L53">        passwordField = (EditText) view.findViewById(R.id.password_field);</span>
+
+<span class="fc bfc" id="L55" title="All 2 branches covered.">        if (this.getArguments() != null){</span>
+<span class="fc" id="L56">            Bundle bundle = this.getArguments();</span>
+<span class="fc" id="L57">            String username = bundle.getString(&quot;username&quot;);</span>
+<span class="fc" id="L58">            usernameField.setText(username);</span>
+        }
+
+        //set up login button action
+<span class="fc" id="L62">        Button loginButton = (Button)view.findViewById(R.id.login_button);</span>
+<span class="fc" id="L63">        loginButton.setOnClickListener(new View.OnClickListener() {</span>
+            @Override
+            public void onClick(View view) {
+<span class="fc" id="L66">                loginHeader.setText(getString(R.string.validatingMessage));</span>
+<span class="fc" id="L67">                sendLoginPostRequest(usernameField.getText().toString(), passwordField.getText().toString());</span>
+<span class="fc" id="L68">            }</span>
+        });
+
+        //set up account creation button action
+<span class="fc" id="L72">        Button createAccountButton = (Button)view.findViewById(R.id.create_account_button);</span>
+<span class="fc" id="L73">        createAccountButton.setOnClickListener(new View.OnClickListener() {</span>
+            @Override
+            public void onClick(View view) {
+<span class="fc" id="L76">               navigateToSignup();</span>
+<span class="fc" id="L77">            }</span>
+        });
+
+        //set up hide/show password button action
+<span class="fc" id="L81">        Button showHideButton = (Button)view.findViewById(R.id.show_hide_button);</span>
+<span class="fc" id="L82">        showHideButton.setOnClickListener(new View.OnClickListener() {</span>
+            @Override
+            public void onClick(View view) {
+<span class="fc bfc" id="L85" title="All 2 branches covered.">                if (showHideButton.getText().toString().equals(&quot;show&quot;)){</span>
+<span class="fc" id="L86">                    showHideButton.setText(getString(R.string.hidePassword));</span>
+<span class="fc" id="L87">                    passwordField.setTransformationMethod(HideReturnsTransformationMethod.getInstance());</span>
+                } else {
+<span class="fc" id="L89">                    showHideButton.setText(getString(R.string.showPassword));</span>
+<span class="fc" id="L90">                    passwordField.setTransformationMethod(PasswordTransformationMethod.getInstance());</span>
+                }
+<span class="fc" id="L92">            }</span>
+        });
+
+<span class="fc" id="L95">        return view;</span>
+    }
+
+    /**
+     * sends a post request with Strings for username and password to a
+     * url stored in the strings xml.
+     *
+     * @param username username to be sent to the server
+     * @param password password to be sent to the server
+     */
+    private void sendLoginPostRequest(String username, String password){
+        try{
+
+            //add login credentials to the response body
+<span class="fc" id="L109">            JSONObject requestBody = new JSONObject();</span>
+<span class="fc" id="L110">            requestBody.put(&quot;username&quot;, username);</span>
+<span class="fc" id="L111">            requestBody.put(&quot;password&quot;, password);</span>
+
+<span class="fc" id="L113">            JsonObjectRequest request = new JsonObjectRequest(</span>
+                    Request.Method.POST,
+<span class="fc" id="L115">                    getString(R.string.remote_server_url, &quot;login&quot;, &quot;&quot;),</span>
+                    requestBody,
+<span class="fc" id="L117">                    new Response.Listener&lt;JSONObject&gt;() {</span>
+                        @Override
+                        public void onResponse(JSONObject response) {
+                            try {
+                                //check for passed or failed verification in the response
+<span class="fc bfc" id="L122" title="All 2 branches covered.">                                if (response.getString(&quot;verification&quot;).equals(&quot;passed&quot;)){</span>
+
+                                    //transfer user data received from http response to userData singleton
+<span class="fc" id="L125">                                    UserData userData= UserData.getInstance();</span>
+
+<span class="fc" id="L127">                                    userData.setUserID(response.getJSONObject(&quot;user&quot;).getInt(&quot;id&quot;));</span>
+<span class="fc" id="L128">                                    userData.setUsername(response.getJSONObject(&quot;user&quot;).getString(&quot;username&quot;));</span>
+<span class="fc" id="L129">                                    userData.setPassword(password);</span>
+<span class="fc" id="L130">                                    userData.setRole(response.getJSONObject(&quot;user&quot;).getString(&quot;role&quot;));</span>
+
+<span class="fc" id="L132">                                    int numFriends = response.getJSONObject(&quot;user&quot;).getJSONArray(&quot;friends&quot;).length();</span>
+<span class="fc" id="L133">                                    Friend[] friendList = new Friend[numFriends];</span>
+<span class="pc bpc" id="L134" title="1 of 2 branches missed.">                                    for (int i = 0; i &lt; numFriends; i++){</span>
+<span class="nc" id="L135">                                        JSONObject friendObj = response.getJSONObject(&quot;user&quot;).getJSONArray(&quot;friends&quot;).getJSONObject(i);</span>
+<span class="nc" id="L136">                                        friendList[i] = new Friend(friendObj.getInt(&quot;friendId&quot;), friendObj.getString(&quot;username&quot;));</span>
+                                    }
+<span class="fc" id="L138">                                    userData.setFriendsList(friendList);</span>
+
+<span class="fc" id="L140">                                    int numSentRequests = response.getJSONObject(&quot;user&quot;).getJSONArray(&quot;sentFriendRequests&quot;).length();</span>
+<span class="fc" id="L141">                                    Friend[] sentRequests = new Friend[numSentRequests];</span>
+<span class="pc bpc" id="L142" title="1 of 2 branches missed.">                                    for (int i = 0; i &lt; numSentRequests; i++){</span>
+<span class="nc" id="L143">                                        JSONObject friendObj = response.getJSONObject(&quot;user&quot;).getJSONArray(&quot;sentFriendRequests&quot;).getJSONObject(i);</span>
+<span class="nc" id="L144">                                        sentRequests[i] = new Friend(friendObj.getInt(&quot;friendId&quot;), friendObj.getString(&quot;username&quot;));</span>
+                                    }
+<span class="fc" id="L146">                                    userData.setSentRequestsList(sentRequests);</span>
+
+<span class="fc" id="L148">                                    int numReceivedRequests = response.getJSONObject(&quot;user&quot;).getJSONArray(&quot;receivedFriendRequests&quot;).length();</span>
+<span class="fc" id="L149">                                    Friend[] receivedRequests = new Friend[numReceivedRequests];</span>
+<span class="pc bpc" id="L150" title="1 of 2 branches missed.">                                    for (int i = 0; i &lt; numReceivedRequests; i++){</span>
+<span class="nc" id="L151">                                        JSONObject friendObj = response.getJSONObject(&quot;user&quot;).getJSONArray(&quot;receivedFriendRequests&quot;).getJSONObject(i);</span>
+<span class="nc" id="L152">                                        receivedRequests[i] = new Friend(friendObj.getInt(&quot;friendId&quot;), friendObj.getString(&quot;username&quot;));</span>
+                                    }
+<span class="fc" id="L154">                                    userData.setReceivedRequestsList(receivedRequests);</span>
+
+<span class="fc" id="L156">                                    userData.setGamesWon(response.getJSONObject(&quot;user&quot;).getInt(&quot;gamesPlayed&quot;));</span>
+<span class="fc" id="L157">                                    userData.setGamesPlayed(response.getJSONObject(&quot;user&quot;).getInt(&quot;gamesWon&quot;));</span>
+
+                                    //change fragment to main menu
+<span class="fc" id="L160">                                    navigateToMainMenu();</span>
+<span class="fc" id="L161">                                } else {</span>
+                                    //notify user of failed login
+<span class="fc" id="L163">                                    loginHeader.setText(getString(R.string.login_failed));</span>
+                                }
+<span class="nc" id="L165">                            } catch (JSONException ex) {</span>
+<span class="nc" id="L166">                                loginHeader.setText(getString(R.string.login_error));</span>
+<span class="fc" id="L167">                            }</span>
+<span class="fc" id="L168">                        }</span>
+                    },
+<span class="fc" id="L170">                    new Response.ErrorListener() {</span>
+                        @Override
+                        public void onErrorResponse(VolleyError error) {
+<span class="nc" id="L173">                            loginHeader.setText(getString(R.string.login_error));</span>
+<span class="nc" id="L174">                        }</span>
+                    }
+            );
+
+<span class="fc" id="L178">            Volley.newRequestQueue(requireContext()).add(request);</span>
+
+<span class="nc" id="L180">        } catch(JSONException ex) {</span>
+<span class="nc" id="L181">            loginHeader.setText(getString(R.string.login_error));</span>
+<span class="fc" id="L182">        }</span>
+<span class="fc" id="L183">    }</span>
+
+    /**
+     * method which changes fragment in container to the main menu fragment
+     */
+    private void navigateToMainMenu(){
+<span class="fc" id="L189">        getActivity().getSupportFragmentManager().beginTransaction().replace(R.id.fragmentContainerView, new MainMenuFragment()).commit();</span>
+<span class="fc" id="L190">    }</span>
+
+    /**
+     * changes the fragment in the contariner to the signup fragment
+     */
+    private void navigateToSignup(){
+<span class="fc" id="L196">        getActivity().getSupportFragmentManager().beginTransaction().replace(R.id.fragmentContainerView, new SignUpScreenFragment()).commit();</span>
+<span class="fc" id="L197">    }</span>
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.7.202105040129</span>Generated by the Android Gradle plugin 7.2.2</div></body></html>

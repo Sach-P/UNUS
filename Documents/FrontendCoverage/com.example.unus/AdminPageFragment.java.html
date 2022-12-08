@@ -1,0 +1,560 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>AdminPageFragment.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=0;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">debug</a> &gt; <a href="index.source.html" class="el_package">com.example.unus</a> &gt; <span class="el_source">AdminPageFragment.java</span></div><h1>AdminPageFragment.java</h1><pre class="source lang-java linenums">package com.example.unus;
+
+import android.os.Bundle;
+import android.view.Gravity;
+import android.view.LayoutInflater;
+import android.view.View;
+import android.view.ViewGroup;
+import android.widget.Button;
+import android.widget.EditText;
+import android.widget.LinearLayout;
+import android.widget.PopupWindow;
+import android.widget.Space;
+import android.widget.TextView;
+
+import androidx.fragment.app.Fragment;
+
+import com.android.volley.Request;
+import com.android.volley.Response;
+import com.android.volley.VolleyError;
+import com.android.volley.toolbox.JsonArrayRequest;
+import com.android.volley.toolbox.JsonObjectRequest;
+import com.android.volley.toolbox.Volley;
+
+import org.json.JSONArray;
+import org.json.JSONException;
+import org.json.JSONObject;
+
+import java.util.ArrayList;
+import java.util.List;
+
+/**
+ * this class acts as the admin page for the app. you will have features such as deleting a user
+ * and lobby as well as changing their account information, including stats and friends
+ */
+
+<span class="fc" id="L36">public class AdminPageFragment extends Fragment {</span>
+
+    private View view;
+    private List&lt;Friend&gt; userList;
+    private List&lt;Integer&gt; lobbyList;
+    private List&lt;Team&gt; teamList;
+    private LinearLayout displayList;
+    private Button back;
+    private Button users;
+    private Button lobbies;
+    private Button teams;
+
+    @Override
+    public void onCreate(Bundle savedInstanceState) {
+<span class="fc" id="L50">        super.onCreate(savedInstanceState);</span>
+<span class="fc" id="L51">    }</span>
+
+    @Override
+    public View onCreateView(LayoutInflater inflater, ViewGroup container,
+                             Bundle savedInstanceState) {
+<span class="fc" id="L56">        view = inflater.inflate(R.layout.fragment_admin_page, container, false);</span>
+<span class="fc" id="L57">        userList = new ArrayList&lt;Friend&gt;();</span>
+<span class="fc" id="L58">        lobbyList = new ArrayList&lt;Integer&gt;();</span>
+<span class="fc" id="L59">        teamList = new ArrayList&lt;Team&gt;();</span>
+<span class="fc" id="L60">        displayList= (LinearLayout) view.findViewById(R.id.results);</span>
+<span class="fc" id="L61">        back = (Button) view.findViewById(R.id.backbutton);</span>
+<span class="fc" id="L62">        users = (Button) view.findViewById(R.id.users);</span>
+<span class="fc" id="L63">        lobbies = (Button) view.findViewById(R.id.lobbies);</span>
+<span class="fc" id="L64">        teams = (Button) view.findViewById(R.id.teams);</span>
+
+<span class="fc" id="L66">        getUsers();</span>
+<span class="fc" id="L67">        getLobbies();</span>
+<span class="fc" id="L68">        getTeams();</span>
+
+<span class="fc" id="L70">        users.setOnClickListener(new View.OnClickListener() {</span>
+            @Override
+            public void onClick(View view) {
+<span class="fc" id="L73">                users.setBackgroundColor(view.getResources().getColor(R.color.purple_500));</span>
+<span class="fc" id="L74">                users.setTextColor(view.getResources().getColor(R.color.yellow));</span>
+<span class="fc" id="L75">                lobbies.setBackgroundColor(view.getResources().getColor(R.color.yellow));</span>
+<span class="fc" id="L76">                lobbies.setTextColor(view.getResources().getColor(R.color.purple_500));</span>
+<span class="fc" id="L77">                teams.setBackgroundColor(view.getResources().getColor(R.color.yellow));</span>
+<span class="fc" id="L78">                teams.setTextColor(view.getResources().getColor(R.color.purple_500));</span>
+<span class="fc" id="L79">                displayUsers(userList);</span>
+<span class="fc" id="L80">            }</span>
+        });
+
+<span class="fc" id="L83">        lobbies.setOnClickListener(new View.OnClickListener() {</span>
+            @Override
+            public void onClick(View view) {
+<span class="fc" id="L86">                lobbies.setBackgroundColor(view.getResources().getColor(R.color.purple_500));</span>
+<span class="fc" id="L87">                lobbies.setTextColor(view.getResources().getColor(R.color.yellow));</span>
+<span class="fc" id="L88">                users.setBackgroundColor(view.getResources().getColor(R.color.yellow));</span>
+<span class="fc" id="L89">                users.setTextColor(view.getResources().getColor(R.color.purple_500));</span>
+<span class="fc" id="L90">                teams.setBackgroundColor(view.getResources().getColor(R.color.yellow));</span>
+<span class="fc" id="L91">                teams.setTextColor(view.getResources().getColor(R.color.purple_500));</span>
+<span class="fc" id="L92">                displayLobbies(lobbyList);</span>
+<span class="fc" id="L93">            }</span>
+        });
+
+<span class="fc" id="L96">        teams.setOnClickListener(new View.OnClickListener() {</span>
+            @Override
+            public void onClick(View view) {
+<span class="fc" id="L99">                lobbies.setBackgroundColor(view.getResources().getColor(R.color.yellow));</span>
+<span class="fc" id="L100">                lobbies.setTextColor(view.getResources().getColor(R.color.purple_500));</span>
+<span class="fc" id="L101">                users.setBackgroundColor(view.getResources().getColor(R.color.yellow));</span>
+<span class="fc" id="L102">                users.setTextColor(view.getResources().getColor(R.color.purple_500));</span>
+<span class="fc" id="L103">                teams.setBackgroundColor(view.getResources().getColor(R.color.purple_500));</span>
+<span class="fc" id="L104">                teams.setTextColor(view.getResources().getColor(R.color.yellow));</span>
+<span class="fc" id="L105">                displayTeams();</span>
+<span class="fc" id="L106">            }</span>
+        });
+
+<span class="fc" id="L109">        back.setOnClickListener(new View.OnClickListener() {</span>
+            @Override
+            public void onClick(View view) {
+<span class="fc" id="L112">                getActivity().getSupportFragmentManager().beginTransaction().replace(R.id.fragmentContainerView, new MainMenuFragment()).commit();</span>
+<span class="fc" id="L113">            }</span>
+        });
+
+<span class="fc" id="L116">        return view;</span>
+    }
+
+    /**
+     * gets all of the users in the database and puts them all into a list of Users
+     */
+    private void getUsers() {
+<span class="fc" id="L123">        JsonArrayRequest request = new JsonArrayRequest(</span>
+                Request.Method.GET,
+                &quot;http://coms-309-029.class.las.iastate.edu:8080/user&quot;,
+                null,
+<span class="fc" id="L127">                new Response.Listener&lt;JSONArray&gt;() {</span>
+                    @Override
+                    public void onResponse(JSONArray response) {
+                        try {
+<span class="fc bfc" id="L131" title="All 2 branches covered.">                            for( int i = 0; i &lt; response.length(); i++) {</span>
+<span class="fc bfc" id="L132" title="All 2 branches covered.">                                if(!response.getJSONObject(i).getString(&quot;role&quot;).equals(&quot;admin&quot;))</span>
+<span class="fc" id="L133">                                    userList.add(new Friend(response.getJSONObject(i).getInt(&quot;id&quot;), response.getJSONObject(i).getString(&quot;username&quot;),</span>
+<span class="fc" id="L134">                                            response.getJSONObject(i).getString(&quot;password&quot;),</span>
+<span class="fc" id="L135">                                            response.getJSONObject(i).getInt(&quot;gamesPlayed&quot;), response.getJSONObject(i).getInt(&quot;gamesWon&quot;)));</span>
+                            }
+<span class="nc" id="L137">                        } catch (JSONException e) {</span>
+<span class="nc" id="L138">                            e.printStackTrace();</span>
+<span class="fc" id="L139">                        }</span>
+<span class="fc" id="L140">                        displayUsers(userList);</span>
+<span class="fc" id="L141">                    }</span>
+                },
+<span class="fc" id="L143">                new Response.ErrorListener() {</span>
+                    @Override
+                    public void onErrorResponse(VolleyError error) {
+<span class="nc" id="L146">                    }</span>
+                }
+        );
+<span class="fc" id="L149">        Volley.newRequestQueue(requireContext()).add(request);</span>
+<span class="fc" id="L150">    }</span>
+    /**
+     * gets all of the lobbies in the database and puts them all into a list of ints
+     */
+    public void getLobbies() {
+<span class="fc" id="L155">        JsonArrayRequest request = new JsonArrayRequest(</span>
+                Request.Method.GET,
+                &quot;http://coms-309-029.class.las.iastate.edu:8080/lobbies&quot;,
+                null,
+<span class="fc" id="L159">                new Response.Listener&lt;JSONArray&gt;() {</span>
+                    @Override
+                    public void onResponse(JSONArray response) {
+                        try {
+<span class="pc bpc" id="L163" title="1 of 2 branches missed.">                            for( int i = 0; i &lt; response.length(); i++) {</span>
+<span class="nc" id="L164">                                lobbyList.add(response.getJSONObject(i).getInt(&quot;id&quot;));</span>
+                            }
+<span class="nc" id="L166">                        } catch (JSONException e) {</span>
+<span class="nc" id="L167">                            e.printStackTrace();</span>
+<span class="fc" id="L168">                        }</span>
+<span class="fc" id="L169">                    }</span>
+                },
+<span class="fc" id="L171">                new Response.ErrorListener() {</span>
+                    @Override
+                    public void onErrorResponse(VolleyError error) {
+<span class="nc" id="L174">                    }</span>
+                }
+        );
+<span class="fc" id="L177">        Volley.newRequestQueue(requireContext()).add(request);</span>
+<span class="fc" id="L178">    }</span>
+
+    /**
+     * displays the list of users by username and stat on the screen
+     * It will display The name followed by either games played or games won
+     * This function is called every time any button is hit in the leaderboard
+     * screen
+     *
+     * @param list
+     */
+    private void displayUsers(List&lt;Friend&gt; list) {
+<span class="fc" id="L189">        displayList.removeViews(0, displayList.getChildCount());</span>
+<span class="fc bfc" id="L190" title="All 2 branches covered.">        for(int i = 0; i &lt; list.size(); i++) {</span>
+<span class="fc" id="L191">            LinearLayout layout = new LinearLayout(view.getContext());</span>
+<span class="fc" id="L192">            TextView tv = new TextView(view.getContext());</span>
+<span class="fc" id="L193">            tv.setLayoutParams( new ViewGroup.LayoutParams(500, 100));</span>
+<span class="fc" id="L194">            tv.setText(list.get(i).getUsername());</span>
+<span class="fc" id="L195">            tv.setTextColor(view.getResources().getColor(R.color.yellow));</span>
+<span class="fc" id="L196">            tv.setTextSize(25);</span>
+
+<span class="fc" id="L198">            Space sp = new Space(view.getContext());</span>
+<span class="fc" id="L199">            sp.setLayoutParams( new ViewGroup.LayoutParams(100, 100));</span>
+<span class="fc" id="L200">            Space sp2 = new Space(view.getContext());</span>
+<span class="fc" id="L201">            sp2.setLayoutParams( new ViewGroup.LayoutParams(50, 100));</span>
+
+<span class="fc" id="L203">            int finalI = i;</span>
+
+<span class="fc" id="L205">            Button stats = new Button(view.getContext());</span>
+<span class="fc" id="L206">            stats.setLayoutParams( new ViewGroup.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT));</span>
+<span class="fc" id="L207">            stats.setText(&quot;stats&quot;);</span>
+<span class="fc" id="L208">            stats.setBackgroundColor(this.getResources().getColor(R.color.purple_500));</span>
+<span class="fc" id="L209">            stats.setTextColor(view.getResources().getColor(R.color.yellow));</span>
+<span class="fc" id="L210">            stats.setTextSize(10);</span>
+<span class="fc" id="L211">            stats.setOnClickListener(new View.OnClickListener() {</span>
+                @Override
+                public void onClick(View view) {
+                   //AdminUserPopup popup = new AdminUserPopup(view, list.get(finalI));
+<span class="nc" id="L215">                    userPopup(list.get(finalI));</span>
+<span class="nc" id="L216">                }</span>
+            });
+
+<span class="fc" id="L219">            Button del = new Button(view.getContext());</span>
+<span class="fc" id="L220">            del.setLayoutParams( new ViewGroup.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT));</span>
+<span class="fc" id="L221">            del.setText(&quot;x&quot;);</span>
+<span class="fc" id="L222">            del.setBackgroundColor(this.getResources().getColor(R.color.purple_500));</span>
+<span class="fc" id="L223">            del.setTextColor(view.getResources().getColor(R.color.yellow));</span>
+<span class="fc" id="L224">            del.setTextSize(10);</span>
+<span class="fc" id="L225">            del.setOnClickListener(new View.OnClickListener() {</span>
+                @Override
+                public void onClick(View view) {
+<span class="nc" id="L228">                    deleteUser(list.get(finalI).getUserID());</span>
+<span class="nc" id="L229">                }</span>
+            });
+
+<span class="fc" id="L232">            layout.addView(tv);</span>
+<span class="fc" id="L233">            layout.addView(sp);</span>
+<span class="fc" id="L234">            layout.addView(stats);</span>
+<span class="fc" id="L235">            layout.addView(sp2);</span>
+<span class="fc" id="L236">            layout.addView(del);</span>
+<span class="fc" id="L237">            displayList.addView(layout);</span>
+        }
+<span class="fc" id="L239">    }</span>
+
+    /**
+     * displays the list of lobbies by id where the admin can then
+     * either delete the lobby or kick just one specific player in the lobby
+     *
+     * @param list
+     */
+    private void displayLobbies(List&lt;Integer&gt; list) {
+<span class="fc" id="L248">        displayList.removeViews(0, displayList.getChildCount());</span>
+<span class="pc bpc" id="L249" title="1 of 2 branches missed.">        for(int i = 0; i &lt; list.size(); i++) {</span>
+<span class="nc" id="L250">            LinearLayout layout = new LinearLayout(view.getContext());</span>
+<span class="nc" id="L251">            TextView tv = new TextView(view.getContext());</span>
+<span class="nc" id="L252">            tv.setLayoutParams( new ViewGroup.LayoutParams(500, 100));</span>
+<span class="nc" id="L253">            tv.setText(list.get(i).toString());</span>
+<span class="nc" id="L254">            tv.setTextColor(view.getResources().getColor(R.color.yellow));</span>
+<span class="nc" id="L255">            tv.setTextSize(25);</span>
+
+<span class="nc" id="L257">            Space sp = new Space(view.getContext());</span>
+<span class="nc" id="L258">            sp.setLayoutParams( new ViewGroup.LayoutParams(100, 100));</span>
+<span class="nc" id="L259">            Space sp2 = new Space(view.getContext());</span>
+<span class="nc" id="L260">            sp2.setLayoutParams( new ViewGroup.LayoutParams(50, 100));</span>
+
+<span class="nc" id="L262">            int finalI = i;</span>
+
+
+<span class="nc" id="L265">            Button del = new Button(view.getContext());</span>
+<span class="nc" id="L266">            del.setLayoutParams( new ViewGroup.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT));</span>
+<span class="nc" id="L267">            del.setText(&quot;x&quot;);</span>
+<span class="nc" id="L268">            del.setBackgroundColor(this.getResources().getColor(R.color.purple_500));</span>
+<span class="nc" id="L269">            del.setTextColor(view.getResources().getColor(R.color.yellow));</span>
+<span class="nc" id="L270">            del.setTextSize(10);</span>
+<span class="nc" id="L271">            del.setOnClickListener(new View.OnClickListener() {</span>
+                @Override
+                public void onClick(View view) {
+<span class="nc" id="L274">                    deleteLobby(list.get(finalI));</span>
+<span class="nc" id="L275">                }</span>
+            });
+
+<span class="nc" id="L278">            layout.addView(tv);</span>
+<span class="nc" id="L279">            layout.addView(sp);</span>
+            //layout.addView(stats);
+<span class="nc" id="L281">            layout.addView(sp2);</span>
+<span class="nc" id="L282">            layout.addView(del);</span>
+<span class="nc" id="L283">            displayList.addView(layout);</span>
+        }
+<span class="fc" id="L285">    }</span>
+
+    /**
+     * This function will delete the user logged in from the database entirely
+     * including removing them from anyone else's friends list
+     */
+        private void deleteUser(int id) {
+
+<span class="nc" id="L293">        JsonObjectRequest request = new JsonObjectRequest(</span>
+                Request.Method.DELETE,
+<span class="nc" id="L295">                getString(R.string.remote_server_url, &quot;user&quot;, Integer.toString(id)),</span>
+                null,
+<span class="nc" id="L297">                new Response.Listener&lt;JSONObject&gt;() {</span>
+                    @Override
+                    public void onResponse(JSONObject response) {
+<span class="nc" id="L300">                        getActivity().getSupportFragmentManager().beginTransaction().replace(R.id.fragmentContainerView, new AdminPageFragment()).commit();</span>
+<span class="nc" id="L301">                    }</span>
+                },
+<span class="nc" id="L303">                new Response.ErrorListener() {</span>
+                    @Override
+                    public void onErrorResponse(VolleyError error) {
+<span class="nc" id="L306">                        getActivity().getSupportFragmentManager().beginTransaction().replace(R.id.fragmentContainerView, new MainMenuFragment()).commit();</span>
+<span class="nc" id="L307">                    }</span>
+                }
+        );
+
+<span class="nc" id="L311">        Volley.newRequestQueue(requireContext()).add(request);</span>
+<span class="nc" id="L312">    }</span>
+
+    /**
+     * This function will delete an existing lobby and kick all of the players in the lobby
+     */
+    private void deleteLobby(int id) {
+
+<span class="nc" id="L319">        JsonObjectRequest request = new JsonObjectRequest(</span>
+                Request.Method.DELETE,
+<span class="nc" id="L321">                getString(R.string.remote_server_url, &quot;lobbies/delete-lobby&quot;, id+&quot;?userId=&quot;+UserData.getInstance().getUserID()),</span>
+                null,
+<span class="nc" id="L323">                new Response.Listener&lt;JSONObject&gt;() {</span>
+                    @Override
+                    public void onResponse(JSONObject response) {
+<span class="nc" id="L326">                      getActivity().getSupportFragmentManager().beginTransaction().replace(R.id.fragmentContainerView, new AdminPageFragment()).commit();</span>
+<span class="nc" id="L327">                    }</span>
+                },
+<span class="nc" id="L329">                new Response.ErrorListener() {</span>
+                    @Override
+                    public void onErrorResponse(VolleyError error) {
+<span class="nc" id="L332">                      getActivity().getSupportFragmentManager().beginTransaction().replace(R.id.fragmentContainerView, new MainMenuFragment()).commit();</span>
+<span class="nc" id="L333">                    }</span>
+                }
+        );
+
+<span class="nc" id="L337">        Volley.newRequestQueue(requireContext()).add(request);</span>
+<span class="nc" id="L338">    }</span>
+
+    public void userPopup(Friend user) {
+<span class="nc" id="L341">        LayoutInflater inflater = (LayoutInflater) view.getContext().getSystemService(view.getContext().LAYOUT_INFLATER_SERVICE);</span>
+<span class="nc" id="L342">        View popupView = inflater.inflate(R.layout.admin_user_popup, null);</span>
+
+<span class="nc" id="L344">        TextView username = (TextView) popupView.findViewById(R.id.username);</span>
+<span class="nc" id="L345">        TextView userID = (TextView) popupView.findViewById(R.id.user_id);</span>
+<span class="nc" id="L346">        EditText played = (EditText) popupView.findViewById(R.id.played);</span>
+<span class="nc" id="L347">        EditText won = (EditText) popupView.findViewById(R.id.won);</span>
+<span class="nc" id="L348">        Button change = (Button) popupView.findViewById(R.id.change);</span>
+<span class="nc" id="L349">        Button promote = (Button) popupView.findViewById(R.id.promote);</span>
+
+<span class="nc" id="L351">        username.setText(user.getUsername());</span>
+<span class="nc" id="L352">        userID.setText(Integer.toString(user.getUserID()));</span>
+<span class="nc" id="L353">        played.setText(Integer.toString(user.getGamesPlayed()));</span>
+<span class="nc" id="L354">        won.setText(Integer.toString(user.getGamesWon()));</span>
+
+        //Make Inactive Items Outside Of PopupWindow
+<span class="nc" id="L357">        boolean focusable = true;</span>
+
+        //Create a window with our parameters
+<span class="nc" id="L360">        final PopupWindow popupWindow = new PopupWindow(popupView, 1000, 1600, focusable);</span>
+
+        //Set the location of the window on the screen
+<span class="nc" id="L363">        popupWindow.showAtLocation(view, Gravity.CENTER, 0, 0);</span>
+
+<span class="nc" id="L365">        promote.setOnClickListener(new View.OnClickListener() {</span>
+            @Override
+            public void onClick(View view) {
+<span class="nc" id="L368">                promote(user);</span>
+<span class="nc" id="L369">                popupWindow.dismiss();</span>
+<span class="nc" id="L370">            }</span>
+        });
+
+<span class="nc" id="L373">        change.setOnClickListener(new View.OnClickListener() {</span>
+            @Override
+            public void onClick(View view) {
+<span class="nc" id="L376">                String id = played.getText().toString();</span>
+<span class="nc bnc" id="L377" title="All 2 branches missed.">                if(id.length() == 0)</span>
+<span class="nc" id="L378">                    return;</span>
+<span class="nc bnc" id="L379" title="All 2 branches missed.">                for(int i = 0; i &lt; id.length(); i++) {</span>
+<span class="nc bnc" id="L380" title="All 10 branches missed.">                    if (id.charAt(i) != '0' &amp;&amp; id.charAt(i) != '1' &amp;&amp; id.charAt(i) != '2' &amp;&amp; id.charAt(i) != '3' &amp;&amp; id.charAt(i) != '4' &amp;&amp;</span>
+<span class="nc bnc" id="L381" title="All 6 branches missed.">                            id.charAt(i) != '5' &amp;&amp; id.charAt(i) != '6' &amp;&amp; id.charAt(i) != '7' &amp;&amp;</span>
+<span class="nc bnc" id="L382" title="All 6 branches missed.">                            id.charAt(i) != '8' &amp;&amp; id.charAt(i) != '8' &amp;&amp; id.charAt(i) != '9') {</span>
+<span class="nc" id="L383">                        return;</span>
+                    }
+                }
+<span class="nc" id="L386">                id = won.getText().toString();</span>
+<span class="nc bnc" id="L387" title="All 2 branches missed.">                if(id.length() == 0)</span>
+<span class="nc" id="L388">                    return;</span>
+<span class="nc bnc" id="L389" title="All 2 branches missed.">                for(int i = 0; i &lt; id.length(); i++) {</span>
+<span class="nc bnc" id="L390" title="All 10 branches missed.">                    if (id.charAt(i) != '0' &amp;&amp; id.charAt(i) != '1' &amp;&amp; id.charAt(i) != '2' &amp;&amp; id.charAt(i) != '3' &amp;&amp; id.charAt(i) != '4' &amp;&amp;</span>
+<span class="nc bnc" id="L391" title="All 6 branches missed.">                            id.charAt(i) != '5' &amp;&amp; id.charAt(i) != '6' &amp;&amp; id.charAt(i) != '7' &amp;&amp;</span>
+<span class="nc bnc" id="L392" title="All 6 branches missed.">                            id.charAt(i) != '8' &amp;&amp; id.charAt(i) != '8' &amp;&amp; id.charAt(i) != '9') {</span>
+<span class="nc" id="L393">                        return;</span>
+                    }
+                }
+<span class="nc" id="L396">                changeUser(Integer.parseInt(played.getText().toString()), Integer.parseInt(won.getText().toString()), user);</span>
+<span class="nc" id="L397">                popupWindow.dismiss();</span>
+<span class="nc" id="L398">            }</span>
+        });
+
+<span class="nc" id="L401">    }</span>
+
+
+    public void changeUser(int played, int won, Friend user) {
+        try {
+            //add login credentials to the response body
+<span class="nc" id="L407">            JSONObject requestBody = new JSONObject();</span>
+<span class="nc" id="L408">            requestBody.put(&quot;id&quot;, user.getUserID());</span>
+<span class="nc" id="L409">            requestBody.put(&quot;username&quot;, user.getUsername());</span>
+<span class="nc" id="L410">            requestBody.put(&quot;password&quot;, user.getPassword());</span>
+            //requestBody.put(&quot;friends&quot;, friendsList);
+<span class="nc" id="L412">            requestBody.put(&quot;role&quot;, &quot;player&quot;);</span>
+<span class="nc" id="L413">            requestBody.put(&quot;gamesPlayed&quot;, played);</span>
+<span class="nc" id="L414">            requestBody.put(&quot;gamesWon&quot;, won);</span>
+
+<span class="nc" id="L416">            JsonObjectRequest request = new JsonObjectRequest(</span>
+                    Request.Method.PUT,
+<span class="nc" id="L418">                    &quot;http://coms-309-029.class.las.iastate.edu:8080/user/&quot;+user.getUserID(),</span>
+                    requestBody,
+                    null,
+<span class="nc" id="L421">                    new Response.ErrorListener() {</span>
+                        @Override
+                        public void onErrorResponse(VolleyError error) {
+<span class="nc" id="L424">                        }</span>
+                    }
+            );
+
+<span class="nc" id="L428">            Volley.newRequestQueue(requireContext()).add(request);</span>
+
+<span class="nc" id="L430">        } catch (JSONException ex) {</span>
+<span class="nc" id="L431">        }</span>
+<span class="nc" id="L432">    }</span>
+
+    public void promote(Friend user) {
+        try {
+            //add login credentials to the response body
+<span class="nc" id="L437">            JSONObject requestBody = new JSONObject();</span>
+<span class="nc" id="L438">            requestBody.put(&quot;id&quot;, user.getUserID());</span>
+<span class="nc" id="L439">            requestBody.put(&quot;username&quot;, user.getUsername());</span>
+<span class="nc" id="L440">            requestBody.put(&quot;password&quot;, user.getPassword());</span>
+            //requestBody.put(&quot;friends&quot;, friendsList);
+<span class="nc" id="L442">            requestBody.put(&quot;role&quot;, &quot;admin&quot;);</span>
+<span class="nc" id="L443">            requestBody.put(&quot;gamesPlayed&quot;, user.getGamesPlayed());</span>
+<span class="nc" id="L444">            requestBody.put(&quot;gamesWon&quot;, user.getGamesWon());</span>
+
+<span class="nc" id="L446">            JsonObjectRequest request = new JsonObjectRequest(</span>
+                    Request.Method.PUT,
+<span class="nc" id="L448">                    &quot;http://coms-309-029.class.las.iastate.edu:8080/user/&quot;+user.getUserID(),</span>
+                    requestBody,
+                    null,
+<span class="nc" id="L451">                    new Response.ErrorListener() {</span>
+                        @Override
+                        public void onErrorResponse(VolleyError error) {
+<span class="nc" id="L454">                        }</span>
+                    }
+            );
+
+<span class="nc" id="L458">            Volley.newRequestQueue(requireContext()).add(request);</span>
+
+<span class="nc" id="L460">        } catch (JSONException ex) {</span>
+<span class="nc" id="L461">        }</span>
+<span class="nc" id="L462">    }</span>
+
+    /**
+     * gets all of the users in the database and puts them all into a list of Users
+     */
+    private void getTeams() {
+<span class="fc" id="L468">        JsonArrayRequest request = new JsonArrayRequest(</span>
+                Request.Method.GET,
+                &quot;http://coms-309-029.class.las.iastate.edu:8080/teams&quot;,
+                null,
+<span class="fc" id="L472">                new Response.Listener&lt;JSONArray&gt;() {</span>
+                    @Override
+                    public void onResponse(JSONArray response) {
+                        try {
+<span class="fc bfc" id="L476" title="All 2 branches covered.">                            for (int i = 0; i &lt; response.length(); i++) {</span>
+<span class="fc" id="L477">                                teamList.add(new Team(response.getJSONObject(i).getString(&quot;teamName&quot;),</span>
+<span class="fc" id="L478">                                        response.getJSONObject(i).getInt(&quot;id&quot;),</span>
+<span class="fc" id="L479">                                        response.getJSONObject(i).getInt(&quot;wins&quot;)));</span>
+                            }
+<span class="nc" id="L481">                        } catch (JSONException e) {</span>
+<span class="nc" id="L482">                            e.printStackTrace();</span>
+<span class="fc" id="L483">                        }</span>
+<span class="fc" id="L484">                    }</span>
+                },
+<span class="fc" id="L486">                new Response.ErrorListener() {</span>
+                    @Override
+                    public void onErrorResponse(VolleyError error) {
+<span class="nc" id="L489">                    }</span>
+                }
+        );
+<span class="fc" id="L492">        Volley.newRequestQueue(requireContext()).add(request);</span>
+<span class="fc" id="L493">    }</span>
+
+    /**
+     * displays the list of users by username and stat on the screen
+     * It will display The name followed by either games played or games won
+     * This function is called every time any button is hit in the leaderboard
+     * screen
+     *
+     */
+    private void displayTeams() {
+<span class="fc" id="L503">        displayList.removeViews(0, displayList.getChildCount());</span>
+<span class="fc bfc" id="L504" title="All 2 branches covered.">        for(int i = 0; i &lt; teamList.size(); i++) {</span>
+<span class="fc" id="L505">            LinearLayout layout = new LinearLayout(view.getContext());</span>
+<span class="fc" id="L506">            TextView tv = new TextView(view.getContext());</span>
+<span class="fc" id="L507">            tv.setLayoutParams( new ViewGroup.LayoutParams(500, 100));</span>
+<span class="fc" id="L508">            tv.setText(teamList.get(i).getName());</span>
+<span class="fc" id="L509">            tv.setTextColor(view.getResources().getColor(R.color.yellow));</span>
+<span class="fc" id="L510">            tv.setTextSize(25);</span>
+
+<span class="fc" id="L512">            Space sp = new Space(view.getContext());</span>
+<span class="fc" id="L513">            sp.setLayoutParams( new ViewGroup.LayoutParams(100, 100));</span>
+
+<span class="fc" id="L515">            Button del = new Button(getContext());</span>
+<span class="fc" id="L516">            del.setLayoutParams( new ViewGroup.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT));</span>
+<span class="fc" id="L517">            del.setText(&quot;x&quot;);</span>
+<span class="fc" id="L518">            del.setTextColor(view.getResources().getColor(R.color.yellow));</span>
+<span class="fc" id="L519">            del.setBackgroundColor(view.getResources().getColor(R.color.purple_500));</span>
+<span class="fc" id="L520">            del.setTextSize(10);</span>
+
+<span class="fc" id="L522">            int finalI = i;</span>
+<span class="fc" id="L523">            del.setOnClickListener(new View.OnClickListener() {</span>
+                @Override
+                public void onClick(View view) {
+<span class="nc" id="L526">                    deleteTeam(teamList.get(finalI).getId());</span>
+<span class="nc" id="L527">                }</span>
+            });
+
+<span class="fc" id="L530">            layout.addView(tv);</span>
+<span class="fc" id="L531">            layout.addView(sp);</span>
+<span class="fc" id="L532">            layout.addView(del);</span>
+<span class="fc" id="L533">            displayList.addView(layout);</span>
+        }
+<span class="fc" id="L535">    }</span>
+
+    public void deleteTeam(int id) {
+<span class="nc" id="L538">        JsonObjectRequest request = new JsonObjectRequest(</span>
+                Request.Method.DELETE,
+<span class="nc" id="L540">                getString(R.string.remote_server_url, &quot;teams/delete-team&quot;, id + &quot;?userId=&quot; + UserData.getInstance().getUserID()),</span>
+                null,
+<span class="nc" id="L542">                new Response.Listener&lt;JSONObject&gt;() {</span>
+                    @Override
+                    public void onResponse(JSONObject response) {
+<span class="nc" id="L545">                        getActivity().getSupportFragmentManager().beginTransaction().replace(R.id.fragmentContainerView, new AdminPageFragment()).commit();</span>
+<span class="nc" id="L546">                    }</span>
+                },
+<span class="nc" id="L548">                new Response.ErrorListener() {</span>
+                    @Override
+                    public void onErrorResponse(VolleyError error) {
+<span class="nc" id="L551">                        getActivity().getSupportFragmentManager().beginTransaction().replace(R.id.fragmentContainerView, new AdminPageFragment()).commit();</span>
+
+<span class="nc" id="L553">                    }</span>
+                }
+        );
+
+<span class="nc" id="L557">        Volley.newRequestQueue(requireContext()).add(request);</span>
+<span class="nc" id="L558">    }</span>
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.7.202105040129</span>Generated by the Android Gradle plugin 7.2.2</div></body></html>

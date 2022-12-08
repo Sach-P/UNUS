@@ -1,0 +1,282 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>UserSettingsFragment.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=0;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">debug</a> &gt; <a href="index.source.html" class="el_package">com.example.unus</a> &gt; <span class="el_source">UserSettingsFragment.java</span></div><h1>UserSettingsFragment.java</h1><pre class="source lang-java linenums">package com.example.unus;
+
+import android.os.Bundle;
+import android.view.Gravity;
+import android.view.LayoutInflater;
+import android.view.MotionEvent;
+import android.view.View;
+import android.view.ViewGroup;
+import android.widget.Button;
+import android.widget.EditText;
+import android.widget.LinearLayout;
+import android.widget.PopupWindow;
+import android.widget.TextView;
+import android.widget.Toast;
+
+import androidx.fragment.app.Fragment;
+
+import com.android.volley.Request;
+import com.android.volley.Response;
+import com.android.volley.VolleyError;
+import com.android.volley.toolbox.JsonObjectRequest;
+import com.android.volley.toolbox.Volley;
+
+import org.json.JSONArray;
+import org.json.JSONException;
+import org.json.JSONObject;
+
+/**
+ * This fragment displays the user settings, for now they include
+ * change username, change password and delete user but will most
+ * likely be expanded in the future
+ * Change user will permanently change the name of the current user
+ * logged in
+ * change password changes the password
+ * delete user will remove the user from the database
+ *
+ * @author Abe Demo
+ */
+
+public class UserSettingsFragment extends Fragment {
+
+    private View view;
+    private TextView top_text;
+    private Button delete_user;
+    private Button back;
+    private Button change_name;
+    private Button change_pass;
+
+<span class="fc" id="L49">    public UserSettingsFragment() {</span>
+        // Required empty public constructor
+<span class="fc" id="L51">    }</span>
+
+    @Override
+    public void onCreate(Bundle savedInstanceState) {
+<span class="fc" id="L55">        super.onCreate(savedInstanceState);</span>
+<span class="fc" id="L56">    }</span>
+
+    @Override
+    public View onCreateView(LayoutInflater inflater, ViewGroup container,
+                             Bundle savedInstanceState) {
+<span class="fc" id="L61">        view = inflater.inflate(R.layout.fragment_user_settings, container, false);</span>
+<span class="fc" id="L62">        top_text = (TextView) view.findViewById(R.id.top_text);</span>
+<span class="fc" id="L63">        delete_user = (Button) view.findViewById(R.id.delete_user);</span>
+<span class="fc" id="L64">        back = (Button) view.findViewById(R.id.back);</span>
+<span class="fc" id="L65">        change_name = (Button) view.findViewById(R.id.change_name);</span>
+<span class="fc" id="L66">        change_pass = (Button) view.findViewById(R.id.change_password);</span>
+
+<span class="fc" id="L68">        back.setOnClickListener(new View.OnClickListener() {</span>
+            @Override
+            public void onClick(View view) {
+<span class="nc" id="L71">                getActivity().getSupportFragmentManager().beginTransaction().replace(R.id.fragmentContainerView, new UserProfileFragment()).commit();</span>
+<span class="nc" id="L72">            }</span>
+        });
+
+<span class="fc" id="L75">        change_name.setOnClickListener(new View.OnClickListener() {</span>
+            @Override
+            public void onClick(View view) {
+<span class="fc" id="L78">                change(true);</span>
+<span class="fc" id="L79">            }</span>
+        });
+
+<span class="fc" id="L82">        change_pass.setOnClickListener(new View.OnClickListener() {</span>
+            @Override
+            public void onClick(View view) {
+<span class="nc" id="L85">                change(false);</span>
+<span class="nc" id="L86">            }</span>
+        });
+
+<span class="fc" id="L89">        delete_user.setOnClickListener(new View.OnClickListener() {</span>
+            @Override
+            public void onClick(View view) {
+<span class="fc" id="L92">                deleteConfirmation();</span>
+<span class="fc" id="L93">            }</span>
+        });
+
+<span class="fc" id="L96">        return view;</span>
+    }
+
+    /**
+     * This function will prompt the user on whether or not they want to fully delete
+     * their account from the database
+     */
+    public void deleteConfirmation( ) {
+        //Create a View object yourself through inflater
+<span class="fc" id="L105">        LayoutInflater inflater = (LayoutInflater) view.getContext().getSystemService(view.getContext().LAYOUT_INFLATER_SERVICE);</span>
+<span class="fc" id="L106">        View popupView = inflater.inflate(R.layout.pop_up_layout, null);</span>
+
+        //Make Inactive Items Outside Of PopupWindow
+<span class="fc" id="L109">        boolean focusable = true;</span>
+
+        //Create a window with our parameters
+<span class="fc" id="L112">        final PopupWindow popupWindow = new PopupWindow(popupView, 1000, 1000, focusable);</span>
+
+        //Set the location of the window on the screen
+<span class="fc" id="L115">        popupWindow.showAtLocation(view, Gravity.CENTER, 50, 30);</span>
+
+<span class="fc" id="L117">        Button delete = (Button) popupView.findViewById(R.id.delete);</span>
+<span class="fc" id="L118">        delete.setOnClickListener(new View.OnClickListener() {</span>
+            @Override
+            public void onClick(View view) {
+<span class="fc" id="L121">                String name = ((EditText) popupView.findViewById(R.id.user_prompt)).getText().toString();</span>
+<span class="fc" id="L122">                String password = ((EditText) popupView.findViewById(R.id.pass_prompt)).getText().toString();</span>
+<span class="pc bpc" id="L123" title="2 of 4 branches missed.">                if(name.equals(UserData.getInstance().getUsername()) &amp;&amp; password.equals(UserData.getInstance().getPassword())) {</span>
+<span class="fc" id="L124">                    popupWindow.dismiss();</span>
+<span class="fc" id="L125">                    deleteUser(UserData.getInstance().getUserID());</span>
+                } else {
+<span class="nc" id="L127">                    popupWindow.dismiss();</span>
+<span class="nc" id="L128">                    top_text.setText(getString(R.string.invalid_credentials));</span>
+                }
+
+<span class="fc" id="L131">            }</span>
+        });
+
+<span class="fc" id="L134">        popupView.setOnTouchListener(new View.OnTouchListener() {</span>
+            @Override
+            public boolean onTouch(View v, MotionEvent event) {
+                //Close the window when clicked
+<span class="nc" id="L138">                popupWindow.dismiss();</span>
+<span class="nc" id="L139">                return true;</span>
+            }
+        });
+<span class="fc" id="L142">    }</span>
+
+    /**
+     * this function will prompt the user with how they'd like to change their
+     * information. They can then enter their desired username or password
+     *
+     * @param name
+     */
+    public void change(boolean name) {
+        //Create a View object yourself through inflater
+<span class="fc" id="L152">        LayoutInflater inflater = (LayoutInflater) view.getContext().getSystemService(view.getContext().LAYOUT_INFLATER_SERVICE);</span>
+<span class="fc" id="L153">        View popupView = inflater.inflate(R.layout.pop_up_layout, null);</span>
+
+        //Make Inactive Items Outside Of PopupWindow
+<span class="fc" id="L156">        boolean focusable = true;</span>
+
+        //Create a window with our parameters
+<span class="fc" id="L159">        final PopupWindow popupWindow = new PopupWindow(popupView, 1000, 1000, focusable);</span>
+
+        //Set the location of the window on the screen
+<span class="fc" id="L162">        popupWindow.showAtLocation(view, Gravity.CENTER, 50, 30);</span>
+<span class="pc bpc" id="L163" title="1 of 2 branches missed.">        if(name) {</span>
+<span class="fc" id="L164">            ((TextView) popupView.findViewById(R.id.username)).setText(getString(R.string.new_username));</span>
+        } else {
+<span class="nc" id="L166">            ((TextView) popupView.findViewById(R.id.username)).setText(getString(R.string.new_password));</span>
+<span class="nc" id="L167">            ((TextView) popupView.findViewById(R.id.password)).setText(getString(R.string.old_password));</span>
+        }
+
+
+<span class="fc" id="L171">        ((Button) popupView.findViewById(R.id.delete)).setText(getString(R.string.change_button));</span>
+
+<span class="fc" id="L173">        Button delete = (Button) popupView.findViewById(R.id.delete);</span>
+<span class="fc" id="L174">        delete.setOnClickListener(new View.OnClickListener() {</span>
+            @Override
+            public void onClick(View view) {
+<span class="fc" id="L177">                popupWindow.dismiss();</span>
+<span class="pc bpc" id="L178" title="1 of 2 branches missed.">                if(((EditText) popupView.findViewById(R.id.pass_prompt)).getText().toString().equals(UserData.getInstance().getPassword())) {</span>
+<span class="fc" id="L179">                    changeUser(name, ((EditText) popupView.findViewById(R.id.user_prompt)).getText().toString());</span>
+                } else {
+<span class="nc" id="L181">                    top_text.setText(getString(R.string.invalid_credentials));</span>
+                }
+<span class="fc" id="L183">            }</span>
+        });
+
+<span class="fc" id="L186">        popupView.setOnTouchListener(new View.OnTouchListener() {</span>
+            @Override
+            public boolean onTouch(View v, MotionEvent event) {
+                //Close the window when clicked
+<span class="nc" id="L190">                popupWindow.dismiss();</span>
+<span class="nc" id="L191">                return true;</span>
+            }
+        });
+<span class="fc" id="L194">    }</span>
+
+    /**
+     * This function will delete the user logged in from the database entirely
+     * including removing them from anyone else's friends list
+     */
+    private void deleteUser(int id) {
+
+<span class="fc" id="L202">        JsonObjectRequest request = new JsonObjectRequest(</span>
+                Request.Method.DELETE,
+<span class="fc" id="L204">                getString(R.string.remote_server_url, &quot;user&quot;, Integer.toString(id)),</span>
+                null,
+<span class="fc" id="L206">                new Response.Listener&lt;JSONObject&gt;() {</span>
+                    @Override
+                    public void onResponse(JSONObject response) {
+<span class="fc" id="L209">                        navigateToLogin();</span>
+<span class="fc" id="L210">                    }</span>
+                },
+<span class="fc" id="L212">                new Response.ErrorListener() {</span>
+                    @Override
+                    public void onErrorResponse(VolleyError error) {
+<span class="nc" id="L215">                        navigateToLogin();</span>
+<span class="nc" id="L216">                    }</span>
+                }
+        );
+
+<span class="fc" id="L220">        Volley.newRequestQueue(requireContext()).add(request);</span>
+
+<span class="fc" id="L222">    }</span>
+
+    /**
+     * this function will change either the username of the user or the password and update
+     * the change in the backend
+     *
+     * @param b
+     * @param s
+     */
+    public void changeUser(boolean b, String s) {
+        try {
+<span class="fc" id="L233">            JSONArray friendsList = new JSONArray();</span>
+<span class="pc bpc" id="L234" title="1 of 2 branches missed.">            for(int i = 0; i &lt; UserData.getInstance().getFriendsList().length; i++) {</span>
+<span class="nc" id="L235">                JSONObject temp = new JSONObject();</span>
+<span class="nc" id="L236">                temp.put(&quot;friendId&quot;, UserData.getInstance().getFriendsList()[i].getUserID());</span>
+<span class="nc" id="L237">                temp.put(&quot;username&quot;, UserData.getInstance().getFriendsList()[i].getUsername());</span>
+<span class="nc" id="L238">                temp.put(&quot;status&quot;, &quot;pending&quot;);</span>
+<span class="nc" id="L239">                friendsList.put(temp);</span>
+            }
+            //add login credentials to the response body
+<span class="fc" id="L242">            JSONObject requestBody = new JSONObject();</span>
+<span class="fc" id="L243">            requestBody.put(&quot;id&quot;, UserData.getInstance().getUserID());</span>
+<span class="pc bpc" id="L244" title="1 of 2 branches missed.">            if(b) {</span>
+<span class="fc" id="L245">                requestBody.put(&quot;username&quot;, s);</span>
+<span class="fc" id="L246">                requestBody.put(&quot;password&quot;, UserData.getInstance().getPassword());</span>
+            } else {
+<span class="nc" id="L248">                requestBody.put(&quot;username&quot;, UserData.getInstance().getUsername());</span>
+<span class="nc" id="L249">                requestBody.put(&quot;password&quot;, s);</span>
+            }
+<span class="fc" id="L251">            requestBody.put(&quot;friends&quot;, friendsList);</span>
+<span class="fc" id="L252">            requestBody.put(&quot;role&quot;, UserData.getInstance().getRole());</span>
+<span class="fc" id="L253">            requestBody.put(&quot;gamesPlayed&quot;, UserData.getInstance().getGamesPlayed());</span>
+<span class="fc" id="L254">            requestBody.put(&quot;gamesWon&quot;, UserData.getInstance().getGamesWon());</span>
+
+<span class="fc" id="L256">            JsonObjectRequest request = new JsonObjectRequest(</span>
+                    Request.Method.PUT,
+<span class="fc" id="L258">                    getString(R.string.remote_server_url, &quot;user&quot;, Integer.toString(UserData.getInstance().getUserID())),</span>
+                    requestBody,
+                    null,
+<span class="fc" id="L261">                    new Response.ErrorListener() {</span>
+                        @Override
+                        public void onErrorResponse(VolleyError error) {
+                            //loginHeader.setText(getString(R.string.login_error));
+<span class="nc" id="L265">                        }</span>
+                    }
+            );
+
+<span class="fc" id="L269">            Volley.newRequestQueue(requireContext()).add(request);</span>
+
+<span class="nc" id="L271">        } catch (JSONException ex) {</span>
+            //loginHeader.setText(getString(R.string.login_error));
+<span class="fc" id="L273">        }</span>
+<span class="fc" id="L274">        navigateToLogin();</span>
+<span class="fc" id="L275">    }</span>
+
+    private void navigateToLogin(){
+<span class="fc" id="L278">        getActivity().getSupportFragmentManager().beginTransaction().replace(R.id.fragmentContainerView, new LogInScreenFragment()).commit();</span>
+<span class="fc" id="L279">    }</span>
+}
+
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.7.202105040129</span>Generated by the Android Gradle plugin 7.2.2</div></body></html>

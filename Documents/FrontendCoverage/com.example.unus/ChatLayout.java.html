@@ -1,0 +1,226 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>ChatLayout.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=0;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">debug</a> &gt; <a href="index.source.html" class="el_package">com.example.unus</a> &gt; <span class="el_source">ChatLayout.java</span></div><h1>ChatLayout.java</h1><pre class="source lang-java linenums">package com.example.unus;
+
+import android.app.Activity;
+import android.view.Gravity;
+import android.view.LayoutInflater;
+import android.view.View;
+import android.view.ViewGroup;
+import android.widget.Button;
+import android.widget.EditText;
+import android.widget.LinearLayout;
+import android.widget.PopupWindow;
+import android.widget.RelativeLayout;
+import android.widget.TextView;
+
+import org.java_websocket.client.WebSocketClient;
+import org.java_websocket.handshake.ServerHandshake;
+import org.json.JSONException;
+import org.json.JSONObject;
+
+import java.net.URI;
+import java.net.URISyntaxException;
+
+/**
+ * this is the global chat for the app.
+ * It works with a websocket that will both send and receive messages
+ * It will not save messages if the global chat is closed nor will it
+ * continue to receive them if it's not open
+ *
+ * @author Abe Demo
+ */
+
+public class ChatLayout extends Activity {
+
+    private EditText newMessage;
+    private Button sendMessage;
+    private Button back;
+    private View popupView;
+    private LinearLayout messageBoard;
+    private WebSocketClient ws;
+<span class="fc" id="L40">    private String lastUser = &quot;&quot;;</span>
+
+<span class="fc" id="L42">    public ChatLayout(View view) {</span>
+<span class="fc" id="L43">        LayoutInflater inflater = (LayoutInflater) view.getContext().getSystemService(view.getContext().LAYOUT_INFLATER_SERVICE);</span>
+<span class="fc" id="L44">        popupView = inflater.inflate(R.layout.chat_layout, null);</span>
+
+        //Make Inactive Items Outside Of PopupWindow
+<span class="fc" id="L47">        boolean focusable = true;</span>
+
+        //Create a window with our parameters
+<span class="fc" id="L50">        final PopupWindow popupWindow = new PopupWindow(popupView, 1000, 3000, focusable);</span>
+
+        //Set the location of the window on the screen
+<span class="fc" id="L53">        popupWindow.showAtLocation(view, Gravity.LEFT, 0, 0);</span>
+
+<span class="fc" id="L55">        connectWebSocket();</span>
+
+<span class="fc" id="L57">        newMessage = popupView.findViewById(R.id.new_message);</span>
+<span class="fc" id="L58">        sendMessage = popupView.findViewById(R.id.send);</span>
+<span class="fc" id="L59">        messageBoard = popupView.findViewById(R.id.messages);</span>
+<span class="fc" id="L60">        back = popupView.findViewById(R.id.back);</span>
+
+<span class="fc" id="L62">        sendMessage.setOnClickListener(new View.OnClickListener() {</span>
+            @Override
+            public void onClick(View view) {
+<span class="nc bnc" id="L65" title="All 2 branches missed.">                if(!newMessage.getText().toString().equals(&quot;&quot;))</span>
+<span class="nc" id="L66">                    sendMessage(newMessage.getText().toString());</span>
+<span class="nc" id="L67">            }</span>
+        });
+
+<span class="fc" id="L70">        back.setOnClickListener(new View.OnClickListener() {</span>
+            @Override
+            public void onClick(View view) {
+<span class="fc" id="L73">                ws.close();</span>
+<span class="fc" id="L74">                popupWindow.dismiss();</span>
+<span class="fc" id="L75">            }</span>
+        });
+
+<span class="fc" id="L78">    }</span>
+
+    /**
+     * this is where the messages that we get from the websocket will be assessed and displayed
+     * on the chat screen, it will differtiate between the username and password as well
+     * @param s
+     * @throws JSONException
+     */
+    private void receivedMessage(String s) throws JSONException {
+        try {
+<span class="nc" id="L88">            JSONObject object = new JSONObject(s);</span>
+<span class="nc bnc" id="L89" title="All 2 branches missed.">            if(!object.get(&quot;username&quot;).equals(UserData.getInstance().getUsername())) {</span>
+<span class="nc" id="L90">                TextView nextMessage = new TextView(popupView.getContext());</span>
+<span class="nc" id="L91">                LinearLayout.LayoutParams textLayoutParams = new LinearLayout.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT);</span>
+<span class="nc" id="L92">                textLayoutParams.setMargins(50, 10, 100, 0);</span>
+<span class="nc" id="L93">                nextMessage.setLayoutParams(textLayoutParams);</span>
+<span class="nc" id="L94">                nextMessage.setPadding(20, 10, 20, 10);</span>
+<span class="nc" id="L95">                nextMessage.setText(object.getString(&quot;message&quot;));</span>
+<span class="nc" id="L96">                nextMessage.setTextColor(popupView.getResources().getColor(R.color.yellow));</span>
+<span class="nc" id="L97">                nextMessage.setBackgroundColor(popupView.getResources().getColor(R.color.purple_500));</span>
+<span class="nc" id="L98">                nextMessage.setTextSize(20);</span>
+
+<span class="nc" id="L100">                TextView sender = new TextView(popupView.getContext());</span>
+<span class="nc" id="L101">                LinearLayout.LayoutParams sendLayoutParams = new LinearLayout.LayoutParams(900, ViewGroup.LayoutParams.WRAP_CONTENT);</span>
+<span class="nc" id="L102">                sendLayoutParams.setMargins(40, 0, 10, 0);</span>
+<span class="nc" id="L103">                sender.setLayoutParams(sendLayoutParams);</span>
+<span class="nc" id="L104">                sender.setPadding(20, 0, 20, 0);</span>
+<span class="nc" id="L105">                sender.setText(object.get(&quot;username&quot;).toString());</span>
+<span class="nc" id="L106">                sender.setTextColor(popupView.getResources().getColor(R.color.yellow));</span>
+                //sender.setBackgroundColor(popupView.getResources().getColor(R.color.bright_purple));
+<span class="nc" id="L108">                sender.setTextSize(15);</span>
+<span class="nc" id="L109">                sender.setGravity(Gravity.LEFT);</span>
+
+<span class="nc bnc" id="L111" title="All 2 branches missed.">                if(lastUser.equals(object.getString(&quot;username&quot;))){</span>
+<span class="nc" id="L112">                    messageBoard.addView(nextMessage, 1);</span>
+                } else {
+<span class="nc" id="L114">                    messageBoard.addView(nextMessage, 0);</span>
+<span class="nc" id="L115">                    messageBoard.addView(sender, 0);</span>
+                }
+<span class="nc" id="L117">                lastUser = object.getString(&quot;username&quot;);</span>
+            }
+<span class="nc" id="L119">        } catch (JSONException ex) {</span>
+
+<span class="nc" id="L121">        }</span>
+<span class="nc" id="L122">    }</span>
+
+    /**
+     * this function will display the message that the user sent on the chat screen
+     * as well as sending it to the server so that every other user can see it
+     * @param message
+     */
+    private void sendMessage(String message) {
+<span class="nc" id="L130">            TextView nextMessage = new TextView(popupView.getContext());</span>
+<span class="nc" id="L131">            LinearLayout.LayoutParams textLayoutParams = new LinearLayout.LayoutParams(900, ViewGroup.LayoutParams.WRAP_CONTENT);</span>
+<span class="nc" id="L132">            textLayoutParams.setMargins(50, 10, 50, 0);</span>
+<span class="nc" id="L133">            nextMessage.setLayoutParams(textLayoutParams);</span>
+<span class="nc" id="L134">            nextMessage.setPadding(20, 10, 20, 10);</span>
+<span class="nc" id="L135">            nextMessage.setText(message);</span>
+<span class="nc" id="L136">            nextMessage.setTextColor(popupView.getResources().getColor(R.color.yellow));</span>
+<span class="nc" id="L137">            nextMessage.setBackgroundColor(popupView.getResources().getColor(R.color.purple_500));</span>
+<span class="nc" id="L138">            nextMessage.setTextSize(20);</span>
+<span class="nc" id="L139">            nextMessage.setGravity(Gravity.RIGHT);</span>
+<span class="nc" id="L140">            newMessage.setText(&quot;&quot;);</span>
+
+<span class="nc" id="L142">            ws.send(message);</span>
+
+<span class="nc" id="L144">            TextView sender = new TextView(popupView.getContext());</span>
+<span class="nc" id="L145">            LinearLayout.LayoutParams sendLayoutParams = new LinearLayout.LayoutParams(900, ViewGroup.LayoutParams.WRAP_CONTENT);</span>
+<span class="nc" id="L146">            sendLayoutParams.setMargins(10, 0, 10, 0);</span>
+<span class="nc" id="L147">            sender.setLayoutParams(sendLayoutParams);</span>
+<span class="nc" id="L148">            sender.setPadding(20, 0, 20, 0);</span>
+<span class="nc" id="L149">            sender.setText(message);</span>
+<span class="nc" id="L150">            sender.setText(UserData.getInstance().getUsername());</span>
+<span class="nc" id="L151">            sender.setTextColor(popupView.getResources().getColor(R.color.yellow));</span>
+            //sender.setBackgroundColor(popupView.getResources().getColor(R.color.bright_purple));
+<span class="nc" id="L153">            sender.setTextSize(15);</span>
+<span class="nc" id="L154">            sender.setGravity(Gravity.RIGHT);</span>
+
+<span class="nc bnc" id="L156" title="All 2 branches missed.">            if(lastUser.equals(UserData.getInstance().getUsername())){</span>
+<span class="nc" id="L157">                messageBoard.addView(nextMessage, 1);</span>
+            } else {
+<span class="nc" id="L159">                messageBoard.addView(nextMessage, 0);</span>
+<span class="nc" id="L160">                messageBoard.addView(sender, 0);</span>
+            }
+<span class="nc" id="L162">            lastUser = UserData.getInstance().getUsername();</span>
+<span class="nc" id="L163">    }</span>
+
+    /**
+     * this function connects to the websocket every time the  user hits the
+     * global chat button, it handles all of the websocket functions
+     */
+    private void connectWebSocket() {
+        URI uri;
+        try {
+            //uri = new URI(&quot;wss://demo.piesocket.com/v3/channel_123?api_key=VCXCEuvhGcBDP7XhiJJUDvR1e1D3eiVjgZ9VRiaV&amp;notify_self&quot;);
+<span class="fc" id="L173">            uri = new URI(&quot;ws://coms-309-029.class.las.iastate.edu:8080/global/&quot;+UserData.getInstance().getUserID());</span>
+
+                //will be getString(R.string.fake_websocket)) eventually;
+<span class="nc" id="L176">        } catch (URISyntaxException e) {</span>
+<span class="nc" id="L177">            TextView nextMessage = new TextView(popupView.getContext());</span>
+<span class="nc" id="L178">            nextMessage.setText(&quot;Couldn't Connect to Messages&quot;); //will be getString(R.string.message_error)); eventually</span>
+<span class="nc" id="L179">            nextMessage.setTextColor(popupView.getResources().getColor(R.color.yellow));</span>
+<span class="nc" id="L180">            nextMessage.setBackgroundColor(popupView.getResources().getColor(R.color.purple_500));</span>
+<span class="nc" id="L181">            nextMessage.setTextSize(20);</span>
+
+<span class="nc" id="L183">            messageBoard.addView(nextMessage, 0);</span>
+<span class="nc" id="L184">            e.printStackTrace();</span>
+<span class="nc" id="L185">            return;</span>
+<span class="fc" id="L186">        }</span>
+
+<span class="fc" id="L188">        ws = new WebSocketClient(uri) {</span>
+            @Override
+            public void onOpen(ServerHandshake serverHandshake) {
+                //ws.send(&quot;Hello from android&quot;);
+<span class="fc" id="L192">            }</span>
+
+            @Override
+            public void onMessage(String s) {
+<span class="nc" id="L196">                runOnUiThread(new Runnable() {</span>
+                    @Override
+                    public void run() {
+                        try {
+<span class="nc" id="L200">                            receivedMessage(s);</span>
+<span class="nc" id="L201">                        } catch (JSONException e) {</span>
+<span class="nc" id="L202">                            e.printStackTrace();</span>
+<span class="nc" id="L203">                        }</span>
+<span class="nc" id="L204">                    }</span>
+                });
+<span class="nc" id="L206">            }</span>
+
+            @Override
+            public void onClose(int i, String s, boolean b) {
+<span class="fc" id="L210">            }</span>
+
+            @Override
+            public void onError(Exception e) {
+<span class="nc" id="L214">                TextView nextMessage = new TextView(popupView.getContext());</span>
+<span class="nc" id="L215">                nextMessage.setText(&quot;&quot;+e);</span>
+<span class="nc" id="L216">                nextMessage.setTextColor(popupView.getResources().getColor(R.color.yellow));</span>
+<span class="nc" id="L217">                nextMessage.setBackgroundColor(popupView.getResources().getColor(R.color.bright_purple));</span>
+<span class="nc" id="L218">                nextMessage.setTextSize(25);</span>
+
+<span class="nc" id="L220">                messageBoard.addView(nextMessage, 0);</span>
+<span class="nc" id="L221">            }</span>
+        };
+<span class="fc" id="L223">        ws.connect();</span>
+<span class="fc" id="L224">    }</span>
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.7.202105040129</span>Generated by the Android Gradle plugin 7.2.2</div></body></html>

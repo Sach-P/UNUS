@@ -1,0 +1,273 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>UserProfileFragment.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=0;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">debug</a> &gt; <a href="index.source.html" class="el_package">com.example.unus</a> &gt; <span class="el_source">UserProfileFragment.java</span></div><h1>UserProfileFragment.java</h1><pre class="source lang-java linenums">package com.example.unus;
+import android.os.Bundle;
+import android.view.Gravity;
+import android.view.LayoutInflater;
+import android.view.ViewGroup;
+import android.view.View;
+import android.widget.Button;
+import android.widget.LinearLayout;
+import android.widget.PopupWindow;
+import android.widget.ScrollView;
+import android.widget.Space;
+import android.widget.TextView;
+
+import androidx.fragment.app.Fragment;
+
+import com.android.volley.Request;
+import com.android.volley.Response;
+import com.android.volley.VolleyError;
+import com.android.volley.toolbox.JsonObjectRequest;
+import com.android.volley.toolbox.Volley;
+
+import org.json.JSONException;
+import org.json.JSONObject;
+
+/**
+ * This fragment displays the stats of the user along with the users friends,
+ * from here the user can navigate to the user Settings
+ * You can also navigate to the user search fragment and friend requests
+ * fragment
+ * you can also remove friends on this page
+ *
+ * @author Abe Demo
+ */
+
+public class UserProfileFragment extends Fragment {
+
+    private View view;
+    private TextView username;
+    private TextView userID;
+    private TextView games;
+    private TextView wins;
+    private Button settings;
+    private Button back;
+    private Button teams;
+    private Button addFriends;
+
+<span class="fc" id="L47">    public UserProfileFragment() {</span>
+        // Required empty public constructor
+<span class="fc" id="L49">    }</span>
+
+    @Override
+    public void onCreate(Bundle savedInstanceState) {
+<span class="fc" id="L53">        super.onCreate(savedInstanceState);</span>
+<span class="fc" id="L54">    }</span>
+
+    @Override
+    public View onCreateView(LayoutInflater inflater, ViewGroup container,
+                              Bundle savedInstanceState) {
+<span class="fc" id="L59">        view = inflater.inflate(R.layout.fragment_user_profile, container, false);</span>
+<span class="fc" id="L60">        username = (TextView) view.findViewById(R.id.username);</span>
+<span class="fc" id="L61">        userID = (TextView) view.findViewById(R.id.userID);</span>
+<span class="fc" id="L62">        games = (TextView) view.findViewById(R.id.games);</span>
+<span class="fc" id="L63">        wins = (TextView) view.findViewById(R.id.wins);</span>
+<span class="fc" id="L64">        settings = (Button) view.findViewById(R.id.user_settings);</span>
+<span class="fc" id="L65">        back = (Button) view.findViewById(R.id.back);</span>
+<span class="fc" id="L66">        teams = (Button) view.findViewById(R.id.teams);</span>
+<span class="fc" id="L67">        username.setText(UserData.getInstance().getUsername());</span>
+<span class="fc" id="L68">        userID.setText(getString(R.string.user_id_display, UserData.getInstance().getUserID()));</span>
+<span class="fc" id="L69">        games.setText(getString(R.string.games_played_display, UserData.getInstance().getGamesPlayed()));</span>
+<span class="fc" id="L70">        wins.setText(getString(R.string.games_won_display, UserData.getInstance().getGamesWon()));</span>
+<span class="fc" id="L71">        getFriends();</span>
+
+<span class="fc" id="L73">        settings.setOnClickListener(new View.OnClickListener() {</span>
+            @Override
+            public void onClick(View view) {
+<span class="fc" id="L76">                getActivity().getSupportFragmentManager().beginTransaction().replace(R.id.fragmentContainerView, new UserSettingsFragment()).commit();</span>
+<span class="fc" id="L77">            }</span>
+        });
+
+<span class="fc" id="L80">        back.setOnClickListener(new View.OnClickListener() {</span>
+            @Override
+            public void onClick(View view) {
+<span class="fc" id="L83">                getActivity().getSupportFragmentManager().beginTransaction().replace(R.id.fragmentContainerView, new MainMenuFragment()).commit();</span>
+<span class="fc" id="L84">            }</span>
+        });
+
+<span class="fc" id="L87">        teams.setOnClickListener(new View.OnClickListener() {</span>
+            @Override
+            public void onClick(View view) {
+<span class="fc" id="L90">                getActivity().getSupportFragmentManager().beginTransaction().replace(R.id.fragmentContainerView, new TeamsFragment()).commit();</span>
+<span class="fc" id="L91">            }</span>
+        });
+
+
+<span class="fc" id="L95">        return view;</span>
+    }
+
+    /**
+     * This function will iterate thorugh the users list of friends and display them
+     * in the profile with options to view users and remove them from your friends
+     */
+    public void getFriends() {
+<span class="fc" id="L103">        LinearLayout flayout = view.findViewById(R.id.friend_buttons);</span>
+<span class="fc" id="L104">        Button make_friends = new Button(view.getContext());</span>
+<span class="fc" id="L105">        make_friends.setLayoutParams(new ViewGroup.LayoutParams(175,</span>
+                ViewGroup.LayoutParams.WRAP_CONTENT));
+<span class="fc" id="L107">        make_friends.setTextSize(15);</span>
+<span class="fc" id="L108">        make_friends.setText(&quot;Add&quot;);</span>
+<span class="fc" id="L109">        flayout.addView(make_friends);</span>
+<span class="fc" id="L110">        make_friends.setBackgroundColor(this.getResources().getColor(R.color.purple_500));</span>
+<span class="fc" id="L111">        make_friends.setTextColor(this.getResources().getColor(R.color.yellow));</span>
+<span class="fc" id="L112">        make_friends.setOnClickListener(new View.OnClickListener() {</span>
+            @Override
+            public void onClick(View view) {
+<span class="fc" id="L115">                getActivity().getSupportFragmentManager().beginTransaction().replace(R.id.fragmentContainerView, new UserSearchFragment()).commit();</span>
+<span class="fc" id="L116">            }</span>
+        });
+
+<span class="fc" id="L119">        Space sp = new Space(view.getContext());</span>
+<span class="fc" id="L120">        sp.setLayoutParams(new ViewGroup.LayoutParams(40, ViewGroup.LayoutParams.WRAP_CONTENT));</span>
+<span class="fc" id="L121">        flayout.addView(sp);</span>
+
+<span class="fc" id="L123">        Button pending_reqs = new Button(view.getContext());</span>
+<span class="fc" id="L124">        pending_reqs.setLayoutParams(new ViewGroup.LayoutParams(300,</span>
+                ViewGroup.LayoutParams.WRAP_CONTENT));
+<span class="fc" id="L126">        pending_reqs.setTextSize(15);</span>
+<span class="fc" id="L127">        pending_reqs.setText(&quot;Requests&quot;);</span>
+<span class="fc" id="L128">        flayout.addView(pending_reqs);</span>
+<span class="fc" id="L129">        pending_reqs.setBackgroundColor(this.getResources().getColor(R.color.purple_500));</span>
+<span class="fc" id="L130">        pending_reqs.setTextColor(this.getResources().getColor(R.color.yellow));</span>
+<span class="fc" id="L131">        pending_reqs.setOnClickListener(new View.OnClickListener() {</span>
+            @Override
+            public void onClick(View view) {
+<span class="fc" id="L134">                getActivity().getSupportFragmentManager().beginTransaction().replace(R.id.fragmentContainerView, new FriendRequestFragment()).commit();</span>
+
+<span class="fc" id="L136">            }</span>
+        });
+<span class="pc bpc" id="L138" title="1 of 2 branches missed.">        for( int i = 0; i &lt; UserData.getInstance().getFriendsList().length; i++) {</span>
+<span class="nc" id="L139">            LinearLayout layout = view.findViewById(R.id.scrollList);</span>
+<span class="nc" id="L140">            LinearLayout newLayout = new LinearLayout(view.getContext());</span>
+<span class="nc" id="L141">            newLayout.setLayoutParams(new ViewGroup.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT,</span>
+                    ViewGroup.LayoutParams.WRAP_CONTENT));
+<span class="nc" id="L143">            Button button = new Button(view.getContext());</span>
+<span class="nc" id="L144">            button.setLayoutParams(new ViewGroup.LayoutParams(400,</span>
+                    ViewGroup.LayoutParams.WRAP_CONTENT));
+<span class="nc" id="L146">            button.setText(UserData.getInstance().getFriendsList()[i].getUsername());</span>
+<span class="nc" id="L147">            button.setTextSize(20);</span>
+<span class="nc" id="L148">            button.setAllCaps(false);</span>
+<span class="nc" id="L149">            button.setBackgroundColor(this.getResources().getColor(R.color.purple_500));</span>
+<span class="nc" id="L150">            button.setTextColor(this.getResources().getColor(R.color.yellow));</span>
+
+<span class="nc" id="L152">            Button remove = new Button(view.getContext());</span>
+<span class="nc" id="L153">            remove.setLayoutParams(new ViewGroup.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT,</span>
+                    ViewGroup.LayoutParams.WRAP_CONTENT));
+<span class="nc" id="L155">            remove.setText(&quot;del&quot;);</span>
+<span class="nc" id="L156">            remove.setTextSize(10);</span>
+<span class="nc" id="L157">            remove.setBackgroundColor(this.getResources().getColor(R.color.purple_500));</span>
+<span class="nc" id="L158">            remove.setTextColor(this.getResources().getColor(R.color.yellow));</span>
+<span class="nc" id="L159">            int finalIndex = i;</span>
+<span class="nc" id="L160">            button.setOnClickListener(new View.OnClickListener() {</span>
+                @Override
+                public void onClick(View view) {
+<span class="nc" id="L163">                    getUser(UserData.getInstance().getFriendsList()[finalIndex].getUserID());</span>
+<span class="nc" id="L164">                }</span>
+            });
+<span class="nc" id="L166">            remove.setOnClickListener(new View.OnClickListener() {</span>
+                @Override
+                public void onClick(View view) {
+<span class="nc" id="L169">                        unfriend(UserData.getInstance().getFriendsList()[finalIndex].getUserID(), UserData.getInstance().getFriendsList()[finalIndex].getUsername());</span>
+<span class="nc" id="L170">                }</span>
+            });
+<span class="nc" id="L172">            Space sp2 = new Space(view.getContext());</span>
+<span class="nc" id="L173">            sp2.setLayoutParams(new ViewGroup.LayoutParams(20, ViewGroup.LayoutParams.WRAP_CONTENT));</span>
+<span class="nc" id="L174">            newLayout.addView(button);</span>
+<span class="nc" id="L175">            newLayout.addView(sp2);</span>
+<span class="nc" id="L176">            newLayout.addView(remove);</span>
+<span class="nc" id="L177">            Space sp3 = new Space(view.getContext());</span>
+<span class="nc" id="L178">            sp3.setLayoutParams(new ViewGroup.LayoutParams( ViewGroup.LayoutParams.WRAP_CONTENT, 20));</span>
+<span class="nc" id="L179">            layout.addView(newLayout);</span>
+<span class="nc" id="L180">            layout.addView(sp3);</span>
+        }
+<span class="fc" id="L182">    }</span>
+
+    /**
+     * this function will get a user from the database based on the ID of the user
+     * and it will display the users information in a popup window
+     * @param id
+     */
+    public void getUser(int id) {
+<span class="nc" id="L190">        LayoutInflater inflater = (LayoutInflater) view.getContext().getSystemService(view.getContext().LAYOUT_INFLATER_SERVICE);</span>
+<span class="nc" id="L191">        View popupView = inflater.inflate(R.layout.profile_view_layout, null);</span>
+
+        //Make Inactive Items Outside Of PopupWindow
+<span class="nc" id="L194">        boolean focusable = true;</span>
+
+        //Create a window with our parameters
+<span class="nc" id="L197">        final PopupWindow popupWindow = new PopupWindow(popupView, 1000, 1000, focusable);</span>
+
+        //Set the location of the window on the screen
+<span class="nc" id="L200">        popupWindow.showAtLocation(view, Gravity.CENTER, 50, 30);</span>
+
+<span class="nc" id="L202">        JsonObjectRequest request = new JsonObjectRequest(</span>
+                Request.Method.GET,
+<span class="nc" id="L204">                getString(R.string.remote_server_url, &quot;user&quot;, Integer.toString(id)),</span>
+                null,
+<span class="nc" id="L206">                new Response.Listener&lt;JSONObject&gt;() {</span>
+                    @Override
+                    public void onResponse(JSONObject response) {
+
+                        try {
+<span class="nc" id="L211">                            ((TextView) popupView.findViewById(R.id.username)).setText(response.getString(&quot;username&quot;));</span>
+<span class="nc" id="L212">                            ((TextView) popupView.findViewById(R.id.user_id)).setText(&quot;ID: &quot;+ response.getInt(&quot;id&quot;));</span>
+<span class="nc" id="L213">                            ((TextView) popupView.findViewById(R.id.games_played)).setText(&quot;Games Played: &quot;+ response.getInt(&quot;gamesPlayed&quot;));</span>
+<span class="nc" id="L214">                            ((TextView) popupView.findViewById(R.id.games_won)).setText(&quot;Games Won: &quot;+ response.getInt(&quot;gamesWon&quot;));</span>
+<span class="nc" id="L215">                        } catch (JSONException e) {</span>
+<span class="nc" id="L216">                            e.printStackTrace();</span>
+<span class="nc" id="L217">                        }</span>
+<span class="nc" id="L218">                    }</span>
+                },
+<span class="nc" id="L220">                new Response.ErrorListener() {</span>
+                    @Override
+                    public void onErrorResponse(VolleyError error) {
+                        //loginHeader.setText(getString(R.string.login_error));
+<span class="nc" id="L224">                    }</span>
+                }
+        );
+
+<span class="nc" id="L228">        Volley.newRequestQueue(requireContext()).add(request);</span>
+
+<span class="nc" id="L230">    }</span>
+
+    /**
+     * this function will remove the user from the logged in users friend list and it will also remove the
+     * current user from the other users friend list by removing them in the backend
+     * @param id
+     * @param name
+     */
+    private void unfriend(int id, String name) {
+<span class="nc" id="L239">        JsonObjectRequest request = new JsonObjectRequest(</span>
+                Request.Method.DELETE,
+<span class="nc" id="L241">                &quot;http://coms-309-029.class.las.iastate.edu:8080/user/&quot; + UserData.getInstance().getUserID() + &quot;/friends/remove-friend?friendId=&quot;+id,</span>
+                null,
+<span class="nc" id="L243">                new Response.Listener&lt;JSONObject&gt;() {</span>
+                    @Override
+                    public void onResponse(JSONObject response) {
+
+<span class="nc" id="L247">                    }</span>
+                },
+<span class="nc" id="L249">                new Response.ErrorListener() {</span>
+                    @Override
+                    public void onErrorResponse(VolleyError error) {
+                        //loginHeader.setText(getString(R.string.login_error));
+<span class="nc" id="L253">                    }</span>
+                }
+        );
+
+<span class="nc" id="L257">        Volley.newRequestQueue(requireContext()).add(request);</span>
+
+<span class="nc" id="L259">        Friend[] newFriends = new Friend[UserData.getInstance().getFriendsList().length - 1];</span>
+<span class="nc bnc" id="L260" title="All 2 branches missed.">        for(int i = 0, j = 0; i &lt; UserData.getInstance().getFriendsList().length; i++) {</span>
+<span class="nc bnc" id="L261" title="All 2 branches missed.">            if(UserData.getInstance().getFriendsList()[i].getUserID() != id) {</span>
+<span class="nc" id="L262">                newFriends[j] = UserData.getInstance().getFriendsList()[i];</span>
+<span class="nc" id="L263">                j++;</span>
+            }
+        }
+<span class="nc" id="L266">        UserData.getInstance().setFriendsList(newFriends);</span>
+<span class="nc" id="L267">        getActivity().getSupportFragmentManager().beginTransaction().replace(R.id.fragmentContainerView, new UserProfileFragment()).commit();</span>
+
+
+<span class="nc" id="L270">    }</span>
+
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.7.202105040129</span>Generated by the Android Gradle plugin 7.2.2</div></body></html>
