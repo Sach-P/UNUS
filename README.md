@@ -2,7 +2,8 @@
 
 UNUS is a full-stack android app that functions as a UNO-like multiplayer game created as a group project for Iowa State University course COM S 309: Software Engineering Practices. On top of the technologies listed below, we also learned about project management and team dynamics + workflow.
 
-##Technologies
+## Technologies
+
 Front-end (Isaac Blandin, Abe Demo): Android Studio (Java)
 
 Back-end (Sachin Patel): Spring Boot (Java), MySQL
